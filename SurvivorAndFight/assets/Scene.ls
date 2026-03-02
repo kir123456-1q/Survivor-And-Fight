@@ -1,5 +1,14 @@
 {
   "_$ver": 1,
+  "_$id": "me27tb79",
+  "_$type": "Scene",
+  "left": 0,
+  "right": 0,
+  "top": 0,
+  "bottom": 0,
+  "name": "Scene2D",
+  "width": 1334,
+  "height": 750,
   "_$child": [
     {
       "_$id": "n9gjxcltvl",
@@ -12,7 +21,6 @@
           "_$type": "Material"
         }
       },
-      "ambientMode": 0,
       "ambientColor": {
         "_$type": "Color",
         "r": 0.424308,
@@ -20,50 +28,20 @@
         "b": 0.5294118
       },
       "_reflectionsIblSamples": 1024,
-      "ambientSphericalHarmonics": {
-        "_$type": "SphericalHarmonicsL2",
-        "_coefficients": {
-          "_$type": "Float32Array",
-          "value": [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ]
-        }
-      },
       "fogStart": 0,
-      "fogRange": 300,
+      "fogEnd": 300,
       "fogColor": {
         "_$type": "Color",
         "r": 0.5,
         "g": 0.5,
         "b": 0.5
       },
-      "lightmaps": [],
+      "_$comp": [
+        {
+          "_$type": "7bad1742-6eed-4d8d-81c0-501dc5bf03d6",
+          "scriptPath": "../src/Main.ts"
+        }
+      ],
       "_$child": [
         {
           "_$id": "6jx8h8bvc6",
@@ -74,32 +52,21 @@
               "_$type": "Vector3",
               "y": 1,
               "z": 5
-            },
-            "localRotation": {
-              "_$type": "Quaternion",
-              "w": 1
             }
           },
+          "nearPlane": 0.3,
+          "farPlane": 1000,
           "clearFlag": 1,
           "clearColor": {
             "_$type": "Color",
             "r": 0.3921,
             "g": 0.5843,
             "b": 0.9294
-          },
-          "orthographicVerticalSize": 10,
-          "fieldOfView": 60,
-          "nearPlane": 0.3,
-          "farPlane": 1000,
-          "normalizedViewport": {
-            "_$type": "Viewport",
-            "width": 1,
-            "height": 1
           }
         },
         {
           "_$id": "6ni3p096l5",
-          "_$type": "DirectionLight",
+          "_$type": "LightSprite",
           "name": "Direction Light",
           "transform": {
             "localPosition": {
@@ -125,14 +92,6 @@
                 "g": 0.6,
                 "b": 0.6
               },
-              "lightmapBakedType": 1,
-              "shadowMode": 0,
-              "shadowStrength": 1,
-              "shadowDistance": 50,
-              "shadowDepthBias": 1,
-              "shadowNormalBias": 1,
-              "shadowNearPlane": 0.1,
-              "shadowCascadesMode": 0,
               "strength": 1,
               "angle": 0.526,
               "maxBounces": 1024
@@ -143,18 +102,6 @@
           "_$id": "to74d73p",
           "_$type": "Sprite3D",
           "name": "Cube",
-          "transform": {
-            "localPosition": {
-              "_$type": "Vector3",
-              "x": 0,
-              "y": 0,
-              "z": 0
-            },
-            "localRotation": {
-              "_$type": "Quaternion",
-              "w": 1
-            }
-          },
           "_$comp": [
             {
               "_$type": "MeshFilter",
@@ -165,7 +112,9 @@
             },
             {
               "_$type": "MeshRenderer",
-              "_scaleInLightmap": 1,
+              "lightmapScaleOffset": {
+                "_$type": "Vector4"
+              },
               "sharedMaterials": [
                 {
                   "_$uuid": "6f90bbb0-bcb2-4311-8a9d-3d8277522098",
