@@ -50,8 +50,19 @@
           "transform": {
             "localPosition": {
               "_$type": "Vector3",
-              "y": 1,
+              "y": 13.646793365478516,
               "z": 5
+            },
+            "localRotation": {
+              "_$type": "Quaternion",
+              "x": -0.3258375573012677,
+              "w": 0.945425769826454
+            },
+            "localScale": {
+              "_$type": "Vector3",
+              "x": 1,
+              "y": 0.9999999917859697,
+              "z": 0.9999999917859697
             }
           },
           "nearPlane": 0.3,
@@ -106,6 +117,12 @@
             "localPosition": {
               "_$type": "Vector3",
               "y": 1.985749676619045
+            },
+            "localScale": {
+              "_$type": "Vector3",
+              "x": 100,
+              "y": 1,
+              "z": 100
             }
           },
           "_$comp": [
@@ -124,6 +141,40 @@
               "sharedMaterials": [
                 {
                   "_$uuid": "6f90bbb0-bcb2-4311-8a9d-3d8277522098",
+                  "_$type": "Material"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "_$id": "n3k613pc",
+          "_$type": "Sprite3D",
+          "name": "Sphere",
+          "transform": {
+            "localPosition": {
+              "_$type": "Vector3",
+              "x": 1.8973746866950894,
+              "y": 8.007416817354638,
+              "z": -3.352078764186413
+            }
+          },
+          "_$comp": [
+            {
+              "_$type": "MeshFilter",
+              "sharedMesh": {
+                "_$uuid": "f1e48cc9-d67d-4196-92dd-77d9ee2f076c",
+                "_$type": "Mesh"
+              }
+            },
+            {
+              "_$type": "MeshRenderer",
+              "lightmapScaleOffset": {
+                "_$type": "Vector4"
+              },
+              "sharedMaterials": [
+                {
+                  "_$uuid": "1f03e29a-0a92-4fdb-99a2-b16e871e8e6d",
                   "_$type": "Material"
                 }
               ]
