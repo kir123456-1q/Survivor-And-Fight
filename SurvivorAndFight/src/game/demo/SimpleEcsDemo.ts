@@ -7,11 +7,14 @@ import { ViewSyncSystem } from '../../ecs/systems/ViewSyncSystem';
 /**
  * SimpleEcsDemo sets up a minimal scene with a handful of entities
  * that move and rotate, to validate the ECS core and Laya bindings.
+ * Pass the Scene3D node so 3D meshes are added to the scene; otherwise falls back to 2D sprites.
  */
 export class SimpleEcsDemo {
     readonly world = new EcsWorld();
+    private readonly scene3D: Laya.Scene3D | null;
 
-    constructor() {
+    constructor(scene3D?: Laya.Scene3D | null) {
+        this.scene3D = scene3D ?? null;
         this.setupSystems();
         this.spawnEntities(32);
     }
@@ -45,7 +48,12 @@ export class SimpleEcsDemo {
     }
 
     private createVisualNode(): any {
-        // MVP：先全部用 2D 精灵，避免错误地把 3D 节点挂到 stage 上导致 _addRenderObject 异常。
+        if (this.scene3D) {
+            const mesh = Laya.PrimitiveMesh.createSphere(0.2);
+            const meshSprite = new Laya.MeshSprite3D(mesh);
+            this.scene3D.addChild(meshSprite);
+            return meshSprite;
+        }
         const sprite2D = new Laya.Sprite();
         sprite2D.graphics.drawCircle(0, 0, 5, '#ffcc00');
         Laya.stage.addChild(sprite2D);

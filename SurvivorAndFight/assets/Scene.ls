@@ -102,6 +102,12 @@
           "_$id": "to74d73p",
           "_$type": "Sprite3D",
           "name": "Cube",
+          "transform": {
+            "localPosition": {
+              "_$type": "Vector3",
+              "y": 1.985749676619045
+            }
+          },
           "_$comp": [
             {
               "_$type": "MeshFilter",

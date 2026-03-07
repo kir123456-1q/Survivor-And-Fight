@@ -1,0 +1,29 @@
+---
+description: LayaAir Transform3D 位置修改的正确方式，避免「逻辑在跑但节点不动」的坑。
+globs: **/*.ts
+---
+
+# LayaAir Transform3D 位置修改
+
+## 错误原因（为何“改了 position 但节点不移动”）
+
+在 LayaAir 中，`transform.position` 的 **getter 返回的是内部向量的副本**，而不是引用。若写成：
+
+```ts
+const p = node.transform.position;
+p.setValue(p.x + dx, p.y + dy, p.z + dz);
+```
+
+则只是修改了这份副本，**引擎内部的世界位置并未更新**，所以场景里节点/相机看起来完全不动，但业务逻辑和 Log 都正常。
+
+## 正确做法
+
+- **绝对位置**：用 setter 赋值，不要对 getter 返回值做 `setValue`。
+  - 正确：`transform.position = new Laya.Vector3(x, y, z);`
+  - 错误：`transform.position.setValue(x, y, z);`（若 getter 返回副本则无效）
+
+- **相对位移**：用 `translate(translation, isLocal)`，由引擎内部更新位置。
+  - 世界空间平移：`transform.translate(new Laya.Vector3(dx, dy, dz), false);`
+  - 局部空间平移：`transform.translate(offset, true);`
+
+涉及相机、Sprite3D 等节点位置/平移时，统一用上述方式，避免“只改副本不生效”的问题。
