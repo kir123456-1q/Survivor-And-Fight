@@ -1,0 +1,15 @@
+{
+  "name": "excel-export-tool",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Export Excel config tables to JSON (list + id schema)",
+  "main": "export-excel.js",
+  "scripts": {
+    "export": "node export-excel.js",
+    "export:sample": "node export-excel.js --sample",
+    "create-sample": "node create-sample-xlsx.js"
+  },
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  }
+}

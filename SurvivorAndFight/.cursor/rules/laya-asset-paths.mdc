@@ -1,0 +1,32 @@
+---
+description: LayaAir 运行时资源路径与 404 原因——材质等资源必须放在 assets 下才能被加载。
+globs: "**/*"
+---
+
+# LayaAir 资源路径与 404
+
+## 为何会 404（例如 Failed to load '../src/Material/red.lmat'）
+
+运行时（浏览器）请求的地址是相对「发布目录」解析的。Laya 运行/发布时：
+
+- **会参与打包、可被加载的资源**通常来自 **`assets`**（或配置的资源目录），发布后会在输出目录（如 `bin`）里。
+- **`src`** 是 TypeScript 源码目录，只参与编译成 JS，**不会**作为静态资源被拷贝到运行目录或作为资源根提供。
+
+因此若在 IDE 里把材质/贴图等**放在 `src` 下**并拖到场景上，场景里会存成类似 `../src/Material/xxx.lmat` 的路径；运行时解析出来就是 `/src/Material/xxx.lmat`，而服务器下没有这个路径（或资源加载的 baseURL 下没有 src），就会 **404 Not Found**。
+
+## 正确做法
+
+- **材质、贴图、模型、场景等需要被运行时加载的资源**，一律放在 **`assets`** 下（例如 `assets/Material/red.lmat`），不要放在 `src` 下。
+- 在 IDE 里：
+  - 在**资源管理器**里把 `red.lmat` 从 `src/Material/` **拖到** `assets/Material/`（或先建好 `assets/Material` 再拖进去），让 IDE 更新引用；
+  - 或删除场景/预制体上对该材质的引用，再从 `assets/Material/red.lmat` 重新拖上去赋值。
+- 这样发布后加载路径会变成基于 `assets` 的路径（如 `Material/red.lmat`），资源能被正确找到。
+
+## 小结
+
+| 目录   | 用途           | 运行时是否当资源提供 |
+|--------|----------------|------------------------|
+| `src`  | TypeScript 源码 | 否，只编译为 JS        |
+| `assets` | 场景、材质、贴图等资源 | 是，会参与发布与加载   |
+
+「手动拖上去的材质」若放在 `src` 下，就会出现 404；移到 `assets` 并在 IDE 中改引用即可。
