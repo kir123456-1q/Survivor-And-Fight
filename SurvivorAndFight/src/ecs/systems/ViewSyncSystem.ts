@@ -11,21 +11,29 @@ export class ViewSyncSystem implements System {
     update(_deltaTime: number): void {
         const pairs = this.world.getAllOfType(ViewComponent);
         for (const [entity, view] of pairs) {
-            const node = view.node as any;
-            if (!node) continue;
+            const node = view?.node as any;
+            if (node == null || (node.destroyed === true)) continue;
             const position = this.world.getComponent(entity, Position);
             const rotation = this.world.getComponent(entity, Rotation);
 
-            if (position && node.transform && node.transform.position) {
-                node.transform.position.setValue(position.x, position.y, position.z);
-            } else if (position) {
-                // Fallback for 2D nodes
-                if ('x' in node) node.x = position.x;
-                if ('y' in node) node.y = position.y;
+            if (position) {
+                if (typeof node.x === 'number') node.x = position.x;
+                if (typeof node.y === 'number') node.y = position.y;
+                try {
+                    const tr = (node as any).transform;
+                    if (tr && tr.position && typeof tr.position.setValue === 'function') {
+                        tr.position.setValue(position.x, position.y, 0);
+                    }
+                } catch (_) { /* 2D 节点可能无 transform */ }
             }
 
-            if (rotation && node.transform && node.transform.rotationEuler) {
-                node.transform.rotationEuler.setValue(rotation.pitch, rotation.yaw, rotation.roll);
+            if (rotation) {
+                try {
+                    const tr = (node as any).transform;
+                    if (tr && tr.rotationEuler && typeof tr.rotationEuler.setValue === 'function') {
+                        tr.rotationEuler.setValue(rotation.pitch, rotation.yaw, rotation.roll);
+                    }
+                } catch (_) { /* 2D 节点可能无 rotationEuler */ }
             }
         }
     }

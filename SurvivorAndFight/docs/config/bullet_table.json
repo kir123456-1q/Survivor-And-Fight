@@ -1,0 +1,22 @@
+{
+  "list": [
+    {
+      "id": "player_bullet",
+      "prefabPath": "prefabs/Common/Buttle/buttle2d.lh",
+      "duration": 3,
+      "speed": 15,
+      "damage": 10,
+      "penetration": 0,
+      "ownerType": "player"
+    },
+    {
+      "id": "monster_bullet",
+      "prefabPath": "prefabs/Common/Buttle/buttle2d.lh",
+      "duration": 2,
+      "speed": 8,
+      "damage": 5,
+      "penetration": 0,
+      "ownerType": "monster"
+    }
+  ]
+}

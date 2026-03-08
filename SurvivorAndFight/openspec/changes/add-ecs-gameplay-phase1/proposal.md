@@ -11,6 +11,22 @@
 - 新增**操控组件与操控系统**：用于标记与处理玩家控制的实体及其输入驱动。
 - 新增**筛选器设计**：定义对应筛选器，用于驱动上述 Entity 等数据的查询与迭代。
 
+## New Files and Interfaces
+
+本变更须新增以下文件，各文件对外接口见同目录下 **`INTERFACES.md`**。归档后须将该接口文档保留到项目文档树（如 `docs/ecs-gameplay-phase1-interfaces.md` 或对应 spec 目录），供后续实现与调用方使用。
+
+### 新建文件清单
+- **组件**：`src/ecs/components/Position.ts`、`Velocity.ts`、`PlayerTag.ts`、`MonsterTag.ts`、`Attribute.ts`、`Skill.ts`、`Control.ts`
+- **系统**：`src/ecs/systems/MovementSystem.ts`、`AttributeSystem.ts`、`SkillSystem.ts`、`ControlSystem.ts`
+- **筛选器**：`src/ecs/filters/FilterRegistry.ts`、`NamedFilters.ts`
+- **技能相关**：`src/game/skill/FormulaParser.ts`、`Targeting.ts`
+
+### 接口概要（详见 INTERFACES.md）
+- **组件**：各组件数据字段（如 Position.x/y/z、Velocity.vx/vy、Attribute.base 与 modifiers、Skill.currentSkillId 与 cooldownRemain 等）；Attribute 须提供 getFinalValue、addModifier、removeModifiersBySource、getModifierContributions。
+- **系统**：MovementSystem / AttributeSystem / SkillSystem / ControlSystem 均须提供 `update(deltaTime: number): void`；AttributeSystem 须提供属性合并与 Modifier API；ControlSystem 须依赖输入抽象与 Controllable 筛选器。
+- **筛选器**：FilterRegistry 须提供 `query(componentTypes): EntityId[]`、`registerNamedFilter`、`getNamedFilter`；NamedFilters 须提供 Players、Monsters、Controllable、Movable。
+- **公式与索敌**：FormulaParser 须提供 `evaluate(formula, context): number`；Targeting 须提供 `resolveAuto`、`resolveSimple`。
+
 ## Impact
 - **Affected specs（新增能力）**
   - `entity-archetypes`：玩家/怪物等实体形态与组件组合约定。
@@ -19,8 +35,6 @@
   - `skill-effect`：技能组件、技能系统、effect 配表（执行者/效果/目标）、公式解析、索敌、特效与子弹栏位。
   - `control`：操控组件与操控系统。
   - `ecs-filters`：筛选器设计与驱动 Entity 数据的查询方式。
-- **Affected code（预期涉及）**
-  - `src/ecs/components`：Movement、Attribute、Skill、Control 等组件。
-  - `src/ecs/systems`：MovementSystem、AttributeSystem、SkillSystem、ControlSystem。
-  - `src/ecs/filters` 或等价：筛选器实现。
+- **Affected code**
+  - 新建文件见上文「New Files and Interfaces」及 `INTERFACES.md`。
   - 配表与读表：技能/effect 表、公式与索敌配置。

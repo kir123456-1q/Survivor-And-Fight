@@ -10,6 +10,16 @@
       "alias": "Data_Item",
       "sources": ["item_table.json", "equipment_table.json"],
       "idKey": "id"
+    },
+    {
+      "key": "Character",
+      "sources": ["character_table.json"],
+      "idKey": "id"
+    },
+    {
+      "key": "Bullet",
+      "sources": ["bullet_table.json"],
+      "idKey": "id"
     }
   ]
 }

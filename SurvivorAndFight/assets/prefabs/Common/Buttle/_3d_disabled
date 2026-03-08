@@ -1,0 +1,53 @@
+{
+  "_$ver": 1,
+  "_$id": "jihgd9at",
+  "_$type": "Sprite3D",
+  "name": "Sprite3D",
+  "_$child": [
+    {
+      "_$id": "v5n47iu4",
+      "_$type": "Sprite3D",
+      "name": "Capsule",
+      "transform": {
+        "localRotation": {
+          "_$type": "Quaternion",
+          "x": 0.7071067811865475,
+          "w": 0.7071067811865476
+        },
+        "localScale": {
+          "_$type": "Vector3",
+          "x": 0.3,
+          "y": 0.3,
+          "z": 0.3
+        }
+      },
+      "_$comp": [
+        {
+          "_$type": "MeshFilter",
+          "sharedMesh": {
+            "_$uuid": "81a027ba-bf6c-4112-8e81-2a9b06c53290",
+            "_$type": "Mesh"
+          }
+        },
+        {
+          "_$type": "MeshRenderer",
+          "lightmapScaleOffset": {
+            "_$type": "Vector4"
+          },
+          "sharedMaterials": [
+            {
+              "_$uuid": "1f03e29a-0a92-4fdb-99a2-b16e871e8e6d",
+              "_$type": "Material"
+            }
+          ]
+        },
+        {
+          "_$type": "PhysicsCollider",
+          "collisionGroup": 1,
+          "canCollideWith": -1,
+          "isTrigger": true
+        }
+      ]
+    }
+  ]
+}

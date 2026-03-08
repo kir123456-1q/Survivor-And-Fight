@@ -2,6 +2,7 @@ import { EcsWorld } from '../core/World';
 import { System } from '../core/System';
 import { Position, Velocity } from '../components/TransformComponents';
 
+/** 2D 平面移动：仅更新 x、y，z 保持不变。 */
 export class MovementSystem implements System {
     readonly group = 'logic' as const;
     readonly priority = 0;
@@ -15,7 +16,6 @@ export class MovementSystem implements System {
             if (!position) continue;
             position.x += velocity.vx * deltaTime;
             position.y += velocity.vy * deltaTime;
-            position.z += velocity.vz * deltaTime;
         }
     }
 }

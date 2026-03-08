@@ -73,3 +73,23 @@
   - `const row = Data.Item.GetByID(1);`
   - `const name = Data.Item.GetName(1);` 或 `Data.Item.Get('name', 1);`
   - 实现见 `src/config/Data.ts`。
+
+## 10. 技能与 Effect 配表（add-ecs-gameplay-phase1）
+
+- **技能表（如 Skill）**：主键为技能 id（string 或 int）。每行须包含：
+  - `effects`：list&lt;string&gt;，该技能包含的 effect 行 id 列表，顺序即执行顺序。
+  - `effectSlot`（可选）：string，特效资源 id 或路径，供后续特效系统读取。
+  - `bulletSlot`（可选）：string，子弹资源 id 或路径，供后续子弹系统读取。
+- **Effect 表（如 Effect）**：主键为 effect id。每行须包含：
+  - `executor`：string，执行者枚举（如 `player`）。
+  - `effect`：string，效果类型（如 `damage`）。
+  - `params`：string，参数公式，支持属性别名（如 `atk*1.2`），由 FormulaParser 解析。
+  - `target`：string，目标类型：`auto`（威胁度+血量加权索敌）或 `simple`（以目标位置索敌）。
+  - `effectSlot` / `bulletSlot`（可选）：同上，可覆盖技能表栏位。
+- 读表：SkillSystem 通过可选的 getSkillEffects(skillId)、getEffectRow(effectId) 与 Data 对接；若使用 Data，则 getSkillEffects 返回 `Data.Skill.GetByID(skillId)?.effects`，getEffectRow 返回 `Data.Effect.GetByID(effectId)`。
+
+## 11. 角色表与子弹表（add-bullet-hp-ui-verification）
+
+- **角色表（Character）**：主键 id（string 或 int）。每行须包含：prefabPath（角色预制体路径，如 prefabs/character/Player.lh）、bodyPrefabPath（Body UI 预制体路径，如 prefabs/SceneUI/PlayerBody.lh）、hp、maxHp（number）、roleType（"player" | "monster"）。可选 bulletPrefabPath 或由技能 bulletSlot 指定。
+- **子弹表（Bullet）**：主键 id。每行须包含：prefabPath（子弹预制体路径）、duration（秒）、speed、damage、penetration（穿透次数）、ownerType（"player" | "monster"）。玩家子弹示例：prefabs/Common/Buttle/simple.lh；怪物子弹：prefabs/Common/Buttle/MonsterButtle.lh。
+- tables.registry.json 须注册 Character、Bullet 及对应 sources（如 character_table.json、bullet_table.json）。

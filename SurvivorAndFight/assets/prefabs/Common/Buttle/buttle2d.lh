@@ -1,0 +1,40 @@
+{
+  "_$ver": 1,
+  "_$id": "m9gn4mjm",
+  "_$type": "Sprite",
+  "name": "Sprite",
+  "width": 400,
+  "height": 400,
+  "_$child": [
+    {
+      "_$id": "6l3f6p7z",
+      "_$type": "GImage",
+      "name": "over",
+      "x": 84,
+      "y": 165,
+      "width": 128,
+      "height": 21,
+      "gears": [
+        {
+          "_$type": "GearDisplay",
+          "pages": [
+            2
+          ]
+        }
+      ],
+      "relations": [
+        {
+          "_$type": "Relation",
+          "data": [
+            1,
+            0,
+            2,
+            0
+          ]
+        }
+      ],
+      "src": "res://229471bf-e8ae-4dd9-a763-30012813d4df",
+      "autoSize": false
+    }
+  ]
+}

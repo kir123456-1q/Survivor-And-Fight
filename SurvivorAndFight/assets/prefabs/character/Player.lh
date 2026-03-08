@@ -1,0 +1,30 @@
+{
+  "_$ver": 1,
+  "_$id": "ida4zf2b",
+  "_$type": "Sprite3D",
+  "name": "Sprite3D",
+  "_$comp": [
+    {
+      "_$type": "UI3D",
+      "lightmapScaleOffset": {
+        "_$type": "Vector4"
+      },
+      "prefab": {
+        "_$uuid": "922f266f-899f-42f4-b7ec-665e602eba8a",
+        "_$type": "Prefab"
+      },
+      "resolutionRate": 512,
+      "scale": {
+        "_$type": "Vector2",
+        "x": 0.78125,
+        "y": 0.78125
+      }
+    },
+    {
+      "_$type": "PhysicsCollider",
+      "collisionGroup": 1,
+      "canCollideWith": -1,
+      "isTrigger": true
+    }
+  ]
+}

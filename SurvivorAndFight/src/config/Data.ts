@@ -11,8 +11,7 @@
 import { ConfigTable } from './TableLoader';
 import type { ConfigTableJson } from './TableLoader';
 import type { TablesRegistryJson } from './TablesRegistry';
-
-const DEFAULT_ID_KEY = 'id';
+import { DEFAULT_ID_KEY } from '../defines';
 
 /** Converts column name to GetXxx method name (e.g. "name" -> "GetName"). */
 function getterName(columnName: string): string {

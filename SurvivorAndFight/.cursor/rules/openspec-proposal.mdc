@@ -1,0 +1,17 @@
+---
+alwaysApply: false
+globs: openspec/changes/**/proposal.md, openspec/changes/**/design.md, openspec/changes/**/INTERFACES.md
+---
+
+## OpenSpec 提案：新建文件与接口
+
+- 每个变更提案**须**包含「新建文件清单」与「各文件对外接口」。
+- 新建文件清单**须**写清完整路径（如 `src/ecs/components/Attribute.ts`）与文件职责。
+- 对外接口**须**以接口文档形式存在：在变更目录下提供 **INTERFACES.md**（或等价命名），列出组件数据字段、系统方法签名、筛选器/工具 API；或在 proposal 中直接列出并注明「详见 INTERFACES.md」。
+- **归档后须保留接口文档**：变更归档时，须将接口文档保留到项目文档树中供后续调用，不得仅存于 `changes/archive/` 且无其他可发现副本。保留方式二选一或同时使用：复制到 `docs/` 下（如 `docs/<change-id>-interfaces.md`）、或合并到对应 `specs/<capability>/` 下的接口说明文件。
+
+## 表述规范：禁止模糊词汇
+
+- 提案与设计文档中**禁止**使用「可能」「或许」「尽量」「建议」「可选的」「可先」等模糊表述。
+- **须**使用确定性用语：**须**、**必须**、**应**、**不得**、**禁止**、**只**、**仅**；需求用 SHALL/MUST，禁止用 may/should 表达规范性要求。
+- 若存在未决项，**须**放入「Open Questions」并给出当前决策或默认约定，不在正文中用「可能」一带而过。

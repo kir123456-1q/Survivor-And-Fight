@@ -1,0 +1,13 @@
+---
+alwaysApply: true
+---
+
+## 静态配置与 define 约定
+
+- **所有静态配置**（常量、默认值、正则、路径等）放在 **`src/defines/`** 下的 define 文件中，不在业务文件内散落。
+- **按模块命名**：每个 define 文件对应一个模块，文件名带模块名，如 `appDefine.ts`、`configDefine.ts`、`demoDefine.ts`、`bulletDefine.ts`、`uiDefine.ts`、`skillDefine.ts`。禁止多个模块共用一个同名 `define.ts`。
+- **全项目可访问**：`src/defines/index.ts` 统一 re-export 各模块 define，任意位置通过相对路径引用即可，例如 `import { CONFIG_BASE } from './defines'`、`import { MONSTER_COUNT } from '../../defines'`。
+- 新增模块的静态配置时：在 `src/defines/` 下新建 `模块名Define.ts`，并在 `defines/index.ts` 中增加 `export * from './模块名Define'`。
+
+✅ 在 `src/defines/demoDefine.ts` 中定义 `MONSTER_COUNT`，任意文件 `import { MONSTER_COUNT } from '…/defines'`  
+❌ 在业务文件顶部写 `const MONSTER_COUNT = 5`，或各模块使用同名 `define.ts`

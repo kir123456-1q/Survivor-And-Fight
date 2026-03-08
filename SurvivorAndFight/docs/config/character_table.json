@@ -1,0 +1,20 @@
+{
+  "list": [
+    {
+      "id": "player",
+      "prefabPath": "prefabs/SceneUI/PlayerBody.lh",
+      "bodyPrefabPath": "prefabs/SceneUI/PlayerBody.lh",
+      "hp": 100,
+      "maxHp": 100,
+      "roleType": "player"
+    },
+    {
+      "id": "monster",
+      "prefabPath": "prefabs/SceneUI/MonsterBody.lh",
+      "bodyPrefabPath": "prefabs/SceneUI/MonsterBody.lh",
+      "hp": 50,
+      "maxHp": 50,
+      "roleType": "monster"
+    }
+  ]
+}

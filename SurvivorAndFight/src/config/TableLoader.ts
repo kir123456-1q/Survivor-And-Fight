@@ -4,11 +4,11 @@
  * via Laya.loader or fetch, then ConfigTable.fromJson(loadedObject).
  */
 
+import { DEFAULT_ID_KEY } from '../defines';
+
 export interface ConfigTableJson<T = Record<string, unknown>> {
     list: T[];
 }
-
-const DEFAULT_ID_KEY = 'id';
 
 /**
  * Read-only table view over config JSON. Primary key defaults to "id".

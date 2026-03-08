@@ -18,23 +18,23 @@
   - 本阶段不引入多线程或 Job 调度。
 
 ## Decisions
-- **实体形态**：通过“Tag 组件”或“Archetype 名”区分 Player / Monster；具体为可选的 `PlayerTag`、`MonsterTag` 等组件，便于筛选器使用。不在本阶段引入复杂 Archetype 类型系统。
-- **移动**：Movement 相关组件（如 Position、Velocity）与 MovementSystem 每帧根据 Velocity 等更新 Position；与 ecs-laya-binding-demo 的 Transform 同步可衔接（先 ECS 再同步到 Laya）。
-- **属性与 Modifier**：Attribute 组件持有“基础属性”与“Modifier 列表”；每个 modifier 有来源 id（如 buffId）、类型（加算/乘算等）、数值；AttributeSystem 或 getter 按约定顺序合并 modifier 得到最终值，支持溯源到具体 modifier。
-- **技能与 Effect**：Skill 组件持有当前技能 id、冷却等；技能表指向多个 effect 配置；每个 effect 有 executor 枚举（如 player）、effect 类型（如 damage）、参数公式字符串（如 atk*1.2）、target 枚举（auto / simple）。公式解析器支持属性别名（atk、hp 等）从执行者/目标实体属性解析。索敌：auto = 威胁度与血量加权（优先低血高威胁），simple = 以鼠标位置为目标的简单索敌。
-- **特效/子弹栏位**：在技能或 effect 配表中增加“特效栏位”“子弹栏位”等字段，用于配置资源 id 或预制体路径；具体播放/生成由后续系统根据栏位读取，本阶段只约定表结构。
-- **操控**：Control 组件标记实体受玩家控制；ControlSystem 根据输入（如来自 input-abstraction）写入移动/技能释放等意图到对应实体组件或命令缓冲。
-- **筛选器**：提供“筛选器”抽象：按“拥有哪些组件”查询 Entity 列表；与 ecs-core 的“按组件类型遍历”对齐，可封装为 Named Filter（如 “Players”“Monsters”“Controllable”），供 Movement、Skill、Control 等 System 使用。
+- **实体形态**：通过 Tag 组件区分 Player / Monster；须提供 `PlayerTag`、`MonsterTag` 组件供筛选器使用。本阶段不引入复杂 Archetype 类型系统。
+- **移动**：Position、Velocity 组件与 MovementSystem 每帧根据 Velocity 更新 Position；与 ecs-laya-binding-demo 的 Transform 同步衔接，执行顺序须为 ECS 先于 Laya 同步。
+- **属性与 Modifier**：Attribute 组件须持有基础属性与 Modifier 列表；每个 modifier 须含来源 id、类型（加算/乘算）、数值；AttributeSystem 或 getter 须按约定顺序（先加算后乘算）合并 modifier 得到最终值，并支持按 modifier 溯源。
+- **技能与 Effect**：Skill 组件须持有当前技能 id、冷却等；技能表须指向多个 effect 配置；每个 effect 须含 executor 枚举、effect 类型、参数公式字符串、target 枚举（auto / simple）。公式解析器须支持属性别名（atk、hp 等）从执行者/目标实体属性解析。索敌：auto 须按威胁度与血量加权（优先低血高威胁），simple 须以鼠标位置为目标。
+- **特效/子弹栏位**：技能或 effect 配表须包含“特效栏位”“子弹栏位”字段，用于配置资源 id 或预制体路径；本阶段只约定表结构，播放/生成由后续系统根据栏位读取。
+- **操控**：Control 组件须标记实体受玩家控制；ControlSystem 须根据 input-abstraction 写入移动与技能释放意图到对应实体组件或命令缓冲。
+- **筛选器**：须提供按组件组合查询 Entity 列表的抽象，与 ecs-core 的按组件类型遍历对齐；须封装命名筛选器 Players、Monsters、Controllable、Movable，供 Movement、Skill、Control 等 System 使用。
 
 ## Risks / Trade-offs
-- 公式解析与属性别名：需要统一属性名与配表列名，避免运行时解析失败；建议白名单别名与默认值。
-- 索敌权重：auto 的“威胁度”需后续与仇恨/威胁系统对接，本阶段可先实现“距离+血量”等简单权重。
-- Modifier 顺序与合并规则：加算/乘算顺序会影响结果，需在 design/spec 中写死规则并在 AttributeSystem 中一致实现。
+- 公式解析与属性别名：须统一属性名与配表列名，避免运行时解析失败；须使用白名单别名与明确默认值。
+- 索敌权重：auto 的“威胁度”须与后续仇恨/威胁系统对接；本阶段须实现基于距离与血量的可配置权重。
+- Modifier 顺序与合并规则：加算/乘算顺序须在 design/spec 中固定，并在 AttributeSystem 中一致实现。
 
 ## Migration Plan
 - 本变更为新增能力，不替换现有 ecs-core 或 ecs-attribute-system 的既有行为；ecs-attribute-system 通过 ADDED requirement 增加“属性组件与 modifier”，原有“配表驱动初始化”保留。
-- 实现顺序建议：entity-archetypes → movement → attribute modifier → filters → skill-effect → control。
+- 实现顺序：entity-archetypes → movement → attribute modifier → filters → skill-effect → control。
 
 ## Open Questions
-- 技能冷却与 CD 显示是否在本阶段 spec 中明确为技能组件字段？
-- 子弹栏位是“单 bullet 资源 id”还是“支持多段/多子弹”的列表？先按单资源 id 约定，后续可扩展。
+- 技能冷却与 CD 显示在本阶段 spec 中已明确为 Skill 组件字段（cooldownRemain）；若需 CD 显示 UI，由调用方读该字段。
+- 子弹栏位本阶段约定为单资源 id 字段；多段/多子弹通过扩展配表结构在后续变更中增加。
