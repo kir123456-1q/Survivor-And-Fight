@@ -148,38 +148,22 @@
           ]
         },
         {
-          "_$id": "n3k613pc",
-          "_$type": "Sprite3D",
-          "name": "Sphere",
+          "_$id": "5nkwqjcn",
+          "_$prefab": "89c9c7d3-0930-496a-9183-bc3eb5c5f219",
+          "name": "Player",
+          "active": true,
+          "layer": 0,
           "transform": {
             "localPosition": {
               "_$type": "Vector3",
-              "x": 1.8973746866950894,
-              "y": 8.007416817354638,
-              "z": -3.352078764186413
-            }
-          },
-          "_$comp": [
-            {
-              "_$type": "MeshFilter",
-              "sharedMesh": {
-                "_$uuid": "f1e48cc9-d67d-4196-92dd-77d9ee2f076c",
-                "_$type": "Mesh"
-              }
+              "x": 1.8973746299743652,
+              "y": 8.447453902465012,
+              "z": -3.352078676223755
             },
-            {
-              "_$type": "MeshRenderer",
-              "lightmapScaleOffset": {
-                "_$type": "Vector4"
-              },
-              "sharedMaterials": [
-                {
-                  "_$uuid": "1f03e29a-0a92-4fdb-99a2-b16e871e8e6d",
-                  "_$type": "Material"
-                }
-              ]
+            "localRotation": {
+              "_$type": "Quaternion"
             }
-          ]
+          }
         }
       ]
     }

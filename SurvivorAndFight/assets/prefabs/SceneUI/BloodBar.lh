@@ -1,0 +1,32 @@
+{
+  "_$ver": 1,
+  "_$id": "h5v6uyc6",
+  "_$type": "GWidget",
+  "name": "Root",
+  "width": 400,
+  "height": 400,
+  "_$child": [
+    {
+      "_$id": "5tt5ae4o",
+      "_$prefab": "b4521a63-ee87-4b39-8324-d1c29b403467",
+      "name": "ProgressBar",
+      "active": true,
+      "x": 3,
+      "y": 11,
+      "width": 380,
+      "visible": true,
+      "value": 100,
+      "_$child": [
+        {
+          "_$override": "k3702cls",
+          "color": "#ffffff",
+          "src": "res://829ea062-8d63-47ae-92f2-a61bf6ed2dc8"
+        },
+        {
+          "_$override": "ju7q5zn6",
+          "src": "res://9b7edd21-fb45-48f2-ac69-ddf65781127e"
+        }
+      ]
+    }
+  ]
+}

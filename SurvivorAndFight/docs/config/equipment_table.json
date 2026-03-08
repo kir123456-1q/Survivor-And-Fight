@@ -1,0 +1,6 @@
+{
+  "list": [
+    { "id": 10, "name": "sword_iron", "type": 2, "attack": 15 },
+    { "id": 11, "name": "shield_wood", "type": 2, "defense": 5 }
+  ]
+}

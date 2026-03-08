@@ -19,6 +19,14 @@
 - [x] 4.4 提供 Node 脚本或 npm script：指定 Excel 路径（及可选输出路径），执行后生成 JSON
 - [x] 4.5 提供至少一个示例 Excel 表，导出后与示例 JSON 一致，用于回归验证
 
-## 5. 验证与文档
-- [x] 5.1 跑通流程：示例 Excel → 导表 → JSON → 读表 API 按 id 查询，结果与预期一致
-- [x] 5.2 在 README 或 openspec 变更下补充：属性系统与配表的使用方式、Excel 格式说明、导表命令用法
+## 5. 表注册配置与 Data 全局读表
+- [x] 5.3 规定并实现表注册配置 JSON 的 schema（tables[].key、sources、idKey、alias），文档化于 CONFIG_SCHEMA 或独立 registry 说明
+- [x] 5.4 实现多源合并逻辑：按 sources 顺序加载多个 JSON，将 list 数组合并为一张逻辑表，主键重复时先出现者生效
+- [x] 5.5 实现 Data 单例：加载表注册配置后为每个 key 挂载表视图，提供 GetByID(id)、Get(columnName, id)、GetAll()
+- [x] 5.6 根据表头英文列名动态生成单列取值方法 GetXxx(id)（如 GetName、GetHp），首字母大写驼峰
+- [x] 5.7 提供示例 tables.registry.json（含单表与多表关联，如 Item 合并道具表+装备表）及 Data 初始化与调用示例
+
+## 6. 验证与文档
+- [x] 6.1 跑通流程：示例 Excel → 导表 → JSON → 读表 API 按 id 查询，结果与预期一致
+- [x] 6.2 在 README 或 openspec 变更下补充：属性系统与配表的使用方式、Excel 格式说明、导表命令用法
+- [x] 6.3 补充表注册配置与 Data.Item.GetByID / GetXxx 的用法说明

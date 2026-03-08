@@ -1,0 +1,30 @@
+{
+  "_$ver": 1,
+  "_$id": "sw5npfld",
+  "_$type": "GWidget",
+  "name": "Root",
+  "width": 400,
+  "height": 400,
+  "_$child": [
+    {
+      "_$id": "iifiafa8",
+      "_$type": "GImage",
+      "name": "img_1",
+      "x": 114,
+      "y": 105,
+      "width": 180,
+      "height": 295,
+      "src": "res://f16de3cf-34c8-4ca3-b3cb-23698da66b3f",
+      "autoSize": false
+    },
+    {
+      "_$id": "q6sc3buy",
+      "_$prefab": "5ea630f7-f2c9-4586-b5b0-64432ca8f4ec",
+      "name": "BloodBar",
+      "active": true,
+      "x": 3,
+      "y": 6,
+      "visible": true
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "list": [
+    { "id": 1, "name": "potion_hp", "type": 1, "stack": 99 },
+    { "id": 2, "name": "potion_mp", "type": 1, "stack": 99 }
+  ]
+}

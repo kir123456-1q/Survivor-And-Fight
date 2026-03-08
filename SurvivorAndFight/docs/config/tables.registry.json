@@ -1,0 +1,15 @@
+{
+  "tables": [
+    {
+      "key": "Role",
+      "sources": ["sample_table.json"],
+      "idKey": "id"
+    },
+    {
+      "key": "Item",
+      "alias": "Data_Item",
+      "sources": ["item_table.json", "equipment_table.json"],
+      "idKey": "id"
+    }
+  ]
+}

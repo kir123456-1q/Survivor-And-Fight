@@ -38,6 +38,15 @@
   - 实现方式：Node 脚本（TypeScript/JavaScript），使用 xlsx 等库读取 Excel。
   - 输入：Excel 文件路径（或目录批量）；输出：一个或多个 JSON 文件（可与表名或 sheet 名对应）。
   - 类型解析：严格按第 2 行类型标记解析；list 类型对单元格做 trim + split(',')，再按元素类型 parseInt/parseFloat；无效值处理策略在 spec 中规定（如跳过、默认 0、或报错）。
+- **表注册配置（tables.registry.json）**
+  - 用途：声明「逻辑表名/读取名」与「源 JSON 文件」的对应关系，以及多表关联（多源合并为一张逻辑表）。
+  - 结构：根对象包含 `tables` 数组；每项包含 `key`（如 `"Item"`，对应 `Data.Item`）、`sources`（JSON 路径数组，多源时按顺序合并 list）、可选 `idKey`（主键列名，默认 `id`）、可选 `alias`（内部别名，如 `Data_Item`）。
+  - 多表关联：同一逻辑表对应多个 source 时，运行时按顺序加载各 JSON，将其 `list` 数组合并（concat）为一张表；主键重复时以先出现的为准。
+  - 放置：与配表 JSON 同目录或项目约定的 config 目录，由 Data 初始化时加载。
+- **Data 全局读表 API**
+  - 单例 `Data`：根据表注册配置加载所有源 JSON，为每个 `key` 挂载一个表视图对象，项目内通过 `Data.Item`、`Data.Role` 等统一访问。
+  - 表视图提供：`GetByID(id)` 返回整行（或 undefined）；`Get(columnName, id)` 返回该行指定列的值；按英文表头生成「单列取值」方法：对每列 `xxx` 提供 `GetXxx(id)`（首字母大写的驼峰形式），如 `GetName(id)`、`GetHp(id)`，由运行时根据表头动态生成或由后续代码生成补充。
+  - 初始化：在游戏启动时加载表注册配置，再按 `sources` 加载各 JSON，合并后构建 ConfigTable，注册到 Data[key]，并生成各列的 GetXxx 方法。
 
 ## Risks / Trade-offs
 - Excel 格式一旦定死，后续加列或改类型需要兼容：通过「类型行」和可选「忽略未识别列」策略降低风险；大改可视为新表或版本。
@@ -49,3 +58,4 @@
 ## Open Questions
 - 多 Sheet 是否每个 Sheet 导出一份 JSON，还是合并（由 tasks/实现时约定）。
 - 主键是否允许多列联合（本设计先采用单列主键 `id`）。
+- Data 单例的初始化时机（首屏前一次性加载 vs 按需懒加载）由实现与性能需求决定。

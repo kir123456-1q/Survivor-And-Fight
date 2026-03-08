@@ -48,4 +48,28 @@
 ## 7. 运行时加载（Laya）
 
 - 将配表 JSON 放在 `assets` 或可访问的 URL，使用 Laya.loader 加载（或 fetch）得到 JSON 对象。
-- 将得到的对象传入 `ConfigTable.fromJson(loadedObject)` 构建表，再使用 `getById(id)` / `getAll()` 查询。读表工具不直接依赖 Laya API，仅接受已解析的 JSON，便于在任意环境复用。
+- 将得到的对象传入 `ConfigTable.fromJson(loadedObject)` 构建表，再使用 `getById(id)` / `getAll()` 查询。读表工具不直接依赖 Laya API，仅接受先加载再传入解析结果，便于在任意环境复用。
+
+## 8. 表注册配置（tables.registry.json）
+
+- **用途**：声明逻辑表在全局 `Data` 上的读取名（key）与源 JSON 路径的对应关系，以及多表关联合并（多源合并为一张逻辑表）。
+- **位置**：与配表 JSON 同目录或项目约定的 config 目录；由业务在启动时加载并传入 `initData`。
+- **结构**：根对象包含 `tables` 数组；每项为：
+  - `key`（必填）：在 `Data` 上的访问名，如 `"Item"` 对应 `Data.Item`。
+  - `sources`（必填）：该逻辑表对应的 JSON 路径数组；多个路径时按顺序加载并合并 `list`，主键重复时先出现者生效。
+  - `idKey`（可选）：主键列名，默认 `id`。
+  - `alias`（可选）：内部别名，如 `Data_Item`，供文档或工具使用。
+- **示例**：见同目录 `tables.registry.json`（含单表 Role 与多表关联 Item = 道具表 + 装备表）。
+
+## 9. Data 全局读表
+
+- 使用 `initData(registryJson, loadSource)` 初始化：`loadSource(path)` 为异步加载单份 JSON 的函数（如封装 Laya.loader 或 fetch）。初始化完成后，可通过 `Data.XXX` 访问各表。
+- **表视图 API**：
+  - `Data.XXX.GetByID(id)`：按主键取整行，无则返回 `undefined`。
+  - `Data.XXX.Get(columnName, id)`：取该行指定列的值。
+  - `Data.XXX.GetAll()`：返回全表行数组。
+  - 按英文表头生成的单列方法：如 `Data.Role.GetName(id)`、`Data.Role.GetHp(id)`（首字母大写驼峰 `GetXxx`），与表头一一对应。
+- **示例**：
+  - `const row = Data.Item.GetByID(1);`
+  - `const name = Data.Item.GetName(1);` 或 `Data.Item.Get('name', 1);`
+  - 实现见 `src/config/Data.ts`。
