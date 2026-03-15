@@ -5,6 +5,8 @@
   "name": "Root",
   "width": 400,
   "height": 400,
+  "scaleX": 0.1,
+  "scaleY": 0.1,
   "_$child": [
     {
       "_$id": "iifiafa8",
