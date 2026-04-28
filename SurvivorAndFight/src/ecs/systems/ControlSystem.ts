@@ -3,6 +3,7 @@ import { System } from '../core/System';
 import { Velocity } from '../components/TransformComponents';
 import { Skill } from '../components/Skill';
 import type { FilterRegistry } from '../filters/FilterRegistry';
+import { PLAYER_MOVE_SPEED } from '../../defines';
 
 /**
  * 输入抽象：移动轴与技能释放请求。由 input-abstraction 或 InputService 适配实现。
@@ -24,9 +25,11 @@ export class ControlSystem implements System {
         private readonly world: EcsWorld,
         private readonly filters: FilterRegistry,
         private readonly input: ControlInputSource | null,
+        private readonly isPaused?: () => boolean,
     ) {}
 
     update(_deltaTime: number): void {
+        if (this.isPaused?.()) return;
         if (!this.input) return;
         const controllable = this.filters.getNamedFilter('Controllable');
         if (controllable.length === 0) return;
@@ -34,9 +37,8 @@ export class ControlSystem implements System {
         const axis = this.input.getMoveAxis();
         const velocity = this.world.getComponent(entity, Velocity);
         if (velocity) {
-            const speed = 2;
-            velocity.vx = axis.x * speed;
-            velocity.vy = axis.y * speed;
+            velocity.vx = axis.x * PLAYER_MOVE_SPEED;
+            velocity.vy = axis.y * PLAYER_MOVE_SPEED;
             if (velocity.vz !== undefined) velocity.vz = 0;
         }
         const cast = this.input.getSkillCastRequest();

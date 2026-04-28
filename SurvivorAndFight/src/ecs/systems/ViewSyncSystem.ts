@@ -21,8 +21,8 @@ export class ViewSyncSystem implements System {
                 if (typeof node.y === 'number') node.y = position.y;
                 try {
                     const tr = (node as any).transform;
-                    if (tr && tr.position && typeof tr.position.setValue === 'function') {
-                        tr.position.setValue(position.x, position.y, 0);
+                    if (tr) {
+                        tr.position = new Laya.Vector3(position.x, position.y, 0);
                     }
                 } catch (_) { /* 2D 节点可能无 transform */ }
             }
@@ -30,8 +30,8 @@ export class ViewSyncSystem implements System {
             if (rotation) {
                 try {
                     const tr = (node as any).transform;
-                    if (tr && tr.rotationEuler && typeof tr.rotationEuler.setValue === 'function') {
-                        tr.rotationEuler.setValue(rotation.pitch, rotation.yaw, rotation.roll);
+                    if (tr) {
+                        tr.rotationEuler = new Laya.Vector3(rotation.pitch, rotation.yaw, rotation.roll);
                     }
                 } catch (_) { /* 2D 节点可能无 rotationEuler */ }
             }

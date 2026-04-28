@@ -3,7 +3,8 @@ const { regClass } = Laya;
 import { CONFIG_BASE, DESIGN_WIDTH, DESIGN_HEIGHT } from './defines';
 import { SimpleEcsDemo } from './game/demo/SimpleEcsDemo';
 import { InputService } from './input/InputService';
-import { initData } from './config/Data';
+import { ControlInputAdapter } from './input/ControlInputAdapter';
+import { Data, initData } from './config/Data';
 import type { TablesRegistryJson } from './config/TablesRegistry';
 
 /** 参考 LayaProject2：脚本挂在 Area2D 子节点上，不挂在场景根，避免 3D 管线（_addRenderObject / cullInfoCamera）。 */
@@ -13,15 +14,16 @@ export class Main extends Laya.Script {
 
     private demo: SimpleEcsDemo | null = null;
     private input: InputService | null = null;
+    private controlInput: ControlInputAdapter | null = null;
     /** 2D 相机跟随：平滑系数 0~1，越大跟得越紧；0 表示不跟随。 */
     private cameraFollowSmooth = 0.12;
 
     onStart() {
         // 2D：this.owner 为场景中的 Area2D（GameRoot），用作游戏根容器
         const container = this.owner && (this.owner as any).addChild ? this.owner : null;
-        this.demo = new SimpleEcsDemo(container);
-
         this.input = new InputService();
+        this.controlInput = new ControlInputAdapter(this.input);
+        this.demo = new SimpleEcsDemo(container, null, this.controlInput);
 
         Laya.timer.frameLoop(1, this, this.onFrameLoop);
         this.loadConfigAndInitDemo();
@@ -29,7 +31,7 @@ export class Main extends Laya.Script {
 
     /** 加载配表（Character 等）后按预制体生成玩家与怪物。配表需在 CONFIG_BASE 下；若返回 HTML(404) 会尝试 config/。 */
     private async loadConfigAndInitDemo(): Promise<void> {
-        const bases = [CONFIG_BASE, 'config/'];
+        const bases = ['config/', CONFIG_BASE];
         for (const base of bases) {
             try {
                 const r = await fetch(base + 'tables.registry.json');
@@ -42,6 +44,13 @@ export class Main extends Laya.Script {
                     if (!res.ok) throw new Error(path + ' ' + res.status);
                     const text = await res.text();
                     try { return JSON.parse(text); } catch { throw new Error(path + ' not JSON'); }
+                });
+                console.log('[Config] loaded base', base, {
+                    tables: Object.keys(Data),
+                    hasSkill: !!Data.Skill,
+                    hasSkillEffect: !!Data.SkillEffect,
+                    hasBullet: !!Data.Bullet,
+                    playerAutoSkillRow: Data.Skill?.GetByID?.('player_auto_shot'),
                 });
                 break;
             } catch (e) {

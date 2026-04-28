@@ -13,6 +13,17 @@ function findProgressBar(bodyNode: any): any {
     return bloodBar.getChildByName ? bloodBar.getChildByName(PROGRESS_BAR_NAME) : null;
 }
 
+function toProgressValue(progressBar: any, ratio01: number): number {
+    if (progressBar && typeof progressBar.max === 'number' && progressBar.max > 0) {
+        return ratio01 * progressBar.max;
+    }
+    // Laya GProgressBar commonly uses 0-100 value range by default.
+    if (progressBar && typeof progressBar.value === 'number' && progressBar.value > 1) {
+        return ratio01 * 100;
+    }
+    return ratio01;
+}
+
 /**
  * 根据实体 Attribute 的 hp、maxHp 更新 BloodBar 下 ProgressBar.value（0–1）。
  * 仅处理同时拥有 ViewComponent、BodyUIComponent、Attribute 的实体。
@@ -37,7 +48,7 @@ export class BloodBarSyncSystem implements System {
             const hp = this.attrSystem.getFinalValue(entity, 'hp');
             const maxHp = this.attrSystem.getFinalValue(entity, 'maxHp');
             const ratio = maxHp > 0 ? Math.max(0, Math.min(1, hp / maxHp)) : 1;
-            progressBar.value = ratio;
+            progressBar.value = toProgressValue(progressBar, ratio);
         }
     }
 }

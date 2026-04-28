@@ -1,0 +1,10 @@
+{
+  "list": [
+    {
+      "id": "player_auto_shot_effect_1",
+      "effect": "bullet",
+      "target": "auto",
+      "bulletSlot": "player_bullet_fast_1"
+    }
+  ]
+}

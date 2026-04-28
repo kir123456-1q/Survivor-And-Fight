@@ -1,0 +1,10 @@
+{
+  "list": [
+    {
+      "id": "player_auto_shot",
+      "name": "Player Auto Shot",
+      "effectIds": "player_auto_shot_effect_1",
+      "cooldownSec": 0.25
+    }
+  ]
+}

@@ -7,9 +7,13 @@ export class MovementSystem implements System {
     readonly group = 'logic' as const;
     readonly priority = 0;
 
-    constructor(private readonly world: EcsWorld) {}
+    constructor(
+        private readonly world: EcsWorld,
+        private readonly isPaused?: () => boolean,
+    ) {}
 
     update(deltaTime: number): void {
+        if (this.isPaused?.()) return;
         const pairs = this.world.getAllOfType(Velocity);
         for (const [entity, velocity] of pairs) {
             const position = this.world.getComponent(entity, Position);

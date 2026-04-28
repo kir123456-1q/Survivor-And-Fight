@@ -1,0 +1,24 @@
+{
+  "tables": [
+    {
+      "key": "Character",
+      "sources": ["character_table.json"],
+      "idKey": "id"
+    },
+    {
+      "key": "Bullet",
+      "sources": ["bullet_table.json"],
+      "idKey": "id"
+    },
+    {
+      "key": "Skill",
+      "sources": ["skill_table.json"],
+      "idKey": "id"
+    },
+    {
+      "key": "SkillEffect",
+      "sources": ["skill_effect_table.json"],
+      "idKey": "id"
+    }
+  ]
+}

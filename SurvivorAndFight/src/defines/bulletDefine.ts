@@ -1,7 +1,7 @@
 /**
  * 子弹模块静态配置。
  */
-export const HIT_RADIUS = 1.0;
+export const HIT_RADIUS = 18;
 
 /** 2D 子弹预制体（纯 2D 项目必须用 2D 预制体，避免加载 Sprite3D/PBR/SkyPanoramic）。 */
 export const BULLET_PREFAB_2D = 'prefabs/Common/Buttle/buttle2d.lh';
@@ -11,3 +11,6 @@ export const BULLET_3D_PATHS_TO_2D: Record<string, string> = {
     'prefabs/Common/Buttle/MonsterButtle.lh': BULLET_PREFAB_2D,
     'prefabs/Common/Buttle/simple.lh': BULLET_PREFAB_2D,
 };
+
+/** 默认自动射击子弹槽位（配表缺失时兜底）。 */
+export const DEFAULT_PLAYER_AUTO_BULLET_ID = 'player_bullet_fast_1';

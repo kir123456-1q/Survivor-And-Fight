@@ -6,7 +6,7 @@ import { Attribute } from '../../ecs/components/Attribute';
 import { PlayerTag } from '../../ecs/components/PlayerTag';
 import { MonsterTag } from '../../ecs/components/MonsterTag';
 import type { BulletPool } from './BulletPool';
-import { HIT_RADIUS, BULLET_PREFAB_2D, BULLET_3D_PATHS_TO_2D } from '../../defines';
+import { HIT_RADIUS, BULLET_PREFAB_2D, BULLET_3D_PATHS_TO_2D, COMBAT_DEBUG_LOG } from '../../defines';
 
 export type GetBulletRowFn = (id: string) => Record<string, unknown> | undefined;
 export type InstantiateBulletFn = (prefabPath: string) => any;
@@ -36,6 +36,8 @@ export class BulletSystem implements System {
     readonly priority = 1;
 
     private readonly bullets: BulletInstance[] = [];
+    private spawnLogCount = 0;
+    private hitLogCount = 0;
 
     constructor(
         private readonly world: EcsWorld,
@@ -43,6 +45,7 @@ export class BulletSystem implements System {
         private readonly getBulletRow: GetBulletRowFn,
         private readonly instantiateBullet: InstantiateBulletFn,
         private readonly bulletPool?: BulletPool,
+        private readonly isPaused?: () => boolean,
     ) {}
 
     /**
@@ -50,7 +53,13 @@ export class BulletSystem implements System {
      */
     spawnBullet(bulletId: string, position: { x: number; y: number; z?: number }, direction: { x: number; y: number; z?: number }, ownerType: string): void {
         const row = this.getBulletRow(bulletId);
-        if (!row) return;
+        if (!row) {
+            if (COMBAT_DEBUG_LOG && this.spawnLogCount < 40) {
+                this.spawnLogCount += 1;
+                console.log('[BulletSystem] bullet row not found', { bulletId, ownerType });
+            }
+            return;
+        }
         let prefabPath = (row.prefabPath as string) ?? BULLET_PREFAB_2D;
         if (BULLET_3D_PATHS_TO_2D[prefabPath]) prefabPath = BULLET_3D_PATHS_TO_2D[prefabPath];
         const duration = Number(row.duration) || 2;
@@ -65,6 +74,27 @@ export class BulletSystem implements System {
             y: direction.y / len,
             z: 0,
         };
+        if (typeof (node as any)?.then === 'function') {
+            (node as Promise<any>).then((resolvedNode) => {
+                if (!resolvedNode) return;
+                this.addBulletInstance(resolvedNode, prefabPath, position, dir, speed, damage, penetration, ownerType, duration);
+            }).catch(() => {});
+            return;
+        }
+        this.addBulletInstance(node, prefabPath, position, dir, speed, damage, penetration, ownerType, duration);
+    }
+
+    private addBulletInstance(
+        node: any,
+        prefabPath: string,
+        position: { x: number; y: number; z?: number },
+        dir: { x: number; y: number; z: number },
+        speed: number,
+        damage: number,
+        penetration: number,
+        ownerType: string,
+        duration: number,
+    ): void {
         if (this.sceneParent && node.parent !== this.sceneParent) {
             this.sceneParent.addChild(node);
         }
@@ -79,6 +109,7 @@ export class BulletSystem implements System {
         } catch (_) {
             if (node && typeof (node as any).x === 'number') { (node as any).x = x; (node as any).y = y; }
         }
+        this.applyBulletFacing(node, dir);
         this.bullets.push({
             node,
             prefabPath,
@@ -93,9 +124,24 @@ export class BulletSystem implements System {
             age: 0,
             duration,
         });
+        if (COMBAT_DEBUG_LOG && this.spawnLogCount < 40) {
+            this.spawnLogCount += 1;
+            console.log('[BulletSystem] bullet spawned', {
+                prefabPath,
+                speed,
+                damage,
+                penetration,
+                ownerType,
+                x: position.x,
+                y: position.y ?? 0,
+                dir,
+                aliveCount: this.bullets.length,
+            });
+        }
     }
 
     update(deltaTime: number): void {
+        if (this.isPaused?.()) return;
         for (let i = this.bullets.length - 1; i >= 0; i--) {
             const b = this.bullets[i];
             b.x += b.dir.x * b.speed * deltaTime;
@@ -126,6 +172,16 @@ export class BulletSystem implements System {
                 const attr = this.world.getComponent(eid, Attribute);
                 if (attr && typeof attr.base.hp === 'number') {
                     attr.base.hp = Math.max(0, attr.base.hp - b.damage);
+                    if (COMBAT_DEBUG_LOG && this.hitLogCount < 80) {
+                        this.hitLogCount += 1;
+                        console.log('[BulletSystem] hit target', {
+                            target: eid,
+                            ownerType: b.ownerType,
+                            damage: b.damage,
+                            targetHp: attr.base.hp,
+                            penetrationLeftBeforeDec: b.penetration,
+                        });
+                    }
                 }
                 b.penetration--;
             }
@@ -169,5 +225,20 @@ export class BulletSystem implements System {
             }
         }
         return out;
+    }
+
+    private applyBulletFacing(node: any, dir: { x: number; y: number }): void {
+        const angle = Math.atan2(dir.y, dir.x) * 180 / Math.PI;
+        try {
+            if (node && typeof node.rotation === 'number') {
+                node.rotation = angle;
+            }
+            const tr = node && (node as any).transform;
+            if (tr) {
+                tr.rotationEuler = new Laya.Vector3(0, 0, angle);
+            }
+        } catch (_) {
+            // ignore orientation failures for node types without rotation support
+        }
     }
 }

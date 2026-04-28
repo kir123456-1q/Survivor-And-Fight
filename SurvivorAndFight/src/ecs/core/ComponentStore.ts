@@ -49,5 +49,41 @@ export class ComponentStore {
         });
         return result;
     }
+
+    /**
+     * Removes all components attached to an entity.
+     * Used by world.destroyEntity to satisfy "销毁实体时移除其所有组件".
+     */
+    removeAllComponents(entity: EntityId): void {
+        for (const [type, bucket] of this.store) {
+            if (!bucket.has(entity)) continue;
+            bucket.delete(entity);
+            this.entities.unmarkHasComponent(entity, type);
+            if (bucket.size === 0) {
+                this.store.delete(type);
+            }
+        }
+    }
+
+    /**
+     * Minimal multi-component query helper for future systems.
+     * MVP keeps this simple and map-based.
+     */
+    getEntitiesWith(types: Function[]): EntityId[] {
+        if (types.length === 0) return [];
+        const buckets = types
+            .map((type) => this.store.get(type))
+            .filter((bucket): bucket is Map<EntityId, unknown> => !!bucket);
+        if (buckets.length !== types.length) return [];
+
+        const [smallest, ...rest] = buckets.sort((a, b) => a.size - b.size);
+        const result: EntityId[] = [];
+        for (const entityId of smallest.keys()) {
+            if (rest.every((bucket) => bucket.has(entityId))) {
+                result.push(entityId);
+            }
+        }
+        return result;
+    }
 }
 

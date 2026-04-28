@@ -1,0 +1,49 @@
+import { System } from '../core/System';
+import type { EcsWorld } from '../core/World';
+import type { FilterRegistry } from '../filters/FilterRegistry';
+import { Position } from '../components/TransformComponents';
+import { Attribute } from '../components/Attribute';
+import { MONSTER_COLLISION_DPS, MONSTER_COLLISION_RADIUS } from '../../defines';
+
+/**
+ * Applies continuous contact damage when monsters overlap the player.
+ */
+export class MonsterContactDamageSystem implements System {
+    readonly group = 'logic' as const;
+    readonly priority = -5;
+
+    constructor(
+        private readonly world: EcsWorld,
+        private readonly filters: FilterRegistry,
+        private readonly isPaused?: () => boolean,
+    ) {}
+
+    update(deltaTime: number): void {
+        if (this.isPaused?.()) return;
+        const players = this.filters.getNamedFilter('Players');
+        if (players.length === 0) return;
+        const player = players[0];
+        const playerPos = this.world.getComponent(player, Position);
+        const playerAttr = this.world.getComponent(player, Attribute);
+        if (!playerPos || !playerAttr || typeof playerAttr.base.hp !== 'number') return;
+        if (playerAttr.base.hp <= 0) return;
+
+        const monsters = this.filters.getNamedFilter('Monsters');
+        const radiusSq = MONSTER_COLLISION_RADIUS * MONSTER_COLLISION_RADIUS;
+        let hitCount = 0;
+        for (const monster of monsters) {
+            const mPos = this.world.getComponent(monster, Position);
+            if (!mPos) continue;
+            const dx = mPos.x - playerPos.x;
+            const dy = mPos.y - playerPos.y;
+            const distSq = dx * dx + dy * dy;
+            if (distSq <= radiusSq) {
+                hitCount += 1;
+            }
+        }
+        if (hitCount === 0) return;
+
+        const damage = MONSTER_COLLISION_DPS * hitCount * deltaTime;
+        playerAttr.base.hp = Math.max(0, playerAttr.base.hp - damage);
+    }
+}

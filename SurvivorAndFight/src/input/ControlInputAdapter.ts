@@ -25,8 +25,8 @@ export class ControlInputAdapter implements ControlInputSource {
     getMoveAxis(): { x: number; y: number } {
         let x = 0;
         let y = 0;
-        if (this.input.isKeyDown(KeyCode.W)) y += 1;
-        if (this.input.isKeyDown(KeyCode.S)) y -= 1;
+        if (this.input.isKeyDown(KeyCode.W)) y -= 1;
+        if (this.input.isKeyDown(KeyCode.S)) y += 1;
         if (this.input.isKeyDown(KeyCode.A)) x -= 1;
         if (this.input.isKeyDown(KeyCode.D)) x += 1;
         return { x, y };

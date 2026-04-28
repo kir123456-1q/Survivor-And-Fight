@@ -1,0 +1,41 @@
+{
+  "_$ver": 1,
+  "_$id": "3czn4fl1",
+  "_$type": "GPanel",
+  "name": "ReStartPanel",
+  "width": 1338,
+  "height": 745,
+  "anchorX": 0.0033333333333333335,
+  "_$child": [
+    {
+      "_$id": "ggyybzwi",
+      "_$type": "GImage",
+      "name": "img",
+      "x": -90,
+      "y": -115,
+      "width": 1487,
+      "height": 1009,
+      "alpha": 0.25,
+      "src": "res://8daa4e1f-cba7-4117-b0d3-eb5c7ad9eefa",
+      "autoSize": false
+    },
+    {
+      "_$id": "a1xxlk9e",
+      "_$prefab": "b0c7f4b6-9a33-4cd8-897e-4888efe760fe",
+      "_$var": true,
+      "name": "Button",
+      "active": true,
+      "x": 610,
+      "y": 664,
+      "visible": true,
+      "_$child": [
+        {
+          "_$override": "kahpmowa",
+          "text": "复活",
+          "y": 4,
+          "height": 44
+        }
+      ]
+    }
+  ]
+}

@@ -24,9 +24,8 @@ export class EcsWorld {
     }
 
     destroyEntity(id: EntityId): void {
+        this.components.removeAllComponents(id);
         this.entities.destroyEntity(id);
-        // ComponentStore relies on destroy/remove being called explicitly;
-        // for MVP we don't auto-scan all component buckets here.
     }
 
     addComponent<T>(entity: EntityId, type: new (...args: any[]) => T, instance: T): void {
@@ -49,8 +48,18 @@ export class EcsWorld {
         return this.components.getAllOfType(type);
     }
 
-    registerSystem(system: System, group: SystemGroup = 'logic', priority = 0): void {
-        this.systems.push({ system, group, priority });
+    getEntitiesWith(types: Function[]): EntityId[] {
+        return this.components.getEntitiesWith(types);
+    }
+
+    registerSystem(system: System, group?: SystemGroup, priority?: number): void {
+        const resolvedGroup = group ?? system.group ?? 'logic';
+        const resolvedPriority = priority ?? system.priority ?? 0;
+        this.systems.push({
+            system,
+            group: resolvedGroup,
+            priority: resolvedPriority,
+        });
         this.sortSystems();
     }
 

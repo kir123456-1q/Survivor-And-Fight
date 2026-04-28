@@ -8,3 +8,4 @@ export * from './demoDefine';
 export * from './bulletDefine';
 export * from './uiDefine';
 export * from './skillDefine';
+export * from './progressionDefine';

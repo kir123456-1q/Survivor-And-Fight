@@ -1,0 +1,33 @@
+{
+  "_$ver": 1,
+  "_$id": "3czn4fl1",
+  "_$type": "GPanel",
+  "name": "MainUIPanel",
+  "width": 1338,
+  "height": 745,
+  "anchorX": 0.0033333333333333335,
+  "_$child": [
+    {
+      "_$id": "xhndu91h",
+      "_$prefab": "b4521a63-ee87-4b39-8324-d1c29b403467",
+      "name": "LevelProgressBar",
+      "active": true,
+      "x": 149,
+      "y": 15,
+      "width": 1051,
+      "visible": true
+    },
+    {
+      "_$id": "2s7weq56",
+      "_$prefab": "fc1809fd-2e70-4e0c-89a7-156033b9af9e",
+      "name": "LevelTxt",
+      "active": true,
+      "x": 15,
+      "y": 11,
+      "width": 105,
+      "height": 47,
+      "visible": true,
+      "text": "text"
+    }
+  ]
+}
