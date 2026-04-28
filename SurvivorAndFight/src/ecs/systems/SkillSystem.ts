@@ -5,6 +5,7 @@ import { Skill } from '../components/Skill';
 import { Attribute } from '../components/Attribute';
 import { Position } from '../components/TransformComponents';
 import { PlayerTag } from '../components/PlayerTag';
+import { UpgradeState } from '../components/UpgradeState';
 import type { AttributeSystem } from './AttributeSystem';
 import type { FilterRegistry } from '../filters/FilterRegistry';
 import type { BulletSystem } from '../../game/bullet/BulletSystem';
@@ -135,7 +136,27 @@ export class SkillSystem implements System {
                             z: 0,
                         };
                     }
-                    this.bulletSystem.spawnBullet(bulletSlot, pos, dir, ownerType);
+                    const upgrade = this.world.getComponent(entity, UpgradeState);
+                    const shotCount = ownerType === 'player'
+                        ? 1 + Math.max(0, upgrade?.multiShotExtra ?? 0)
+                        : 1;
+                    const splitCount = ownerType === 'player' ? Math.max(0, upgrade?.onHitSpawnCount ?? 0) : 0;
+                    const damageScale = ownerType === 'player' ? (upgrade?.bulletDamageMultiplier ?? 1) : 1;
+                    const spreadStepDeg = 8;
+                    for (let si = 0; si < shotCount; si++) {
+                        const spreadOffset = si - (shotCount - 1) * 0.5;
+                        const a = spreadOffset * spreadStepDeg * Math.PI / 180;
+                        const rotatedDir = {
+                            x: dir.x * Math.cos(a) - dir.y * Math.sin(a),
+                            y: dir.x * Math.sin(a) + dir.y * Math.cos(a),
+                            z: 0,
+                        };
+                        this.bulletSystem.spawnBulletWithOptions(bulletSlot, pos, rotatedDir, ownerType, {
+                            damageScale,
+                            splitCount,
+                            splitRemaining: splitCount > 0 ? 1 : 0,
+                        });
+                    }
                     if (COMBAT_DEBUG_LOG && this.logCounter < 40) {
                         this.logCounter += 1;
                         console.log('[SkillSystem] spawn bullet request', {
@@ -178,7 +199,11 @@ export class SkillSystem implements System {
                 }
             }
             const cooldownSec = this.getSkillCooldown?.(skillId) ?? 1;
-            skill.cooldownRemain[skillId] = Math.max(0, cooldownSec);
+            const upgrade = this.world.getComponent(entity, UpgradeState);
+            const fireRateMul = this.world.getComponent(entity, PlayerTag)
+                ? Math.max(0.1, upgrade?.fireRateMultiplier ?? 1)
+                : 1;
+            skill.cooldownRemain[skillId] = Math.max(0, cooldownSec / fireRateMul);
         }
     }
 }

@@ -7,6 +7,7 @@ import { Skill } from '../../ecs/components/Skill';
 import { Control } from '../../ecs/components/Control';
 import { Experience } from '../../ecs/components/Experience';
 import { ExperienceReward } from '../../ecs/components/ExperienceReward';
+import { UpgradeState } from '../../ecs/components/UpgradeState';
 import { MovementSystem } from '../../ecs/systems/MovementSystem';
 import { RotationSystem } from '../../ecs/systems/RotationSystem';
 import { ViewSyncSystem } from '../../ecs/systems/ViewSyncSystem';
@@ -26,6 +27,7 @@ import { MonsterPool } from '../monster/MonsterPool';
 import { PlayerAutoCastSystem } from '../../ecs/systems/PlayerAutoCastSystem';
 import { ExperienceSystem } from '../../ecs/systems/ExperienceSystem';
 import { MonsterWaveSpawnSystem } from '../../ecs/systems/MonsterWaveSpawnSystem';
+import { UpgradeRewardSystem } from '../../ecs/systems/UpgradeRewardSystem';
 import { FilterRegistry } from '../../ecs/filters/FilterRegistry';
 import { registerNamedFilters } from '../../ecs/filters/NamedFilters';
 import { GameSession } from '../../ecs/components/GameSession';
@@ -71,6 +73,7 @@ export class SimpleEcsDemo {
     private readonly skillSystem: SkillSystem;
     private readonly experienceSystem: ExperienceSystem;
     private readonly monsterWaveSpawnSystem: MonsterWaveSpawnSystem;
+    private readonly upgradeRewardSystem: UpgradeRewardSystem;
     private readonly mainHudSystem: MainHudSystem;
     private readonly container: any;
     private readonly filters: FilterRegistry;
@@ -118,7 +121,13 @@ export class SimpleEcsDemo {
             (count, monsterLevel) => this.spawnMonsters(count, monsterLevel),
             () => this.isPaused(),
         );
-        this.mainHudSystem = new MainHudSystem(this.world, this.filters, this.container ?? Laya.stage);
+        this.upgradeRewardSystem = new UpgradeRewardSystem(
+            this.world,
+            this.filters,
+            () => this.getUpgradeRarityRows(),
+            () => this.getUpgradeEffectRows(),
+        );
+        this.mainHudSystem = new MainHudSystem(this.world, this.filters, Laya.stage);
         this.setupSystems();
     }
 
@@ -146,6 +155,7 @@ export class SimpleEcsDemo {
         this.world.registerSystem(new MonsterRecycleSystem(this.world, this.filters, this.monsterPool, this.experienceSystem, isPaused), 'logic', -6);
         this.world.registerSystem(this.experienceSystem, 'logic', -7);
         this.world.registerSystem(this.monsterWaveSpawnSystem, 'logic', -8);
+        this.world.registerSystem(this.upgradeRewardSystem, 'logic', -9);
         this.world.registerSystem(new PlayerDeathSystem(this.world, this.filters, this.sessionEntity), 'logic', -10);
         this.world.registerSystem(new RestartPanelSystem(this.world, this.sessionEntity, this.uiStack), 'render', 5);
         this.world.registerSystem(this.mainHudSystem, 'render', 20);
@@ -166,6 +176,7 @@ export class SimpleEcsDemo {
         this.world.addComponent(entity, Rotation, new Rotation());
         this.world.addComponent(entity, Attribute, new Attribute({ hp, maxHp }));
         this.world.addComponent(entity, Experience, new Experience(1, 0));
+        this.world.addComponent(entity, UpgradeState, new UpgradeState());
         this.world.addComponent(entity, Skill, new Skill(DEFAULT_PLAYER_AUTO_SKILL_ID, {}));
         this.world.addComponent(entity, Control, new Control());
 
@@ -400,6 +411,49 @@ export class SimpleEcsDemo {
             }
         }
         return row;
+    }
+
+    private getUpgradeRarityRows(): Array<{ rarity: 'common' | 'rare' | 'epic'; baseWeight: number; levelFactor: number }> {
+        const rows = Data?.UpgradeRarity?.GetAll?.() as Array<Record<string, unknown>> | undefined;
+        if (!rows || rows.length === 0) {
+            return [
+                { rarity: 'common', baseWeight: 80, levelFactor: -0.6 },
+                { rarity: 'rare', baseWeight: 18, levelFactor: 0.5 },
+                { rarity: 'epic', baseWeight: 2, levelFactor: 0.1 },
+            ];
+        }
+        return rows.map((r) => ({
+            rarity: String(r.rarity) as 'common' | 'rare' | 'epic',
+            baseWeight: Number(r.baseWeight) || 0,
+            levelFactor: Number(r.levelFactor) || 0,
+        }));
+    }
+
+    private getUpgradeEffectRows(): Array<{ id: string; effectType: string; tier: number; rarity: 'common' | 'rare' | 'epic'; value: number }> {
+        const rows = Data?.UpgradeEffect?.GetAll?.() as Array<Record<string, unknown>> | undefined;
+        if (!rows || rows.length === 0) {
+            return [
+                { id: 'u_fire_1', effectType: 'fire_rate', tier: 1, rarity: 'common', value: 0.12 },
+                { id: 'u_fire_2', effectType: 'fire_rate', tier: 2, rarity: 'rare', value: 0.18 },
+                { id: 'u_fire_3', effectType: 'fire_rate', tier: 3, rarity: 'epic', value: 0.24 },
+                { id: 'u_dmg_1', effectType: 'damage', tier: 1, rarity: 'common', value: 0.12 },
+                { id: 'u_dmg_2', effectType: 'damage', tier: 2, rarity: 'rare', value: 0.18 },
+                { id: 'u_dmg_3', effectType: 'damage', tier: 3, rarity: 'epic', value: 0.25 },
+                { id: 'u_ms_1', effectType: 'multi_shot', tier: 1, rarity: 'common', value: 1 },
+                { id: 'u_ms_2', effectType: 'multi_shot', tier: 2, rarity: 'rare', value: 1 },
+                { id: 'u_ms_3', effectType: 'multi_shot', tier: 3, rarity: 'epic', value: 1 },
+                { id: 'u_split_1', effectType: 'on_hit_spawn', tier: 1, rarity: 'common', value: 1 },
+                { id: 'u_split_2', effectType: 'on_hit_spawn', tier: 2, rarity: 'rare', value: 1 },
+                { id: 'u_split_3', effectType: 'on_hit_spawn', tier: 3, rarity: 'epic', value: 2 },
+            ];
+        }
+        return rows.map((r) => ({
+            id: String(r.id),
+            effectType: String(r.effectType),
+            tier: Number(r.tier) || 1,
+            rarity: String(r.rarity) as 'common' | 'rare' | 'epic',
+            value: Number(r.value) || 0,
+        }));
     }
 
     private logMissingConfigOnce(key: string, message: string, detail: Record<string, unknown>): void {

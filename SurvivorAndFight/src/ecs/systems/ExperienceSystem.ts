@@ -31,6 +31,7 @@ export class ExperienceSystem implements System {
             xp.exp -= xp.expToNext;
             xp.level += 1;
             xp.expToNext = calcExpToNext(xp.level);
+            xp.pendingRewardRolls += 1;
         }
         if (xp.exp < 0) xp.exp = 0;
     }

@@ -4,8 +4,8 @@
 - [ ] 1.3 通过 `openspec validate add-mvc-ui-stack-redpoint-pooling --strict --no-interactive`
 
 ## 2. Framework Implementation
-- [ ] 2.1 新增 MVC UI 基类与生命周期接口（初始化、显示、隐藏、销毁、重置）
-- [ ] 2.2 实现 UI 栈管理器（push/pop/replace/clearToRoot）及栈操作保护
+- [x] 2.1 新增 MVC UI 基类与生命周期接口（初始化、显示、隐藏、销毁、重置）
+- [x] 2.2 实现 UI 栈管理器（push/pop/replace/clearToRoot）及栈操作保护
 - [ ] 2.3 实现红点树服务（节点注册、父子聚合、事件通知、解绑清理）
 - [ ] 2.4 实现 UI 对象池服务（自动回收、复用重置、容量与过期策略）
 

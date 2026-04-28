@@ -8,3 +8,4 @@ export const RESTART_PANEL_PREFAB = 'prefabs/MainUI/ReStartPanel.lh';
 export const MAIN_UI_PANEL_PREFAB = 'prefabs/MainUI/MainUIPanel.lh';
 export const LEVEL_PROGRESS_BAR_NAME = 'LevelProgressBar';
 export const LEVEL_TEXT_NAME = 'LevelTxt';
+export const SKILL_TEXT_NAME = 'SKillTxt';

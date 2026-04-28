@@ -28,6 +28,17 @@
       "height": 47,
       "visible": true,
       "text": "text"
+    },
+    {
+      "_$id": "yfkkkjb1",
+      "_$type": "GTextField",
+      "name": "SKillTxt",
+      "x": 1122,
+      "y": 48,
+      "width": 215,
+      "height": 689,
+      "text": "text",
+      "fontSize": 20
     }
   ]
 }

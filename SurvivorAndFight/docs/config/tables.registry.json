@@ -30,6 +30,16 @@
       "key": "SkillEffect",
       "sources": ["skill_effect_table.json"],
       "idKey": "id"
+    },
+    {
+      "key": "UpgradeEffect",
+      "sources": ["upgrade_effect_table.json"],
+      "idKey": "id"
+    },
+    {
+      "key": "UpgradeRarity",
+      "sources": ["upgrade_rarity_table.json"],
+      "idKey": "rarity"
     }
   ]
 }

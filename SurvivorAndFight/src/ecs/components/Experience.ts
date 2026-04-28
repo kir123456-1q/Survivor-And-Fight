@@ -5,6 +5,7 @@ export class Experience {
         public level: number = 1,
         public exp: number = 0,
         public expToNext: number = PLAYER_LEVEL_EXP_BASE,
+        public pendingRewardRolls: number = 0,
     ) {}
 }
 

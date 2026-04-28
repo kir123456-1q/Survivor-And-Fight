@@ -12,6 +12,7 @@ export type GetBulletRowFn = (id: string) => Record<string, unknown> | undefined
 export type InstantiateBulletFn = (prefabPath: string) => any;
 
 interface BulletInstance {
+    bulletId: string;
     node: any;
     prefabPath: string;
     x: number;
@@ -24,6 +25,9 @@ interface BulletInstance {
     ownerType: string;
     age: number;
     duration: number;
+    splitCount: number;
+    splitRemaining: number;
+    collisionDelay: number;
 }
 
 /**
@@ -52,6 +56,21 @@ export class BulletSystem implements System {
      * 根据子弹表 id 生成子弹，position 与 direction 为世界坐标/方向，ownerType 为 "player" | "monster"。
      */
     spawnBullet(bulletId: string, position: { x: number; y: number; z?: number }, direction: { x: number; y: number; z?: number }, ownerType: string): void {
+        this.spawnBulletWithOptions(bulletId, position, direction, ownerType, {});
+    }
+
+    spawnBulletWithOptions(
+        bulletId: string,
+        position: { x: number; y: number; z?: number },
+        direction: { x: number; y: number; z?: number },
+        ownerType: string,
+        options: {
+            damageScale?: number;
+            splitCount?: number;
+            splitRemaining?: number;
+            collisionDelaySec?: number;
+        },
+    ): void {
         const row = this.getBulletRow(bulletId);
         if (!row) {
             if (COMBAT_DEBUG_LOG && this.spawnLogCount < 40) {
@@ -64,7 +83,7 @@ export class BulletSystem implements System {
         if (BULLET_3D_PATHS_TO_2D[prefabPath]) prefabPath = BULLET_3D_PATHS_TO_2D[prefabPath];
         const duration = Number(row.duration) || 2;
         const speed = Number(row.speed) || 10;
-        const damage = Number(row.damage) || 5;
+        const damage = (Number(row.damage) || 5) * (options.damageScale ?? 1);
         const penetration = Number(row.penetration) ?? 0;
         const node = this.bulletPool?.get(prefabPath) ?? this.instantiateBullet(prefabPath);
         if (!node) return;
@@ -77,14 +96,43 @@ export class BulletSystem implements System {
         if (typeof (node as any)?.then === 'function') {
             (node as Promise<any>).then((resolvedNode) => {
                 if (!resolvedNode) return;
-                this.addBulletInstance(resolvedNode, prefabPath, position, dir, speed, damage, penetration, ownerType, duration);
+                this.addBulletInstance(
+                    bulletId,
+                    resolvedNode,
+                    prefabPath,
+                    position,
+                    dir,
+                    speed,
+                    damage,
+                    penetration,
+                    ownerType,
+                    duration,
+                    options.splitCount ?? 0,
+                    options.splitRemaining ?? 0,
+                    options.collisionDelaySec ?? 0,
+                );
             }).catch(() => {});
             return;
         }
-        this.addBulletInstance(node, prefabPath, position, dir, speed, damage, penetration, ownerType, duration);
+        this.addBulletInstance(
+            bulletId,
+            node,
+            prefabPath,
+            position,
+            dir,
+            speed,
+            damage,
+            penetration,
+            ownerType,
+            duration,
+            options.splitCount ?? 0,
+            options.splitRemaining ?? 0,
+            options.collisionDelaySec ?? 0,
+        );
     }
 
     private addBulletInstance(
+        bulletId: string,
         node: any,
         prefabPath: string,
         position: { x: number; y: number; z?: number },
@@ -94,6 +142,9 @@ export class BulletSystem implements System {
         penetration: number,
         ownerType: string,
         duration: number,
+        splitCount: number,
+        splitRemaining: number,
+        collisionDelay: number,
     ): void {
         if (this.sceneParent && node.parent !== this.sceneParent) {
             this.sceneParent.addChild(node);
@@ -111,6 +162,7 @@ export class BulletSystem implements System {
         }
         this.applyBulletFacing(node, dir);
         this.bullets.push({
+            bulletId,
             node,
             prefabPath,
             x: position.x,
@@ -123,6 +175,9 @@ export class BulletSystem implements System {
             ownerType,
             age: 0,
             duration,
+            splitCount,
+            splitRemaining,
+            collisionDelay,
         });
         if (COMBAT_DEBUG_LOG && this.spawnLogCount < 40) {
             this.spawnLogCount += 1;
@@ -147,6 +202,9 @@ export class BulletSystem implements System {
             b.x += b.dir.x * b.speed * deltaTime;
             b.y += b.dir.y * b.speed * deltaTime;
             b.age += deltaTime;
+            if (b.collisionDelay > 0) {
+                b.collisionDelay = Math.max(0, b.collisionDelay - deltaTime);
+            }
             const n = b.node;
             try {
                 const tr = n && (n as any).transform;
@@ -166,9 +224,10 @@ export class BulletSystem implements System {
                 this.bullets.splice(i, 1);
                 continue;
             }
-            const hits = this.getHits(b);
+            const hits = b.collisionDelay > 0 ? [] : this.getHits(b);
             for (const eid of hits) {
                 if (b.penetration < 0) break;
+                const hitPos = this.world.getComponent(eid, Position);
                 const attr = this.world.getComponent(eid, Attribute);
                 if (attr && typeof attr.base.hp === 'number') {
                     attr.base.hp = Math.max(0, attr.base.hp - b.damage);
@@ -183,12 +242,44 @@ export class BulletSystem implements System {
                         });
                     }
                 }
+                if (hitPos && b.splitCount > 0 && b.splitRemaining > 0) {
+                    this.spawnSplitBullets(b, { x: hitPos.x, y: hitPos.y ?? 0 });
+                }
                 b.penetration--;
             }
             if (b.penetration < 0) {
                 this.destroyBullet(b);
                 this.bullets.splice(i, 1);
             }
+        }
+    }
+
+    private spawnSplitBullets(parent: BulletInstance, hitPos: { x: number; y: number }): void {
+        // Rule: splitCount=1 means spawn 2 bullets (same as parent bullet),
+        // then distribute evenly within [-60°, +60°] around parent direction.
+        const splitLevel = Math.max(0, Math.round(parent.splitCount));
+        const cnt = splitLevel + 1;
+        if (cnt <= 0) return;
+        const remaining = parent.splitRemaining - 1;
+        const baseAngle = Math.atan2(parent.dir.y, parent.dir.x);
+        const spreadRad = 120 * Math.PI / 180;
+        const start = baseAngle - spreadRad * 0.5;
+        const step = cnt > 1 ? spreadRad / (cnt - 1) : 0;
+        for (let i = 0; i < cnt; i++) {
+            const a = start + step * i;
+            const dir = { x: Math.cos(a), y: Math.sin(a), z: 0 };
+            this.spawnBulletWithOptions(parent.bulletId, {
+                x: hitPos.x,
+                y: hitPos.y,
+                z: 0,
+            }, dir, parent.ownerType, {
+                damageScale: 1,
+                splitCount: parent.splitCount,
+                splitRemaining: remaining,
+                // Spawned at hit point: arm collision shortly after launch
+                // to avoid immediate self-collision disappearance.
+                collisionDelaySec: 0.06,
+            });
         }
     }
 
