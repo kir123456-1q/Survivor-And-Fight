@@ -1,0 +1,16 @@
+fx_shot_triple_fan_icon
+fx_shot_prism_overload_icon
+fx_shot_meteor_fall_icon
+fx_shot_blackhole_seed_icon
+fx_rand_wild_arc_icon
+fx_rand_hop_target_icon
+fx_rand_lucky_split_icon
+fx_rand_roulette_bomb_icon
+fx_rand_pinball_icon
+fx_rand_sniper_focus_icon
+fx_rand_mirror_shot_icon
+fx_rand_quantum_pick_icon
+fx_rand_entropy_storm_icon
+fx_rand_destiny_reset_icon
+reserved_empty_15
+reserved_empty_16

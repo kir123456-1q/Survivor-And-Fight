@@ -1,0 +1,17 @@
+{
+  "list": [
+    { "id": "balance_global", "category": "global", "rarity": "global", "mana_cap_base": 100, "mana_regen_per_sec": 12, "mana_cost_scale": 1.0, "attack_speed_min": 0.6, "attack_speed_max": 2.2, "projectile_budget": 18, "max_chain_triggers": 8 },
+
+    { "id": "balance_melee_common", "category": "melee_orbit", "rarity": "common", "mana_cap_base": 110, "mana_regen_per_sec": 14, "mana_cost_scale": 0.95, "attack_speed_min": 0.9, "attack_speed_max": 1.6, "projectile_budget": 10, "max_chain_triggers": 4 },
+    { "id": "balance_melee_rare", "category": "melee_orbit", "rarity": "rare", "mana_cap_base": 130, "mana_regen_per_sec": 15, "mana_cost_scale": 1.0, "attack_speed_min": 0.85, "attack_speed_max": 1.8, "projectile_budget": 12, "max_chain_triggers": 5 },
+    { "id": "balance_melee_epic", "category": "melee_orbit", "rarity": "epic", "mana_cap_base": 160, "mana_regen_per_sec": 17, "mana_cost_scale": 1.08, "attack_speed_min": 0.8, "attack_speed_max": 2.0, "projectile_budget": 14, "max_chain_triggers": 6 },
+
+    { "id": "balance_shot_common", "category": "ranged_shot", "rarity": "common", "mana_cap_base": 105, "mana_regen_per_sec": 11, "mana_cost_scale": 1.0, "attack_speed_min": 0.75, "attack_speed_max": 1.5, "projectile_budget": 12, "max_chain_triggers": 4 },
+    { "id": "balance_shot_rare", "category": "ranged_shot", "rarity": "rare", "mana_cap_base": 130, "mana_regen_per_sec": 12, "mana_cost_scale": 1.06, "attack_speed_min": 0.7, "attack_speed_max": 1.6, "projectile_budget": 15, "max_chain_triggers": 6 },
+    { "id": "balance_shot_epic", "category": "ranged_shot", "rarity": "epic", "mana_cap_base": 165, "mana_regen_per_sec": 13, "mana_cost_scale": 1.15, "attack_speed_min": 0.65, "attack_speed_max": 1.75, "projectile_budget": 18, "max_chain_triggers": 8 },
+
+    { "id": "balance_random_common", "category": "ranged_random", "rarity": "common", "mana_cap_base": 108, "mana_regen_per_sec": 12, "mana_cost_scale": 0.98, "attack_speed_min": 0.8, "attack_speed_max": 1.65, "projectile_budget": 13, "max_chain_triggers": 5 },
+    { "id": "balance_random_rare", "category": "ranged_random", "rarity": "rare", "mana_cap_base": 136, "mana_regen_per_sec": 13, "mana_cost_scale": 1.05, "attack_speed_min": 0.75, "attack_speed_max": 1.85, "projectile_budget": 16, "max_chain_triggers": 7 },
+    { "id": "balance_random_epic", "category": "ranged_random", "rarity": "epic", "mana_cap_base": 172, "mana_regen_per_sec": 15, "mana_cost_scale": 1.12, "attack_speed_min": 0.7, "attack_speed_max": 2.0, "projectile_budget": 18, "max_chain_triggers": 9 }
+  ]
+}

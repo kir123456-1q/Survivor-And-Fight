@@ -40,6 +40,26 @@
       "key": "UpgradeRarity",
       "sources": ["upgrade_rarity_table.json"],
       "idKey": "rarity"
+    },
+    {
+      "key": "Wand",
+      "sources": ["wand_table.json"],
+      "idKey": "id"
+    },
+    {
+      "key": "WandEffect",
+      "sources": ["wand_effect_table.json"],
+      "idKey": "id"
+    },
+    {
+      "key": "WandEffectPool",
+      "sources": ["wand_effect_pool_table.json"],
+      "idKey": "id"
+    },
+    {
+      "key": "WandBalance",
+      "sources": ["wand_balance_table.json"],
+      "idKey": "id"
     }
   ]
 }

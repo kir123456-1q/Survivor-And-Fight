@@ -19,5 +19,5 @@
 - [x] 3.4 覆盖法杖空位更新 panel 的底图、槽位、高亮、value 层提示词
 
 ## 4. 校验
-- [ ] 4.1 运行 `npx openspec validate add-three-wand-systems-and-config-tables --strict --no-interactive`
-- [ ] 4.2 修复校验错误直至通过
+- [x] 4.1 运行 `npx openspec validate add-three-wand-systems-and-config-tables --strict --no-interactive`
+- [x] 4.2 修复校验错误直至通过
