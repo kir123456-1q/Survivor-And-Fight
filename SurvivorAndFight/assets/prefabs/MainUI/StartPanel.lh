@@ -1,0 +1,76 @@
+{
+  "_$ver": 1,
+  "_$id": "kb7zg0r9",
+  "_$type": "Area2D",
+  "name": "StartPanel",
+  "x": -5,
+  "y": -1,
+  "width": 1339,
+  "height": 747,
+  "_$child": [
+    {
+      "_$id": "i7ba5ju5",
+      "_$type": "GImage",
+      "name": "img",
+      "x": 6,
+      "y": 1,
+      "width": 1330,
+      "height": 751,
+      "src": "res://48823ab5-249c-43bb-a092-d82b2f96d8bf",
+      "autoSize": false
+    },
+    {
+      "_$id": "pkuzth06",
+      "_$type": "GImage",
+      "name": "img_1",
+      "x": 378,
+      "y": 44,
+      "width": 551,
+      "height": 453,
+      "src": "res://5d830498-6cbd-43d9-8e9c-571375cd9c0a",
+      "autoSize": false
+    },
+    {
+      "_$id": "ozd9u7uz",
+      "_$prefab": "b0c7f4b6-9a33-4cd8-897e-4888efe760fe",
+      "name": "Button",
+      "active": true,
+      "x": 487,
+      "y": 539,
+      "width": 355,
+      "height": 95,
+      "visible": true,
+      "_$child": [
+        {
+          "_$override": "ug1dmopr",
+          "src": "res://1c662b8a-ed49-4cfb-a056-d5b7b17786eb",
+          "x": 0,
+          "y": 0,
+          "width": 355,
+          "height": 95
+        },
+        {
+          "_$override": "asxzquct",
+          "src": "res://1c662b8a-ed49-4cfb-a056-d5b7b17786eb"
+        },
+        {
+          "_$override": "syt0gdq4",
+          "src": "res://1c662b8a-ed49-4cfb-a056-d5b7b17786eb",
+          "alpha": 0.752,
+          "y": 0,
+          "height": 95,
+          "x": 0
+        },
+        {
+          "_$override": "kahpmowa",
+          "singleCharRender": false,
+          "text": "Start",
+          "color": "#fcdba1",
+          "fontSize": 50,
+          "y": 11,
+          "x": 0
+        }
+      ]
+    }
+  ]
+}
