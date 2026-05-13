@@ -35,10 +35,10 @@
       "_$prefab": "b0c7f4b6-9a33-4cd8-897e-4888efe760fe",
       "name": "StartBtn",
       "active": true,
-      "x": 487,
-      "y": 539,
-      "width": 355,
-      "height": 95,
+      "x": 478,
+      "y": 544,
+      "width": 335,
+      "height": 96,
       "visible": true,
       "_$child": [
         {
@@ -46,8 +46,8 @@
           "src": "res://1c662b8a-ed49-4cfb-a056-d5b7b17786eb",
           "x": 0,
           "y": 0,
-          "width": 355,
-          "height": 95
+          "width": 335,
+          "height": 96
         },
         {
           "_$override": "asxzquct",
@@ -58,7 +58,7 @@
           "src": "res://1c662b8a-ed49-4cfb-a056-d5b7b17786eb",
           "alpha": 0.752,
           "y": 0,
-          "height": 95,
+          "height": 96,
           "x": 0
         },
         {
