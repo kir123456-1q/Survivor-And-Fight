@@ -10,8 +10,12 @@
       "mana_cap_bonus": 20,
       "projectile_speed": 6,
       "effect_slot_count": 2,
-      "default_tags": ["orbit", "close_range"],
-      "description": "低耗蓝近身环绕入门法杖。"
+      "default_tags": [
+        "orbit",
+        "close_range"
+      ],
+      "description": "低耗蓝近身环绕入门法杖。",
+      "ui_icon_path": "atlas/WeaponIcon/wand_melee_bronze_orbit_icon.png"
     },
     {
       "id": "wand_melee_ash_guard",
@@ -23,8 +27,12 @@
       "mana_cap_bonus": 15,
       "projectile_speed": 7,
       "effect_slot_count": 2,
-      "default_tags": ["orbit", "burn"],
-      "description": "偏攻速，适配持续灼烧。"
+      "default_tags": [
+        "orbit",
+        "burn"
+      ],
+      "description": "偏攻速，适配持续灼烧。",
+      "ui_icon_path": "atlas/WeaponIcon/wand_melee_ash_guard_icon.png"
     },
     {
       "id": "wand_melee_storm_ring",
@@ -36,8 +44,12 @@
       "mana_cap_bonus": 30,
       "projectile_speed": 8,
       "effect_slot_count": 3,
-      "default_tags": ["orbit", "multi_hit"],
-      "description": "高速环绕，多段命中能力稳定。"
+      "default_tags": [
+        "orbit",
+        "multi_hit"
+      ],
+      "description": "高速环绕，多段命中能力稳定。",
+      "ui_icon_path": "atlas/WeaponIcon/wand_melee_storm_ring_icon.png"
     },
     {
       "id": "wand_melee_void_reaper",
@@ -49,8 +61,12 @@
       "mana_cap_bonus": 45,
       "projectile_speed": 9,
       "effect_slot_count": 3,
-      "default_tags": ["orbit", "execute"],
-      "description": "高蓝量储备，适配终结型效果。"
+      "default_tags": [
+        "orbit",
+        "execute"
+      ],
+      "description": "高蓝量储备，适配终结型效果。",
+      "ui_icon_path": "atlas/WeaponIcon/wand_melee_void_reaper_icon.png"
     },
     {
       "id": "wand_melee_celestial_halo",
@@ -62,21 +78,30 @@
       "mana_cap_bonus": 70,
       "projectile_speed": 10,
       "effect_slot_count": 4,
-      "default_tags": ["orbit", "holy", "burst"],
-      "description": "近战环绕终局模板，爆发与控制兼具。"
+      "default_tags": [
+        "orbit",
+        "holy",
+        "burst"
+      ],
+      "description": "近战环绕终局模板，爆发与控制兼具。",
+      "ui_icon_path": "atlas/WeaponIcon/wand_melee_celestial_halo_icon.png"
     },
     {
       "id": "wand_ranged_ember_spike",
       "name": "余烬刺针杖",
       "category": "ranged_shot",
       "rarity": "common",
-      "base_attack_speed": 1.0,
+      "base_attack_speed": 1,
       "base_mana_cost": 9,
       "mana_cap_bonus": 25,
       "projectile_speed": 14,
       "effect_slot_count": 2,
-      "default_tags": ["projectile", "single_shot"],
-      "description": "稳定直射型法杖，易上手。"
+      "default_tags": [
+        "projectile",
+        "single_shot"
+      ],
+      "description": "稳定直射型法杖，易上手。",
+      "ui_icon_path": "atlas/WeaponIcon/wand_ranged_ember_spike_icon.png"
     },
     {
       "id": "wand_ranged_fork_branch",
@@ -88,8 +113,12 @@
       "mana_cap_bonus": 30,
       "projectile_speed": 13,
       "effect_slot_count": 2,
-      "default_tags": ["projectile", "split"],
-      "description": "基础分裂构筑核心。"
+      "default_tags": [
+        "projectile",
+        "split"
+      ],
+      "description": "基础分裂构筑核心。",
+      "ui_icon_path": "atlas/WeaponIcon/wand_ranged_fork_branch_icon.png"
     },
     {
       "id": "wand_ranged_frost_lancer",
@@ -101,8 +130,13 @@
       "mana_cap_bonus": 35,
       "projectile_speed": 16,
       "effect_slot_count": 3,
-      "default_tags": ["projectile", "pierce", "frost"],
-      "description": "穿透与减速联动收益高。"
+      "default_tags": [
+        "projectile",
+        "pierce",
+        "frost"
+      ],
+      "description": "穿透与减速联动收益高。",
+      "ui_icon_path": "atlas/WeaponIcon/wand_ranged_frost_lancer_icon.png"
     },
     {
       "id": "wand_ranged_bombard_core",
@@ -114,8 +148,12 @@
       "mana_cap_bonus": 55,
       "projectile_speed": 12,
       "effect_slot_count": 3,
-      "default_tags": ["projectile", "explosion"],
-      "description": "重耗蓝高爆炸半径模板。"
+      "default_tags": [
+        "projectile",
+        "explosion"
+      ],
+      "description": "重耗蓝高爆炸半径模板。",
+      "ui_icon_path": "atlas/WeaponIcon/wand_ranged_bombard_core_icon.png"
     },
     {
       "id": "wand_ranged_prism_cannon",
@@ -127,8 +165,13 @@
       "mana_cap_bonus": 75,
       "projectile_speed": 18,
       "effect_slot_count": 4,
-      "default_tags": ["projectile", "split", "chain"],
-      "description": "Noita 风格高上限远程构筑模板。"
+      "default_tags": [
+        "projectile",
+        "split",
+        "chain"
+      ],
+      "description": "Noita 风格高上限远程构筑模板。",
+      "ui_icon_path": "atlas/WeaponIcon/wand_ranged_prism_cannon_icon.png"
     },
     {
       "id": "wand_random_wild_seed",
@@ -140,8 +183,12 @@
       "mana_cap_bonus": 22,
       "projectile_speed": 12,
       "effect_slot_count": 2,
-      "default_tags": ["random", "scatter"],
-      "description": "随机弹道入门，容错高。"
+      "default_tags": [
+        "random",
+        "scatter"
+      ],
+      "description": "随机弹道入门，容错高。",
+      "ui_icon_path": "atlas/WeaponIcon/wand_random_wild_seed_icon.png"
     },
     {
       "id": "wand_random_chaos_fan",
@@ -153,8 +200,12 @@
       "mana_cap_bonus": 24,
       "projectile_speed": 11,
       "effect_slot_count": 2,
-      "default_tags": ["random", "multi_target"],
-      "description": "偏向随机锁敌与散射。"
+      "default_tags": [
+        "random",
+        "multi_target"
+      ],
+      "description": "偏向随机锁敌与散射。",
+      "ui_icon_path": "atlas/WeaponIcon/wand_random_chaos_fan_icon.png"
     },
     {
       "id": "wand_random_echo_orb",
@@ -166,8 +217,12 @@
       "mana_cap_bonus": 40,
       "projectile_speed": 15,
       "effect_slot_count": 3,
-      "default_tags": ["random", "ricochet"],
-      "description": "随机弹道叠加反弹，清场能力强。"
+      "default_tags": [
+        "random",
+        "ricochet"
+      ],
+      "description": "随机弹道叠加反弹，清场能力强。",
+      "ui_icon_path": "atlas/WeaponIcon/wand_random_echo_orb_icon.png"
     },
     {
       "id": "wand_random_starlight_lottery",
@@ -179,8 +234,12 @@
       "mana_cap_bonus": 52,
       "projectile_speed": 14,
       "effect_slot_count": 3,
-      "default_tags": ["random", "explosion"],
-      "description": "随机落点爆破，适配高收益高波动。"
+      "default_tags": [
+        "random",
+        "explosion"
+      ],
+      "description": "随机落点爆破，适配高收益高波动。",
+      "ui_icon_path": "atlas/WeaponIcon/wand_random_starlight_lottery_icon.png"
     },
     {
       "id": "wand_random_entropy_oracle",
@@ -192,8 +251,13 @@
       "mana_cap_bonus": 80,
       "projectile_speed": 17,
       "effect_slot_count": 4,
-      "default_tags": ["random", "chain", "smart_target"],
-      "description": "随机系终局模板，具备高连锁潜力。"
+      "default_tags": [
+        "random",
+        "chain",
+        "smart_target"
+      ],
+      "description": "随机系终局模板，具备高连锁潜力。",
+      "ui_icon_path": "atlas/WeaponIcon/wand_random_entropy_oracle_icon.png"
     }
   ]
 }
