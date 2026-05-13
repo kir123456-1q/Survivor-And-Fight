@@ -35,19 +35,16 @@
       "_$prefab": "b0c7f4b6-9a33-4cd8-897e-4888efe760fe",
       "name": "StartBtn",
       "active": true,
-      "x": 478,
-      "y": 544,
-      "width": 335,
-      "height": 96,
+      "x": 473,
+      "y": 563,
+      "width": 394,
+      "height": 85,
       "visible": true,
       "_$child": [
         {
           "_$override": "ug1dmopr",
           "src": "res://1c662b8a-ed49-4cfb-a056-d5b7b17786eb",
-          "x": 0,
-          "y": 0,
-          "width": 335,
-          "height": 96
+          "alpha": 1
         },
         {
           "_$override": "asxzquct",
@@ -56,19 +53,17 @@
         {
           "_$override": "syt0gdq4",
           "src": "res://1c662b8a-ed49-4cfb-a056-d5b7b17786eb",
-          "alpha": 0.752,
-          "y": 0,
-          "height": 96,
-          "x": 0
+          "alpha": 0.524
         },
         {
           "_$override": "kahpmowa",
-          "singleCharRender": false,
           "text": "Start",
-          "color": "#fcdba1",
-          "fontSize": 50,
-          "y": 11,
-          "x": 0
+          "underlineColor": "#ffffff",
+          "color": "#eeff00",
+          "valign": "middle",
+          "fontSize": 40,
+          "x": 1,
+          "y": 11
         }
       ]
     }
