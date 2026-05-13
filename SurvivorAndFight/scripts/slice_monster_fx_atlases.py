@@ -3,22 +3,22 @@
 """
 按《docs/怪物与局内特效_生图提示词.md》约定切分三张图集（保留 PNG alpha）。
 
-仓库内默认原图（顺序：怪物 → 特效 A → 特效 B）：
-  assets/OrginImg/MonsterIconMap.png
-  assets/OrginImg/EffectIconMap.png
-  assets/OrginImg/EffectIconMap2.png
+默认（非 --strict-size 且非 --legacy-grid）在**实际像素尺寸**上：
+  - 怪物图：四行布局（第 1、2 行各 8 格；第 3 行 4 格含空白占位；第 4 行整宽一格），
+    在行间、列间**透明带（alpha 低）**附近搜索切割线，避免切穿主体。
+  - EffectIconMap / EffectIconMap2：在均匀网格的**理论接缝**附近搜索，使接缝落在
+    **垂直/水平窄带内 alpha 能量最小**处（尽量不落在不透明像素上）。
 
-若原图像素尺寸与文档设计稿不一致，默认按「设计坐标 → 实际宽高」分别比例映射后裁切（与 4096×3072 等比例缩放等效）；
-加 --strict-size 则要求尺寸完全一致。
+可选 --legacy-grid：仍按设计稿坐标比例映射切分（不做接缝搜索）。
 
-依赖：pip install pillow
+仓库默认原图：assets/OrginImg/MonsterIconMap.png、EffectIconMap.png、EffectIconMap2.png
+
+依赖：pip install pillow numpy
 
 示例：
   python scripts/slice_monster_fx_atlases.py repo-all -o out/sliced
-  python scripts/slice_monster_fx_atlases.py monster -o out/monster
-  python scripts/slice_monster_fx_atlases.py monster -i monster_atlas.png -o out/monster
-  python scripts/slice_monster_fx_atlases.py fx-a -o out/fx_a --naming ascii
-  python scripts/slice_monster_fx_atlases.py all --monster m.png --fx-a a.png --fx-b b.png -o out
+  python scripts/slice_monster_fx_atlases.py repo-all -o out --seam-search-pct 0.2
+  python scripts/slice_monster_fx_atlases.py monster -o out/monster --legacy-grid
 """
 
 from __future__ import annotations
@@ -28,25 +28,27 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Sequence, Tuple
 
+import numpy as np
 from PIL import Image
 
-# 脚本位于 SurvivorAndFight/scripts/，默认原图在同级项目的 assets/OrginImg/
+# 脚本位于 SurvivorAndFight/scripts/
 _SURVIVOR_ROOT = Path(__file__).resolve().parent.parent
 REPO_ORIGIN_IMG_DIR = _SURVIVOR_ROOT / "assets" / "OrginImg"
 REPO_MONSTER_MAP = REPO_ORIGIN_IMG_DIR / "MonsterIconMap.png"
 REPO_FX_A_MAP = REPO_ORIGIN_IMG_DIR / "EffectIconMap.png"
 REPO_FX_B_MAP = REPO_ORIGIN_IMG_DIR / "EffectIconMap2.png"
 
-# --- 期望画布尺寸（与文档一致）---
+# --- 设计稿参考尺寸（仅 legacy / strict 用）---
 MONSTER_EXPECTED = (4096, 3072)
 FX_A_EXPECTED = (4096, 2560)
 FX_B_EXPECTED = (2048, 2048)
 
+# 怪物图设计稿行高比例（文档 512 : 1024 : 1024 : 512）
+_MONSTER_ROW_FRAC = (512 / 3072, 1024 / 3072, 1024 / 3072, 512 / 3072)
+
 
 @dataclass(frozen=True)
 class Slice:
-    """矩形切片：左上角 (x,y)，宽 w 高 h，输出文件 stem（不含 .png）。"""
-
     x: int
     y: int
     w: int
@@ -54,10 +56,130 @@ class Slice:
     stem: str
 
 
+def _open_image(path: Path) -> Image.Image:
+    if not path.is_file():
+        raise FileNotFoundError(f"输入文件不存在：{path}")
+    return Image.open(path).convert("RGBA")
+
+
+def _rgba_u8(img: Image.Image) -> np.ndarray:
+    return np.asarray(img, dtype=np.uint8)
+
+
+def _vertical_strip_cost(rgba: np.ndarray, x: int, strip_half: int) -> float:
+    """
+    竖缝代价：主项为加权 alpha 之和；在近似透明像素上增加 RGB 分散度惩罚，
+    便于在「透明底 + 纯色细线边界」时仍对齐到线/低纹理带。
+    """
+    h, w, _ = rgba.shape
+    x0 = max(0, x - strip_half)
+    x1 = min(w, x + strip_half + 1)
+    if x0 >= x1:
+        return 1e18
+    band = rgba[:, x0:x1]
+    a = band[..., 3].astype(np.float64)
+    alpha_term = float(np.maximum(0, a - 8).sum())
+    mask = a < 24
+    if not np.any(mask):
+        return alpha_term + 800.0
+    rgb = band[:, :, :3][mask].astype(np.float64)
+    rgb_std = float(rgb.std(axis=0).mean()) if rgb.size else 0.0
+    return alpha_term + 0.4 * rgb_std
+
+
+def _horizontal_strip_cost(rgba: np.ndarray, y: int, strip_half: int) -> float:
+    h, w, _ = rgba.shape
+    y0 = max(0, y - strip_half)
+    y1 = min(h, y + strip_half + 1)
+    if y0 >= y1:
+        return 1e18
+    band = rgba[y0:y1, :, :]
+    a = band[..., 3].astype(np.float64)
+    alpha_term = float(np.maximum(0, a - 8).sum())
+    mask = a < 24
+    if not np.any(mask):
+        return alpha_term + 800.0
+    rgb = band[:, :, :3][mask].astype(np.float64)
+    rgb_std = float(rgb.std(axis=0).mean()) if rgb.size else 0.0
+    return alpha_term + 0.4 * rgb_std
+
+
+def _refine_vertical_seams(
+    rgba: np.ndarray,
+    n_cols: int,
+    search_px: int,
+    strip_half: int,
+    min_cell: int = 8,
+) -> List[int]:
+    """返回 x 边界 [0, x1, ..., W]，长度 n_cols+1。"""
+    _h, w, _ = rgba.shape
+    boundaries = [0]
+    cell = w / n_cols
+    for i in range(1, n_cols):
+        nominal = int(round(i * cell))
+        lo = max(boundaries[-1] + min_cell, nominal - search_px)
+        hi = min(w - min_cell * (n_cols - i), nominal + search_px)
+        if lo >= hi:
+            x_best = nominal
+        else:
+            costs = [(x, _vertical_strip_cost(rgba, x, strip_half)) for x in range(lo, hi + 1)]
+            x_best = min(costs, key=lambda t: t[1])[0]
+        boundaries.append(x_best)
+    boundaries.append(w)
+    return boundaries
+
+
+def _refine_horizontal_seams(
+    rgba: np.ndarray,
+    n_rows: int,
+    search_px: int,
+    strip_half: int,
+    min_cell: int = 8,
+) -> List[int]:
+    h, _w, _ = rgba.shape
+    boundaries = [0]
+    cell = h / n_rows
+    for i in range(1, n_rows):
+        nominal = int(round(i * cell))
+        lo = max(boundaries[-1] + min_cell, nominal - search_px)
+        hi = min(h - min_cell * (n_rows - i), nominal + search_px)
+        if lo >= hi:
+            y_best = nominal
+        else:
+            costs = [(y, _horizontal_strip_cost(rgba, y, strip_half)) for y in range(lo, hi + 1)]
+            y_best = min(costs, key=lambda t: t[1])[0]
+        boundaries.append(y_best)
+    boundaries.append(h)
+    return boundaries
+
+
+def _refine_horizontal_seams_guided(
+    rgba: np.ndarray,
+    nominal_boundaries: Sequence[int],
+    search_px: int,
+    strip_half: int,
+    min_cell: int = 6,
+) -> List[int]:
+    """在 nominal_boundaries 附近（±search_px）细化水平线，首末固定为 0 与 H。"""
+    h, _w, _ = rgba.shape
+    out = [0]
+    for i in range(1, len(nominal_boundaries) - 1):
+        nominal = int(np.clip(nominal_boundaries[i], 0, h))
+        lo = max(out[-1] + min_cell, nominal - search_px)
+        hi = min(h - min_cell * (len(nominal_boundaries) - 1 - i), nominal + search_px)
+        if lo >= hi:
+            y_best = nominal
+        else:
+            costs = [(y, _horizontal_strip_cost(rgba, y, strip_half)) for y in range(lo, hi + 1)]
+            y_best = min(costs, key=lambda t: t[1])[0]
+        out.append(y_best)
+    out.append(h)
+    return out
+
+
 def _monster_slices() -> List[Slice]:
-    """文档 1.2：怪物 4096×3072。"""
+    """文档坐标 + stem（仅 legacy 用）。"""
     return [
-        # 第一行 A1–A8，512×512
         Slice(0, 0, 512, 512, "monster_M02"),
         Slice(512, 0, 512, 512, "monster_M04"),
         Slice(1024, 0, 512, 512, "monster_M06"),
@@ -66,7 +188,6 @@ def _monster_slices() -> List[Slice]:
         Slice(2560, 0, 512, 512, "monster_E03"),
         Slice(3072, 0, 512, 512, "monster_E05"),
         Slice(3584, 0, 512, 512, "monster_calib"),
-        # 第二行 B1–B8，512×1024
         Slice(0, 512, 512, 1024, "monster_M01"),
         Slice(512, 512, 512, 1024, "monster_M05"),
         Slice(1024, 512, 512, 1024, "monster_M08"),
@@ -75,18 +196,92 @@ def _monster_slices() -> List[Slice]:
         Slice(2560, 512, 512, 1024, "monster_E01"),
         Slice(3072, 512, 512, 1024, "monster_B02"),
         Slice(3584, 512, 512, 1024, "monster_B03"),
-        # 第三行 C1–C4，1024×1024
         Slice(0, 1536, 1024, 1024, "monster_B01"),
         Slice(1024, 1536, 1024, 1024, "monster_E04"),
         Slice(2048, 1536, 1024, 1024, "monster_C3_blank"),
         Slice(3072, 1536, 1024, 1024, "monster_C4_blank"),
-        # 第四行 D1，4096×512
         Slice(0, 2560, 4096, 512, "monster_M10"),
     ]
 
 
+def _monster_smart_slices(
+    img: Image.Image,
+    search_pct: float,
+    strip_half: int,
+) -> List[Slice]:
+    """
+    怪物拼图：行 1/2 各 8 列；行 3 为 4 列（两格内容 + 空白占位）；行 4 单行整宽。
+    行间、列间接缝在透明带附近搜索。
+    """
+    rgba = _rgba_u8(img)
+    H, W = rgba.shape[:2]
+    search_h = max(6, int(H * search_pct * 0.25))
+    search_w8 = max(6, int((W / 8) * search_pct))
+    search_w4 = max(6, int((W / 4) * search_pct))
+
+    # 水平四带：按设计比例得 nominal 行界，再在 ±search 内压 alpha
+    y_nom = [0]
+    acc = 0.0
+    for fr in _MONSTER_ROW_FRAC:
+        acc += fr
+        y_nom.append(int(round(acc * H)))
+    y_bounds = _refine_horizontal_seams_guided(rgba, y_nom, search_h, strip_half)
+
+    y0, y1, y2, y3, y4 = y_bounds[0], y_bounds[1], y_bounds[2], y_bounds[3], y_bounds[4]
+    slices: List[Slice] = []
+
+    # 行 1：8 格（短带）
+    band1 = rgba[y0:y1, :, :]
+    xs1 = _refine_vertical_seams(band1, 8, search_w8, strip_half)
+    stems_r1 = [
+        "monster_M02",
+        "monster_M04",
+        "monster_M06",
+        "monster_M07",
+        "monster_M03",
+        "monster_E03",
+        "monster_E05",
+        "monster_calib",
+    ]
+    for c in range(8):
+        slices.append(
+            Slice(xs1[c], y0, xs1[c + 1] - xs1[c], y1 - y0, stems_r1[c])
+        )
+
+    # 行 2：8 格（高带）
+    band2 = rgba[y1:y2, :, :]
+    xs2 = _refine_vertical_seams(band2, 8, search_w8, strip_half)
+    stems_r2 = [
+        "monster_M01",
+        "monster_M05",
+        "monster_M08",
+        "monster_M09",
+        "monster_E02",
+        "monster_E01",
+        "monster_B02",
+        "monster_B03",
+    ]
+    for c in range(8):
+        slices.append(
+            Slice(xs2[c], y1, xs2[c + 1] - xs2[c], y2 - y1, stems_r2[c])
+        )
+
+    # 行 3：4 列（两内容 + 两空白占位）
+    band3 = rgba[y2:y3, :, :]
+    xs3 = _refine_vertical_seams(band3, 4, search_w4, strip_half)
+    stems_r3 = ["monster_B01", "monster_E04", "monster_C3_blank", "monster_C4_blank"]
+    for c in range(4):
+        slices.append(
+            Slice(xs3[c], y2, xs3[c + 1] - xs3[c], y3 - y2, stems_r3[c])
+        )
+
+    # 行 4：整宽一条
+    slices.append(Slice(0, y3, W, y4 - y3, "monster_M10"))
+
+    return slices
+
+
 def _fx_a_names_ascii() -> List[str]:
-    """文档 2.2：从左到右、从上到下，与中文特效名一一对应（ASCII 文件名）。"""
     rows = [
         [
             "muzzle_spark",
@@ -147,7 +342,6 @@ def _fx_a_names_ascii() -> List[str]:
 
 
 def _fx_a_names_zh() -> List[str]:
-    """文档 2.2 表「特效名」列，用于 --naming chinese。"""
     rows = [
         ["枪口火花", "细弹道拖尾", "锁链光束命中", "受击闪白遮罩", "直接伤害光束", "攻速流光环身", "武器附魔光晕", "扇形瞄准线"],
         ["双发残影叠帧", "命中分裂爆发", "子弹生成环状冲击", "环绕轨迹带", "旋转风圈", "切割火花", "近身气浪", "警示地面圈"],
@@ -162,42 +356,71 @@ def _fx_a_names_zh() -> List[str]:
     return out
 
 
-def _fx_a_slices(naming: str) -> List[Slice]:
-    cell = 512
+def _fx_a_smart_slices(
+    img: Image.Image,
+    naming: str,
+    search_pct: float,
+    strip_half: int,
+) -> List[Slice]:
+    """8×5 格：先定水平带再定竖条，接缝均在各自 band 内最小 alpha 穿透。"""
+    rgba = _rgba_u8(img)
+    H, W = rgba.shape[:2]
+    search_h = max(6, int((H / 5) * search_pct))
+    search_w = max(6, int((W / 8) * search_pct))
+
+    y_bounds = _refine_horizontal_seams(rgba, 5, search_h, strip_half)
     names = _fx_a_names_zh() if naming == "chinese" else _fx_a_names_ascii()
     slices: List[Slice] = []
     idx = 0
-    for row in range(5):
-        for col in range(8):
-            x, y = col * cell, row * cell
+    for r in range(5):
+        y0, y1 = y_bounds[r], y_bounds[r + 1]
+        band = rgba[y0:y1, :, :]
+        xs = _refine_vertical_seams(band, 8, search_w, strip_half)
+        for c in range(8):
             stem = names[idx]
-            if naming == "chinese":
-                stem = f"fx_{stem}"
-            else:
-                stem = f"fx_{stem}"
-            slices.append(Slice(x, y, cell, cell, stem))
+            stem = f"fx_{stem}"
+            slices.append(
+                Slice(xs[c], y0, xs[c + 1] - xs[c], y1 - y0, stem)
+            )
             idx += 1
     return slices
 
 
-def _fx_b_slices() -> List[Slice]:
-    """文档 2.4：四象限 1024×1024。"""
-    return [
-        Slice(0, 0, 1024, 1024, "fx_tile_poison"),
-        Slice(1024, 0, 1024, 1024, "fx_tile_thundergrid"),
-        Slice(0, 1024, 1024, 1024, "fx_shield_crack"),
-        Slice(1024, 1024, 1024, 1024, "fx_void_rip"),
+def _fx_b_stems() -> List[str]:
+    return ["fx_tile_poison", "fx_tile_thundergrid", "fx_shield_crack", "fx_void_rip"]
+
+
+def _fx_b_smart_slices(
+    img: Image.Image,
+    search_pct: float,
+    strip_half: int,
+) -> List[Slice]:
+    """2×2：在中间附近找一条竖缝、一条横缝（全图 alpha 最小穿透）。"""
+    rgba = _rgba_u8(img)
+    H, W = rgba.shape[:2]
+    search_x = max(8, int((W / 2) * search_pct))
+    search_y = max(8, int((H / 2) * search_pct))
+    mid_x = W // 2
+    mid_y = H // 2
+    lo_x, hi_x = max(4, mid_x - search_x), min(W - 4, mid_x + search_x)
+    x_split = min(range(lo_x, hi_x + 1), key=lambda x: _vertical_strip_cost(rgba, x, strip_half))
+    lo_y, hi_y = max(4, mid_y - search_y), min(H - 4, mid_y + search_y)
+    y_split = min(range(lo_y, hi_y + 1), key=lambda y: _horizontal_strip_cost(rgba, y, strip_half))
+
+    stems = _fx_b_stems()
+    quads = [
+        (0, 0, x_split, y_split),
+        (x_split, 0, W - x_split, y_split),
+        (0, y_split, x_split, H - y_split),
+        (x_split, y_split, W - x_split, H - y_split),
     ]
-
-
-def _open_image(path: Path) -> Image.Image:
-    if not path.is_file():
-        raise FileNotFoundError(f"输入文件不存在：{path}")
-    return Image.open(path).convert("RGBA")
+    slices: List[Slice] = []
+    for i, (x, y, w, h) in enumerate(quads):
+        slices.append(Slice(x, y, max(1, w), max(1, h), stems[i]))
+    return slices
 
 
 def _scale_slices(slices: Sequence[Slice], sx: float, sy: float) -> List[Slice]:
-    """将设计稿坐标系下的矩形缩放到实际像素（宽、高可不同缩放比）。"""
     out: List[Slice] = []
     for s in slices:
         out.append(
@@ -212,15 +435,12 @@ def _scale_slices(slices: Sequence[Slice], sx: float, sy: float) -> List[Slice]:
     return out
 
 
-def _prepare_slices(
+def _prepare_slices_legacy(
     path: Path,
     expected: Tuple[int, int],
     slices_canonical: Sequence[Slice],
     strict: bool,
 ) -> Tuple[Image.Image, List[Slice]]:
-    """
-    按文档设计分辨率 expected 定义切片；若实际图尺寸不同，则按比例映射到像素（除非 strict）。
-    """
     img = _open_image(path)
     aw, ah = img.size
     ew, eh = expected
@@ -229,15 +449,36 @@ def _prepare_slices(
     if strict:
         raise ValueError(
             f"{path.name} 尺寸为 {aw}×{ah}，文档约定应为 {ew}×{eh}。"
-            f" 去掉 --strict-size 可按比例从设计坐标裁切。"
+            f" 去掉 --strict-size 可按比例从设计坐标裁切，或使用默认智能接缝。"
         )
     sx, sy = aw / ew, ah / eh
-    scaled = _scale_slices(slices_canonical, sx, sy)
-    return img, scaled
+    return img, _scale_slices(slices_canonical, sx, sy)
+
+
+def _fx_a_slices_canonical(naming: str) -> List[Slice]:
+    cell = 512
+    names = _fx_a_names_zh() if naming == "chinese" else _fx_a_names_ascii()
+    slices: List[Slice] = []
+    idx = 0
+    for row in range(5):
+        for col in range(8):
+            x, y = col * cell, row * cell
+            stem = f"fx_{names[idx]}"
+            slices.append(Slice(x, y, cell, cell, stem))
+            idx += 1
+    return slices
+
+
+def _fx_b_slices_canonical() -> List[Slice]:
+    return [
+        Slice(0, 0, 1024, 1024, "fx_tile_poison"),
+        Slice(1024, 0, 1024, 1024, "fx_tile_thundergrid"),
+        Slice(0, 1024, 1024, 1024, "fx_shield_crack"),
+        Slice(1024, 1024, 1024, 1024, "fx_void_rip"),
+    ]
 
 
 def _crop_save(img: Image.Image, s: Slice, out_dir: Path, dry_run: bool) -> Path:
-    """PIL crop 使用 (left, upper, right, lower)，right/lower 为开区间外边界。"""
     w_img, h_img = img.size
     left = max(0, min(s.x, w_img - 1))
     top = max(0, min(s.y, h_img - 1))
@@ -274,7 +515,13 @@ def _resolve_input(explicit: str | None, default: Path) -> Path:
 def cmd_monster(args: argparse.Namespace) -> None:
     p = _resolve_input(args.input, REPO_MONSTER_MAP)
     out = Path(args.output)
-    img, slices = _prepare_slices(p, MONSTER_EXPECTED, _monster_slices(), args.strict_size)
+    if args.strict_size or args.legacy_grid:
+        img, slices = _prepare_slices_legacy(
+            p, MONSTER_EXPECTED, _monster_slices(), args.strict_size
+        )
+    else:
+        img = _open_image(p)
+        slices = _monster_smart_slices(img, args.seam_search_pct, args.seam_strip)
     _run_slices(img, slices, out, args.dry_run)
     _print_done("monster", p, out, len(slices), args.dry_run)
 
@@ -282,7 +529,13 @@ def cmd_monster(args: argparse.Namespace) -> None:
 def cmd_fx_a(args: argparse.Namespace) -> None:
     p = _resolve_input(args.input, REPO_FX_A_MAP)
     out = Path(args.output)
-    img, slices = _prepare_slices(p, FX_A_EXPECTED, _fx_a_slices(args.naming), args.strict_size)
+    if args.strict_size or args.legacy_grid:
+        img, slices = _prepare_slices_legacy(
+            p, FX_A_EXPECTED, _fx_a_slices_canonical(args.naming), args.strict_size
+        )
+    else:
+        img = _open_image(p)
+        slices = _fx_a_smart_slices(img, args.naming, args.seam_search_pct, args.seam_strip)
     _run_slices(img, slices, out, args.dry_run)
     _print_done("fx-a", p, out, len(slices), args.dry_run)
 
@@ -290,7 +543,13 @@ def cmd_fx_a(args: argparse.Namespace) -> None:
 def cmd_fx_b(args: argparse.Namespace) -> None:
     p = _resolve_input(args.input, REPO_FX_B_MAP)
     out = Path(args.output)
-    img, slices = _prepare_slices(p, FX_B_EXPECTED, _fx_b_slices(), args.strict_size)
+    if args.strict_size or args.legacy_grid:
+        img, slices = _prepare_slices_legacy(
+            p, FX_B_EXPECTED, _fx_b_slices_canonical(), args.strict_size
+        )
+    else:
+        img = _open_image(p)
+        slices = _fx_b_smart_slices(img, args.seam_search_pct, args.seam_strip)
     _run_slices(img, slices, out, args.dry_run)
     _print_done("fx-b", p, out, len(slices), args.dry_run)
 
@@ -308,32 +567,38 @@ def cmd_all(args: argparse.Namespace) -> None:
             f"  特效A: {fxa_in}\n"
             f"  特效B: {fxb_in}"
         )
-    ns_m = argparse.Namespace(
-        input=monster_in,
-        output=str(base / "monster"),
+    common = dict(
         dry_run=args.dry_run,
         strict_size=args.strict_size,
+        legacy_grid=args.legacy_grid,
+        seam_search_pct=args.seam_search_pct,
+        seam_strip=args.seam_strip,
     )
-    ns_a = argparse.Namespace(
-        input=fxa_in,
-        output=str(base / "fx_a"),
-        naming=args.naming,
-        dry_run=args.dry_run,
-        strict_size=args.strict_size,
+    cmd_monster(
+        argparse.Namespace(
+            input=monster_in,
+            output=str(base / "monster"),
+            **common,
+        )
     )
-    ns_b = argparse.Namespace(
-        input=fxb_in,
-        output=str(base / "fx_b"),
-        dry_run=args.dry_run,
-        strict_size=args.strict_size,
+    cmd_fx_a(
+        argparse.Namespace(
+            input=fxa_in,
+            output=str(base / "fx_a"),
+            naming=args.naming,
+            **common,
+        )
     )
-    cmd_monster(ns_m)
-    cmd_fx_a(ns_a)
-    cmd_fx_b(ns_b)
+    cmd_fx_b(
+        argparse.Namespace(
+            input=fxb_in,
+            output=str(base / "fx_b"),
+            **common,
+        )
+    )
 
 
 def cmd_repo_all(args: argparse.Namespace) -> None:
-    """顺序：MonsterIconMap → EffectIconMap → EffectIconMap2。"""
     ns = argparse.Namespace(
         output=args.output,
         monster=None,
@@ -343,6 +608,9 @@ def cmd_repo_all(args: argparse.Namespace) -> None:
         naming=args.naming,
         dry_run=args.dry_run,
         strict_size=args.strict_size,
+        legacy_grid=args.legacy_grid,
+        seam_search_pct=args.seam_search_pct,
+        seam_strip=args.seam_strip,
     )
     cmd_all(ns)
 
@@ -352,9 +620,31 @@ def _print_done(kind: str, src: Path, out: Path, n: int, dry: bool) -> None:
     print(f"[{kind}] {verb} {n} 张 -> {out}（源 {src}）")
 
 
+def _add_seam_and_legacy(sp: argparse.ArgumentParser) -> None:
+    sp.add_argument(
+        "--legacy-grid",
+        action="store_true",
+        help="按设计稿坐标比例切分，不做透明缝搜索",
+    )
+    sp.add_argument(
+        "--seam-search-pct",
+        type=float,
+        default=0.18,
+        metavar="PCT",
+        help="接缝相对「单格尺寸」的搜索半径比例，默认 0.18（约 ±18%% 格宽/格高）",
+    )
+    sp.add_argument(
+        "--seam-strip",
+        type=int,
+        default=3,
+        metavar="PX",
+        help="接缝检测带半宽（像素），整带为 2*半宽+1；默认 3",
+    )
+
+
 def _build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
-        description="切分怪物 / 局内特效 A / 局内特效 B 三张图集（见 docs/怪物与局内特效_生图提示词.md）。"
+        description="切分怪物 / 局内特效图集；默认按 alpha 低值带对齐接缝（见 --legacy-grid）。"
     )
     sub = p.add_subparsers(dest="command", required=True)
 
@@ -362,7 +652,7 @@ def _build_parser() -> argparse.ArgumentParser:
         sp.add_argument(
             "--strict-size",
             action="store_true",
-            help="强制原图尺寸与文档设计分辨率一致；默认按宽高比例映射设计坐标到当前像素",
+            help="强制原图尺寸与文档设计分辨率一致并按设计像素切分",
         )
 
     def add_in_out(sp: argparse.ArgumentParser) -> None:
@@ -371,83 +661,56 @@ def _build_parser() -> argparse.ArgumentParser:
             "--input",
             required=False,
             default=None,
-            help="输入整张 PNG；省略则使用 assets/OrginImg 下对应默认文件名",
+            help="输入整张 PNG；省略则使用 assets/OrginImg 下默认文件名",
         )
         sp.add_argument("-o", "--output", required=True, help="输出目录")
 
-    sp_m = sub.add_parser("monster", help="怪物图集 4096×3072（默认输入 MonsterIconMap.png）")
+    sp_m = sub.add_parser("monster", help="怪物拼图：智能接缝（默认）或 --legacy-grid")
     add_in_out(sp_m)
     add_strict(sp_m)
-    sp_m.add_argument("--dry-run", action="store_true", help="只校验尺寸并打印数量，不写文件")
+    _add_seam_and_legacy(sp_m)
+    sp_m.add_argument("--dry-run", action="store_true")
     sp_m.set_defaults(func=cmd_monster)
 
-    sp_a = sub.add_parser(
-        "fx-a",
-        help="局内特效图集 A 4096×2560，8×5 格各 512×512（默认输入 EffectIconMap.png）",
-    )
+    sp_a = sub.add_parser("fx-a", help="EffectIconMap：8×5 智能接缝（默认）")
     add_in_out(sp_a)
     add_strict(sp_a)
+    _add_seam_and_legacy(sp_a)
     sp_a.add_argument(
         "--naming",
         choices=("ascii", "chinese"),
         default="ascii",
-        help="输出文件名：ascii 为英文蛇形；chinese 为 fx_+ 文档表中文名",
+        help="ascii：英文 stem；chinese：fx_+ 中文名",
     )
     sp_a.add_argument("--dry-run", action="store_true")
     sp_a.set_defaults(func=cmd_fx_a)
 
-    sp_b = sub.add_parser(
-        "fx-b",
-        help="局内特效图集 B 2048×2048，四象限各 1024×1024（默认输入 EffectIconMap2.png）",
-    )
+    sp_b = sub.add_parser("fx-b", help="EffectIconMap2：2×2 智能接缝（默认）")
     add_in_out(sp_b)
     add_strict(sp_b)
+    _add_seam_and_legacy(sp_b)
     sp_b.add_argument("--dry-run", action="store_true")
     sp_b.set_defaults(func=cmd_fx_b)
 
-    sp_all = sub.add_parser(
-        "all",
-        help="一次切三张；省略各路径时从 --origin-dir 按顺序读 MonsterIconMap / EffectIconMap / EffectIconMap2",
-    )
+    sp_all = sub.add_parser("all", help="一次切三张")
     sp_all.add_argument("-o", "--output", required=True, help="输出根目录")
-    sp_all.add_argument(
-        "--origin-dir",
-        default=str(REPO_ORIGIN_IMG_DIR),
-        help=f"默认三张原图所在目录（默认：{REPO_ORIGIN_IMG_DIR}）",
-    )
-    sp_all.add_argument(
-        "--monster",
-        default=None,
-        help="怪物图集 PNG；省略则用 origin-dir/MonsterIconMap.png",
-    )
-    sp_all.add_argument(
-        "--fx-a",
-        default=None,
-        help="特效 A PNG；省略则用 origin-dir/EffectIconMap.png",
-    )
-    sp_all.add_argument(
-        "--fx-b",
-        default=None,
-        help="特效 B PNG；省略则用 origin-dir/EffectIconMap2.png",
-    )
+    sp_all.add_argument("--origin-dir", default=str(REPO_ORIGIN_IMG_DIR))
+    sp_all.add_argument("--monster", default=None)
+    sp_all.add_argument("--fx-a", default=None)
+    sp_all.add_argument("--fx-b", default=None)
     sp_all.add_argument("--naming", choices=("ascii", "chinese"), default="ascii")
     sp_all.add_argument("--dry-run", action="store_true")
     add_strict(sp_all)
+    _add_seam_and_legacy(sp_all)
     sp_all.set_defaults(func=cmd_all)
 
-    sp_repo = sub.add_parser(
-        "repo-all",
-        help="等同 all + 默认 origin-dir：顺序 MonsterIconMap.png → EffectIconMap.png → EffectIconMap2.png",
-    )
-    sp_repo.add_argument("-o", "--output", required=True, help="输出根目录")
-    sp_repo.add_argument(
-        "--origin-dir",
-        default=str(REPO_ORIGIN_IMG_DIR),
-        help=f"原图目录（默认：{REPO_ORIGIN_IMG_DIR}）",
-    )
+    sp_repo = sub.add_parser("repo-all", help="默认 OrginImg 三张顺序切分")
+    sp_repo.add_argument("-o", "--output", required=True)
+    sp_repo.add_argument("--origin-dir", default=str(REPO_ORIGIN_IMG_DIR))
     sp_repo.add_argument("--naming", choices=("ascii", "chinese"), default="ascii")
     sp_repo.add_argument("--dry-run", action="store_true")
     add_strict(sp_repo)
+    _add_seam_and_legacy(sp_repo)
     sp_repo.set_defaults(func=cmd_repo_all)
 
     return p
