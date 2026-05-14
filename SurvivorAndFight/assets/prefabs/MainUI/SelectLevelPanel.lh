@@ -33,37 +33,165 @@
     {
       "_$id": "ozd9u7uz",
       "_$prefab": "b0c7f4b6-9a33-4cd8-897e-4888efe760fe",
-      "name": "StartBtn",
+      "name": "Level1Btn",
       "active": true,
-      "x": 473,
-      "y": 563,
+      "x": 454,
+      "y": 173,
       "width": 394,
       "height": 85,
       "visible": true,
       "_$child": [
         {
           "_$override": "ug1dmopr",
-          "src": "res://1c662b8a-ed49-4cfb-a056-d5b7b17786eb",
+          "src": "res://fcd22920-4507-413e-aafd-40704fef65a5",
           "alpha": 1
         },
         {
           "_$override": "asxzquct",
-          "src": "res://1c662b8a-ed49-4cfb-a056-d5b7b17786eb"
+          "src": "res://fcd22920-4507-413e-aafd-40704fef65a5"
         },
         {
           "_$override": "syt0gdq4",
-          "src": "res://1c662b8a-ed49-4cfb-a056-d5b7b17786eb",
+          "src": "res://fcd22920-4507-413e-aafd-40704fef65a5",
           "alpha": 0.524
         },
         {
           "_$override": "kahpmowa",
-          "text": "Start",
+          "text": "Level1",
           "underlineColor": "#ffffff",
-          "color": "#eeff00",
+          "color": "#5d5e44",
           "valign": "middle",
           "fontSize": 40,
-          "x": 1,
-          "y": 11
+          "x": -8,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "_$id": "7wwafovd",
+      "_$prefab": "b0c7f4b6-9a33-4cd8-897e-4888efe760fe",
+      "name": "Level2Btn",
+      "active": true,
+      "x": 455,
+      "y": 292,
+      "width": 394,
+      "height": 85,
+      "visible": true,
+      "_$child": [
+        {
+          "_$override": "ug1dmopr",
+          "src": "res://fcd22920-4507-413e-aafd-40704fef65a5",
+          "alpha": 1
+        },
+        {
+          "_$override": "asxzquct",
+          "src": "res://fcd22920-4507-413e-aafd-40704fef65a5"
+        },
+        {
+          "_$override": "syt0gdq4",
+          "src": "res://fcd22920-4507-413e-aafd-40704fef65a5",
+          "alpha": 0.524
+        },
+        {
+          "_$override": "kahpmowa",
+          "text": "Level2",
+          "underlineColor": "#ffffff",
+          "color": "#5d5e44",
+          "valign": "middle",
+          "fontSize": 40,
+          "x": -3,
+          "y": -8
+        }
+      ]
+    },
+    {
+      "_$id": "8bc6d23v",
+      "_$prefab": "b0c7f4b6-9a33-4cd8-897e-4888efe760fe",
+      "name": "Level3Btn",
+      "active": true,
+      "x": 456,
+      "y": 413,
+      "width": 394,
+      "height": 85,
+      "visible": true,
+      "_$child": [
+        {
+          "_$override": "ug1dmopr",
+          "src": "res://fcd22920-4507-413e-aafd-40704fef65a5",
+          "alpha": 1
+        },
+        {
+          "_$override": "asxzquct",
+          "src": "res://fcd22920-4507-413e-aafd-40704fef65a5"
+        },
+        {
+          "_$override": "syt0gdq4",
+          "src": "res://fcd22920-4507-413e-aafd-40704fef65a5",
+          "alpha": 0.524
+        },
+        {
+          "_$override": "kahpmowa",
+          "text": "Level3",
+          "underlineColor": "#ffffff",
+          "color": "#5d5e44",
+          "valign": "middle",
+          "fontSize": 40,
+          "x": -8,
+          "y": 3,
+          "height": 76
+        }
+      ]
+    },
+    {
+      "_$id": "wfb6h8f1",
+      "_$type": "GTextField",
+      "name": "txt",
+      "x": 550,
+      "y": 126,
+      "width": 199,
+      "height": 30,
+      "text": "SELECT",
+      "fontSize": 20,
+      "color": "#f4f4f4",
+      "align": "center",
+      "valign": "middle"
+    },
+    {
+      "_$id": "nt1n28n1",
+      "_$prefab": "b0c7f4b6-9a33-4cd8-897e-4888efe760fe",
+      "name": "EscBtn",
+      "active": true,
+      "x": 1254,
+      "y": 7,
+      "width": 83,
+      "height": 77,
+      "visible": true,
+      "_$child": [
+        {
+          "_$override": "ug1dmopr",
+          "src": "res://fc642359-5080-473f-9bf1-e02210567716",
+          "alpha": 1
+        },
+        {
+          "_$override": "asxzquct",
+          "src": "res://fc642359-5080-473f-9bf1-e02210567716"
+        },
+        {
+          "_$override": "syt0gdq4",
+          "src": "res://fc642359-5080-473f-9bf1-e02210567716",
+          "alpha": 0.524
+        },
+        {
+          "_$override": "kahpmowa",
+          "text": "",
+          "underlineColor": "#ffffff",
+          "color": "#5d5e44",
+          "valign": "middle",
+          "fontSize": 40,
+          "x": -8,
+          "y": 3,
+          "height": 75,
+          "width": 89
         }
       ]
     }
