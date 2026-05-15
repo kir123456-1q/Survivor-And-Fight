@@ -71,17 +71,6 @@
       "height": 1644,
       "src": "res://0093b2ce-8d51-4e19-bfd1-b23e6953037f",
       "autoSize": false
-    },
-    {
-      "_$id": "54hqd11t",
-      "_$type": "GImage",
-      "name": "MainHud",
-      "x": -1,
-      "y": 2,
-      "width": 1338,
-      "height": 121,
-      "src": "res://d7368ee0-fd0a-4a69-8b3c-4ad3fcfb66a0",
-      "autoSize": false
     }
   ]
 }

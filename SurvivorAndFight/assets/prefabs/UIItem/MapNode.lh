@@ -1,0 +1,24 @@
+{
+  "_$ver": 1,
+  "_$id": "jnp4peoh",
+  "_$type": "GImage",
+  "name": "MapNode",
+  "x": 640,
+  "y": 671,
+  "width": 75,
+  "height": 75,
+  "alpha": 0.706,
+  "src": "res://62f3c6cf-4c21-42b3-81b5-9a914ba489a8",
+  "autoSize": false,
+  "_$child": [
+    {
+      "_$id": "f7b4lofc",
+      "_$type": "GImage",
+      "name": "SelectNode",
+      "width": 75,
+      "height": 75,
+      "src": "res://62f3c6cf-4c21-42b3-81b5-9a914ba489a8",
+      "autoSize": false
+    }
+  ]
+}

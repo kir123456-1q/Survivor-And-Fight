@@ -1,0 +1,22 @@
+{
+  "_$ver": 1,
+  "_$id": "s5kybyfr",
+  "_$type": "GImage",
+  "name": "LineNode",
+  "x": 568,
+  "y": 585,
+  "width": 220,
+  "height": 31,
+  "alpha": 0.532,
+  "src": "res://510462a8-dc11-49cb-b0b1-73190d8bd9b1",
+  "_$child": [
+    {
+      "_$id": "dpo0mqlr",
+      "_$type": "GImage",
+      "name": "MovedlineNode",
+      "width": 220,
+      "height": 31,
+      "src": "res://510462a8-dc11-49cb-b0b1-73190d8bd9b1"
+    }
+  ]
+}
