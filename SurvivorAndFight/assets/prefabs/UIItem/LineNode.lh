@@ -6,17 +6,19 @@
   "x": 568,
   "y": 585,
   "width": 220,
-  "height": 31,
+  "height": 15,
   "alpha": 0.532,
   "src": "res://510462a8-dc11-49cb-b0b1-73190d8bd9b1",
+  "autoSize": false,
   "_$child": [
     {
       "_$id": "dpo0mqlr",
       "_$type": "GImage",
       "name": "MovedlineNode",
       "width": 220,
-      "height": 31,
-      "src": "res://510462a8-dc11-49cb-b0b1-73190d8bd9b1"
+      "height": 15,
+      "src": "res://510462a8-dc11-49cb-b0b1-73190d8bd9b1",
+      "autoSize": false
     }
   ]
 }

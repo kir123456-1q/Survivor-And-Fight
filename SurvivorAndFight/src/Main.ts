@@ -1,7 +1,12 @@
 const { regClass } = Laya;
 
-import { CONFIG_BASE, DESIGN_WIDTH, DESIGN_HEIGHT } from './defines';
+import { CONFIG_BASE, DESIGN_WIDTH, DESIGN_HEIGHT, META_MENU_ENABLED } from './defines';
 import { SimpleEcsDemo } from './game/demo/SimpleEcsDemo';
+import type { CombatEnterPayload } from './game/meta/MetaFlowController';
+import { MetaFlowController } from './game/meta/MetaFlowController';
+import { MetaRunSession } from './game/meta/MetaRunSession';
+import { MetaMenuBootstrap } from './game/ui/meta/MetaMenuBootstrap';
+import { UIStackManager } from './game/ui/mvc/UIStackManager';
 import { InputService } from './input/InputService';
 import { ControlInputAdapter } from './input/ControlInputAdapter';
 import { Data, initData } from './config/Data';
@@ -13,6 +18,8 @@ export class Main extends Laya.Script {
     declare owner: Laya.Area2D;
 
     private demo: SimpleEcsDemo | null = null;
+    private metaUiStack: UIStackManager | null = null;
+    private metaFlow: MetaFlowController | null = null;
     private input: InputService | null = null;
     private controlInput: ControlInputAdapter | null = null;
     /** 2D 相机跟随：平滑系数 0~1，越大跟得越紧；0 表示不跟随。 */
@@ -57,7 +64,36 @@ export class Main extends Laya.Script {
                 if (base === bases[bases.length - 1]) console.warn('Main: config load failed (tried ' + bases.join(', ') + ')', e);
             }
         }
-        if (this.demo) await this.demo.init();
+        if (META_MENU_ENABLED) {
+            await this.startMetaMenu();
+        } else if (this.demo) {
+            await this.demo.init();
+        }
+    }
+
+    private async startMetaMenu(): Promise<void> {
+        const container = this.owner as any;
+        if (container) container.visible = false;
+
+        this.metaUiStack = new UIStackManager();
+        this.metaFlow = new MetaFlowController({
+            onEnterCombat: async (payload?: CombatEnterPayload) => {
+                if (container) container.visible = true;
+                if (this.demo) await this.demo.init();
+                if (payload?.isBoss) {
+                    Laya.timer.once(8000, this, this.onBossCombatCleared);
+                }
+            },
+        });
+        MetaMenuBootstrap.registerRoutes(this.metaUiStack, this.metaFlow);
+        await MetaMenuBootstrap.start(this.metaUiStack);
+    }
+
+    /** 首版 Boss 战占位：8s 后视为击杀 Boss，进入下一大关并回到跑图。 */
+    private onBossCombatCleared(): void {
+        const container = this.owner as any;
+        if (container) container.visible = false;
+        MetaRunSession.completeBossVictory();
     }
 
     private onFrameLoop(): void {

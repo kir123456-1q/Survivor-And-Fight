@@ -34,15 +34,6 @@
           "scriptPath": "../src/Main.ts"
         }
       ]
-    },
-    {
-      "_$id": "o7ltrerq",
-      "_$prefab": "adee3667-d762-4286-97c3-ed707ed1a4aa",
-      "name": "StartPanel",
-      "active": true,
-      "x": -5,
-      "y": -1,
-      "visible": true
     }
   ]
 }
