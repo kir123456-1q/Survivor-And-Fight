@@ -11,3 +11,8 @@ export * from './skillDefine';
 export * from './progressionDefine';
 export * from './metaDefine';
 export * from './runMapDefine';
+export * from './combatDefine';
+export * from './combatEffectDefine';
+export * from './skillSelectDefine';
+export * from './monsterDefine';
+export * from './rewardDefine';

@@ -1,6 +1,14 @@
 const { regClass } = Laya;
 
-import { CONFIG_BASE, DESIGN_WIDTH, DESIGN_HEIGHT, META_MENU_ENABLED } from './defines';
+import {
+    BOSS_COMBAT_SURVIVE_VICTORY_SEC,
+    COMBAT_SURVIVE_VICTORY_SEC,
+    DESIGN_WIDTH,
+    DESIGN_HEIGHT,
+    META_MENU_ENABLED,
+    REWARD_PANEL_ROUTE_ID,
+} from './defines';
+import { CombatSurvivalTimer } from './game/combat/CombatSurvivalTimer';
 import { SimpleEcsDemo } from './game/demo/SimpleEcsDemo';
 import type { CombatEnterPayload } from './game/meta/MetaFlowController';
 import { MetaFlowController } from './game/meta/MetaFlowController';
@@ -9,8 +17,7 @@ import { MetaMenuBootstrap } from './game/ui/meta/MetaMenuBootstrap';
 import { UIStackManager } from './game/ui/mvc/UIStackManager';
 import { InputService } from './input/InputService';
 import { ControlInputAdapter } from './input/ControlInputAdapter';
-import { Data, initData } from './config/Data';
-import type { TablesRegistryJson } from './config/TablesRegistry';
+import { ensureGameConfigLoaded } from './config/ConfigBootstrap';
 
 /** 参考 LayaProject2：脚本挂在 Area2D 子节点上，不挂在场景根，避免 3D 管线（_addRenderObject / cullInfoCamera）。 */
 @regClass()
@@ -22,6 +29,9 @@ export class Main extends Laya.Script {
     private metaFlow: MetaFlowController | null = null;
     private input: InputService | null = null;
     private controlInput: ControlInputAdapter | null = null;
+    private readonly combatSurvivalTimer = new CombatSurvivalTimer();
+    private combatSurvivalDurationSec = COMBAT_SURVIVE_VICTORY_SEC;
+    private pendingBossVictory = false;
     /** 2D 相机跟随：平滑系数 0~1，越大跟得越紧；0 表示不跟随。 */
     private cameraFollowSmooth = 0.12;
 
@@ -31,39 +41,15 @@ export class Main extends Laya.Script {
         this.input = new InputService();
         this.controlInput = new ControlInputAdapter(this.input);
         this.demo = new SimpleEcsDemo(container, null, this.controlInput);
+        this.demo.setOnTabPauseChange((paused) => this.handleTabPauseChange(paused));
 
         Laya.timer.frameLoop(1, this, this.onFrameLoop);
         this.loadConfigAndInitDemo();
     }
 
-    /** 加载配表（Character 等）后按预制体生成玩家与怪物。配表需在 CONFIG_BASE 下；若返回 HTML(404) 会尝试 config/。 */
+    /** 加载配表（Character 等）后按预制体生成玩家与怪物。预览需 tools/sync-config-to-bin.ps1。 */
     private async loadConfigAndInitDemo(): Promise<void> {
-        const bases = ['config/', CONFIG_BASE];
-        for (const base of bases) {
-            try {
-                const r = await fetch(base + 'tables.registry.json');
-                if (!r.ok) continue;
-                const ct = r.headers.get('content-type') ?? '';
-                if (ct.indexOf('json') === -1) continue;
-                const registry = await r.json() as TablesRegistryJson;
-                await initData(registry, async (path: string) => {
-                    const res = await fetch(base + path);
-                    if (!res.ok) throw new Error(path + ' ' + res.status);
-                    const text = await res.text();
-                    try { return JSON.parse(text); } catch { throw new Error(path + ' not JSON'); }
-                });
-                console.log('[Config] loaded base', base, {
-                    tables: Object.keys(Data),
-                    hasSkill: !!Data.Skill,
-                    hasSkillEffect: !!Data.SkillEffect,
-                    hasBullet: !!Data.Bullet,
-                    playerAutoSkillRow: Data.Skill?.GetByID?.('player_auto_shot'),
-                });
-                break;
-            } catch (e) {
-                if (base === bases[bases.length - 1]) console.warn('Main: config load failed (tried ' + bases.join(', ') + ')', e);
-            }
-        }
+        await ensureGameConfigLoaded();
         if (META_MENU_ENABLED) {
             await this.startMetaMenu();
         } else if (this.demo) {
@@ -78,22 +64,69 @@ export class Main extends Laya.Script {
         this.metaUiStack = new UIStackManager();
         this.metaFlow = new MetaFlowController({
             onEnterCombat: async (payload?: CombatEnterPayload) => {
+                this.stopCombatSurvivalTimer();
                 if (container) container.visible = true;
-                if (this.demo) await this.demo.init();
-                if (payload?.isBoss) {
-                    Laya.timer.once(8000, this, this.onBossCombatCleared);
+                if (this.demo) {
+                    MetaRunSession.combatDemo = this.demo;
+                    await this.demo.init();
+                    this.demo.setSessionPaused(false);
                 }
+                this.pendingBossVictory = !!payload?.isBoss;
+                this.combatSurvivalDurationSec = payload?.isBoss
+                    ? BOSS_COMBAT_SURVIVE_VICTORY_SEC
+                    : COMBAT_SURVIVE_VICTORY_SEC;
+                this.startCombatSurvivalTimer();
             },
         });
         MetaMenuBootstrap.registerRoutes(this.metaUiStack, this.metaFlow);
         await MetaMenuBootstrap.start(this.metaUiStack);
     }
 
-    /** 首版 Boss 战占位：8s 后视为击杀 Boss，进入下一大关并回到跑图。 */
-    private onBossCombatCleared(): void {
+    private startCombatSurvivalTimer(): void {
+        this.combatSurvivalTimer.start(this.combatSurvivalDurationSec, () => {
+            void this.onCombatSurvived();
+        });
+    }
+
+    private stopCombatSurvivalTimer(): void {
+        this.combatSurvivalTimer.stop();
+    }
+
+    private handleTabPauseChange(paused: boolean): void {
+        if (!this.combatSurvivalTimer.isRunning()) return;
+        if (paused) {
+            this.combatSurvivalTimer.pause();
+        } else {
+            this.combatSurvivalTimer.reset();
+        }
+    }
+
+    /** 生存胜利：暂停战斗并弹出三选一奖励。 */
+    private async onCombatSurvived(): Promise<void> {
+        this.stopCombatSurvivalTimer();
+        this.demo?.setSessionPaused(true);
+
+        const context = this.pendingBossVictory ? 'boss' : 'combat';
+        if (!this.metaUiStack) return;
+
+        MetaRunSession.onRewardPanelClosed = (picked) => {
+            MetaRunSession.onRewardPanelClosed = null;
+            void this.afterCombatReward(picked);
+        };
+        await this.metaUiStack.push(REWARD_PANEL_ROUTE_ID, { context, applyInCombat: true });
+    }
+
+    private async afterCombatReward(_picked: boolean): Promise<void> {
         const container = this.owner as any;
         if (container) container.visible = false;
-        MetaRunSession.completeBossVictory();
+        this.demo?.setSessionPaused(false);
+
+        if (this.pendingBossVictory) {
+            this.pendingBossVictory = false;
+            MetaRunSession.completeBossVictory();
+            return;
+        }
+        await MetaRunSession.resumeRunMap?.();
     }
 
     private onFrameLoop(): void {

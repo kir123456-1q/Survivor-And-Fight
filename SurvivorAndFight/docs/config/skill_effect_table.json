@@ -1,10 +1,755 @@
-{
-  "list": [
-    {
-      "id": "player_auto_shot_effect_1",
-      "effect": "bullet",
-      "target": "auto",
-      "bulletSlot": "player_bullet_fast_1"
-    }
-  ]
+﻿{
+    "list":  [
+                 {
+                     "id":  "fx_atk_speed_aura",
+                     "name":  "Fx Atk Speed Aura",
+                     "iconPath":  "atlas/EffectIcon/fx_atk_speed_aura.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_blast_smoke",
+                     "name":  "Fx Blast Smoke",
+                     "iconPath":  "atlas/EffectIcon/fx_blast_smoke.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_bullet_spawn_ring",
+                     "name":  "Fx Bullet Spawn Ring",
+                     "iconPath":  "atlas/EffectIcon/fx_bullet_spawn_ring.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_burst_brightness_upsweep",
+                     "name":  "Fx Burst Brightness Upsweep",
+                     "iconPath":  "atlas/EffectIcon/fx_burst_brightness_upsweep.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_chain_beam_hit",
+                     "name":  "Fx Chain Beam Hit",
+                     "iconPath":  "atlas/EffectIcon/fx_chain_beam_hit.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35,
+                     "chainCount":  2
+                 },
+                 {
+                     "id":  "fx_chain_lightning_zigzag",
+                     "name":  "Fx Chain Lightning Zigzag",
+                     "iconPath":  "atlas/EffectIcon/fx_chain_lightning_zigzag.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35,
+                     "chainCount":  2
+                 },
+                 {
+                     "id":  "fx_charge_glow_dot",
+                     "name":  "Fx Charge Glow Dot",
+                     "iconPath":  "atlas/EffectIcon/fx_charge_glow_dot.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_core_fireball",
+                     "name":  "Fx Core Fireball",
+                     "iconPath":  "atlas/EffectIcon/fx_core_fireball.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_crosshair_jitter_particles",
+                     "name":  "Fx Crosshair Jitter Particles",
+                     "iconPath":  "atlas/EffectIcon/fx_crosshair_jitter_particles.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_curved_trail_ballistic",
+                     "name":  "Fx Curved Trail Ballistic",
+                     "iconPath":  "atlas/EffectIcon/fx_curved_trail_ballistic.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_cut_spark",
+                     "name":  "Fx Cut Spark",
+                     "iconPath":  "atlas/EffectIcon/fx_cut_spark.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_damage_beam",
+                     "name":  "Fx Damage Beam",
+                     "iconPath":  "atlas/EffectIcon/fx_damage_beam.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_double_ghost_frame",
+                     "name":  "Fx Double Ghost Frame",
+                     "iconPath":  "atlas/EffectIcon/fx_double_ghost_frame.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_electrocute_spark",
+                     "name":  "Fx Electrocute Spark",
+                     "iconPath":  "atlas/EffectIcon/fx_electrocute_spark.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_ember_particles_stream",
+                     "name":  "Fx Ember Particles Stream",
+                     "iconPath":  "atlas/EffectIcon/fx_ember_particles_stream.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_execute_mark_skull",
+                     "name":  "Fx Execute Mark Skull",
+                     "iconPath":  "atlas/EffectIcon/fx_execute_mark_skull.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_explosion_warn_double_ring",
+                     "name":  "Fx Explosion Warn Double Ring",
+                     "iconPath":  "atlas/EffectIcon/fx_explosion_warn_double_ring.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_fan_aim_fan",
+                     "name":  "Fx Fan Aim Fan",
+                     "iconPath":  "atlas/EffectIcon/fx_fan_aim_fan.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_ghost_scale_frame",
+                     "name":  "Fx Ghost Scale Frame",
+                     "iconPath":  "atlas/EffectIcon/fx_ghost_scale_frame.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_ground_flame_cluster",
+                     "name":  "Fx Ground Flame Cluster",
+                     "iconPath":  "atlas/EffectIcon/fx_ground_flame_cluster.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_hit_flash_mask",
+                     "name":  "Fx Hit Flash Mask",
+                     "iconPath":  "atlas/EffectIcon/fx_hit_flash_mask.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_kill_vertical_pillar",
+                     "name":  "Fx Kill Vertical Pillar",
+                     "iconPath":  "atlas/EffectIcon/fx_kill_vertical_pillar.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_melee_anchor_spike_icon",
+                     "name":  "Fx Melee Anchor Spike",
+                     "iconPath":  "atlas/EffectIcon/fx_melee_anchor_spike_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_melee_chain_orbit_icon",
+                     "name":  "Fx Melee Chain Orbit",
+                     "iconPath":  "atlas/EffectIcon/fx_melee_chain_orbit_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35,
+                     "chainCount":  2
+                 },
+                 {
+                     "id":  "fx_melee_dual_ring_icon",
+                     "name":  "Fx Melee Dual Ring",
+                     "iconPath":  "atlas/EffectIcon/fx_melee_dual_ring_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_melee_ember_trail_icon",
+                     "name":  "Fx Melee Ember Trail",
+                     "iconPath":  "atlas/EffectIcon/fx_melee_ember_trail_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_melee_execution_mark_icon",
+                     "name":  "Fx Melee Execution Mark",
+                     "iconPath":  "atlas/EffectIcon/fx_melee_execution_mark_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_melee_holy_barrier_icon",
+                     "name":  "Fx Melee Holy Barrier",
+                     "iconPath":  "atlas/EffectIcon/fx_melee_holy_barrier_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_melee_orbit_blade_icon",
+                     "name":  "Fx Melee Orbit Blade",
+                     "iconPath":  "atlas/EffectIcon/fx_melee_orbit_blade_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_melee_shockwave",
+                     "name":  "Fx Melee Shockwave",
+                     "iconPath":  "atlas/EffectIcon/fx_melee_shockwave.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_melee_singularity_orbit_icon",
+                     "name":  "Fx Melee Singularity Orbit",
+                     "iconPath":  "atlas/EffectIcon/fx_melee_singularity_orbit_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_melee_thorn_burst_icon",
+                     "name":  "Fx Melee Thorn Burst",
+                     "iconPath":  "atlas/EffectIcon/fx_melee_thorn_burst_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_melee_vampiric_spin_icon",
+                     "name":  "Fx Melee Vampiric Spin",
+                     "iconPath":  "atlas/EffectIcon/fx_melee_vampiric_spin_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_mirror_bounce_highlight",
+                     "name":  "Fx Mirror Bounce Highlight",
+                     "iconPath":  "atlas/EffectIcon/fx_mirror_bounce_highlight.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_multi_segment_lock_line",
+                     "name":  "Fx Multi Segment Lock Line",
+                     "iconPath":  "atlas/EffectIcon/fx_multi_segment_lock_line.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_muzzle_spark",
+                     "name":  "Fx Muzzle Spark",
+                     "iconPath":  "atlas/EffectIcon/fx_muzzle_spark.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_orbit_trail",
+                     "name":  "Fx Orbit Trail",
+                     "iconPath":  "atlas/EffectIcon/fx_orbit_trail.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_poison_ring_decal",
+                     "name":  "Fx Poison Ring Decal",
+                     "iconPath":  "atlas/EffectIcon/fx_poison_ring_decal.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_polyline_trail_frame",
+                     "name":  "Fx Polyline Trail Frame",
+                     "iconPath":  "atlas/EffectIcon/fx_polyline_trail_frame.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_rand_destiny_reset_icon",
+                     "name":  "Fx Rand Destiny Reset",
+                     "iconPath":  "atlas/EffectIcon/fx_rand_destiny_reset_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_rand_entropy_storm_icon",
+                     "name":  "Fx Rand Entropy Storm",
+                     "iconPath":  "atlas/EffectIcon/fx_rand_entropy_storm_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_rand_hop_target_icon",
+                     "name":  "Fx Rand Hop Target",
+                     "iconPath":  "atlas/EffectIcon/fx_rand_hop_target_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_rand_lucky_split_icon",
+                     "name":  "Fx Rand Lucky Split",
+                     "iconPath":  "atlas/EffectIcon/fx_rand_lucky_split_icon.png",
+                     "effect":  "modifier_split",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "splitCount":  1
+                 },
+                 {
+                     "id":  "fx_rand_mirror_shot_icon",
+                     "name":  "Fx Rand Mirror Shot",
+                     "iconPath":  "atlas/EffectIcon/fx_rand_mirror_shot_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_rand_pinball_icon",
+                     "name":  "Fx Rand Pinball",
+                     "iconPath":  "atlas/EffectIcon/fx_rand_pinball_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_rand_quantum_pick_icon",
+                     "name":  "Fx Rand Quantum Pick",
+                     "iconPath":  "atlas/EffectIcon/fx_rand_quantum_pick_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_rand_roulette_bomb_icon",
+                     "name":  "Fx Rand Roulette Bomb",
+                     "iconPath":  "atlas/EffectIcon/fx_rand_roulette_bomb_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_rand_sniper_focus_icon",
+                     "name":  "Fx Rand Sniper Focus",
+                     "iconPath":  "atlas/EffectIcon/fx_rand_sniper_focus_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_rand_wild_arc_icon",
+                     "name":  "Fx Rand Wild Arc",
+                     "iconPath":  "atlas/EffectIcon/fx_rand_wild_arc_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_shield_crack",
+                     "name":  "Fx Shield Crack",
+                     "iconPath":  "atlas/EffectIcon/fx_shield_crack.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_shockwave_rim",
+                     "name":  "Fx Shockwave Rim",
+                     "iconPath":  "atlas/EffectIcon/fx_shockwave_rim.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_shot_blackhole_seed_icon",
+                     "name":  "Fx Shot Blackhole Seed",
+                     "iconPath":  "atlas/EffectIcon/fx_shot_blackhole_seed_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_shot_chain_arc_icon",
+                     "name":  "Fx Shot Chain Arc",
+                     "iconPath":  "atlas/EffectIcon/fx_shot_chain_arc_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35,
+                     "chainCount":  2
+                 },
+                 {
+                     "id":  "fx_shot_delay_burst_icon",
+                     "name":  "Fx Shot Delay Burst",
+                     "iconPath":  "atlas/EffectIcon/fx_shot_delay_burst_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_shot_meteor_fall_icon",
+                     "name":  "Fx Shot Meteor Fall",
+                     "iconPath":  "atlas/EffectIcon/fx_shot_meteor_fall_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_shot_pierce_round_icon",
+                     "name":  "Fx Shot Pierce Round",
+                     "iconPath":  "atlas/EffectIcon/fx_shot_pierce_round_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35,
+                     "penetration":  2
+                 },
+                 {
+                     "id":  "fx_shot_prism_overload_icon",
+                     "name":  "Fx Shot Prism Overload",
+                     "iconPath":  "atlas/EffectIcon/fx_shot_prism_overload_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_shot_rebound_icon",
+                     "name":  "Fx Shot Rebound",
+                     "iconPath":  "atlas/EffectIcon/fx_shot_rebound_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_shot_split_two_icon",
+                     "name":  "Fx Shot Split Two",
+                     "iconPath":  "atlas/EffectIcon/fx_shot_split_two_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35,
+                     "splitCount":  1
+                 },
+                 {
+                     "id":  "fx_shot_sticky_bomb_icon",
+                     "name":  "Fx Shot Sticky Bomb",
+                     "iconPath":  "atlas/EffectIcon/fx_shot_sticky_bomb_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_shot_triple_fan_icon",
+                     "name":  "Fx Shot Triple Fan",
+                     "iconPath":  "atlas/EffectIcon/fx_shot_triple_fan_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_small_starburst_hit",
+                     "name":  "Fx Small Starburst Hit",
+                     "iconPath":  "atlas/EffectIcon/fx_small_starburst_hit.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_spike_warn_line",
+                     "name":  "Fx Spike Warn Line",
+                     "iconPath":  "atlas/EffectIcon/fx_spike_warn_line.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_spinning_wind_ring",
+                     "name":  "Fx Spinning Wind Ring",
+                     "iconPath":  "atlas/EffectIcon/fx_spinning_wind_ring.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_split_burst_on_hit",
+                     "name":  "Fx Split Burst On Hit",
+                     "iconPath":  "atlas/EffectIcon/fx_split_burst_on_hit.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false,
+                     "splitCount":  1
+                 },
+                 {
+                     "id":  "fx_split_prism_refraction",
+                     "name":  "Fx Split Prism Refraction",
+                     "iconPath":  "atlas/EffectIcon/fx_split_prism_refraction.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false,
+                     "splitCount":  1
+                 },
+                 {
+                     "id":  "fx_thin_trail",
+                     "name":  "Fx Thin Trail",
+                     "iconPath":  "atlas/EffectIcon/fx_thin_trail.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_thunder_parry_pulse_ring",
+                     "name":  "Fx Thunder Parry Pulse Ring",
+                     "iconPath":  "atlas/EffectIcon/fx_thunder_parry_pulse_ring.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_tile_poison",
+                     "name":  "Fx Tile Poison",
+                     "iconPath":  "atlas/EffectIcon/fx_tile_poison.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_tile_thundergrid",
+                     "name":  "Fx Tile Thundergrid",
+                     "iconPath":  "atlas/EffectIcon/fx_tile_thundergrid.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  12,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_void_rip",
+                     "name":  "Fx Void Rip",
+                     "iconPath":  "atlas/EffectIcon/fx_void_rip.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_warn_ground_circle",
+                     "name":  "Fx Warn Ground Circle",
+                     "iconPath":  "atlas/EffectIcon/fx_warn_ground_circle.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_weak_spotlight_cone",
+                     "name":  "Fx Weak Spotlight Cone",
+                     "iconPath":  "atlas/EffectIcon/fx_weak_spotlight_cone.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "fx_weapon_enchant_glow",
+                     "name":  "Fx Weapon Enchant Glow",
+                     "iconPath":  "atlas/EffectIcon/fx_weapon_enchant_glow.png",
+                     "effect":  "direct_damage",
+                     "target":  "auto",
+                     "damage":  8,
+                     "enabled":  false
+                 },
+                 {
+                     "id":  "player_auto_shot_effect_1",
+                     "name":  "Auto Shot",
+                     "iconPath":  "atlas/EffectIcon/fx_shot_split_two_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "damage":  10,
+                     "enabled":  true
+                 }
+             ]
 }

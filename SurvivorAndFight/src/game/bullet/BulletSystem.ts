@@ -6,7 +6,17 @@ import { Attribute } from '../../ecs/components/Attribute';
 import { PlayerTag } from '../../ecs/components/PlayerTag';
 import { MonsterTag } from '../../ecs/components/MonsterTag';
 import type { BulletPool } from './BulletPool';
-import { HIT_RADIUS, BULLET_PREFAB_2D, BULLET_3D_PATHS_TO_2D, COMBAT_DEBUG_LOG } from '../../defines';
+import {
+    BULLET_PREFAB_2D,
+    BULLET_3D_PATHS_TO_2D,
+    CHAIN_HIT_RADIUS,
+    COMBAT_DEBUG_LOG,
+} from '../../defines';
+import { hitRadiusSq, segmentHitsCircle } from './BulletHitTest';
+import type { CombatDataPrepareSystem } from '../combat/CombatDataPrepareSystem';
+import type { CombatBulletSnapshot } from '../combat/CombatDataBridge';
+import type { CombatWorkerComputeResponse } from '../combat/combatWorkerProtocol';
+import { applyBulletIconSkin } from './BulletVisual';
 
 export type GetBulletRowFn = (id: string) => Record<string, unknown> | undefined;
 export type InstantiateBulletFn = (prefabPath: string) => any;
@@ -15,6 +25,7 @@ interface BulletInstance {
     bulletId: string;
     node: any;
     prefabPath: string;
+    iconPath?: string;
     x: number;
     y: number;
     z: number;
@@ -27,6 +38,7 @@ interface BulletInstance {
     duration: number;
     splitCount: number;
     splitRemaining: number;
+    chainCount: number;
     collisionDelay: number;
 }
 
@@ -50,7 +62,27 @@ export class BulletSystem implements System {
         private readonly instantiateBullet: InstantiateBulletFn,
         private readonly bulletPool?: BulletPool,
         private readonly isPaused?: () => boolean,
+        private combatPrepare?: CombatDataPrepareSystem,
     ) {}
+
+    setCombatPrepare(prepare: CombatDataPrepareSystem): void {
+        this.combatPrepare = prepare;
+    }
+
+    collectSnapshots(): CombatBulletSnapshot[] {
+        return this.bullets.map((b) => ({
+            x: b.x,
+            y: b.y,
+            dirX: b.dir.x,
+            dirY: b.dir.y,
+            speed: b.speed,
+            age: b.age,
+            duration: b.duration,
+            penetration: b.penetration,
+            ownerSide: b.ownerType === 'player' ? 0 : 1,
+            collisionDelay: b.collisionDelay,
+        }));
+    }
 
     /**
      * 根据子弹表 id 生成子弹，position 与 direction 为世界坐标/方向，ownerType 为 "player" | "monster"。
@@ -66,9 +98,14 @@ export class BulletSystem implements System {
         ownerType: string,
         options: {
             damageScale?: number;
+            speedScale?: number;
+            penetration?: number;
             splitCount?: number;
             splitRemaining?: number;
+            chainCount?: number;
             collisionDelaySec?: number;
+            damageOverride?: number;
+            iconPath?: string;
         },
     ): void {
         const row = this.getBulletRow(bulletId);
@@ -82,9 +119,11 @@ export class BulletSystem implements System {
         let prefabPath = (row.prefabPath as string) ?? BULLET_PREFAB_2D;
         if (BULLET_3D_PATHS_TO_2D[prefabPath]) prefabPath = BULLET_3D_PATHS_TO_2D[prefabPath];
         const duration = Number(row.duration) || 2;
-        const speed = Number(row.speed) || 10;
-        const damage = (Number(row.damage) || 5) * (options.damageScale ?? 1);
-        const penetration = Number(row.penetration) ?? 0;
+        const speed = (Number(row.speed) || 10) * (options.speedScale ?? 1);
+        const baseDamage = options.damageOverride ?? (Number(row.damage) || 5);
+        const damage = baseDamage * (options.damageScale ?? 1);
+        const penetration = options.penetration ?? (Number(row.penetration) ?? 0);
+        const chainCount = Math.max(0, Math.floor(options.chainCount ?? 0));
         const node = this.bulletPool?.get(prefabPath) ?? this.instantiateBullet(prefabPath);
         if (!node) return;
         const len = Math.sqrt(direction.x * direction.x + direction.y * direction.y) || 1;
@@ -109,7 +148,9 @@ export class BulletSystem implements System {
                     duration,
                     options.splitCount ?? 0,
                     options.splitRemaining ?? 0,
+                    chainCount,
                     options.collisionDelaySec ?? 0,
+                    options.iconPath,
                 );
             }).catch(() => {});
             return;
@@ -127,7 +168,9 @@ export class BulletSystem implements System {
             duration,
             options.splitCount ?? 0,
             options.splitRemaining ?? 0,
+            chainCount,
             options.collisionDelaySec ?? 0,
+            options.iconPath,
         );
     }
 
@@ -144,7 +187,9 @@ export class BulletSystem implements System {
         duration: number,
         splitCount: number,
         splitRemaining: number,
+        chainCount: number,
         collisionDelay: number,
+        iconPath?: string,
     ): void {
         if (this.sceneParent && node.parent !== this.sceneParent) {
             this.sceneParent.addChild(node);
@@ -161,10 +206,14 @@ export class BulletSystem implements System {
             if (node && typeof (node as any).x === 'number') { (node as any).x = x; (node as any).y = y; }
         }
         this.applyBulletFacing(node, dir);
+        if (iconPath && ownerType === 'player') {
+            void applyBulletIconSkin(node, iconPath).catch(() => {});
+        }
         this.bullets.push({
             bulletId,
             node,
             prefabPath,
+            iconPath,
             x: position.x,
             y: position.y ?? 0,
             z: 0,
@@ -177,6 +226,7 @@ export class BulletSystem implements System {
             duration,
             splitCount,
             splitRemaining,
+            chainCount,
             collisionDelay,
         });
         if (COMBAT_DEBUG_LOG && this.spawnLogCount < 40) {
@@ -197,8 +247,18 @@ export class BulletSystem implements System {
 
     update(deltaTime: number): void {
         if (this.isPaused?.()) return;
+
+        const frameResult = this.combatPrepare?.getFrameResult();
+        const hasChain = this.bullets.some((b) => b.chainCount > 0);
+        if (frameResult && !hasChain && this.applyWorkerFrame(frameResult)) {
+            return;
+        }
+
+        const radiusSq = hitRadiusSq();
         for (let i = this.bullets.length - 1; i >= 0; i--) {
             const b = this.bullets[i];
+            const prevX = b.x;
+            const prevY = b.y;
             b.x += b.dir.x * b.speed * deltaTime;
             b.y += b.dir.y * b.speed * deltaTime;
             b.age += deltaTime;
@@ -224,26 +284,36 @@ export class BulletSystem implements System {
                 this.bullets.splice(i, 1);
                 continue;
             }
-            const hits = b.collisionDelay > 0 ? [] : this.getHits(b);
-            for (const eid of hits) {
+            const hits = b.collisionDelay > 0 ? [] : this.getHits(b, prevX, prevY, radiusSq);
+            for (const primaryEid of hits) {
                 if (b.penetration < 0) break;
-                const hitPos = this.world.getComponent(eid, Position);
-                const attr = this.world.getComponent(eid, Attribute);
-                if (attr && typeof attr.base.hp === 'number') {
-                    attr.base.hp = Math.max(0, attr.base.hp - b.damage);
-                    if (COMBAT_DEBUG_LOG && this.hitLogCount < 80) {
-                        this.hitLogCount += 1;
-                        console.log('[BulletSystem] hit target', {
-                            target: eid,
-                            ownerType: b.ownerType,
-                            damage: b.damage,
-                            targetHp: attr.base.hp,
-                            penetrationLeftBeforeDec: b.penetration,
-                        });
+                const chainTargets = this.getChainTargets(b, primaryEid);
+                let splitSpawned = false;
+                for (const eid of chainTargets) {
+                    const hitPos = this.world.getComponent(eid, Position);
+                    const attr = this.world.getComponent(eid, Attribute);
+                    if (attr && typeof attr.base.hp === 'number') {
+                        attr.base.hp = Math.max(0, attr.base.hp - b.damage);
+                        if (COMBAT_DEBUG_LOG && this.hitLogCount < 80) {
+                            this.hitLogCount += 1;
+                            console.log('[BulletSystem] hit target', {
+                                target: eid,
+                                ownerType: b.ownerType,
+                                damage: b.damage,
+                                chain: eid !== primaryEid,
+                            });
+                        }
                     }
-                }
-                if (hitPos && b.splitCount > 0 && b.splitRemaining > 0) {
-                    this.spawnSplitBullets(b, { x: hitPos.x, y: hitPos.y ?? 0 });
+                    if (
+                        eid === primaryEid &&
+                        hitPos &&
+                        b.splitCount > 0 &&
+                        b.splitRemaining > 0 &&
+                        !splitSpawned
+                    ) {
+                        this.spawnSplitBullets(b, { x: hitPos.x, y: hitPos.y ?? 0 });
+                        splitSpawned = true;
+                    }
                 }
                 b.penetration--;
             }
@@ -276,9 +346,9 @@ export class BulletSystem implements System {
                 damageScale: 1,
                 splitCount: parent.splitCount,
                 splitRemaining: remaining,
-                // Spawned at hit point: arm collision shortly after launch
-                // to avoid immediate self-collision disappearance.
+                chainCount: 0,
                 collisionDelaySec: 0.06,
+                iconPath: parent.iconPath,
             });
         }
     }
@@ -293,18 +363,113 @@ export class BulletSystem implements System {
         }
     }
 
-    private getHits(b: BulletInstance): EntityId[] {
+    private applyWorkerFrame(frameResult: CombatWorkerComputeResponse): boolean {
+        if (frameResult.bulletX.length !== this.bullets.length) return false;
+
+        for (let i = 0; i < this.bullets.length; i++) {
+            const b = this.bullets[i];
+            b.x = frameResult.bulletX[i];
+            b.y = frameResult.bulletY[i];
+            b.age = frameResult.bulletAge[i];
+            b.collisionDelay = frameResult.bulletCollisionDelay[i];
+            b.penetration = frameResult.bulletPenetration[i];
+            this.syncBulletNodePosition(b);
+        }
+
+        for (const hit of frameResult.hits) {
+            const b = this.bullets[hit.bulletIndex];
+            if (!b || b.penetration < 0) continue;
+            const chainTargets = this.getChainTargets(b, hit.targetEntityId);
+            let splitSpawned = false;
+            for (const eid of chainTargets) {
+                const hitPos = this.world.getComponent(eid, Position);
+                const attr = this.world.getComponent(eid, Attribute);
+                if (attr && typeof attr.base.hp === 'number') {
+                    attr.base.hp = Math.max(0, attr.base.hp - b.damage);
+                }
+                if (
+                    eid === hit.targetEntityId &&
+                    hitPos &&
+                    b.splitCount > 0 &&
+                    b.splitRemaining > 0 &&
+                    !splitSpawned
+                ) {
+                    this.spawnSplitBullets(b, { x: hitPos.x, y: hitPos.y ?? 0 });
+                    splitSpawned = true;
+                }
+            }
+        }
+
+        const expired = [...frameResult.expiredBulletIndices].sort((a, b) => b - a);
+        for (const index of expired) {
+            const b = this.bullets[index];
+            if (!b) continue;
+            this.destroyBullet(b);
+            this.bullets.splice(index, 1);
+        }
+
+        return true;
+    }
+
+    private syncBulletNodePosition(b: BulletInstance): void {
+        const n = b.node;
+        try {
+            const tr = n && (n as any).transform;
+            if (tr && tr.position) {
+                const p = tr.position;
+                if (typeof p.set === 'function') p.set(b.x, b.y, 0);
+                else { p.x = b.x; p.y = b.y; if ('z' in p) p.z = 0; }
+            } else if (n && typeof (n as any).x === 'number') {
+                (n as any).x = b.x;
+                (n as any).y = b.y;
+            }
+        } catch (_) {
+            if (n && typeof (n as any).x === 'number') { (n as any).x = b.x; (n as any).y = b.y; }
+        }
+    }
+
+    private getHits(
+        b: BulletInstance,
+        prevX: number,
+        prevY: number,
+        radiusSq: number,
+    ): EntityId[] {
         const out: EntityId[] = [];
         const targets = this.getTargets();
         for (const [eid, pos] of targets) {
             if (b.ownerType === 'player' && !this.world.getComponent(eid, MonsterTag)) continue;
             if (b.ownerType === 'monster' && !this.world.getComponent(eid, PlayerTag)) continue;
+            const cx = pos.x;
+            const cy = pos.y ?? 0;
+            if (segmentHitsCircle(prevX, prevY, b.x, b.y, cx, cy, radiusSq)) {
+                out.push(eid);
+            }
+        }
+        return out;
+    }
+
+    /** 主目标 + 连锁额外目标（按距离排序）。 */
+    private getChainTargets(b: BulletInstance, primaryEid: EntityId): EntityId[] {
+        const result: EntityId[] = [primaryEid];
+        const extra = b.chainCount;
+        if (extra <= 0) return result;
+
+        const radiusSq = CHAIN_HIT_RADIUS * CHAIN_HIT_RADIUS;
+        const candidates: Array<{ eid: EntityId; d2: number }> = [];
+        for (const [eid, pos] of this.getTargets()) {
+            if (eid === primaryEid) continue;
+            if (b.ownerType === 'player' && !this.world.getComponent(eid, MonsterTag)) continue;
+            if (b.ownerType === 'monster' && !this.world.getComponent(eid, PlayerTag)) continue;
             const dx = b.x - pos.x;
             const dy = b.y - (pos.y ?? 0);
             const d2 = dx * dx + dy * dy;
-            if (d2 < HIT_RADIUS * HIT_RADIUS) out.push(eid);
+            if (d2 <= radiusSq) candidates.push({ eid, d2 });
         }
-        return out;
+        candidates.sort((a, c) => a.d2 - c.d2);
+        for (let i = 0; i < extra && i < candidates.length; i++) {
+            result.push(candidates[i].eid);
+        }
+        return result;
     }
 
     private getTargets(): Array<[EntityId, { x: number; y?: number; z?: number }]> {

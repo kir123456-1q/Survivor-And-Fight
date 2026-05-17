@@ -3,6 +3,8 @@ import type { EntityId } from '../core/EntityManager';
 import type { EcsWorld } from '../core/World';
 import type { FilterRegistry } from '../filters/FilterRegistry';
 import { Position, Velocity } from '../components/TransformComponents';
+import { MonsterDef } from '../components/MonsterDef';
+import { getMonsterRow } from '../../game/monster/MonsterCatalog';
 import {
     MONSTER_CHASE_SPEED,
     MONSTER_RANDOM_SWAY_DEGREE,
@@ -10,6 +12,8 @@ import {
     MONSTER_SEPARATION_DISTANCE,
     MONSTER_SEPARATION_FORCE,
 } from '../../defines';
+import type { CombatDataPrepareSystem } from '../../game/combat/CombatDataPrepareSystem';
+import type { CombatWorkerComputeResponse } from '../../game/combat/combatWorkerProtocol';
 
 /**
  * Minimal monster AI for phase1:
@@ -24,11 +28,18 @@ export class MonsterChaseSystem implements System {
         private readonly world: EcsWorld,
         private readonly filters: FilterRegistry,
         private readonly isPaused?: () => boolean,
+        private readonly combatPrepare?: CombatDataPrepareSystem,
     ) {}
 
     update(deltaTime: number): void {
         if (this.isPaused?.()) return;
         this.elapsedTime += deltaTime;
+
+        const frameResult = this.combatPrepare?.getFrameResult();
+        if (frameResult && this.applyWorkerVelocities(frameResult)) {
+            return;
+        }
+
         const players = this.filters.getNamedFilter('Players');
         if (players.length === 0) return;
         const playerPos = this.world.getComponent(players[0], Position);
@@ -61,8 +72,11 @@ export class MonsterChaseSystem implements System {
             const chaseY = baseX * sinA + baseY * cosA;
 
             const separation = this.computeSeparation(monster, pos, monsters);
-            vel.vx = chaseX * MONSTER_CHASE_SPEED + separation.x * MONSTER_SEPARATION_FORCE;
-            vel.vy = chaseY * MONSTER_CHASE_SPEED + separation.y * MONSTER_SEPARATION_FORCE;
+            const def = this.world.getComponent(monster, MonsterDef);
+            const speedScale = def ? (getMonsterRow(def.monsterId)?.chaseSpeedScale ?? 1) : 1;
+            const chaseSpeed = MONSTER_CHASE_SPEED * speedScale;
+            vel.vx = chaseX * chaseSpeed + separation.x * MONSTER_SEPARATION_FORCE;
+            vel.vy = chaseY * chaseSpeed + separation.y * MONSTER_SEPARATION_FORCE;
             if (vel.vz !== undefined) vel.vz = 0;
         }
     }
@@ -96,5 +110,25 @@ export class MonsterChaseSystem implements System {
             sepY += (dy / dist) * weight;
         }
         return { x: sepX, y: sepY };
+    }
+
+    private applyWorkerVelocities(frameResult: CombatWorkerComputeResponse): boolean {
+        const monsters = this.filters.getNamedFilter('Monsters');
+        let index = 0;
+        for (const monster of monsters) {
+            const pos = this.world.getComponent(monster, Position);
+            if (!pos) continue;
+            if (index >= frameResult.monsterVelX.length) return false;
+            const vel = this.world.getComponent(monster, Velocity);
+            if (!vel) {
+                index += 1;
+                continue;
+            }
+            vel.vx = frameResult.monsterVelX[index];
+            vel.vy = frameResult.monsterVelY[index];
+            if (vel.vz !== undefined) vel.vz = 0;
+            index += 1;
+        }
+        return index === frameResult.monsterVelX.length;
     }
 }

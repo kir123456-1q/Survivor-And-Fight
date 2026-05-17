@@ -1,0 +1,7 @@
+{
+  "list": [
+    { "id": 1, "name": "warrior", "hp": 100, "attack": 10.5, "tags": [1, 2, 3] },
+    { "id": 2, "name": "mage", "hp": 60, "attack": 25.0, "tags": [2, 4] },
+    { "id": 3, "name": "archer", "hp": 80, "attack": 15.0, "tags": [1, 3] }
+  ]
+}

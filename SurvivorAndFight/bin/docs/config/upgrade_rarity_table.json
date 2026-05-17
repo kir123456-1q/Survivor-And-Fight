@@ -1,0 +1,7 @@
+{
+  "list": [
+    { "rarity": "common", "baseWeight": 80, "levelFactor": -0.6 },
+    { "rarity": "rare", "baseWeight": 18, "levelFactor": 0.5 },
+    { "rarity": "epic", "baseWeight": 2, "levelFactor": 0.1 }
+  ]
+}

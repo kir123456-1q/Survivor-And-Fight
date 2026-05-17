@@ -1,0 +1,81 @@
+{
+  "list": [
+    {
+      "id": "monster_skill_melee_t1",
+      "name": "怪物近战·轻",
+      "effectIds": ["monster_effect_melee_t1"],
+      "cooldownSec": 1.35,
+      "enabled": true
+    },
+    {
+      "id": "monster_skill_melee_t2",
+      "name": "怪物近战·中",
+      "effectIds": ["monster_effect_melee_t2"],
+      "cooldownSec": 1.15,
+      "enabled": true
+    },
+    {
+      "id": "monster_skill_melee_elite",
+      "name": "怪物近战·精英",
+      "effectIds": ["monster_effect_melee_elite"],
+      "cooldownSec": 1.05,
+      "enabled": true
+    },
+    {
+      "id": "monster_skill_melee_boss",
+      "name": "怪物近战·Boss",
+      "effectIds": ["monster_effect_melee_boss"],
+      "cooldownSec": 0.95,
+      "enabled": true
+    },
+    {
+      "id": "monster_skill_ranged_t1",
+      "name": "怪物远程·轻",
+      "effectIds": ["monster_effect_ranged_t1"],
+      "cooldownSec": 1.25,
+      "enabled": true
+    },
+    {
+      "id": "monster_skill_ranged_t2",
+      "name": "怪物远程·中",
+      "effectIds": ["monster_effect_ranged_t2"],
+      "cooldownSec": 1.05,
+      "enabled": true
+    },
+    {
+      "id": "monster_skill_ranged_pierce",
+      "name": "怪物远程·穿透",
+      "effectIds": ["monster_effect_ranged_pierce"],
+      "cooldownSec": 1.1,
+      "enabled": true
+    },
+    {
+      "id": "monster_skill_ranged_chain",
+      "name": "怪物远程·连锁",
+      "effectIds": ["monster_effect_ranged_chain"],
+      "cooldownSec": 1.2,
+      "enabled": true
+    },
+    {
+      "id": "monster_skill_ranged_elite",
+      "name": "怪物远程·精英",
+      "effectIds": ["monster_effect_ranged_elite"],
+      "cooldownSec": 0.95,
+      "enabled": true
+    },
+    {
+      "id": "monster_skill_ranged_heavy",
+      "name": "怪物远程·重炮",
+      "effectIds": ["monster_effect_ranged_heavy"],
+      "cooldownSec": 1.15,
+      "enabled": true
+    },
+    {
+      "id": "monster_skill_ranged_boss",
+      "name": "怪物远程·Boss",
+      "effectIds": ["monster_effect_ranged_boss"],
+      "cooldownSec": 0.85,
+      "enabled": true
+    }
+  ]
+}

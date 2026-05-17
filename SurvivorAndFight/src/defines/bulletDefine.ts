@@ -14,3 +14,9 @@ export const BULLET_3D_PATHS_TO_2D: Record<string, string> = {
 
 /** 默认自动射击子弹槽位（配表缺失时兜底）。 */
 export const DEFAULT_PLAYER_AUTO_BULLET_ID = 'player_bullet_fast_1';
+
+/** buttle2d.lh 内用于换皮的 GImage 节点名。 */
+export const BULLET_SKIN_IMAGE_NAME = 'over';
+
+/** 战场上子弹贴图边长（与 UI 技能/Effect 图标同源 png）。 */
+export const BULLET_WORLD_ICON_SIZE = 56;

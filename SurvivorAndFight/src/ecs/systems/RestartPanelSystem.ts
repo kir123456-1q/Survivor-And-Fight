@@ -1,6 +1,8 @@
 import { System } from '../core/System';
 import type { EcsWorld } from '../core/World';
 import type { EntityId } from '../core/EntityManager';
+import type { FilterRegistry } from '../filters/FilterRegistry';
+import { Attribute } from '../components/Attribute';
 import { GameSession } from '../components/GameSession';
 import { UIStackManager } from '../../game/ui/mvc/UIStackManager';
 import { RESTART_PANEL_ROUTE_ID } from '../../game/ui/restart/RestartPanelController';
@@ -21,13 +23,16 @@ export class RestartPanelSystem implements System {
         private readonly world: EcsWorld,
         private readonly sessionEntity: EntityId,
         private readonly uiStack: UIStackManager,
+        private readonly filters: FilterRegistry,
     ) {}
 
     update(_deltaTime: number): void {
         const session = this.world.getComponent(this.sessionEntity, GameSession);
         if (!session) return;
 
-        if (session.paused) {
+        const shouldShowRestart = session.paused && this.isPlayerDead();
+
+        if (shouldShowRestart) {
             if (!session.restartPanelVisible && !this.openPending) {
                 this.openPending = true;
                 void this.uiStack.push(RESTART_PANEL_ROUTE_ID, {
@@ -58,6 +63,15 @@ export class RestartPanelSystem implements System {
                 });
             }
         }
+    }
+
+    /** 仅死亡暂停时弹出重启面板；技能装配 Tab 暂停（hp>0）不触发。 */
+    private isPlayerDead(): boolean {
+        const players = this.filters.getNamedFilter('Players');
+        if (players.length === 0) return false;
+        const attr = this.world.getComponent(players[0], Attribute);
+        if (!attr || typeof attr.base.hp !== 'number') return false;
+        return attr.base.hp <= 0;
     }
 }
 

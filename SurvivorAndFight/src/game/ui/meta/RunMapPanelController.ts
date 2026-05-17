@@ -1,8 +1,9 @@
 import {
+    REWARD_PANEL_ROUTE_ID,
     RUN_MAP_PANEL_ROUTE_ID,
-    RUN_ROOM_REST_AUTO_SEC,
     UI_POP_MISMATCH,
 } from '../../../defines';
+import type { RewardPoolContext } from '../../reward/RewardTypes';
 import { MetaRunSession } from '../../meta/MetaRunSession';
 import type { MetaFlowController } from '../../meta/MetaFlowController';
 import type { RunNodeType } from '../../run/RunTypes';
@@ -18,7 +19,6 @@ const COMBAT_TYPES: RunNodeType[] = ['Combat', 'Boss', 'Treasure'];
 export class RunMapPanelController extends UiControllerBase<RunMapPanelPayload> {
     private readonly model = new RunMapPanelModel();
     private readonly view = new RunMapPanelView();
-    private restTimerKey: object | null = null;
 
     constructor(
         private readonly uiStack: UIStackManager,
@@ -54,12 +54,10 @@ export class RunMapPanelController extends UiControllerBase<RunMapPanelPayload> 
     }
 
     protected onHide(): void {
-        this.clearRestTimer();
         this.view.hide();
     }
 
     protected onDispose(): void {
-        this.clearRestTimer();
         this.view.dispose();
         if (MetaRunSession.resumeRunMap) {
             MetaRunSession.resumeRunMap = null;
@@ -99,7 +97,12 @@ export class RunMapPanelController extends UiControllerBase<RunMapPanelPayload> 
         if (!node) return;
 
         if (node.type === 'Rest') {
-            this.scheduleRestComplete();
+            void this.openRewardPanel('rest');
+            return;
+        }
+
+        if (node.type === 'Unknown') {
+            void this.openRewardPanel('unknown');
             return;
         }
 
@@ -108,19 +111,8 @@ export class RunMapPanelController extends UiControllerBase<RunMapPanelPayload> 
         }
     }
 
-    private scheduleRestComplete(): void {
-        this.clearRestTimer();
-        this.restTimerKey = {};
-        Laya.timer.once(RUN_ROOM_REST_AUTO_SEC * 1000, this.restTimerKey, () => {
-            console.log(`[UI] Rest room auto complete after ${RUN_ROOM_REST_AUTO_SEC}s`);
-        });
-    }
-
-    private clearRestTimer(): void {
-        if (this.restTimerKey) {
-            Laya.timer.clearAll(this.restTimerKey);
-            this.restTimerKey = null;
-        }
+    private async openRewardPanel(context: RewardPoolContext): Promise<void> {
+        await this.uiStack.push(REWARD_PANEL_ROUTE_ID, { context, applyInCombat: false });
     }
 
     private async enterCombat(nodeId: string, payloadId: string | null, isBoss: boolean): Promise<void> {

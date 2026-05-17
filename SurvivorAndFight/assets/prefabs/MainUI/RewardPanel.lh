@@ -1,0 +1,232 @@
+{
+  "_$ver": 1,
+  "_$id": "kb7zg0r9",
+  "_$type": "Area2D",
+  "name": "RewardPanel",
+  "x": -5,
+  "y": -1,
+  "width": 1339,
+  "height": 747,
+  "_$child": [
+    {
+      "_$id": "i7ba5ju5",
+      "_$type": "GImage",
+      "name": "img",
+      "x": 6,
+      "y": 1,
+      "width": 1330,
+      "height": 751,
+      "src": "res://288371c1-956a-4b08-9651-e4b4bb3cc3b6",
+      "autoSize": false
+    },
+    {
+      "_$id": "pkuzth06",
+      "_$type": "GImage",
+      "name": "img_1",
+      "x": 375,
+      "y": 118,
+      "width": 551,
+      "height": 453,
+      "src": "res://b6531fa1-5f9f-45e1-969a-d80449c21456",
+      "autoSize": false
+    },
+    {
+      "_$id": "ozd9u7uz",
+      "_$prefab": "b0c7f4b6-9a33-4cd8-897e-4888efe760fe",
+      "name": "Level1Btn_1",
+      "active": true,
+      "x": 454,
+      "y": 173,
+      "width": 394,
+      "height": 85,
+      "visible": true,
+      "_$child": [
+        {
+          "_$override": "ug1dmopr",
+          "src": "res://fcd22920-4507-413e-aafd-40704fef65a5",
+          "alpha": 1
+        },
+        {
+          "_$override": "asxzquct",
+          "src": "res://fcd22920-4507-413e-aafd-40704fef65a5"
+        },
+        {
+          "_$override": "syt0gdq4",
+          "src": "res://fcd22920-4507-413e-aafd-40704fef65a5",
+          "alpha": 0.524
+        },
+        {
+          "_$id": "rw1img01",
+          "_$type": "GImage",
+          "name": "img",
+          "x": 12,
+          "y": 19,
+          "width": 47,
+          "height": 47,
+          "visible": false,
+          "autoSize": false
+        },
+        {
+          "_$override": "kahpmowa",
+          "text": "奖励 1",
+          "underlineColor": "#ffffff",
+          "color": "#5d5e44",
+          "valign": "middle",
+          "fontSize": 28,
+          "x": 60,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "_$id": "7wwafovd",
+      "_$prefab": "b0c7f4b6-9a33-4cd8-897e-4888efe760fe",
+      "name": "Level1Btn_2",
+      "active": true,
+      "x": 455,
+      "y": 292,
+      "width": 394,
+      "height": 85,
+      "visible": true,
+      "_$child": [
+        {
+          "_$override": "ug1dmopr",
+          "src": "res://fcd22920-4507-413e-aafd-40704fef65a5",
+          "alpha": 1
+        },
+        {
+          "_$override": "asxzquct",
+          "src": "res://fcd22920-4507-413e-aafd-40704fef65a5"
+        },
+        {
+          "_$override": "syt0gdq4",
+          "src": "res://fcd22920-4507-413e-aafd-40704fef65a5",
+          "alpha": 0.524
+        },
+        {
+          "_$id": "rw2img02",
+          "_$type": "GImage",
+          "name": "img",
+          "x": 12,
+          "y": 19,
+          "width": 47,
+          "height": 47,
+          "visible": false,
+          "autoSize": false
+        },
+        {
+          "_$override": "kahpmowa",
+          "text": "奖励 2",
+          "underlineColor": "#ffffff",
+          "color": "#5d5e44",
+          "valign": "middle",
+          "fontSize": 28,
+          "x": 60,
+          "y": -8
+        }
+      ]
+    },
+    {
+      "_$id": "8bc6d23v",
+      "_$prefab": "b0c7f4b6-9a33-4cd8-897e-4888efe760fe",
+      "name": "Level1Btn_3",
+      "active": true,
+      "x": 456,
+      "y": 413,
+      "width": 394,
+      "height": 85,
+      "visible": true,
+      "_$child": [
+        {
+          "_$override": "ug1dmopr",
+          "src": "res://fcd22920-4507-413e-aafd-40704fef65a5",
+          "alpha": 1
+        },
+        {
+          "_$override": "asxzquct",
+          "src": "res://fcd22920-4507-413e-aafd-40704fef65a5"
+        },
+        {
+          "_$override": "syt0gdq4",
+          "src": "res://fcd22920-4507-413e-aafd-40704fef65a5",
+          "alpha": 0.524
+        },
+        {
+          "_$id": "rw3img03",
+          "_$type": "GImage",
+          "name": "img",
+          "x": 12,
+          "y": 19,
+          "width": 47,
+          "height": 47,
+          "visible": false,
+          "autoSize": false
+        },
+        {
+          "_$override": "kahpmowa",
+          "text": "奖励 3",
+          "underlineColor": "#ffffff",
+          "color": "#5d5e44",
+          "valign": "middle",
+          "fontSize": 28,
+          "x": 60,
+          "y": 3,
+          "height": 76
+        }
+      ]
+    },
+    {
+      "_$id": "wfb6h8f1",
+      "_$type": "GTextField",
+      "name": "txt",
+      "x": 550,
+      "y": 126,
+      "width": 199,
+      "height": 30,
+      "text": "选择奖励",
+      "fontSize": 20,
+      "color": "#f4f4f4",
+      "align": "center",
+      "valign": "middle"
+    },
+    {
+      "_$id": "nt1n28n1",
+      "_$prefab": "b0c7f4b6-9a33-4cd8-897e-4888efe760fe",
+      "name": "EscBtn",
+      "active": true,
+      "x": 1254,
+      "y": 7,
+      "width": 83,
+      "height": 77,
+      "visible": true,
+      "_$child": [
+        {
+          "_$override": "ug1dmopr",
+          "src": "res://fc642359-5080-473f-9bf1-e02210567716",
+          "alpha": 1
+        },
+        {
+          "_$override": "asxzquct",
+          "src": "res://fc642359-5080-473f-9bf1-e02210567716"
+        },
+        {
+          "_$override": "syt0gdq4",
+          "src": "res://fc642359-5080-473f-9bf1-e02210567716",
+          "alpha": 0.524
+        },
+        {
+          "_$override": "kahpmowa",
+          "text": "",
+          "underlineColor": "#ffffff",
+          "color": "#5d5e44",
+          "valign": "middle",
+          "fontSize": 40,
+          "x": -8,
+          "y": 3,
+          "height": 75,
+          "width": 89
+        }
+      ]
+    }
+  ]
+}

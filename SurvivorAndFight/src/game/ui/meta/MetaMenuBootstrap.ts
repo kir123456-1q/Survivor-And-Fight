@@ -1,10 +1,12 @@
 import {
+    REWARD_PANEL_ROUTE_ID,
     RUN_MAP_PANEL_ROUTE_ID,
     SELECT_LEVEL_PANEL_ROUTE_ID,
     START_PANEL_ROUTE_ID,
 } from '../../../defines';
 import type { MetaFlowController } from '../../meta/MetaFlowController';
 import type { UIStackManager } from '../mvc/UIStackManager';
+import { RewardPanelController } from '../reward/RewardPanelController';
 import { RunMapPanelController } from './RunMapPanelController';
 import { SelectLevelPanelController } from './SelectLevelPanelController';
 import { StartPanelController } from './StartPanelController';
@@ -16,6 +18,7 @@ export class MetaMenuBootstrap {
         this.metaFlow = metaFlow;
         uiStack.register(START_PANEL_ROUTE_ID, () => new StartPanelController(uiStack));
         uiStack.register(SELECT_LEVEL_PANEL_ROUTE_ID, () => new SelectLevelPanelController(uiStack));
+        uiStack.register(REWARD_PANEL_ROUTE_ID, () => new RewardPanelController(uiStack));
         uiStack.register(RUN_MAP_PANEL_ROUTE_ID, () => {
             if (!this.metaFlow) {
                 throw new Error('[MetaMenu] MetaFlowController not initialized');

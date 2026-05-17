@@ -1,0 +1,24 @@
+{
+  "list": [
+    { "id": "pool_melee_common_1", "category": "melee_orbit", "rarity": "common", "weight": 60, "min_player_level": 1, "min_stage": 1, "requires_tags": ["orbit"], "excludes_tags": ["no_melee"] },
+    { "id": "pool_melee_common_2", "category": "melee_orbit", "rarity": "common", "weight": 45, "min_player_level": 3, "min_stage": 1, "requires_tags": ["close_range"], "excludes_tags": ["glass_cannon"] },
+    { "id": "pool_melee_rare_1", "category": "melee_orbit", "rarity": "rare", "weight": 32, "min_player_level": 6, "min_stage": 2, "requires_tags": ["orbit"], "excludes_tags": ["safe_mode"] },
+    { "id": "pool_melee_rare_2", "category": "melee_orbit", "rarity": "rare", "weight": 24, "min_player_level": 8, "min_stage": 2, "requires_tags": ["multi_hit"], "excludes_tags": ["resource_low"] },
+    { "id": "pool_melee_epic_1", "category": "melee_orbit", "rarity": "epic", "weight": 12, "min_player_level": 12, "min_stage": 3, "requires_tags": ["orbit", "burst"], "excludes_tags": ["novice_protection"] },
+    { "id": "pool_melee_epic_2", "category": "melee_orbit", "rarity": "epic", "weight": 9, "min_player_level": 14, "min_stage": 3, "requires_tags": ["execute"], "excludes_tags": ["resource_low"] },
+
+    { "id": "pool_shot_common_1", "category": "ranged_shot", "rarity": "common", "weight": 62, "min_player_level": 1, "min_stage": 1, "requires_tags": ["projectile"], "excludes_tags": ["no_ranged"] },
+    { "id": "pool_shot_common_2", "category": "ranged_shot", "rarity": "common", "weight": 50, "min_player_level": 4, "min_stage": 1, "requires_tags": ["single_shot"], "excludes_tags": ["resource_low"] },
+    { "id": "pool_shot_rare_1", "category": "ranged_shot", "rarity": "rare", "weight": 34, "min_player_level": 7, "min_stage": 2, "requires_tags": ["split"], "excludes_tags": ["safe_mode"] },
+    { "id": "pool_shot_rare_2", "category": "ranged_shot", "rarity": "rare", "weight": 26, "min_player_level": 9, "min_stage": 2, "requires_tags": ["explosion"], "excludes_tags": ["low_performance_mode"] },
+    { "id": "pool_shot_epic_1", "category": "ranged_shot", "rarity": "epic", "weight": 13, "min_player_level": 12, "min_stage": 3, "requires_tags": ["chain"], "excludes_tags": ["novice_protection"] },
+    { "id": "pool_shot_epic_2", "category": "ranged_shot", "rarity": "epic", "weight": 10, "min_player_level": 15, "min_stage": 3, "requires_tags": ["explosion", "burn"], "excludes_tags": ["resource_low"] },
+
+    { "id": "pool_random_common_1", "category": "ranged_random", "rarity": "common", "weight": 58, "min_player_level": 1, "min_stage": 1, "requires_tags": ["random"], "excludes_tags": ["no_random"] },
+    { "id": "pool_random_common_2", "category": "ranged_random", "rarity": "common", "weight": 46, "min_player_level": 4, "min_stage": 1, "requires_tags": ["scatter"], "excludes_tags": ["safe_mode"] },
+    { "id": "pool_random_rare_1", "category": "ranged_random", "rarity": "rare", "weight": 31, "min_player_level": 7, "min_stage": 2, "requires_tags": ["multi_target"], "excludes_tags": ["resource_low"] },
+    { "id": "pool_random_rare_2", "category": "ranged_random", "rarity": "rare", "weight": 23, "min_player_level": 10, "min_stage": 2, "requires_tags": ["ricochet"], "excludes_tags": ["no_random"] },
+    { "id": "pool_random_epic_1", "category": "ranged_random", "rarity": "epic", "weight": 11, "min_player_level": 13, "min_stage": 3, "requires_tags": ["smart_target"], "excludes_tags": ["novice_protection"] },
+    { "id": "pool_random_epic_2", "category": "ranged_random", "rarity": "epic", "weight": 8, "min_player_level": 16, "min_stage": 3, "requires_tags": ["chain"], "excludes_tags": ["resource_low"] }
+  ]
+}

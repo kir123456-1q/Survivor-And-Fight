@@ -1,0 +1,102 @@
+{
+  "list": [
+    {
+      "id": "monster_effect_melee_t1",
+      "name": "爪击",
+      "effect": "direct_damage",
+      "target": "auto",
+      "damage": 7,
+      "enabled": true
+    },
+    {
+      "id": "monster_effect_melee_t2",
+      "name": "撕裂",
+      "effect": "direct_damage",
+      "target": "auto",
+      "damage": 11,
+      "enabled": true
+    },
+    {
+      "id": "monster_effect_melee_elite",
+      "name": "重斩",
+      "effect": "direct_damage",
+      "target": "auto",
+      "damage": 16,
+      "enabled": true
+    },
+    {
+      "id": "monster_effect_melee_boss",
+      "name": "碾压",
+      "effect": "direct_damage",
+      "target": "auto",
+      "damage": 24,
+      "enabled": true
+    },
+    {
+      "id": "monster_effect_ranged_t1",
+      "name": "孢弹",
+      "effect": "bullet",
+      "target": "auto",
+      "bulletSlot": "monster_bullet_weak",
+      "damage": 6,
+      "enabled": true
+    },
+    {
+      "id": "monster_effect_ranged_t2",
+      "name": "魔弹",
+      "effect": "bullet",
+      "target": "auto",
+      "bulletSlot": "monster_bullet",
+      "damage": 10,
+      "enabled": true
+    },
+    {
+      "id": "monster_effect_ranged_pierce",
+      "name": "幻影穿透弹",
+      "effect": "bullet",
+      "target": "auto",
+      "bulletSlot": "monster_bullet",
+      "damage": 9,
+      "penetration": 1,
+      "enabled": true
+    },
+    {
+      "id": "monster_effect_ranged_chain",
+      "name": "雷击链",
+      "effect": "bullet",
+      "target": "auto",
+      "bulletSlot": "monster_bullet_heavy",
+      "damage": 12,
+      "chainCount": 1,
+      "enabled": true
+    },
+    {
+      "id": "monster_effect_ranged_elite",
+      "name": "精英魔弹",
+      "effect": "bullet",
+      "target": "auto",
+      "bulletSlot": "monster_bullet_heavy",
+      "damage": 14,
+      "enabled": true
+    },
+    {
+      "id": "monster_effect_ranged_heavy",
+      "name": "虚空重弹",
+      "effect": "bullet",
+      "target": "auto",
+      "bulletSlot": "monster_bullet_heavy",
+      "damage": 18,
+      "enabled": true
+    },
+    {
+      "id": "monster_effect_ranged_boss",
+      "name": "Boss毁灭弹",
+      "effect": "bullet",
+      "target": "auto",
+      "bulletSlot": "monster_bullet_boss",
+      "damage": 22,
+      "chainCount": 1,
+      "enabled": true
+    }
+  ]
+}

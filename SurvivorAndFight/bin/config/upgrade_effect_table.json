@@ -1,0 +1,19 @@
+{
+  "list": [
+    { "id": "u_fire_1", "effectType": "fire_rate", "tier": 1, "rarity": "common", "value": 0.12 },
+    { "id": "u_fire_2", "effectType": "fire_rate", "tier": 2, "rarity": "rare", "value": 0.18 },
+    { "id": "u_fire_3", "effectType": "fire_rate", "tier": 3, "rarity": "epic", "value": 0.24 },
+
+    { "id": "u_dmg_1", "effectType": "damage", "tier": 1, "rarity": "common", "value": 0.12 },
+    { "id": "u_dmg_2", "effectType": "damage", "tier": 2, "rarity": "rare", "value": 0.18 },
+    { "id": "u_dmg_3", "effectType": "damage", "tier": 3, "rarity": "epic", "value": 0.25 },
+
+    { "id": "u_ms_1", "effectType": "multi_shot", "tier": 1, "rarity": "common", "value": 1 },
+    { "id": "u_ms_2", "effectType": "multi_shot", "tier": 2, "rarity": "rare", "value": 1 },
+    { "id": "u_ms_3", "effectType": "multi_shot", "tier": 3, "rarity": "epic", "value": 1 },
+
+    { "id": "u_split_1", "effectType": "on_hit_spawn", "tier": 1, "rarity": "common", "value": 1 },
+    { "id": "u_split_2", "effectType": "on_hit_spawn", "tier": 2, "rarity": "rare", "value": 1 },
+    { "id": "u_split_3", "effectType": "on_hit_spawn", "tier": 3, "rarity": "epic", "value": 2 }
+  ]
+}

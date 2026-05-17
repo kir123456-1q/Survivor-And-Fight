@@ -33,7 +33,7 @@ export class ControlInputAdapter implements ControlInputSource {
     }
 
     getSkillCastRequest(): { skillId: string; targetPos?: { x: number; y: number; z?: number } } | null {
-        if (!this.input.isKeyDown(this._skillKey) || !this._currentSkillId) return null;
-        return { skillId: this._currentSkillId };
+        // 玩家子弹仅由 Skill + Effect 自动施法（PlayerAutoCastSystem → SkillSystem）产生。
+        return null;
     }
 }

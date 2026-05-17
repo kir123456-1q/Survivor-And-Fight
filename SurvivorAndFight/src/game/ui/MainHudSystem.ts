@@ -2,13 +2,17 @@ import type { EcsWorld } from '../../ecs/core/World';
 import { System } from '../../ecs/core/System';
 import type { FilterRegistry } from '../../ecs/filters/FilterRegistry';
 import { Experience } from '../../ecs/components/Experience';
-import { UpgradeState } from '../../ecs/components/UpgradeState';
+import { SkillLoadoutState } from '../../ecs/components/SkillLoadoutState';
+import { Data } from '../../config/Data';
+import { buildLoadoutDetailText } from '../skill/CombatEffectSummary';
 import {
     LEVEL_PROGRESS_BAR_NAME,
     SKILL_TEXT_NAME,
     LEVEL_TEXT_NAME,
     MAIN_UI_PANEL_PREFAB,
+    SKILL_SELECT_PANEL_NAME,
 } from '../../defines';
+import type { SkillSelectPanelController } from './skillselect/SkillSelectPanelController';
 
 function findNodeByName(root: any, name: string): any {
     if (!root || !name) return null;
@@ -52,6 +56,9 @@ export class MainHudSystem implements System {
         private readonly world: EcsWorld,
         private readonly filters: FilterRegistry,
         private readonly hudParent: any,
+        private readonly skillSelectController?: SkillSelectPanelController,
+        private readonly getSessionEntity?: () => number,
+        private readonly getPlayerEntity?: () => number,
     ) {}
 
     update(_deltaTime: number): void {
@@ -65,6 +72,12 @@ export class MainHudSystem implements System {
                     this.levelProgressBar = findNodeByName(node, LEVEL_PROGRESS_BAR_NAME);
                     this.levelTxt = findNodeByName(node, LEVEL_TEXT_NAME);
                     this.skillTxt = findNodeByName(node, SKILL_TEXT_NAME);
+                    const selectPanel = findNodeByName(node, SKILL_SELECT_PANEL_NAME);
+                    if (selectPanel) {
+                        if (typeof selectPanel.visible !== 'undefined') selectPanel.visible = false;
+                        if (typeof selectPanel.displayed !== 'undefined') selectPanel.displayed = false;
+                    }
+                    this.tryInitSkillSelect(node);
                 })
                 .catch((e) => {
                     console.warn('MainHudSystem: failed to load main ui panel', e);
@@ -76,6 +89,9 @@ export class MainHudSystem implements System {
         }
 
         if (!this.panelNode) return;
+
+        this.tryInitSkillSelect(this.panelNode);
+
         const players = this.filters.getNamedFilter('Players');
         if (players.length === 0) return;
         const player = players[0];
@@ -90,13 +106,13 @@ export class MainHudSystem implements System {
             this.levelTxt.text = `Lv.${xp.level}`;
         }
 
-        const upgrade = this.world.getComponent(player, UpgradeState);
         if (this.skillTxt && typeof this.skillTxt.text !== 'undefined') {
-            this.skillTxt.text = this.buildSkillText(upgrade);
+            this.skillTxt.text = this.buildCombatDetailText(player);
         }
     }
 
     dispose(): void {
+        this.skillSelectController?.dispose();
         if (this.panelNode?.destroy) this.panelNode.destroy();
         this.panelNode = null;
         this.levelProgressBar = null;
@@ -104,20 +120,19 @@ export class MainHudSystem implements System {
         this.skillTxt = null;
     }
 
-    private buildSkillText(upgrade: UpgradeState | undefined): string {
-        if (!upgrade) return '技能: 暂无';
-        const lines: string[] = [];
+    private tryInitSkillSelect(panelRoot: any): void {
+        if (!this.skillSelectController || this.skillSelectController.isInitialized()) return;
+        const sessionEntity = this.getSessionEntity?.() ?? -1;
+        const playerEntity = this.getPlayerEntity?.() ?? -1;
+        if (sessionEntity < 0 || playerEntity < 0) return;
+        this.skillSelectController.init(panelRoot, sessionEntity, this.world, playerEntity);
+    }
 
-        const fireRatePct = Math.max(0, Math.round((upgrade.fireRateMultiplier - 1) * 100));
-        if (fireRatePct > 0) lines.push(`攻速 +${fireRatePct}%`);
-
-        const damagePct = Math.max(0, Math.round((upgrade.bulletDamageMultiplier - 1) * 100));
-        if (damagePct > 0) lines.push(`攻击 +${damagePct}%`);
-
-        if (upgrade.multiShotExtra > 0) lines.push(`子弹数量 +${upgrade.multiShotExtra}`);
-        if (upgrade.onHitSpawnCount > 0) lines.push(`命中分裂 +${upgrade.onHitSpawnCount}`);
-
-        if (lines.length === 0) return '技能: 暂无';
-        return lines.join('\n');
+    private buildCombatDetailText(playerEntity: number): string {
+        const loadout = this.world.getComponent(playerEntity, SkillLoadoutState);
+        if (!loadout) return '【战斗装配】\n数据未就绪';
+        return buildLoadoutDetailText(loadout, (id) =>
+            Data?.SkillEffect?.GetByID?.(id) as Record<string, unknown> | undefined,
+        );
     }
 }

@@ -2,8 +2,10 @@ import { EcsWorld } from '../../ecs/core/World';
 import { Position, Velocity, Rotation, ViewComponent } from '../../ecs/components/TransformComponents';
 import { PlayerTag } from '../../ecs/components/PlayerTag';
 import { MonsterTag } from '../../ecs/components/MonsterTag';
+import { MonsterDef } from '../../ecs/components/MonsterDef';
 import { Attribute } from '../../ecs/components/Attribute';
 import { Skill } from '../../ecs/components/Skill';
+import { SkillLoadoutState } from '../../ecs/components/SkillLoadoutState';
 import { Control } from '../../ecs/components/Control';
 import { Experience } from '../../ecs/components/Experience';
 import { ExperienceReward } from '../../ecs/components/ExperienceReward';
@@ -22,9 +24,22 @@ import { RestartPanelSystem } from '../../ecs/systems/RestartPanelSystem';
 import { BloodBarSyncSystem } from '../ui/BloodBarSyncSystem';
 import { SkillSystem } from '../../ecs/systems/SkillSystem';
 import { BulletSystem } from '../bullet/BulletSystem';
+import { CombatDataBridge } from '../combat/CombatDataBridge';
+import { CombatDataPrepareSystem } from '../combat/CombatDataPrepareSystem';
 import { BulletPool } from '../bullet/BulletPool';
 import { MonsterPool } from '../monster/MonsterPool';
 import { PlayerAutoCastSystem } from '../../ecs/systems/PlayerAutoCastSystem';
+import { MonsterAutoCastSystem } from '../../ecs/systems/MonsterAutoCastSystem';
+import { pickMonsterIdForWave, getMonsterRow } from '../monster/MonsterCatalog';
+import { applyMonsterIconSkin } from '../monster/MonsterVisual';
+import { SkillLoadoutSyncSystem } from '../../ecs/systems/SkillLoadoutSyncSystem';
+import { RewardApplyService } from '../reward/RewardApplyService';
+import {
+    applySkillCastStagger,
+    createDefaultLoadoutState,
+    getCombatEffectIds,
+} from '../skill/SkillLoadoutModel';
+import { SkillSelectPanelController } from '../ui/skillselect/SkillSelectPanelController';
 import { ExperienceSystem } from '../../ecs/systems/ExperienceSystem';
 import { MonsterWaveSpawnSystem } from '../../ecs/systems/MonsterWaveSpawnSystem';
 import { UpgradeRewardSystem } from '../../ecs/systems/UpgradeRewardSystem';
@@ -34,6 +49,7 @@ import { GameSession } from '../../ecs/components/GameSession';
 import { UIStackManager } from '../ui/mvc/UIStackManager';
 import { RESTART_PANEL_ROUTE_ID, RestartPanelController } from '../ui/restart/RestartPanelController';
 import { Data } from '../../config/Data';
+import { ensureGameConfigLoaded } from '../../config/ConfigBootstrap';
 import { MainHudSystem } from '../ui/MainHudSystem';
 import {
     DEFAULT_PLAYER_HP,
@@ -69,12 +85,17 @@ export class SimpleEcsDemo {
     readonly world = new EcsWorld();
     private readonly attributeSystem: AttributeSystem;
     private readonly bulletPool = new BulletPool();
+    private readonly combatBridge = new CombatDataBridge();
+    private readonly combatPrepareSystem: CombatDataPrepareSystem;
     private readonly bulletSystem: BulletSystem;
     private readonly skillSystem: SkillSystem;
     private readonly experienceSystem: ExperienceSystem;
     private readonly monsterWaveSpawnSystem: MonsterWaveSpawnSystem;
     private readonly upgradeRewardSystem: UpgradeRewardSystem;
     private readonly mainHudSystem: MainHudSystem;
+    private readonly skillSelectController = new SkillSelectPanelController();
+    private onTabPauseChange: ((paused: boolean) => void) | null = null;
+    private playerEntity = -1;
     private readonly container: any;
     private readonly filters: FilterRegistry;
     private readonly monsterPool: MonsterPool;
@@ -104,11 +125,19 @@ export class SimpleEcsDemo {
             this.bulletPool,
             () => this.isPaused(),
         );
+        this.combatPrepareSystem = new CombatDataPrepareSystem(
+            this.world,
+            this.filters,
+            this.combatBridge,
+            this.bulletSystem,
+            () => this.isPaused(),
+        );
+        this.bulletSystem.setCombatPrepare(this.combatPrepareSystem);
         this.skillSystem = new SkillSystem(
             this.world,
             this.attributeSystem,
             this.filters,
-            (skillId) => this.getSkillEffects(skillId),
+            (entity, skillId) => this.getSkillEffects(entity, skillId),
             (skillId) => this.getSkillCooldown(skillId),
             (effectId) => this.getEffectRow(effectId),
             this.bulletSystem,
@@ -127,8 +156,22 @@ export class SimpleEcsDemo {
             () => this.getUpgradeRarityRows(),
             () => this.getUpgradeEffectRows(),
         );
-        this.mainHudSystem = new MainHudSystem(this.world, this.filters, Laya.stage);
+        this.mainHudSystem = new MainHudSystem(
+            this.world,
+            this.filters,
+            Laya.stage,
+            this.skillSelectController,
+            () => this.sessionEntity,
+            () => this.playerEntity,
+        );
+        this.skillSelectController.setOnTabPauseChange((paused) => {
+            this.onTabPauseChange?.(paused);
+        });
         this.setupSystems();
+    }
+
+    setOnTabPauseChange(handler: ((paused: boolean) => void) | null): void {
+        this.onTabPauseChange = handler;
     }
 
     /**
@@ -144,26 +187,31 @@ export class SimpleEcsDemo {
     private setupSystems(): void {
         const isPaused = () => this.isPaused();
         this.world.registerSystem(new ControlSystem(this.world, this.filters, this.controlInput, isPaused), 'input', 0);
-        this.world.registerSystem(new MonsterChaseSystem(this.world, this.filters, isPaused), 'logic', 1);
-        this.world.registerSystem(new MovementSystem(this.world, isPaused), 'logic', 0);
+        // 逻辑帧顺序（priority 越大越先跑）：追逐设速 → 施法 → 位移 → 战斗快照/碰撞 → 子弹应用
+        this.world.registerSystem(new MonsterChaseSystem(this.world, this.filters, isPaused, this.combatPrepareSystem), 'logic', 7);
+        this.world.registerSystem(new SkillLoadoutSyncSystem(this.world, this.filters, isPaused), 'logic', 6);
+        this.world.registerSystem(new PlayerAutoCastSystem(this.world, this.filters, isPaused), 'logic', 6);
+        this.world.registerSystem(new MonsterAutoCastSystem(this.world, this.filters, isPaused), 'logic', 6);
+        this.world.registerSystem(this.skillSystem, 'logic', 6);
+        this.world.registerSystem(new MovementSystem(this.world, isPaused), 'logic', 5);
+        this.world.registerSystem(this.combatPrepareSystem, 'logic', 4);
+        this.world.registerSystem(this.bulletSystem, 'logic', 3);
         this.world.registerSystem(new RotationSystem(this.world, isPaused), 'logic', -1);
         this.world.registerSystem(this.attributeSystem, 'logic', -1);
-        this.world.registerSystem(new PlayerAutoCastSystem(this.world, this.filters, isPaused), 'logic', 3);
-        this.world.registerSystem(this.skillSystem, 'logic', 2);
-        this.world.registerSystem(this.bulletSystem, 'logic', 1);
         this.world.registerSystem(new MonsterContactDamageSystem(this.world, this.filters, isPaused), 'logic', -5);
         this.world.registerSystem(new MonsterRecycleSystem(this.world, this.filters, this.monsterPool, this.experienceSystem, isPaused), 'logic', -6);
         this.world.registerSystem(this.experienceSystem, 'logic', -7);
         this.world.registerSystem(this.monsterWaveSpawnSystem, 'logic', -8);
         this.world.registerSystem(this.upgradeRewardSystem, 'logic', -9);
         this.world.registerSystem(new PlayerDeathSystem(this.world, this.filters, this.sessionEntity), 'logic', -10);
-        this.world.registerSystem(new RestartPanelSystem(this.world, this.sessionEntity, this.uiStack), 'render', 5);
+        this.world.registerSystem(new RestartPanelSystem(this.world, this.sessionEntity, this.uiStack, this.filters), 'render', 5);
         this.world.registerSystem(this.mainHudSystem, 'render', 20);
         this.world.registerSystem(new ViewSyncSystem(this.world), 'render', 0);
         this.world.registerSystem(new BloodBarSyncSystem(this.world, this.attributeSystem), 'render', -1);
     }
 
     private async spawnPlayer(): Promise<void> {
+        await ensureGameConfigLoaded();
         const entity = this.world.createEntity();
         const row = getCharacterRow('player');
         const hp = (row?.hp as number) ?? DEFAULT_PLAYER_HP;
@@ -177,8 +225,15 @@ export class SimpleEcsDemo {
         this.world.addComponent(entity, Attribute, new Attribute({ hp, maxHp }));
         this.world.addComponent(entity, Experience, new Experience(1, 0));
         this.world.addComponent(entity, UpgradeState, new UpgradeState());
-        this.world.addComponent(entity, Skill, new Skill(DEFAULT_PLAYER_AUTO_SKILL_ID, {}));
+        const loadout = createDefaultLoadoutState();
+        this.world.addComponent(entity, SkillLoadoutState, loadout);
+        const primarySkill = loadout.equippedSkillIds.find((id) => !!id) ?? null;
+        const skillComp = new Skill(primarySkill, {});
+        applySkillCastStagger(skillComp, loadout);
+        this.world.addComponent(entity, Skill, skillComp);
         this.world.addComponent(entity, Control, new Control());
+        this.playerEntity = entity;
+        RewardApplyService.flushRunSessionToEcs(this.world, entity);
 
         let node = await this.instantiateCharacterNode(prefabPath);
         if (!node) node = this.createPlaceholderNode();
@@ -188,37 +243,57 @@ export class SimpleEcsDemo {
         this.world.addComponent(entity, BodyUIComponent, new BodyUIComponent(node));
     }
 
+    getPlayerEntity(): number {
+        return this.playerEntity;
+    }
+
+    setSessionPaused(paused: boolean): void {
+        const session = this.world.getComponent(this.sessionEntity, GameSession);
+        if (session) session.paused = paused;
+    }
+
     private async spawnMonsters(count: number, monsterLevel: number = 1): Promise<void> {
-        const row = getCharacterRow('monster');
-        const hp = (row?.hp as number) ?? DEFAULT_MONSTER_HP;
-        const maxHp = (row?.maxHp as number) ?? DEFAULT_MONSTER_MAX_HP;
-        const prefabPath = (row?.prefabPath as string) ?? DEFAULT_MONSTER_PREFAB;
+        const charRow = getCharacterRow('monster');
+        const prefabPath = (charRow?.prefabPath as string) ?? DEFAULT_MONSTER_PREFAB;
         const spawnedPos: Array<{ x: number; y: number }> = [];
+        const levelHpScale = 1 + Math.max(0, monsterLevel - 1) * 0.18;
 
         for (let i = 0; i < count; i++) {
+            const monsterId = pickMonsterIdForWave(monsterLevel) ?? 'monster_m01_shambling_corpse';
+            const mRow = getMonsterRow(monsterId);
+            if (!mRow) continue;
+
             const entity = this.world.createEntity();
             const spawnPos = this.pickMonsterSpawnPosition(i, count, spawnedPos);
             spawnedPos.push(spawnPos);
 
             this.world.addComponent(entity, MonsterTag, new MonsterTag());
+            this.world.addComponent(entity, MonsterDef, new MonsterDef(
+                monsterId,
+                mRow.attackType,
+                mRow.tier,
+            ));
             this.world.addComponent(entity, Position, new Position(spawnPos.x, spawnPos.y, 0));
             this.world.addComponent(entity, Velocity, new Velocity(0, 0, 0));
             this.world.addComponent(entity, Rotation, new Rotation());
-            const levelHpScale = 1 + Math.max(0, monsterLevel - 1) * 0.2;
-            const scaledMaxHp = Math.round(maxHp * levelHpScale);
+            const scaledMaxHp = Math.max(1, Math.round(mRow.maxHp * levelHpScale));
             this.world.addComponent(entity, Attribute, new Attribute({
-                hp: Math.max(1, Math.round(hp * levelHpScale)),
-                maxHp: Math.max(1, scaledMaxHp),
+                hp: scaledMaxHp,
+                maxHp: scaledMaxHp,
             }));
             this.world.addComponent(entity, ExperienceReward, new ExperienceReward(
                 MONSTER_EXP_REWARD_BASE + Math.max(0, monsterLevel - 1) * MONSTER_EXP_REWARD_LEVEL_BONUS,
             ));
-            this.world.addComponent(entity, Skill, new Skill(null, {}));
+
+            const skillComp = new Skill(mRow.skillId, {});
+            skillComp.cooldownRemain[mRow.skillId] = MonsterAutoCastSystem.initialCooldownForIndex(i);
+            this.world.addComponent(entity, Skill, skillComp);
 
             let node: any = this.monsterPool?.get() ?? null;
             if (!node) node = await this.instantiateCharacterNode(prefabPath);
             if (!node) node = this.createPlaceholderNode();
             this.resetMonsterNodeForSpawn(node);
+            void applyMonsterIconSkin(node, mRow.iconPath).catch(() => {});
             const parent = this.container ?? Laya.stage;
             if (node && parent) parent.addChild(node);
             this.world.addComponent(entity, ViewComponent, new ViewComponent(entity, node));
@@ -318,6 +393,7 @@ export class SimpleEcsDemo {
     }
 
     destroy(): void {
+        this.combatBridge.dispose();
         void this.uiStack.clearAll();
         this.mainHudSystem.dispose();
         const views = this.world.getAllOfType(ViewComponent);
@@ -345,41 +421,46 @@ export class SimpleEcsDemo {
         return !!session?.paused;
     }
 
-    private getSkillEffects(skillId: string): string[] | undefined {
+    private getSkillEffects(entity: number, skillId: string): string[] | undefined {
+        if (entity === this.playerEntity) {
+            if (this.playerEntity < 0) return [];
+            const loadout = this.world.getComponent(this.playerEntity, SkillLoadoutState);
+            if (!loadout) return [];
+            return getCombatEffectIds(loadout, skillId);
+        }
+        return this.getSkillEffectsFromTable(skillId);
+    }
+
+    private getSkillEffectsFromTable(skillId: string): string[] | undefined {
         const row = Data?.Skill?.GetByID?.(skillId) as Record<string, unknown> | undefined;
         if (!row) {
             this.logMissingConfigOnce(`Skill:${skillId}`, '[Config] Skill row missing', { skillId });
-            if (skillId === DEFAULT_PLAYER_AUTO_SKILL_ID) {
-                return [DEFAULT_PLAYER_AUTO_EFFECT_ID];
-            }
             return undefined;
         }
         const effects = row.effectIds;
+        let ids: string[] = [];
         if (Array.isArray(effects)) {
-            return effects.map((v) => String(v)).filter((v) => v.length > 0);
+            ids = effects.map((v) => String(v)).filter((v) => v.length > 0);
+        } else if (typeof effects === 'string') {
+            ids = effects.split(',').map((s) => s.trim()).filter((s) => s.length > 0);
         }
-        if (typeof effects === 'string') {
-            return effects.split(',').map((s) => s.trim()).filter((s) => s.length > 0);
+        if (ids.length === 0) {
+            this.logMissingConfigOnce(`SkillEffects:${skillId}`, '[Config] Skill.effectIds missing or invalid', {
+                skillId,
+                effectIds: effects,
+            });
+            return undefined;
         }
-        this.logMissingConfigOnce(`SkillEffects:${skillId}`, '[Config] Skill.effectIds missing or invalid', {
-            skillId,
-            effectIds: effects,
+        return ids.filter((eid) => {
+            const fx = Data?.SkillEffect?.GetByID?.(eid) as Record<string, unknown> | undefined;
+            return fx?.enabled !== false;
         });
-        return undefined;
     }
 
     private getEffectRow(effectId: string): Record<string, unknown> | undefined {
         const row = Data?.SkillEffect?.GetByID?.(effectId) as Record<string, unknown> | undefined;
         if (!row) {
             this.logMissingConfigOnce(`SkillEffect:${effectId}`, '[Config] SkillEffect row missing', { effectId });
-            if (effectId === DEFAULT_PLAYER_AUTO_EFFECT_ID) {
-                return {
-                    id: DEFAULT_PLAYER_AUTO_EFFECT_ID,
-                    effect: 'bullet',
-                    target: 'auto',
-                    bulletSlot: DEFAULT_PLAYER_AUTO_BULLET_ID,
-                };
-            }
         }
         return row;
     }
@@ -471,6 +552,7 @@ export class SimpleEcsDemo {
             this.clearAllGameplayEntities();
             session.paused = false;
             this.monsterWaveSpawnSystem.reset();
+            this.playerEntity = -1;
             await this.spawnPlayer();
             await this.spawnMonsters(MONSTER_COUNT);
         } finally {

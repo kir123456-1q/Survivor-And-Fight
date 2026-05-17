@@ -56,6 +56,7 @@ export class SelectLevelPanelController extends UiControllerBase {
         const runSeed = createRunSeed(difficulty);
         const graph = RunMapGenerator.generate(runSeed, difficulty);
         const runMapState = RunMapState.create(graph);
+        MetaRunSession.resetRunRewards();
         MetaRunSession.runMapState = runMapState;
         const payload: RunMapPanelPayload = { difficulty, runSeed, runMapState };
         console.log('[UI] ui.meta.level.selected', JSON.stringify({ difficulty, seed: runSeed.value }));

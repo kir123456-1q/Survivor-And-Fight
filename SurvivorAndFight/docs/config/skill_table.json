@@ -1,10 +1,209 @@
-{
-  "list": [
-    {
-      "id": "player_auto_shot",
-      "name": "Player Auto Shot",
-      "effectIds": "player_auto_shot_effect_1",
-      "cooldownSec": 0.25
-    }
-  ]
+﻿{
+    "list":  [
+                 {
+                     "id":  "wand_melee_ash_guard_icon",
+                     "name":  "Melee Ash Guard",
+                     "iconPath":  "atlas/WeaponIcon/wand_melee_ash_guard_icon.png",
+                     "effectIds":  [
+                                       "fx_shot_blackhole_seed_icon",
+                                       "fx_chain_beam_hit"
+                                   ],
+                     "cooldownSec":  0.35,
+                     "effectSlotCount":  8,
+                     "defaultEquipped":  false,
+                     "sortOrder":  1
+                 },
+                 {
+                     "id":  "wand_melee_bronze_orbit_icon",
+                     "name":  "Melee Bronze Orbit",
+                     "iconPath":  "atlas/WeaponIcon/wand_melee_bronze_orbit_icon.png",
+                     "effectIds":  [
+                                       "fx_shot_blackhole_seed_icon",
+                                       "fx_chain_beam_hit"
+                                   ],
+                     "cooldownSec":  0.35,
+                     "effectSlotCount":  8,
+                     "defaultEquipped":  false,
+                     "sortOrder":  2
+                 },
+                 {
+                     "id":  "wand_melee_celestial_halo_icon",
+                     "name":  "Melee Celestial Halo",
+                     "iconPath":  "atlas/WeaponIcon/wand_melee_celestial_halo_icon.png",
+                     "effectIds":  [
+                                       "fx_shot_blackhole_seed_icon",
+                                       "fx_chain_beam_hit"
+                                   ],
+                     "cooldownSec":  0.35,
+                     "effectSlotCount":  8,
+                     "defaultEquipped":  false,
+                     "sortOrder":  3
+                 },
+                 {
+                     "id":  "wand_melee_storm_ring_icon",
+                     "name":  "Melee Storm Ring",
+                     "iconPath":  "atlas/WeaponIcon/wand_melee_storm_ring_icon.png",
+                     "effectIds":  [
+                                       "fx_shot_blackhole_seed_icon",
+                                       "fx_chain_beam_hit"
+                                   ],
+                     "cooldownSec":  0.35,
+                     "effectSlotCount":  8,
+                     "defaultEquipped":  false,
+                     "sortOrder":  4
+                 },
+                 {
+                     "id":  "wand_melee_void_reaper_icon",
+                     "name":  "Melee Void Reaper",
+                     "iconPath":  "atlas/WeaponIcon/wand_melee_void_reaper_icon.png",
+                     "effectIds":  [
+                                       "fx_shot_blackhole_seed_icon",
+                                       "fx_chain_beam_hit"
+                                   ],
+                     "cooldownSec":  0.35,
+                     "effectSlotCount":  8,
+                     "defaultEquipped":  true,
+                     "sortOrder":  5
+                 },
+                 {
+                     "id":  "wand_random_chaos_fan_icon",
+                     "name":  "Random Chaos Fan",
+                     "iconPath":  "atlas/WeaponIcon/wand_random_chaos_fan_icon.png",
+                     "effectIds":  [
+                                       "fx_shot_blackhole_seed_icon",
+                                       "fx_chain_beam_hit"
+                                   ],
+                     "cooldownSec":  0.35,
+                     "effectSlotCount":  8,
+                     "defaultEquipped":  false,
+                     "sortOrder":  6
+                 },
+                 {
+                     "id":  "wand_random_echo_orb_icon",
+                     "name":  "Random Echo Orb",
+                     "iconPath":  "atlas/WeaponIcon/wand_random_echo_orb_icon.png",
+                     "effectIds":  [
+                                       "fx_shot_blackhole_seed_icon",
+                                       "fx_chain_beam_hit"
+                                   ],
+                     "cooldownSec":  0.35,
+                     "effectSlotCount":  8,
+                     "defaultEquipped":  false,
+                     "sortOrder":  7
+                 },
+                 {
+                     "id":  "wand_random_entropy_oracle_icon",
+                     "name":  "Random Entropy Oracle",
+                     "iconPath":  "atlas/WeaponIcon/wand_random_entropy_oracle_icon.png",
+                     "effectIds":  [
+                                       "fx_shot_blackhole_seed_icon",
+                                       "fx_chain_beam_hit"
+                                   ],
+                     "cooldownSec":  0.35,
+                     "effectSlotCount":  8,
+                     "defaultEquipped":  false,
+                     "sortOrder":  8
+                 },
+                 {
+                     "id":  "wand_random_starlight_lottery_icon",
+                     "name":  "Random Starlight Lottery",
+                     "iconPath":  "atlas/WeaponIcon/wand_random_starlight_lottery_icon.png",
+                     "effectIds":  [
+                                       "fx_shot_blackhole_seed_icon",
+                                       "fx_chain_beam_hit"
+                                   ],
+                     "cooldownSec":  0.35,
+                     "effectSlotCount":  8,
+                     "defaultEquipped":  false,
+                     "sortOrder":  9
+                 },
+                 {
+                     "id":  "wand_random_wild_seed_icon",
+                     "name":  "Random Wild Seed",
+                     "iconPath":  "atlas/WeaponIcon/wand_random_wild_seed_icon.png",
+                     "effectIds":  [
+                                       "fx_shot_blackhole_seed_icon",
+                                       "fx_chain_beam_hit"
+                                   ],
+                     "cooldownSec":  0.35,
+                     "effectSlotCount":  8,
+                     "defaultEquipped":  false,
+                     "sortOrder":  10
+                 },
+                 {
+                     "id":  "wand_ranged_bombard_core_icon",
+                     "name":  "Ranged Bombard Core",
+                     "iconPath":  "atlas/WeaponIcon/wand_ranged_bombard_core_icon.png",
+                     "effectIds":  [
+                                       "fx_shot_blackhole_seed_icon",
+                                       "fx_chain_beam_hit"
+                                   ],
+                     "cooldownSec":  0.35,
+                     "effectSlotCount":  8,
+                     "defaultEquipped":  false,
+                     "sortOrder":  11
+                 },
+                 {
+                     "id":  "wand_ranged_ember_spike_icon",
+                     "name":  "Ranged Ember Spike",
+                     "iconPath":  "atlas/WeaponIcon/wand_ranged_ember_spike_icon.png",
+                     "effectIds":  [
+                                       "fx_shot_blackhole_seed_icon",
+                                       "fx_chain_beam_hit"
+                                   ],
+                     "cooldownSec":  0.35,
+                     "effectSlotCount":  8,
+                     "defaultEquipped":  false,
+                     "sortOrder":  12
+                 },
+                 {
+                     "id":  "wand_ranged_fork_branch_icon",
+                     "name":  "Ranged Fork Branch",
+                     "iconPath":  "atlas/WeaponIcon/wand_ranged_fork_branch_icon.png",
+                     "effectIds":  [
+                                       "fx_shot_blackhole_seed_icon",
+                                       "fx_chain_beam_hit"
+                                   ],
+                     "cooldownSec":  0.35,
+                     "effectSlotCount":  8,
+                     "defaultEquipped":  false,
+                     "sortOrder":  13
+                 },
+                 {
+                     "id":  "wand_ranged_frost_lancer_icon",
+                     "name":  "Ranged Frost Lancer",
+                     "iconPath":  "atlas/WeaponIcon/wand_ranged_frost_lancer_icon.png",
+                     "effectIds":  [
+                                       "fx_shot_blackhole_seed_icon",
+                                       "fx_chain_beam_hit"
+                                   ],
+                     "cooldownSec":  0.35,
+                     "effectSlotCount":  8,
+                     "defaultEquipped":  true,
+                     "sortOrder":  14
+                 },
+                 {
+                     "id":  "wand_ranged_prism_cannon_icon",
+                     "name":  "Ranged Prism Cannon",
+                     "iconPath":  "atlas/WeaponIcon/wand_ranged_prism_cannon_icon.png",
+                     "effectIds":  [
+                                       "fx_shot_blackhole_seed_icon",
+                                       "fx_chain_beam_hit"
+                                   ],
+                     "cooldownSec":  0.35,
+                     "effectSlotCount":  8,
+                     "defaultEquipped":  true,
+                     "sortOrder":  15
+                 },
+                 {
+                     "id":  "player_auto_shot",
+                     "name":  "Player Auto Shot",
+                     "iconPath":  "atlas/WeaponIcon/wand_melee_ash_guard_icon.png",
+                     "effectIds":  "player_auto_shot_effect_1",
+                     "cooldownSec":  0.25,
+                     "effectSlotCount":  8,
+                     "defaultEquipped":  false,
+                     "sortOrder":  999
+                 }
+             ]
 }

@@ -1,3 +1,10 @@
+/** 设置节点可见性（兼容 UI2 GWidget 的 visible / displayed）。 */
+export function setNodeVisible(node: any, visible: boolean): void {
+    if (!node) return;
+    if (typeof node.visible !== 'undefined') node.visible = visible;
+    if (typeof node.displayed !== 'undefined') node.displayed = visible;
+}
+
 export function findDescendantByName(root: any, name: string): any | null {
     if (!root) return null;
     const queue: any[] = [root];

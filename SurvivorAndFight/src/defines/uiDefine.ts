@@ -32,3 +32,15 @@ export const MOVED_LINE_NODE_NAME = 'MovedlineNode';
 export const LEVEL_PROGRESS_BAR_NAME = 'LevelProgressBar';
 export const LEVEL_TEXT_NAME = 'LevelTxt';
 export const SKILL_TEXT_NAME = 'SKillTxt';
+
+/** SkillSelectPanel 子节点（与 MainUIPanel.lh 一致）。 */
+export {
+    SKILL_SELECT_PANEL_NAME,
+    SKILL_BASE_BAR_NAMES,
+    EFFECT_BOX_NAME,
+    EFFECT_BOX_SKILL_PREFIX,
+    SKILL_BOX_NAME,
+    EFFECT_BTN_NAME,
+    EFFECT_ICON_NAME,
+    SKILL_BASE_BAR_NAME,
+} from './skillSelectDefine';
