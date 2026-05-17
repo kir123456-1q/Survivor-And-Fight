@@ -3,34 +3,25 @@
 
 \section{工作总结}
 
-本文围绕 \textbf{Survivor And Fight} 项目，完成了基于 LayaAir 3.x 与 TypeScript 的 Roguelite 生存战斗游戏之分析、设计与实现论述。主要工作包括：
+本文完成了 \textbf{Survivor And Fight} 在 LayaAir 3.x 与 TypeScript 上的 Roguelite 生存战斗游戏之分析、设计与实现。主要工作包括：轻量 ECS 玩法内核；配表驱动技能与子弹组合效果；对象池与 Web Worker 性能优化；元游戏、DAG 跑图与 MVC 界面；测试验证及社会影响讨论。
 
-\begin{enumerate}[label=(\arabic*)]
-  \item 构建了轻量 ECS 核心及玩法层系统群，实现玩家/怪物实体、移动操控、属性修饰器、技能与自动施法；
-  \item 实现了配表驱动的子弹、穿透/分裂/连锁效果及阵营碰撞规则，并结合对象池降低 GC 压力；
-  \item 引入 \texttt{CombatDataBridge} 与 Web Worker，在实体规模达标时卸载部分战斗数值计算；
-  \item 实现元游戏流程、三大关 DAG 跑图生成、经验升级与随机奖励、Tab 技能装配 MVC 界面；
-  \item 采用 OpenSpec 规格驱动管理多变更提案，形成可追踪的需求—设计—实现链路；
-  \item 从社会影响、绿色节能、项目管理等角度对项目作了符合模板要求的补充讨论。
-\end{enumerate}
-
-系统达到了毕业设计原型预期：可演示完整游戏循环，代码结构清晰，模块边界与 OpenSpec 一致，具备继续扩展法杖编程与性能深度的基础。
+研究过程中参考了游戏引擎架构理解方法 SyDRA\cite{ullmann2025sydra}、经典引擎架构论述\cite{gregory2018game}，以及 Unity 物理人群疏散建模实践\cite{cantrell2018unity}，将模块化、物理仿真与验证思想迁移到 H5 教学原型中。系统可演示完整游戏循环，达到毕业设计预期。
 
 \section{不足与展望}
 
 \begin{enumerate}[label=\arabic*.]
-  \item \textbf{法杖法术链 UI}：\texttt{WandLoadout}、\texttt{SpellEval} 尚处于提案阶段，后续须完成三法杖槽位可视化编辑与链式求值测试\cite{kw_noita_spellcraft}；
-  \item \textbf{ECS 存储升级}：迁移至 archetype/chunk，提升同屏实体上限\cite{kw_ecs_game_architecture}；
-  \item \textbf{碰撞 broad phase}：引入空间哈希降低子弹—怪物检测复杂度\cite{kw_spatial_hash_collision}；
-  \item \textbf{自动化测试}：在 \texttt{webapp-testing} 技能指导下补充 Playwright 端到端用例\cite{kw_software_testing_game}；
-  \item \textbf{存档与元进度}：当前装配状态仅局内有效，可扩展 localStorage 或账号体系；
-  \item \textbf{美术与音效}：完善特效预制体，替换占位圆形碰撞体为正式动画。
+  \item 法杖三槽完整 UI 与链式求值界面待完善；
+  \item ECS 可迁移至 archetype 存储以提升同屏规模\cite{ullmann2023coupling}；
+  \item 碰撞可引入空间哈希等 broad phase；
+  \item 补充端到端自动化测试\cite{petty2010vv}；
+  \item 局外存档与元进度；
+  \item 美术特效与音效完善。
 \end{enumerate}
 
-\section{社会、健康与文化影响（模板要求）}
+\section{社会、健康与文化影响}
 
-本游戏为虚构战斗题材，应避免过度血腥表现，并在说明文档中标注适龄提示\cite{kw_ethics_game_design}。长时间游玩可能导致视觉疲劳，建议玩家间歇休息；Tab 暂停机制客观上提供了局内停顿点。作为教学项目，不涉及用户隐私大规模采集；若未来接入排行榜，须遵循个人信息保护相关要求。
+本游戏为虚构战斗题材，应标注适龄提示并避免过度暴力表现。长时间游玩需注意视觉疲劳；Tab 暂停提供局内休息点。教学原型不采集用户敏感信息。
 
 \section{本章小结}
 
-本章总结了全文工作，列出不足与后续方向，并补充了社会影响分析。Survivor And Fight 展示了将 ECS、数据驱动与 H5 性能手段结合于 Roguelite 品类的可行路径，对类似毕业设计具有参考价值。终稿提交前，作者应完成性能实测、文献替换、截图插入与导师审阅修改，使论文从“结构完整的初稿”提升为“数据翔实、引证规范的定稿”。
+本章总结全文并展望后续工作。本项目展示了在 H5 环境下结合 ECS、数据驱动与引擎性能手段构建 Roguelite 原型的可行路径。

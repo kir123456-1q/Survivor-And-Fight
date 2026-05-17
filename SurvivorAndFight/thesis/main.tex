@@ -1,8 +1,3 @@
-% Survivor And Fight 本科毕业设计论文 LaTeX 初稿
-% 编译：xelatex main.tex && bibtex main && xelatex main.tex && xelatex main.tex
-% 模板依据：本科毕业设计(论文)参考模板-计算机学院.pdf（中国石油大学华东）
-% 提取脚本：tools/extract-thesis-template.cjs
-
 \documentclass[UTF8,a4paper,zihao=-4,linespread=1.5]{ctexrep}
 
 \usepackage{geometry}
@@ -17,13 +12,12 @@
 \usepackage{fancyhdr}
 \usepackage{titlesec}
 \usepackage{caption}
-\usepackage{subcaption}
 \usepackage{enumitem}
 \usepackage{setspace}
+\usepackage{url}
 
 \hypersetup{colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue}
 
-% 代码 listings 样式
 \lstset{
   basicstyle=\ttfamily\small,
   keywordstyle=\color{blue},
@@ -36,7 +30,19 @@
   numberstyle=\tiny\color{gray}
 }
 
-% 页眉页脚（正文章页眉为章名，由 \chapter 自动设置）
+% 前置部分无页码
+\newcommand{\frontmatterstyle}{%
+  \pagestyle{empty}%
+}
+
+% 摘要/目录等：无页码，固定页眉
+\fancypagestyle{frontmatterheader}{%
+  \fancyhf{}%
+  \fancyhead[C]{\small 中国石油大学（华东）本科毕业设计(论文)}%
+  \renewcommand{\headrulewidth}{0.4pt}%
+}
+
+% 正文：章标题页眉 + 页脚页码
 \pagestyle{fancy}
 \fancyhf{}
 \fancyfoot[C]{\thepage}
@@ -46,7 +52,6 @@
   \fancyfoot[C]{\thepage}
 }
 
-% 封面信息 —— 请按学籍信息修改
 \newcommand{\thesistitle}{基于 LayaAir 与 ECS 的 Roguelite 生存战斗游戏\\设计与实现}
 \newcommand{\thesisauthor}{（请填写姓名）}
 \newcommand{\thesisstudentid}{（请填写学号）}
@@ -54,12 +59,12 @@
 \newcommand{\thesisclass}{（请填写班级）}
 \newcommand{\thesisadvisor}{（请填写指导教师）}
 \newcommand{\thesisdate}{2026年6月}
-% 论文字数统计命令：在仓库根目录执行 node tools/count-thesis-chars.cjs，正文汉字须不少于 20000 字。
 
 \begin{document}
 
 \input{frontmatter}
 
+\pagestyle{frontmatterheader}
 \tableofcontents
 \clearpage
 \listoffigures
@@ -67,34 +72,24 @@
 \listoftables
 \clearpage
 
-\mainmatter
+% 正文从第 1 页开始编号
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\pagestyle{fancy}
+
 \input{chapter01}
-\input{chapter01-extended}
-\input{chapter01-background-extra}
 \input{chapter02}
-\input{chapter02-extended}
-\input{chapter02-literature}
 \input{chapter03}
-\input{chapter03-extended}
-\input{chapter03-requirements-detail}
 \input{chapter04}
-\input{chapter04-extended}
-\input{chapter04-design-detail}
 \input{chapter05}
-\input{chapter05-extended}
-\input{chapter05-implementation-case}
 \input{chapter06}
-\input{chapter06-extended}
-\input{chapter06-benchmark-guide}
 \input{chapter07}
-\input{chapter07-extended}
-\input{chapter07-test-detail}
 \input{chapter08}
-\input{chapter08-extended}
-\input{supplement-conclusion}
 
 \backmatter
+\pagestyle{frontmatterheader}
 \input{acknowledgement}
+\clearpage
 \bibliographystyle{plain}
 \bibliography{references}
 \input{appendix}

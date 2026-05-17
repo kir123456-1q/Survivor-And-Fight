@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.5.17)  17 MAY 2026 23:03
+This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.5.17)  17 MAY 2026 23:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -884,48 +884,42 @@ Package caption Info: longtable package is loaded.
 
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/caption\ltcaption.sty
 Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
-)) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/caption\subcaption.s
-ty
-Package: subcaption 2023/07/28 v1.6b Sub-captions (AR)
-Package caption Info: New subtype `subfigure' on input line 238.
-\c@subfigure=\count361
-Package caption Info: New subtype `subtable' on input line 238.
-\c@subtable=\count362
-) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/enumitem\enumitem.sty
+)) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/enumitem\enumitem.st
+y
 Package: enumitem 2025/02/06 v3.11 Customized lists
 \labelindent=\skip84
 \enit@outerparindent=\dimen292
 \enit@toks=\toks28
 \enit@inbox=\box67
-\enit@count@id=\count363
-\enitdp@description=\count364
+\enit@count@id=\count361
+\enitdp@description=\count362
 ) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/setspace\setspace.sty
 Package: setspace 2022/12/04 v6.7b set line spacing
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 24.
- (main.aux)
+Package hyperref Info: Option `colorlinks' set `true' on input line 19.
+(main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 59.
-LaTeX Font Info:    ... okay on input line 59.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 59.
-LaTeX Font Info:    ... okay on input line 59.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 59.
-LaTeX Font Info:    ... okay on input line 59.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 59.
-LaTeX Font Info:    ... okay on input line 59.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 59.
-LaTeX Font Info:    ... okay on input line 59.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 59.
-LaTeX Font Info:    ... okay on input line 59.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 59.
-LaTeX Font Info:    ... okay on input line 59.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 59.
-LaTeX Font Info:    ... okay on input line 59.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 59.
-LaTeX Font Info:    ... okay on input line 59.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 59.
-LaTeX Font Info:    ... okay on input line 59.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
 
 Package fontspec Info: 
 (fontspec)             Adjusting the maths setup (use [no-math] to avoid
@@ -933,56 +927,56 @@ Package fontspec Info:
 
 \symlegacymaths=\mathgroup4
 LaTeX Font Info:    Overwriting symbol font `legacymaths' in version `bold'
-(Font)                  OT1/cmr/m/n --> OT1/cmr/bx/n on input line 59.
-LaTeX Font Info:    Redeclaring math accent \acute on input line 59.
-LaTeX Font Info:    Redeclaring math accent \grave on input line 59.
-LaTeX Font Info:    Redeclaring math accent \ddot on input line 59.
-LaTeX Font Info:    Redeclaring math accent \tilde on input line 59.
-LaTeX Font Info:    Redeclaring math accent \bar on input line 59.
-LaTeX Font Info:    Redeclaring math accent \breve on input line 59.
-LaTeX Font Info:    Redeclaring math accent \check on input line 59.
-LaTeX Font Info:    Redeclaring math accent \hat on input line 59.
-LaTeX Font Info:    Redeclaring math accent \dot on input line 59.
-LaTeX Font Info:    Redeclaring math accent \mathring on input line 59.
-LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 59.
-LaTeX Font Info:    Redeclaring math symbol \Delta on input line 59.
-LaTeX Font Info:    Redeclaring math symbol \Theta on input line 59.
-LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 59.
-LaTeX Font Info:    Redeclaring math symbol \Xi on input line 59.
-LaTeX Font Info:    Redeclaring math symbol \Pi on input line 59.
-LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 59.
-LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 59.
-LaTeX Font Info:    Redeclaring math symbol \Phi on input line 59.
-LaTeX Font Info:    Redeclaring math symbol \Psi on input line 59.
-LaTeX Font Info:    Redeclaring math symbol \Omega on input line 59.
-LaTeX Font Info:    Redeclaring math symbol \mathdollar on input line 59.
-LaTeX Font Info:    Redeclaring symbol font `operators' on input line 59.
+(Font)                  OT1/cmr/m/n --> OT1/cmr/bx/n on input line 63.
+LaTeX Font Info:    Redeclaring math accent \acute on input line 63.
+LaTeX Font Info:    Redeclaring math accent \grave on input line 63.
+LaTeX Font Info:    Redeclaring math accent \ddot on input line 63.
+LaTeX Font Info:    Redeclaring math accent \tilde on input line 63.
+LaTeX Font Info:    Redeclaring math accent \bar on input line 63.
+LaTeX Font Info:    Redeclaring math accent \breve on input line 63.
+LaTeX Font Info:    Redeclaring math accent \check on input line 63.
+LaTeX Font Info:    Redeclaring math accent \hat on input line 63.
+LaTeX Font Info:    Redeclaring math accent \dot on input line 63.
+LaTeX Font Info:    Redeclaring math accent \mathring on input line 63.
+LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 63.
+LaTeX Font Info:    Redeclaring math symbol \Delta on input line 63.
+LaTeX Font Info:    Redeclaring math symbol \Theta on input line 63.
+LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 63.
+LaTeX Font Info:    Redeclaring math symbol \Xi on input line 63.
+LaTeX Font Info:    Redeclaring math symbol \Pi on input line 63.
+LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 63.
+LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 63.
+LaTeX Font Info:    Redeclaring math symbol \Phi on input line 63.
+LaTeX Font Info:    Redeclaring math symbol \Psi on input line 63.
+LaTeX Font Info:    Redeclaring math symbol \Omega on input line 63.
+LaTeX Font Info:    Redeclaring math symbol \mathdollar on input line 63.
+LaTeX Font Info:    Redeclaring symbol font `operators' on input line 63.
 LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
-(Font)              `operators' in the math version `normal' on input line 59.
+(Font)              `operators' in the math version `normal' on input line 63.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  OT1/cmr/m/n --> TU/lmr/m/n on input line 59.
+(Font)                  OT1/cmr/m/n --> TU/lmr/m/n on input line 63.
 LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
-(Font)              `operators' in the math version `bold' on input line 59.
+(Font)              `operators' in the math version `bold' on input line 63.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  OT1/cmr/bx/n --> TU/lmr/m/n on input line 59.
+(Font)                  OT1/cmr/bx/n --> TU/lmr/m/n on input line 63.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  TU/lmr/m/n --> TU/lmr/m/n on input line 59.
+(Font)                  TU/lmr/m/n --> TU/lmr/m/n on input line 63.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
-(Font)                  OT1/cmr/m/it --> TU/lmr/m/it on input line 59.
+(Font)                  OT1/cmr/m/it --> TU/lmr/m/it on input line 63.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
-(Font)                  OT1/cmr/bx/n --> TU/lmr/b/n on input line 59.
+(Font)                  OT1/cmr/bx/n --> TU/lmr/b/n on input line 63.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
-(Font)                  OT1/cmss/m/n --> TU/lmss/m/n on input line 59.
+(Font)                  OT1/cmss/m/n --> TU/lmss/m/n on input line 63.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
-(Font)                  OT1/cmtt/m/n --> TU/lmtt/m/n on input line 59.
+(Font)                  OT1/cmtt/m/n --> TU/lmtt/m/n on input line 63.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  TU/lmr/m/n --> TU/lmr/b/n on input line 59.
+(Font)                  TU/lmr/m/n --> TU/lmr/b/n on input line 63.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmr/bx/it --> TU/lmr/b/it on input line 59.
+(Font)                  OT1/cmr/bx/it --> TU/lmr/b/it on input line 63.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/bx/n --> TU/lmss/b/n on input line 59.
+(Font)                  OT1/cmss/bx/n --> TU/lmss/b/n on input line 63.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> TU/lmtt/b/n on input line 59.
+(Font)                  OT1/cmtt/m/n --> TU/lmtt/b/n on input line 63.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: xetex
@@ -1018,8 +1012,8 @@ LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-\c@lstlisting=\count365
-Package hyperref Info: Link coloring ON on input line 59.
+\c@lstlisting=\count363
+Package hyperref Info: Link coloring ON on input line 63.
 (main.out) (main.out)
 \@outlinefile=\write3
 \openout3 = `main.out'.
@@ -1028,16 +1022,87 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
  (frontmatter.tex [1
 
-]
-Overfull \hbox (1.62636pt too wide) in paragraph at lines 26--27
-\TU/SimSun(0)/m/n/12.045 论 文 作 者  |（签 名） ：| $[]$ 指 导 教 师 确 认  |（签 名） ：| $[]$ 
- []
+] [1
 
+]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 12.64723pt, for example:
+(fancyhdr)                \setlength{\headheight}{12.64723pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
+
+[2
+
+])
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 12.64723pt, for example:
+(fancyhdr)                \setlength{\headheight}{12.64723pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
+
+[3
+
+] (main.toc [4
+
+]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 12.64723pt, for example:
+(fancyhdr)                \setlength{\headheight}{12.64723pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
+
+[5])
+\tf@toc=\write4
+\openout4 = `main.toc'.
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 12.64723pt, for example:
+(fancyhdr)                \setlength{\headheight}{12.64723pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
+
+[6] (main.lof)
+\tf@lof=\write5
+\openout5 = `main.lof'.
+
+ [7
+
+
+] (main.lot)
+\tf@lot=\write6
+\openout6 = `main.lot'.
+
+ [8
+
+
+] (chapter01.tex
+第一章
 [1
 
-] [2
 
-]
+]) (chapter02.tex
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 12.64723pt, for example:
+(fancyhdr)                \setlength{\headheight}{12.64723pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
+
+[2]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 12.64723pt, for example:
+(fancyhdr)                \setlength{\headheight}{12.64723pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
+
+[3]
+第二章
 
 Package fontspec Info: 
 (fontspec)             Could not resolve font "FangSong/BI" (it probably
@@ -1065,334 +1130,53 @@ Package fontspec Info:
 (fontspec)             <->"FangSong/OT:script=hani;language=dflt;"
 
 
+Overfull \hbox (8.59503pt too wide) in paragraph at lines 8--9
+[]\TU/lmr/m/n/12.045 TypeScript \TU/SimSun(0)/m/n/12.045 提 供 静 态 类 型 与 模 块 化，| 
+ 静 态 常 量 集 中 于 \TU/lmtt/m/n/12.045 src/defines/ \TU/SimSun(0)/m/n/12.045 并 由 \T
+U/lmtt/m/n/12.045 index.ts
+ []
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
 
-[3
+Overfull \hbox (10.22072pt too wide) in paragraph at lines 12--13
+\TU/lmtt/m/n/12.045 MovementSystem\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.0
+45 AttributeSystem |\TU/SimSun(0)/m/n/12.045 （含 可 溯 源 \TU/lmr/m/n/12.045 modifi
+er\TU/SimSun(0)/m/n/12.045 ） 、| \TU/lmtt/m/n/12.045 SkillSystem\TU/SimSun(0)/m/
+n/12.045 、| \TU/lmtt/m/n/12.045 ControlSystem
+ []
+
+
+Overfull \hbox (138.45483pt too wide) in paragraph at lines 16--17
+[]\TU/SimSun(0)/m/n/12.045 策 划 参 数 外 置 为 \TU/lmr/m/n/12.045 JSON \TU/SimSun(0)/
+m/n/12.045 表，|  由 \TU/lmtt/m/n/12.045 tables.registry.json \TU/SimSun(0)/m/n/12
+.045 注 册，| \TU/lmtt/m/n/12.045 ConfigBootstrap.ensureGameConfigLoaded()
+ []
+
+
+Overfull \hbox (29.46336pt too wide) in paragraph at lines 16--17
+\TU/lmtt/m/n/12.045 modifier_split\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.0
+45 modifier_chain\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 modifier_pierc
+e\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 direct_damage\TU/SimSun(0)/m/n
+/12.045 ，|  由 \TU/lmtt/m/n/12.045 EffectExecutor
+ []
+
+[4
 
 ]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[4]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[5
-
-]) (main.toc [1
-
-
-]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[2]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[3]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[4]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[5]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[6]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[7])
-\tf@toc=\write4
-\openout4 = `main.toc'.
-
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[8] (main.lof)
-\tf@lof=\write5
-\openout5 = `main.lof'.
-
- [9
-
-
-] (main.lot)
-\tf@lot=\write6
-\openout6 = `main.lot'.
-
- [10
-
-
-]
-! Undefined control sequence.
-l.70 \mainmatter
-                
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-(chapter01.tex
-第一章
-[11
-
-
-]) (chapter01-extended.tex
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[12]
-Overfull \hbox (4.07465pt too wide) in paragraph at lines 6--7
-[]\TU/SimSun(0)/m/n/12.045 从 产 业 视 角 看，|  国 产 \TU/lmr/m/n/12.045 H5 \TU/SimSun(
-0)/m/n/12.045 游 戏 与 小 游 戏 平 台 对 轻 量、|  高 留 存 玩 法 需 求 旺 盛；| \TU/lmr/m/n/12.045 R
-oguelite
+Overfull \hbox (34.80414pt too wide) in paragraph at lines 24--25
+\TU/SimSun(0)/m/n/12.045 标 时 将 战 斗 快 照 提 交 \TU/lmr/m/n/12.045 Web Worker\TU/Sim
+Sun(0)/m/n/12.045 ；| \TU/lmtt/m/n/12.045 BulletHitTest \TU/SimSun(0)/m/n/12.045
+ 使 用 距 离 平 方 比 较。| \TU/lmtt/m/n/12.045 GameSession.paused
  []
 
 
-Overfull \hbox (130.27432pt too wide) in paragraph at lines 21--22
-[]\TU/SimSun(0)/m/n/12.045 论 文 撰 写 采 用  |“模 板 约 束 \TU/lmr/m/n/12.045 + \TU/SimS
-un(0)/m/n/12.045 自 动 化 提 取 \TU/lmr/m/n/12.045 + LaTeX \TU/SimSun(0)/m/n/12.045 
-排 版”|  流 程：|  通 过 \TU/lmtt/m/n/12.045 tools/extract-thesis-template.cjs
+Underfull \hbox (badness 4366) in paragraph at lines 37--38
+[]\TU/SimSun(0)/m/n/12.045 单 线 程；|  战 斗 片 段 可 选
  []
 
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[13]) (chapter01-background-extra.tex
-Overfull \hbox (37.10258pt too wide) in paragraph at lines 14--15
-[]\TU/SimSun(0)/m/n/12.045 论 文 叙 述 以 仓 库 \TU/lmtt/m/n/12.045 SurvivorAndFight \
-TU/SimSun(0)/m/n/12.045 为 准：| \TU/lmtt/m/n/12.045 src/ \TU/SimSun(0)/m/n/12.045
- 为 \TU/lmr/m/n/12.045 TypeScript \TU/SimSun(0)/m/n/12.045 源 码，| \TU/lmtt/m/n/12
-.045 openspec/changes/
- []
-
-) (chapter02.tex
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[14]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[15]
-第二章
-
-Overfull \hbox (3.13605pt too wide) in paragraph at lines 6--7
-\TU/lmtt/m/n/12.045 Laya.timer.frameLoop \TU/SimSun(0)/m/n/12.045 驱 动，|  本 项 目 
-的 \TU/lmr/m/n/12.045 ECS \TU/SimSun(0)/m/n/12.045 更 新 入 口 \TU/lmtt/m/n/12.045 E
-csWorld.update(deltaTime)
- []
-
-[16
-
-]
-Overfull \hbox (2.9786pt too wide) in paragraph at lines 25--26
-[]\TU/SimSun(0)/m/n/12.045 技 能 伤 害 等 参 数 可 通 过 \TU/lmtt/m/n/12.045 FormulaParse
-r.evaluate \TU/SimSun(0)/m/n/12.045 解 析 含 属 性 别 名 的 表 达 式 \TU/lmr/m/n/12.045 [[
-]]\TU/SimSun(0)/m/n/12.045 。|
- []
-
-
-Overfull \hbox (43.68791pt too wide) in paragraph at lines 29--30
-[]\TU/lmr/m/n/12.045 Roguelite \TU/SimSun(0)/m/n/12.045 强 调 单 局 随 机 与 局 外 成 长。|
-  本 项 目 跑 图  |（\TU/lmtt/m/n/12.045 add-meta-flow-run-map-spellcraft\TU/SimSun(0
-)/m/n/12.045 ）|
- []
-
-
-Overfull \hbox (17.75166pt too wide) in paragraph at lines 36--37
-[]\TU/lmr/bx/n/12.045 Web Worker\TU/SimSun(0)/m/n/12.045 ：| \TU/lmtt/m/n/12.045
- CombatDataBridge \TU/SimSun(0)/m/n/12.045 在 实 体 数 $\OMS/cmsy/m/n/12.045 ^^U$ \
-TU/lmtt/m/n/12.045 COMBAT_WORKER_MIN_ENTITY_COUNT
- []
-
-
-Overfull \hbox (52.21623pt too wide) in paragraph at lines 43--44
-\TU/SimSun(0)/m/n/12.045 屏 界 面 路 由 唯 一 真 相 源，|  支 持 \TU/lmr/m/n/12.045 push/pop
-/replace[[]]\TU/SimSun(0)/m/n/12.045 。|  变 更 \TU/lmtt/m/n/12.045 add-mvc-ui-sta
-ck-redpoint-pooling
- []
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[17]) (chapter02-extended.tex
-Overfull \hbox (9.73654pt too wide) in paragraph at lines 6--7
-\TU/SimSun(0)/m/n/12.045 作 门 槛，|  同 时 保 留 \TU/lmtt/m/n/12.045 ControlSystem \TU
-/SimSun(0)/m/n/12.045 以 支 持 走 位。|  经 验 曲 线 与 \TU/lmtt/m/n/12.045 MONSTER_EXP_RE
-WARD_BASE\TU/SimSun(0)/m/n/12.045 、|
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 23--24
-[]\TU/lmtt/m/n/12.045 ViewComponent \TU/SimSun(0)/m/n/12.045 直 绑
- []
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[18]
-Overfull \hbox (1.11105pt too wide) in paragraph at lines 34--35
-\TU/SimSun(0)/m/n/12.045 减 少 配 表 冗 余。| \TU/lmr/m/n/12.045 Effect \TU/SimSun(0)/
-m/n/12.045 图 标 \TU/lmr/m/n/12.045 id \TU/SimSun(0)/m/n/12.045 规 则  |（去 掉 \TU/lm
-tt/m/n/12.045 fx_ \TU/SimSun(0)/m/n/12.045 前 缀）|  在 \TU/lmtt/m/n/12.045 add-com
-bat-skill-loadout-ui
- []
-
-! Illegal parameter number in definition of \reserved@b.
-<to be read again> 
-                   }
-l.42 ...md} 增量定义 SHALL 需求与 \texttt{#### Scenario:}
-                                                   验收场景\cite{kw_spec_driven_...
-You meant to type ## instead of #, right?
-Or maybe a } was forgotten somewhere earlier, and things
-are all screwed up? I'm going to assume that you meant ##.
-
-! You can't use `macro parameter character #' in horizontal mode.
-<recently read> ##
-                  
-l.42 ...md} 增量定义 SHALL 需求与 \texttt{#### Scenario:}
-                                                   验收场景\cite{kw_spec_driven_...
-Sorry, but I'm not programmed to handle this case;
-I'll just pretend that you didn't ask for it.
-If you're in the wrong mode, you might be able to
-return to the right one by typing `I}' or `I$' or `I\par'.
-
-! You can't use `macro parameter character #' in horizontal mode.
-<argument> ####
-               #### Scenario:
-l.42 ...md} 增量定义 SHALL 需求与 \texttt{#### Scenario:}
-                                                   验收场景\cite{kw_spec_driven_...
-Sorry, but I'm not programmed to handle this case;
-I'll just pretend that you didn't ask for it.
-If you're in the wrong mode, you might be able to
-return to the right one by typing `I}' or `I$' or `I\par'.
-
-! You can't use `macro parameter character #' in horizontal mode.
-<argument> ######
-                 ## Scenario:
-l.42 ...md} 增量定义 SHALL 需求与 \texttt{#### Scenario:}
-                                                   验收场景\cite{kw_spec_driven_...
-Sorry, but I'm not programmed to handle this case;
-I'll just pretend that you didn't ask for it.
-If you're in the wrong mode, you might be able to
-return to the right one by typing `I}' or `I$' or `I\par'.
-
-! You can't use `macro parameter character #' in horizontal mode.
-<argument> ########
-                    Scenario:
-l.42 ...md} 增量定义 SHALL 需求与 \texttt{#### Scenario:}
-                                                   验收场景\cite{kw_spec_driven_...
-Sorry, but I'm not programmed to handle this case;
-I'll just pretend that you didn't ask for it.
-If you're in the wrong mode, you might be able to
-return to the right one by typing `I}' or `I$' or `I\par'.
-
-) (chapter02-literature.tex
-Overfull \hbox (49.65611pt too wide) in paragraph at lines 42--1
-\TU/lmr/m/n/12.045 SHALL \TU/SimSun(0)/m/n/12.045 需 求 与  \TU/lmtt/m/n/12.045 Sc
-enario: \TU/SimSun(0)/m/n/12.045 验 收 场 景 \TU/lmr/m/n/12.045 [[]]\TU/SimSun(0)/m
-/n/12.045 。|  例 如 \TU/lmtt/m/n/12.045 add-monster-spawn-and-movement-patterns
- []
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[19]
-Overfull \hbox (11.69485pt too wide) in paragraph at lines 6--7
-\TU/SimSun(0)/m/n/12.045 目 怪 物 与 玩 家 共 享 \TU/lmtt/m/n/12.045 Position\TU/SimSun
-(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 Attribute\TU/SimSun(0)/m/n/12.045 、| \TU/
-lmtt/m/n/12.045 Skill \TU/SimSun(0)/m/n/12.045 等 组 件，|  仅 通 过 \TU/lmtt/m/n/12.0
-45 PlayerTag\TU/lmr/m/n/12.045 /\TU/lmtt/m/n/12.045 MonsterTag
- []
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[20]
-Overfull \hbox (79.81366pt too wide) in paragraph at lines 30--31
-[]\TU/lmr/m/n/12.045 UI \TU/SimSun(0)/m/n/12.045 栈 管 理 避 免  |“多 个 全 屏 界 面 同 时 \
-TU/lmr/m/n/12.045 visible\TU/SimSun(0)/m/n/12.045 ”|  的 混 乱。|  提 案 \TU/lmtt/m/n
-/12.045 add-mvc-ui-stack-redpoint-pooling
+Underfull \hbox (badness 2368) in paragraph at lines 39--40
+[]\TU/lmtt/m/n/12.045 ViewComponent \TU/SimSun(0)/m/n/12.045 绑 \TU/lmr/m/n/12.0
+45 Laya
  []
 
 ) (chapter03.tex
@@ -1403,51 +1187,11 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
 
-[21]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[22]
+[5]
 第三章
-
-Underfull \hbox (badness 2689) in paragraph at lines 26--27
-[]\TU/SimSun(0)/m/n/12.045 创 建\TU/lmr/m/n/12.045 /\TU/SimSun(0)/m/n/12.045 销 毁 
-实 体；|  按 类 型 存 取 组 件；|  系 统 按 \TU/lmr/m/n/12.045 in-
- []
-
-
-Underfull \hbox (badness 2521) in paragraph at lines 27--28
-[]\TU/SimSun(0)/m/n/12.045 玩 家\TU/lmr/m/n/12.045 /\TU/SimSun(0)/m/n/12.045 怪 物 
-标 签；|  移 动、|  旋 转、|  视 图 同 步；|  属 性
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 33--34
-[]\TU/lmr/m/n/12.045 Tab \TU/SimSun(0)/m/n/12.045 暂 停；|  三 装 备 栏；|  拖 拽 装 配；|  
-同 步 至
- []
-
-[23
+[6
 
 ]
-Overfull \hbox (74.18794pt too wide) in paragraph at lines 49--50
-[]\TU/SimSun(0)/m/n/12.045 玩 家 按 \TU/lmr/m/n/12.045 Tab \TU/SimSun(0)/m/n/12.04
-5 打 开 技 能 面 板，| \TU/lmtt/m/n/12.045 GameSession.paused=true\TU/SimSun(0)/m/n/12
-.045 ，|  装 配 变 更 经 \TU/lmtt/m/n/12.045 SkillLoadoutSyncSystem
- []
-
-
-Overfull \hbox (47.47392pt too wide) in paragraph at lines 55--56
-[]\TU/SimSun(0)/b/n/12.045 主 成 功 场 景：|  \TU/SimSun(0)/m/n/12.045 用 户 在 \TU/lmtt
-/m/n/12.045 MetaFlowController \TU/SimSun(0)/m/n/12.045 中 选 择 关 卡 或 跑 图 节 点 $\O
-MS/cmsy/m/n/12.045 !$ \TU/SimSun(0)/m/n/12.045 回 调 \TU/lmtt/m/n/12.045 onEnterC
-ombat
- []
-
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 12.64723pt, for example:
@@ -1455,20 +1199,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
 
-[24]
-Overfull \hbox (26.17735pt too wide) in paragraph at lines 69--70
-[]\TU/SimSun(0)/m/n/12.045 模 块 边 界 与 \TU/lmr/m/n/12.045 OpenSpec \TU/lmtt/m/n/1
-2.045 change-id \TU/SimSun(0)/m/n/12.045 对 齐；|  静 态 配 置 仅 存 在 于 \TU/lmtt/m/n/12
-.045 src/defines/*Define.ts\TU/SimSun(0)/m/n/12.045 ；|
- []
-
-
-Overfull \hbox (46.17766pt too wide) in paragraph at lines 77--78
-\TU/lmtt/m/n/12.045 add-bullet-hp-ui-verification \TU/SimSun(0)/m/n/12.045 覆 盖 
-血 条 绑 定 与 阵 营 碰 撞；| \TU/lmtt/m/n/12.045 add-combat-skill-loadout-ui
- []
-
-) (chapter03-extended.tex
+[7]) (chapter04.tex
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 12.64723pt, for example:
@@ -1476,87 +1207,26 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
 
-[25]
-Overfull \hbox (42.85574pt too wide) in paragraph at lines 34--35
-[]\TU/SimSun(0)/b/n/12.045 战 斗 入 口\TU/SimSun(0)/m/n/12.045 ：| \TU/lmtt/m/n/12.0
-45 MetaFlowController \TU/SimSun(0)/m/n/12.045 的 \TU/lmtt/m/n/12.045 onEnterCom
-bat(payload?: CombatEnterPayload)\TU/SimSun(0)/m/n/12.045 ；| 
- []
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[26]) (chapter03-requirements-detail.tex
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[27]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[28]) (chapter04.tex
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[29]
+[8]
 第四章
 
-Overfull \hbox (37.5358pt too wide) in paragraph at lines 36--37
-\TU/SimSun(0)/m/n/12.045 造 \TU/lmtt/m/n/12.045 SimpleEcsDemo\TU/SimSun(0)/m/n/1
-2.045 ；|  根 据 \TU/lmtt/m/n/12.045 META_MENU_ENABLED \TU/SimSun(0)/m/n/12.045 决 
-定 直 接 进 入 战 斗 或 启 动 \TU/lmtt/m/n/12.045 MetaMenuBootstrap\TU/SimSun(0)/m/n/12.0
-45 ；|
+Overfull \hbox (14.86984pt too wide) in paragraph at lines 34--35
+[]\TU/lmtt/m/n/12.045 Main.ts \TU/SimSun(0)/m/n/12.045 初 始 化 输 入、|  构 造 \TU/lmt
+t/m/n/12.045 SimpleEcsDemo\TU/SimSun(0)/m/n/12.045 ，|  按 配 置 进 入 元 菜 单 或 战 斗，| 
+ 在 \TU/lmtt/m/n/12.045 frameLoop
  []
 
-[30
+[9
 
 ]
-Overfull \hbox (13.94144pt too wide) in paragraph at lines 47--48
-[]\TU/lmr/bx/n/12.045 logic\TU/SimSun(0)/m/n/12.045 ：| \TU/lmtt/m/n/12.045 Attr
-ibuteSystem\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 MovementSystem\TU/Si
-mSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 SkillSystem\TU/SimSun(0)/m/n/12.045 、
-| \TU/lmtt/m/n/12.045 PlayerAutoCastSystem\TU/SimSun(0)/m/n/12.045 、|
+Overfull \hbox (63.8413pt too wide) in paragraph at lines 40--41
+[]\TU/SimSun(0)/m/n/12.045 战 斗 帧 流 程：| \TU/lmtt/m/n/12.045 CombatDataPrepareSys
+tem \TU/SimSun(0)/m/n/12.045 采 集 快 照 $\OMS/cmsy/m/n/12.045 !$ \TU/SimSun(0)/m/n
+/12.045 可 选 \TU/lmr/m/n/12.045 Worker \TU/SimSun(0)/m/n/12.045 执 行 \TU/lmtt/m/n
+/12.045 processCombatFrame
  []
 
-
-Overfull \hbox (87.51791pt too wide) in paragraph at lines 47--48
-\TU/lmtt/m/n/12.045 MonsterAutoCastSystem\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m
-/n/12.045 MonsterChaseSystem\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 Exp
-erienceSystem\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 MonsterWaveSpawnSy
-stem\TU/SimSun(0)/m/n/12.045 、|
- []
-
-
-Overfull \hbox (85.67734pt too wide) in paragraph at lines 58--59
-[]\TU/SimSun(0)/m/n/12.045 若 \TU/lmtt/m/n/12.045 CombatDataBridge.shouldUseWork
-er() \TU/SimSun(0)/m/n/12.045 为 真，|  向 \TU/lmr/m/n/12.045 Worker \TU/SimSun(0)/
-m/n/12.045 发 送 \TU/lmtt/m/n/12.045 COMBAT_WORKER_MSG_COMPUTE\TU/SimSun(0)/m/n/1
-2.045 ；| 
- []
-
-
-Overfull \hbox (30.06862pt too wide) in paragraph at lines 59--60
-[]\TU/lmr/m/n/12.045 Worker \TU/SimSun(0)/m/n/12.045 执 行 \TU/lmtt/m/n/12.045 pr
-ocessCombatFrame |\TU/SimSun(0)/m/n/12.045 （与 主 线 程 共 享 逻 辑 文 件 \TU/lmtt/m/n/12
-.045 combatWorkerLogic.ts\TU/SimSun(0)/m/n/12.045 ） ；| 
- []
-
+) (chapter05.tex
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 12.64723pt, for example:
@@ -1564,102 +1234,44 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
 
-[31]) (chapter04-extended.tex
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[32]
-Overfull \hbox (74.27866pt too wide) in paragraph at lines 44--45
-[]\TU/lmr/m/n/12.045 Worker \TU/SimSun(0)/m/n/12.045 失 败 时 自 动 回 退 主 线 程；|  配 表
- 加 载 失 败 时 使 用 \TU/lmtt/m/n/12.045 DEFAULT_* \TU/SimSun(0)/m/n/12.045 常 量 并 \TU
-/lmtt/m/n/12.045 missingConfigLogged
- []
-
-) (chapter04-design-detail.tex
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[33]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[34]) (chapter05.tex
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[35]
+[10]
 第五章
-(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
-File: lstlang1.sty 2025/11/14 1.11b listings language file
-)
-Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 12.
 
-Overfull \hbox (20.23232pt too wide) in paragraph at lines 24--25
-[]\TU/lmtt/m/n/12.045 ViewComponent\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.
-045 BodyUIComponent \TU/SimSun(0)/m/n/12.045 将 实 体 关 联 至 \TU/lmr/m/n/12.045 Lay
-a \TU/SimSun(0)/m/n/12.045 预 制 体 节 点。| \TU/lmtt/m/n/12.045 ViewSyncSystem
+Overfull \hbox (98.6015pt too wide) in paragraph at lines 8--9
+\TU/lmtt/m/n/12.045 Map<EntityId, Component>\TU/SimSun(0)/m/n/12.045 。| \TU/lmt
+t/m/n/12.045 EcsWorld.update \TU/SimSun(0)/m/n/12.045 依 次 调 用 已 注 册 系 统，|  按 \T
+U/lmtt/m/n/12.045 input/logic/physics/render
  []
 
 
-Overfull \hbox (39.78815pt too wide) in paragraph at lines 24--25
-\TU/SimSun(0)/m/n/12.045 更 新 \TU/lmr/m/n/12.045 Body \TU/SimSun(0)/m/n/12.045 内
- \TU/lmtt/m/n/12.045 BloodBar/ProgressBar \TU/SimSun(0)/m/n/12.045 的 \TU/lmr/m/
-n/12.045 value |\TU/SimSun(0)/m/n/12.045 （\TU/lmr/m/n/12.045 0–1\TU/SimSun(0)/m
-/n/12.045 ） ，|  满 足 \TU/lmtt/m/n/12.045 add-bullet-hp-ui-verification
+Overfull \hbox (50.66415pt too wide) in paragraph at lines 14--15
+[]\TU/lmtt/m/n/12.045 AttributeSystem \TU/SimSun(0)/m/n/12.045 支 持 \TU/lmr/m/n/
+12.045 modifier \TU/SimSun(0)/m/n/12.045 按 来 源 增 删，|  供 \TU/lmr/m/n/12.045 Buff
+ \TU/SimSun(0)/m/n/12.045 与 升 级 奖 励 使 用 \TU/lmr/m/n/12.045 [[]]\TU/SimSun(0)/m/
+n/12.045 。| \TU/lmtt/m/n/12.045 MovementSystem\TU/SimSun(0)/m/n/12.045 、|
  []
 
 
-Overfull \hbox (19.54538pt too wide) in paragraph at lines 28--29
-\TU/lmtt/m/n/12.045 getFinalValue\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.04
-5 addModifier\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 removeModifiersByS
-ource\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 getModifierContributions\T
-U/SimSun(0)/m/n/12.045 ，|
+Overfull \hbox (24.12202pt too wide) in paragraph at lines 18--19
+[]\TU/lmtt/m/n/12.045 PlayerAutoCastSystem \TU/SimSun(0)/m/n/12.045 对 三 装 备 栏 维
+ 护 独 立 冷 却 与 \TU/lmtt/m/n/12.045 pendingCasts\TU/SimSun(0)/m/n/12.045 。| \TU/lm
+tt/m/n/12.045 EffectExecutor
  []
 
-[36
+[11
 
 ]
-Overfull \hbox (10.41783pt too wide) in paragraph at lines 36--37
-[]\TU/lmtt/m/n/12.045 FilterRegistry \TU/SimSun(0)/m/n/12.045 支 持 按 组 件 类 型 查 询
- 与 命 名 筛 选 器。| \TU/lmtt/m/n/12.045 NamedFilters \TU/SimSun(0)/m/n/12.045 注 册 \T
-U/lmtt/m/n/12.045 Players\TU/SimSun(0)/m/n/12.045 、|
+Overfull \hbox (58.48048pt too wide) in paragraph at lines 47--48
+[]\TU/lmtt/m/n/12.045 ExperienceSystem\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/
+12.045 UpgradeRewardSystem \TU/SimSun(0)/m/n/12.045 与 奖 励 面 板 构 成 成 长 闭 环。| \TU
+/lmtt/m/n/12.045 MetaFlowController
  []
 
 
-Overfull \hbox (62.91621pt too wide) in paragraph at lines 42--43
-\TU/SimSun(0)/m/n/12.045 求。| \TU/lmtt/m/n/12.045 PlayerAutoCastSystem \TU/SimSu
-n(0)/m/n/12.045 对 三 装 备 栏 分 别 维 护 \TU/lmtt/m/n/12.045 pendingCasts\TU/SimSun(0)
-/m/n/12.045 ，|  并 支 持 \TU/lmtt/m/n/12.045 applySkillCastStagger
- []
-
-
-Overfull \hbox (53.75049pt too wide) in paragraph at lines 44--45
-[]\TU/SimSun(0)/m/n/12.045 配 表 \TU/lmtt/m/n/12.045 skill_table.json \TU/SimSun(
-0)/m/n/12.045 与 \TU/lmtt/m/n/12.045 skill_effect_table.json \TU/SimSun(0)/m/n/1
-2.045 在 \TU/lmtt/m/n/12.045 add-combat-skill-loadout-ui
- []
-
-
-Overfull \hbox (53.10353pt too wide) in paragraph at lines 65--66
-[]\TU/lmtt/m/n/12.045 FormulaParser.evaluate(formula, context) \TU/SimSun(0)/m/
-n/12.045 解 析 伤 害 表 达 式；| \TU/lmtt/m/n/12.045 Targeting.resolveAuto
+Overfull \hbox (17.96024pt too wide) in paragraph at lines 51--52
+\TU/lmtt/m/n/12.045 SkillDragService \TU/SimSun(0)/m/n/12.045 长 按 拖 拽，| \TU/lmt
+t/m/n/12.045 SkillLoadoutSyncSystem \TU/SimSun(0)/m/n/12.045 写 回 战 斗 实 体。| \TU/
+lmtt/m/n/12.045 UIStackManager
  []
 
 
@@ -1669,29 +1281,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
 
-[37]
-Overfull \hbox (82.36487pt too wide) in paragraph at lines 84--85
-[]\TU/lmtt/m/n/12.045 MonsterPool \TU/SimSun(0)/m/n/12.045 与 \TU/lmtt/m/n/12.04
-5 BulletPool \TU/SimSun(0)/m/n/12.045 类 似，|  按 \TU/lmtt/m/n/12.045 prefabPath \
-TU/SimSun(0)/m/n/12.045 分 桶。| \TU/lmtt/m/n/12.045 MonsterVisual.applyMonsterIco
-nSkin
- []
-
-
-Overfull \hbox (63.26457pt too wide) in paragraph at lines 88--89
-\TU/SimSun(0)/m/n/12.045 保 持 \TU/lmtt/m/n/12.045 MONSTER_SPAWN_MIN_DISTANCE\TU/
-SimSun(0)/m/n/12.045 。| \TU/lmtt/m/n/12.045 MonsterChaseSystem \TU/SimSun(0)/m/
-n/12.045 更 新 追 逐 速 度 \TU/lmtt/m/n/12.045 MONSTER_CHASE_SPEED\TU/SimSun(0)/m/n/1
-2.045 ，|
- []
-
-
-Overfull \hbox (79.9557pt too wide) in paragraph at lines 88--89
-\TU/SimSun(0)/m/n/12.045 可 叠 加 \TU/lmr/m/n/12.045 Worker \TU/SimSun(0)/m/n/12.0
-45 返 回 的 分 离 力 与 随 机 摆 动  |（\TU/lmtt/m/n/12.045 MONSTER_RANDOM_SWAY_*\TU/SimSun
-(0)/m/n/12.045 ） 。| \TU/lmtt/m/n/12.045 MonsterContactDamageSystem
- []
-
+[12]) (chapter06.tex
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 12.64723pt, for example:
@@ -1699,287 +1289,11 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
 
-[38]
-Overfull \hbox (32.21652pt too wide) in paragraph at lines 94--95
-\TU/SimSun(0)/m/n/12.045 触 发 \TU/lmtt/m/n/12.045 RewardPanelController\TU/SimSu
-n(0)/m/n/12.045 ，|  由 \TU/lmtt/m/n/12.045 RewardPoolService \TU/SimSun(0)/m/n/1
-2.045 加 权 随 机 奖 励，| \TU/lmtt/m/n/12.045 RewardApplyService
- []
-
-
-Overfull \hbox (71.07118pt too wide) in paragraph at lines 106--108
-[]\TU/lmtt/m/n/12.045 RunMapGenerator.generate(seed, difficulty) \TU/SimSun(0)/
-m/n/12.045 在 最 多 \TU/lmtt/m/n/12.045 RUN_MAP_GENERATION_MAX_RETRIES
- []
-
-
-Overfull \hbox (15.80766pt too wide) in paragraph at lines 118--119
-[]\TU/lmtt/m/n/12.045 SkillSelectPanelController \TU/SimSun(0)/m/n/12.045 监 听 \
-TU/lmr/m/n/12.045 Tab \TU/SimSun(0)/m/n/12.045 键 切 换 可 见 性，|  联 动 \TU/lmtt/m/n/
-12.045 GameSession.paused\TU/SimSun(0)/m/n/12.045 。|
- []
-
-
-Overfull \hbox (13.47148pt too wide) in paragraph at lines 118--119
-\TU/lmtt/m/n/12.045 SkillLoadoutState \TU/SimSun(0)/m/n/12.045 存 储 三 装 备 栏 与 背 
-包；| \TU/lmtt/m/n/12.045 SkillDragService \TU/SimSun(0)/m/n/12.045 实 现 长 按 \TU/l
-mtt/m/n/12.045 LONG_PRESS_MS
- []
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[39]
-Overfull \hbox (92.93004pt too wide) in paragraph at lines 124--125
-[]\TU/lmtt/m/n/12.045 UIStackManager \TU/SimSun(0)/m/n/12.045 管 理 路 由 \TU/lmr/m
-/n/12.045 id \TU/SimSun(0)/m/n/12.045 到 \TU/lmr/m/n/12.045 Controller \TU/SimSu
-n(0)/m/n/12.045 工 厂 的 映 射，|  提 供 \TU/lmr/m/n/12.045 push/pop\TU/SimSun(0)/m/n/1
-2.045 。| \TU/lmtt/m/n/12.045 RestartPanelController\TU/SimSun(0)/m/n/12.045 、|
- []
-
-
-Overfull \hbox (73.68893pt too wide) in paragraph at lines 136--137
-[]\TU/SimSun(0)/m/n/12.045 变 更 \TU/lmtt/m/n/12.045 add-three-wand-systems-and-c
-onfig-tables \TU/SimSun(0)/m/n/12.045 与 \TU/lmtt/m/n/12.045 add-meta-flow-run-m
-ap-spellcraft
- []
-
-) (chapter05-extended.tex
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[40]
-Overfull \hbox (39.15025pt too wide) in paragraph at lines 6--7
-[]\TU/lmtt/m/n/12.045 Main.onStart \TU/SimSun(0)/m/n/12.045 中 依 次 完 成：|  创 建 \T
-U/lmtt/m/n/12.045 InputService\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 C
-ontrolInputAdapter\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 SimpleEcsDemo
-\TU/SimSun(0)/m/n/12.045 ；|
- []
-
-
-Overfull \hbox (61.40512pt too wide) in paragraph at lines 6--7
-\TU/SimSun(0)/m/n/12.045 注 册 \TU/lmtt/m/n/12.045 frameLoop\TU/SimSun(0)/m/n/12.
-045 ；|  调 用 \TU/lmtt/m/n/12.045 loadConfigAndInitDemo\TU/SimSun(0)/m/n/12.045 。
-|  该 异 步 函 数 \TU/lmtt/m/n/12.045 await ensureGameConfigLoaded()\TU/SimSun(0)/m/
-n/12.045 ，|
- []
-
-
-Overfull \hbox (32.14813pt too wide) in paragraph at lines 10--11
-\TU/lmtt/m/n/12.045 CombatDataBridge\TU/SimSun(0)/m/n/12.045 ） 、| \TU/lmtt/m/n/
-12.045 CombatDataPrepareSystem\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 S
-killSystem\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 MonsterWaveSpawnSyste
-m\TU/SimSun(0)/m/n/12.045 、|
- []
-
-
-Overfull \hbox (54.67743pt too wide) in paragraph at lines 14--15
-[]\TU/lmtt/m/n/12.045 init() \TU/SimSun(0)/m/n/12.045 在 配 表 就 绪 后 加 载 玩 家 预 制 体
-：|  读 取 \TU/lmtt/m/n/12.045 Character \TU/SimSun(0)/m/n/12.045 行 中 \TU/lmtt/m/n
-/12.045 prefabPath\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 bodyPrefabPat
-h\TU/SimSun(0)/m/n/12.045 、|
- []
-
-
-Overfull \hbox (104.97974pt too wide) in paragraph at lines 14--15
-\TU/lmtt/m/n/12.045 SkillLoadoutState\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/1
-2.045 Control\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 Experience\TU/SimS
-un(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 ViewComponent \TU/SimSun(0)/m/n/12.045 
-等；|  默 认 写 入 \TU/lmtt/m/n/12.045 createDefaultLoadoutState()
- []
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[41]
-Overfull \hbox (27.38922pt too wide) in paragraph at lines 44--45
-[]\TU/lmtt/m/n/12.045 MonsterChaseSystem \TU/SimSun(0)/m/n/12.045 每 帧 计 算 指 向 玩
- 家 的 单 位 方 向 向 量，|  乘 以 \TU/lmtt/m/n/12.045 MONSTER_CHASE_SPEED
- []
-
-
-Overfull \hbox (32.18686pt too wide) in paragraph at lines 44--45
-\TU/SimSun(0)/m/n/12.045 写 入 速 度 或 位 移。|  密 集 人 群 时 叠 加 分 离 力：|  当 两 怪 距 离 小 于 
-\TU/lmtt/m/n/12.045 MONSTER_SEPARATION_DISTANCE\TU/SimSun(0)/m/n/12.045 ，|
- []
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[42]
-Overfull \hbox (19.1595pt too wide) in paragraph at lines 46--47
-\TU/SimSun(0)/m/n/12.045 用 \TU/lmtt/m/n/12.045 pickMonsterIdForWave \TU/SimSun(
-0)/m/n/12.045 从 \TU/lmtt/m/n/12.045 MonsterCatalog \TU/SimSun(0)/m/n/12.045 按 波
- 次 权 重 选 \TU/lmr/m/n/12.045 id\TU/SimSun(0)/m/n/12.045 。| \TU/lmtt/m/n/12.045 M
-onsterRecycleSystem
- []
-
-
-Overfull \hbox (11.8321pt too wide) in paragraph at lines 62--63
-[]\TU/lmtt/m/n/12.045 SkillSelectPanelView \TU/SimSun(0)/m/n/12.045 绑 定 \TU/lmt
-t/m/n/12.045 MainUIPanel.lh \TU/SimSun(0)/m/n/12.045 预 制 体。|  初 始 化 时 \TU/lmtt/
-m/n/12.045 SkillIconBinder
- []
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[43]
-Overfull \hbox (7.0613pt too wide) in paragraph at lines 68--69
-[]\TU/lmtt/m/n/12.045 InputService \TU/SimSun(0)/m/n/12.045 封 装 键 盘\TU/lmr/m/n/
-12.045 /\TU/SimSun(0)/m/n/12.045 指 针 事 件，| \TU/lmtt/m/n/12.045 ControlInputAdap
-ter \TU/SimSun(0)/m/n/12.045 转 换 为 \TU/lmtt/m/n/12.045 ControlSystem
- []
-
-
-Overfull \hbox (8.17328pt too wide) in paragraph at lines 72--73
-[]\TU/lmtt/m/n/12.045 PlayerDeathSystem \TU/SimSun(0)/m/n/12.045 监 测 \TU/lmtt/m
-/n/12.045 Attribute.hp $\OMS/cmsy/m/n/12.045 ^^T \OT1/cmr/m/n/12.045 0$\TU/SimS
-un(0)/m/n/12.045 ，|  触 发 死 亡 标 志。| \TU/lmtt/m/n/12.045 RestartPanelSystem
- []
-
-) (chapter05-implementation-case.tex
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[44]
-Overfull \hbox (44.0906pt too wide) in paragraph at lines 22--23
-[]\TU/SimSun(0)/m/n/12.045 用 户 长 按 技 能 图 标 \TU/lmr/m/n/12.045 300ms \TU/SimSun(
-0)/m/n/12.045 后 拖 拽 至 另 一 槽，| \TU/lmtt/m/n/12.045 SkillDragService \TU/SimSun(0
-)/m/n/12.045 更 新 \TU/lmtt/m/n/12.045 SkillLoadoutState\TU/SimSun(0)/m/n/12.045 
-。|
- []
-
-
-Overfull \hbox (27.66225pt too wide) in paragraph at lines 28--29
-[]\TU/SimSun(0)/m/n/12.045 当 场 上 怪 物 数 量 达 到 \TU/lmtt/m/n/12.045 COMBAT_WORKER_
-MIN_ENTITY_COUNT\TU/SimSun(0)/m/n/12.045 ，| \TU/lmtt/m/n/12.045 CombatDataPrepa
-reSystem
- []
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[45]
-Overfull \hbox (72.69342pt too wide) in paragraph at lines 57--58
-[]|\TU/lmtt/m/n/12.045 src/game/ui/skillselect/SkillSelectPanelController.ts| 
- []
-
-
-Overfull \hbox (165.59807pt too wide) in paragraph at lines 66--67
-\OMS/cmsy/m/n/12.045 !$ \TU/SimSun(0)/m/n/12.045 子 弹 与 血 条；| \TU/lmtt/m/n/12.04
-5 add-monster-spawn-and-movement-patterns $\OMS/cmsy/m/n/12.045 !$ \TU/SimSun(0
-)/m/n/12.045 怪 物 \TU/lmr/m/n/12.045 AI\TU/SimSun(0)/m/n/12.045 ；| \TU/lmtt/m/n/
-12.045 add-battle-level-and-random-upgrades
- []
-
-
-Overfull \hbox (86.77287pt too wide) in paragraph at lines 66--67
-\OMS/cmsy/m/n/12.045 !$ \TU/SimSun(0)/m/n/12.045 经 验 奖 励；| \TU/lmtt/m/n/12.045 
-add-meta-flow-run-map-spellcraft $\OMS/cmsy/m/n/12.045 !$ \TU/SimSun(0)/m/n/12.
-045 元 游 戏 与 跑 图；| \TU/lmtt/m/n/12.045 add-combat-skill-loadout-ui
- []
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[46]
-Overfull \hbox (49.31532pt too wide) in paragraph at lines 70--71
-[]\TU/SimSun(0)/m/n/12.045 项 目 中 显 式 使 用 的 模 式 包 括：|  \TU/SimSun(0)/b/n/12.045 
-组 合 根  |\TU/SimSun(0)/m/n/12.045 （\TU/lmtt/m/n/12.045 SimpleEcsDemo\TU/SimSun(0
-)/m/n/12.045 ） 、|  \TU/SimSun(0)/b/n/12.045 对 象 池\TU/SimSun(0)/m/n/12.045 、|  \
-TU/SimSun(0)/b/n/12.045 桥 接  |\TU/SimSun(0)/m/n/12.045 （\TU/lmtt/m/n/12.045 Com
-batDataBridge\TU/SimSun(0)/m/n/12.045 ） 、|
- []
-
-
-Overfull \hbox (12.82973pt too wide) in paragraph at lines 74--75
-\TU/SimSun(0)/m/n/12.045 失 败。|  解 决：| \TU/lmtt/m/n/12.045 sync-config-to-bin.ps
-1 \TU/SimSun(0)/m/n/12.045 与 \TU/lmtt/m/n/12.045 configBases \TU/SimSun(0)/m/n/
-12.045 多 路 径 尝 试；| \TU/lmtt/m/n/12.045 isGameConfigReady
- []
-
-
-Overfull \hbox (45.30275pt too wide) in paragraph at lines 80--81
-[]\TU/SimSun(0)/b/n/12.045 难 点 \TU/lmr/bx/n/12.045 4\TU/SimSun(0)/b/n/12.045 ：|
- \TU/lmr/bx/n/12.045 Worker \TU/SimSun(0)/b/n/12.045 与 主 线 程 逻 辑 一 致。|  \TU/Sim
-Sun(0)/m/n/12.045 双 份 实 现 易 漂 移。|  解 决：|  共 享 \TU/lmtt/m/n/12.045 combatWorkerL
-ogic.ts\TU/SimSun(0)/m/n/12.045 ，|
- []
-
-) (chapter06.tex
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[47]
+[13]
 第六章
+[14
 
-Overfull \hbox (50.11954pt too wide) in paragraph at lines 26--27
-[]\TU/lmtt/m/n/12.045 MonsterChaseSystem \TU/SimSun(0)/m/n/12.045 对 大 量 怪 物 计 算
- 追 逐 向 量、|  分 离 力  |（\TU/lmtt/m/n/12.045 MONSTER_SEPARATION_DISTANCE\TU/SimSun(
-0)/m/n/12.045 、|
- []
-
-[48
-
-]
-Overfull \hbox (110.69632pt too wide) in paragraph at lines 30--31
-[]\TU/lmtt/m/n/12.045 combatWorkerProtocol.ts \TU/SimSun(0)/m/n/12.045 定 义 消 息 
-类 型 \TU/lmtt/m/n/12.045 COMBAT_WORKER_MSG_COMPUTE\TU/SimSun(0)/m/n/12.045 、| \T
-U/lmtt/m/n/12.045 COMBAT_WORKER_MSG_READY\TU/SimSun(0)/m/n/12.045 。|
- []
-
-
-Overfull \hbox (110.50333pt too wide) in paragraph at lines 32--33
-[]\TU/SimSun(0)/m/n/12.045 当 \TU/lmtt/m/n/12.045 COMBAT_WORKER_ENABLED \TU/SimS
-un(0)/m/n/12.045 为 \TU/lmr/m/n/12.045 false\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt
-/m/n/12.045 Worker \TU/SimSun(0)/m/n/12.045 不 可 用 或 实 体 数 小 于 \TU/lmtt/m/n/12.0
-45 COMBAT_WORKER_MIN_ENTITY_COUNT
- []
-
-
-Overfull \hbox (5.6623pt too wide) in paragraph at lines 40--41
-[]\TU/lmtt/m/n/12.045 BulletHitTest.hitRadiusSq \TU/SimSun(0)/m/n/12.045 比 较 距 
-离 平 方，|  避 免 \TU/lmtt/m/n/12.045 Math.sqrt\TU/SimSun(0)/m/n/12.045 。| \TU/lmtt/
-m/n/12.045 CHAIN_HIT_RADIUS
- []
-
+]) (chapter07.tex
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 12.64723pt, for example:
@@ -1987,54 +1301,12 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
 
-[49]) (chapter06-extended.tex
-Overfull \hbox (5.41508pt too wide) in paragraph at lines 4--5
-[]\TU/lmr/m/n/12.045 JavaScript \TU/SimSun(0)/m/n/12.045 引 擎  |（如 \TU/lmr/m/n/1
-2.045 V8\TU/SimSun(0)/m/n/12.045 ）|  对 短 生 命 周 期 对 象 敏 感。|  未 池 化 时，|  每 发 子 弹 
-\TU/lmtt/m/n/12.045 instantiate
- []
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[50]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[51]) (chapter06-benchmark-guide.tex
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[52]) (chapter07.tex
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[53]
+[15]
 第七章
+ignored error: Infinite glue shrinkage found in box being split [16
 
-Underfull \hbox (badness 4673) in paragraph at lines 36--37
-[]|\TU/SimSun(0)/m/n/12.045 子 弹 飞 出 并 命 中 怪 物，|  支 持 穿
- []
-
-ignored error: Infinite glue shrinkage found in box being split [54
-
-]
+])
+(chapter08.tex
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 12.64723pt, for example:
@@ -2042,113 +1314,11 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
 
-[55]) (chapter07-extended.tex
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[56]) (chapter07-test-detail.tex
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[57]
-Overfull \hbox (6.91739pt too wide) in paragraph at lines 14--15
-[]\TU/lmtt/m/n/12.045 attributeModifier.verify.ts \TU/SimSun(0)/m/n/12.045 覆 盖：
-|  同 属 性 多 个 \TU/lmr/m/n/12.045 modifier \TU/SimSun(0)/m/n/12.045 叠 加 顺 序；|  按 
-\TU/lmtt/m/n/12.045 sourceId
- []
-
-
-Overfull \hbox (36.14595pt too wide) in paragraph at lines 20--21
-[]\TU/SimSun(0)/m/n/12.045 对 \TU/lmtt/m/n/12.045 RunMapGenerator.generate \TU/S
-imSun(0)/m/n/12.045 运 行 \TU/lmr/m/n/12.045 100 \TU/SimSun(0)/m/n/12.045 次 随 机 种
- 子，|  断 言 每 次 \TU/lmtt/m/n/12.045 validateActReachBoss
- []
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[58]) (chapter08.tex
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[59]
+[17]
 第八章
-[60
-
-]) (chapter08-extended.tex
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[61]) (supplement-conclusion.tex
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[62]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[63] [64
-
-]
-Overfull \hbox (191.08237pt too wide) in paragraph at lines 35--36
-[]\TU/SimSun(0)/m/n/12.045 提 取 \TU/lmr/m/n/12.045 PDF \TU/SimSun(0)/m/n/12.045 
-模 板 要 求：| \TU/lmtt/m/n/12.045 node tools/extract-thesis-template.cjs\TU/SimSun(
-0)/m/n/12.045 ，|  输 出 \TU/lmtt/m/n/12.045 docs/thesis-template-requirements.txt
-\TU/SimSun(0)/m/n/12.045 。|
- []
-
-
-Overfull \hbox (1.70757pt too wide) in paragraph at lines 35--36
-\TU/lmtt/m/n/12.045 tools/sync-config-to-bin.ps1\TU/SimSun(0)/m/n/12.045 。|  校 
-验 \TU/lmr/m/n/12.045 OpenSpec\TU/SimSun(0)/m/n/12.045 ：| \TU/lmtt/m/n/12.045 op
-enspec validate <change-id>
- []
-
 )
-Overfull \hbox (41.37115pt too wide) in paragraph at lines 37--95
-[]\TU/SimSun(0)/m/n/12.045 若 需 将 扩 展 节  |（如 \TU/lmtt/m/n/12.045 chapter02-liter
-ature.tex\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 chapter05-implementati
-on-case.tex\TU/SimSun(0)/m/n/12.045 ）|
- []
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[65]
 ! Undefined control sequence.
-l.96 \backmatter
+l.89 \backmatter
                 
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -2156,7 +1326,9 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-(acknowledgement.tex
+(acknowledgement.tex [18
+
+]
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 12.64723pt, for example:
@@ -2164,11 +1336,12 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
 
-[66]) (main.bbl [67
+[19]) [20
 
-] [68
+] (main.bbl [21
 
-]) (appendix.tex
+
+]
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 12.64723pt, for example:
@@ -2176,42 +1349,21 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
 
-[69]
+[22]) (appendix.tex
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 12.64723pt, for example:
+(fancyhdr)                \setlength{\headheight}{12.64723pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
+
+[23]
 附录 A
-[70
+[24
 
 ]
 附录 B
-[71
-
-]
-附录 C
-[72
-
-]
-附录 D
-Missing character: There is no ① in font [lmroman12-regular]:mapping=tex-text;!
-
-Overfull \hbox (19.63167pt too wide) in paragraph at lines 57--58
-[]\TU/SimSun(0)/m/n/12.045 正 文 小 四 号 宋 体，| \TU/lmr/m/n/12.045 1.5 \TU/SimSun(0)
-/m/n/12.045 倍 行 距，|  首 行 缩 进 \TU/lmr/m/n/12.045 2 \TU/SimSun(0)/m/n/12.045 字 符；
-|  三 级 以 下 标 题 可 用  |“\TU/lmr/m/n/12.045 1\TU/SimSun(0)/m/n/12.045 、 ” “\TU/lmr
-/m/n/12.045 1\TU/SimSun(0)/m/n/12.045 ） ” “ （\TU/lmr/m/n/12.045 1\TU/SimSun(0)/
-m/n/12.045 ） ” “\TU/lmr/m/n/12.045 ①\TU/SimSun(0)/m/n/12.045 ”|
- []
-
-
-Overfull \hbox (168.6021pt too wide) in paragraph at lines 61--62
-[]\TU/SimSun(0)/m/n/12.045 模 板 提 取 命 令：| \TU/lmtt/m/n/12.045 node tools/extract
--thesis-template.cjs |\TU/SimSun(0)/m/n/12.045 （输 出 \TU/lmtt/m/n/12.045 docs/th
-esis-template-requirements.txt\TU/SimSun(0)/m/n/12.045 ） 。| 
- []
-
-[73
-
-]
-附录 E
-) [74
+) [25
 
 ] (main.aux)
  ***********
@@ -2219,15 +1371,15 @@ LaTeX2e <2025-11-01>
 L3 programming layer <2022/08/05>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: BE3E45F0042D13579EE8AE3256C7E048;25778.
+(rerunfilecheck)             Checksum: D359B6E4EDA2DD969A597AD8CAF11683;7609.
  ) 
 Here is how much of TeX's memory you used:
- 20632 strings out of 402987
- 451402 string characters out of 5448524
- 1053605 words of memory out of 5000000
- 49001 multiletter control sequences out of 15000+600000
- 633509 words of font info for 102 fonts, out of 8000000 for 9000
+ 20050 strings out of 402987
+ 429028 string characters out of 5448524
+ 863432 words of memory out of 5000000
+ 48478 multiletter control sequences out of 15000+600000
+ 633477 words of font info for 98 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 93i,12n,111p,1192b,1175s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 93i,12n,111p,1192b,547s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.pdf (80 pages).
+Output written on main.pdf (34 pages).

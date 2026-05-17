@@ -1,64 +1,26 @@
 \chapter{性能优化与工程实践}
 \label{chap:performance}
 
-\section{性能目标与瓶颈分析}
+\section{性能目标与瓶颈}
 
-H5 生存战斗游戏的性能热点通常集中在：（1）大量怪物与子弹的更新与碰撞；（2）预制体实例化与销毁引发的 GC；（3）主线程单线程限制导致的帧时间尖峰。项目通过浏览器 Performance 面板与引擎统计观察，确认在关闭对象池、强制主线程战斗重算时，帧时间 P95 明显上升；开启优化后帧曲线更平稳。以下优化均可在 \texttt{defines} 中开关或调参，便于 A/B 对比\cite{kw_green_web_perf,kw_object_pooling}。
+H5 生存战斗的热点包括：大量实体更新与碰撞、预制体实例化引发 GC、主线程过载。Cantrell 等在 Unity 中实现物理人群模型时，同样关注计算开销与验证方法\cite{cantrell2018unity}；Bott 等使用游戏引擎工具链实现物理驱动人群移动\cite{bott2014unreal}。本项目在 2D H5 环境下采用对象池、Worker 卸载与逻辑暂停等手段应对类似瓶颈。
 
-\section{对象池优化}
+\section{对象池}
 
-\subsection{子弹池}
+\texttt{BulletPool}、\texttt{MonsterPool} 按 \texttt{prefabPath} 分桶复用节点，复用前重置状态。将“每帧大量 instantiate/destroy”转为“峰值后复用”，降低 GC 停顿，与引擎资源管理最佳实践一致\cite{gregory2018game}。
 
-\texttt{BulletPool} 以 \texttt{prefabPath} 为键维护节点数组。\texttt{get} 时弹出栈顶节点；\texttt{put} 时从父节点移除并压栈。调用方在复用前须重置位置、速度、碰撞状态与 effect 修饰器残留。该模式将“每发子弹 new 预制体”变为“峰值后复用”，显著降低分配次数\cite{kw_object_pooling}。
+\section{Web Worker 卸载}
 
-\subsection{怪物池}
+\texttt{MonsterChaseSystem} 的追逐、分离、摆动为纯数值计算，可由 \texttt{CombatDataBridge} 提交 Worker 执行 \texttt{processCombatFrame}，主线程与 Worker 共享同一逻辑文件以保证一致性。实体数不足或 Worker 不可用时回退主线程。子弹碰撞因依赖 Laya 节点仍留主线程，与 McKenzie 等将游戏技术用于仿真但保留引擎交互层的思路类似\cite{mckenzie2008crowd}。
 
-\texttt{MonsterPool} 同理，配合 \texttt{MonsterRecycleSystem} 在怪物离屏或死亡后回收而非 \texttt{destroy}。波次刷怪从池中取出实体并重新挂载组件数据，避免重复加载贴图资源。
+\section{其它优化}
 
-\subsection{与 ECS 的协同}
+\textbf{碰撞：} 使用距离平方比较。\textbf{暂停：} Tab 打开面板时 \texttt{GameSession.paused} 早退战斗系统。\textbf{配置：} 常量集中于 \texttt{defines}，配表一次加载。\textbf{未来：} 可探索 archetype 存储与空间划分 broad phase\cite{ullmann2025sydra}。
 
-池化对象仍通过 \texttt{ViewComponent} 关联实体；销毁实体时组件先清理，视图节点回池。须注意：池节点隐藏期间不应参与碰撞，\texttt{BulletSystem} 在回收时注销碰撞监听。
+\section{绿色计算与兼容性}
 
-\section{Web Worker 战斗卸载}
-
-\subsection{设计动机}
-
-\texttt{MonsterChaseSystem} 对大量怪物计算追逐向量、分离力（\texttt{MONSTER\_SEPARATION\_DISTANCE}、\texttt{MONSTER\_SEPARATION\_FORCE}）与随机摆动，属于纯数值运算，适合从主线程剥离\cite{kw_web_worker_game}。
-
-\subsection{协议与回退}
-
-\texttt{combatWorkerProtocol.ts} 定义消息类型 \texttt{COMBAT\_WORKER\_MSG\_COMPUTE}、\texttt{COMBAT\_WORKER\_MSG\_READY}。\texttt{CombatDataPrepareSystem} 打包 \texttt{CombatEntitySnapshot} 与 \texttt{CombatBulletSnapshot}；Worker 内调用 \texttt{processCombatFrame}；主线程在 \texttt{CombatDataBridge} 中匹配 \texttt{frameId} 应用结果。
-
-当 \texttt{COMBAT\_WORKER\_ENABLED} 为 false、\texttt{Worker} 不可用或实体数小于 \texttt{COMBAT\_WORKER\_MIN\_ENTITY\_COUNT} 时，主线程直接调用同一 \texttt{processCombatFrame}，保证\textbf{逻辑一致性}优于\textbf{强制并行}。该设计符合“渐进增强”原则。
-
-\subsection{延迟与一致性}
-
-Worker 方案引入一帧级异步延迟；追逐力应用滞后于位置同步，在视觉上可接受。子弹碰撞仍留主线程，避免跨线程传递 Laya 节点引用。
-
-\section{碰撞与算法微优化}
-
-\texttt{BulletHitTest.hitRadiusSq} 比较距离平方，避免 \texttt{Math.sqrt}。\texttt{CHAIN\_HIT\_RADIUS} 限制连锁搜索范围，减少嵌套循环规模。后续可引入均匀网格或四叉树作为 broad phase\cite{kw_spatial_hash_collision}，当前实体规模下线性扫描仍可满足毕业设计演示。
-
-\section{逻辑暂停与更新裁剪}
-
-Tab 打开 \texttt{SkillSelectPanel} 时，\texttt{GameSession.paused} 为 true，战斗相关 System 早退，避免无意义物理与 AI 计算。元游戏界面显示时，\texttt{SimpleEcsDemo} 容器可隐藏，停止渲染战斗场景。
-
-\section{静态配置集中与加载优化}
-
-所有常量集中于 \texttt{*Define.ts}，减少运行时对象创建。配表一次性异步加载并缓存于 \texttt{Data}，避免每帧读表。开发流程要求修改 JSON 后执行 \texttt{sync-config-to-bin.ps1}，防止预览环境 404 导致重复失败重试。
-
-\section{ECS 存储的未来优化方向}
-
-当前 \texttt{ComponentStore} 为按类型 Map，遍历友好但非 SoA。OpenSpec 已记录后续将迁移至 archetype/chunk 结构\cite{kw_ecs_game_architecture}。论文阶段以可维护性为主，性能数据作为对比实验记录于第~\ref{chap:test}~章。
-
-\section{绿色计算与兼容性评价}
-
-从可持续发展角度，降低每帧 CPU 占用可减少终端能耗与发热\cite{kw_green_web_perf}。对象池与 Worker 卸载直接降低平均功耗。兼容性方面，Worker 回退保证低端设备可玩；配表双通道加载兼容不同发布路径。浏览器版本升级时须回归测试 \texttt{combat.worker.ts} 的打包路径 \texttt{COMBAT\_WORKER\_SCRIPT\_URL}。
-
-\section{项目管理与规格驱动实践}
-
-项目采用 OpenSpec 管理变更：提案 $\rightarrow$ 评审 $\rightarrow$ \texttt{tasks.md} 实施 $\rightarrow$ 归档。该流程将需求、设计与任务清单绑定，降低“代码与文档不一致”风险\cite{kw_spec_driven_dev,kw_project_management_agile}。多工作流文档 \texttt{WORKSTREAMS.md} 支持并行开发（如元游戏与战斗 UI 分工），体现软件工程方法在毕业设计中的运用。
+降低平均 CPU 占用有利于终端节能。Worker 回退与双通道配表加载提升兼容性。浏览器或引擎升级后须回归 Worker 脚本路径与发布目录。
 
 \section{本章小结}
 
-本章分析了性能瓶颈并阐述了对象池、Web Worker、碰撞微优化、逻辑暂停与配置管理等手段。测试数据见下一章。
+本章阐述了对象池、Worker、碰撞微优化与配置管理等性能手段，测试见下一章。

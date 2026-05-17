@@ -1,47 +1,21 @@
 \chapter{核心模块详细设计与实现}
 \label{chap:modules}
 
-本章结合 OpenSpec 提案与 \texttt{src/} 目录实现，对核心模块作详细说明。文中类名、文件名均与仓库一致，便于答辩演示与代码对照。
+本章结合 \texttt{src/} 实现，对核心模块作详细说明。
 
 \section{ECS 核心模块}
 
-\subsection{实体与组件存储}
+\texttt{EntityManager} 使用自增 ID 与空闲列表复用实体。\texttt{ComponentStore} 按类型维护 \texttt{Map<EntityId, Component>}。\texttt{EcsWorld.update} 依次调用已注册系统，按 \texttt{input/logic/physics/render} 分组排序，与 Gregory 所述引擎主循环驱动子系统更新的模式相对应\cite{gregory2018game}。
 
-\texttt{EntityManager} 使用自增 ID 与空闲列表复用实体标识。\texttt{ComponentStore} 为每种组件类型维护 \texttt{Map<EntityId, Component>}，提供 \texttt{addComponent}、\texttt{removeComponent}、\texttt{getAllOfType}、\texttt{getEntitiesWith} 等 API。\texttt{EcsWorld} 作为门面统一对外：
+\texttt{ViewComponent}、\texttt{BodyUIComponent} 绑定 Laya 节点；\texttt{ViewSyncSystem} 同步坐标；\texttt{BloodBarSyncSystem} 用 hp/maxHp 更新 ProgressBar。
 
-\begin{lstlisting}[language=Java,caption={EcsWorld 更新入口（节选）}]
-update(deltaTime: number): void {
-    for (const { system } of this.systems) {
-        system.update(deltaTime);
-    }
-}
-\end{lstlisting}
+\section{属性、移动与筛选器}
 
-系统注册时指定 \texttt{SystemGroup}（\texttt{input|logic|physics|render}）与 \texttt{priority}，\texttt{sortSystems} 保证组间顺序与组内优先级。该设计对应 \texttt{add-ecs-core-phase1} 中“分组 + 优先级”决策\cite{kw_ecs_game_architecture}。
-
-\subsection{视图绑定}
-
-\texttt{ViewComponent}、\texttt{BodyUIComponent} 将实体关联至 Laya 预制体节点。\texttt{ViewSyncSystem} 将 \texttt{Position} 同步至节点坐标；\texttt{BloodBarSyncSystem} 读取 \texttt{Attribute} 的 hp/maxHp，更新 Body 内 \texttt{BloodBar/ProgressBar} 的 value（0--1），满足 \texttt{add-bullet-hp-ui-verification} 规格。
-
-\section{属性与修饰器系统}
-
-\texttt{Attribute} 组件包含 \texttt{base} 字典与 \texttt{modifiers} 列表。\texttt{AttributeSystem} 提供 \texttt{getFinalValue}、\texttt{addModifier}、\texttt{removeModifiersBySource}、\texttt{getModifierContributions}，实现可溯源 Buff：每个 modifier 记录来源 id，便于技能结束或装备卸下时批量移除\cite{kw_attribute_modifier}。
-
-升级奖励通过 \texttt{RewardApplyService} 向玩家实体添加 modifier 或修改技能参数，与 \texttt{UpgradeRewardSystem}、\texttt{ExperienceSystem} 协同。
-
-\section{移动、操控与筛选器}
-
-\texttt{MovementSystem} 根据 \texttt{Velocity} 更新 \texttt{Position}；\texttt{RotationSystem} 处理朝向；\texttt{ControlSystem} 从 \texttt{ControlInputAdapter} 读取输入写入玩家 \texttt{Control} 组件。
-
-\texttt{FilterRegistry} 支持按组件类型查询与命名筛选器。\texttt{NamedFilters} 注册 \texttt{Players}、\texttt{Monsters}、\texttt{Controllable}、\texttt{Movable} 等，供自动施法、AI 与碰撞过滤使用，避免在系统中散落重复查询逻辑。
+\texttt{AttributeSystem} 支持 modifier 按来源增删，供 Buff 与升级奖励使用\cite{briand2001maintainability}。\texttt{MovementSystem}、\texttt{ControlSystem} 处理位移与输入。\texttt{FilterRegistry} 提供 \texttt{Players}、\texttt{Monsters} 等命名筛选，减少重复查询。
 
 \section{技能与效果执行}
 
-\subsection{技能组件与配表}
-
-\texttt{Skill} 组件记录当前技能 id、冷却剩余等。\texttt{SkillSystem} 处理冷却递减与施法请求。\texttt{PlayerAutoCastSystem} 对三装备栏分别维护 \texttt{pendingCasts}，并支持 \texttt{applySkillCastStagger} 错开多技能施法时间，降低同帧峰值。
-
-配表 \texttt{skill\_table.json} 与 \texttt{skill\_effect\_table.json} 在 \texttt{add-combat-skill-loadout-ui} 中扩展列：\texttt{iconPath}、\texttt{displayName}、\texttt{effectSlotCount}、\texttt{effect} 类型字段等。Effect 类型映射至 \texttt{EffectExecutor}：
+\texttt{PlayerAutoCastSystem} 对三装备栏维护独立冷却与 \texttt{pendingCasts}。\texttt{EffectExecutor} 将配表 effect 映射为子弹、穿透/分裂/连锁修饰或直伤。修饰器须位于后续 \texttt{bullet} effect 之前，形成链式组合语义。
 
 \begin{table}[htbp]
   \centering
@@ -51,90 +25,43 @@ update(deltaTime: number): void {
     \toprule
     \texttt{effect} 字段 & 行为 \\
     \midrule
-    \texttt{bullet} & 调用 \texttt{BulletSystem.spawnBulletWithOptions} \\
-    \texttt{modifier\_split} & 为下一子弹设置分裂数量 \\
-    \texttt{modifier\_chain} & 设置连锁次数与半径 \texttt{CHAIN\_HIT\_RADIUS} \\
-    \texttt{modifier\_pierce} & 增加穿透次数 \\
+    \texttt{bullet} & \texttt{BulletSystem.spawnBulletWithOptions} \\
+    \texttt{modifier\_split} & 设置分裂数量 \\
+    \texttt{modifier\_chain} & 设置连锁与半径 \\
+    \texttt{modifier\_pierce} & 增加穿透 \\
     \texttt{direct\_damage} & 公式直伤 \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-\subsection{公式与索敌}
-
-\texttt{FormulaParser.evaluate(formula, context)} 解析伤害表达式；\texttt{Targeting.resolveAuto} 按威胁度与血量加权选择目标；\texttt{resolveSimple} 用于指向性射击\cite{kw_skill_formula}。自动施法默认绑定 \texttt{DEFAULT\_PLAYER\_AUTO\_SKILL\_ID} 等 define 常量，配表缺失时记录日志并使用占位预制体半径 \texttt{PLACEHOLDER\_RADIUS}。
-
 \section{子弹系统与碰撞}
 
-\texttt{BulletSystem} 负责：
-\begin{enumerate}[label=\arabic*.]
-  \item 从 \texttt{BulletPool} 获取或实例化预制体；
-  \item 维护子弹运动（速度、方向、存活时间）；
-  \item 调用 \texttt{hitRadiusSq} 进行宽相位圆碰撞；
-  \item 按阵营规则过滤：玩家子弹仅伤害 \texttt{MonsterTag}，怪物子弹仅伤害 \texttt{PlayerTag}；
-  \item 扣减 \texttt{penetration}，为 0 时回收至对象池。
-\end{enumerate}
-
-穿透、分裂、连锁在命中时由 \texttt{CombatEffectSummary} 与 effect 修饰器协同完成，满足“组合技”设计目标\cite{kw_spatial_hash_collision}。子弹表字段 \texttt{duration}、\texttt{speed}、\texttt{damage}、\texttt{penetration} 与 \texttt{add-bullet-hp-ui-verification} 设计一致。
+\texttt{BulletSystem} 从 \texttt{BulletPool} 取节点，更新运动，用 \texttt{hitRadiusSq} 做圆碰撞，按阵营过滤后扣血并处理穿透。密集命中场景可参考人群仿真中的局部相互作用与压力模型思想\cite{helbing2000panic,reynolds1987flocks}，本项目采用简化半径检测以降低开销。
 
 \section{怪物系统}
 
-\subsection{池化与视觉}
+\texttt{MonsterWaveSpawnSystem} 在玩家周围环带刷怪；\texttt{MonsterChaseSystem} 追逐并叠加分离力与随机摆动，Worker 可参与数值重算\cite{cantrell2018unity}。\texttt{MonsterContactDamageSystem} 处理接触伤害；\texttt{MonsterRecycleSystem} 与 \texttt{MonsterPool} 回收离屏单位。
 
-\texttt{MonsterPool} 与 \texttt{BulletPool} 类似，按 \texttt{prefabPath} 分桶。\texttt{MonsterVisual.applyMonsterIconSkin} 根据 \texttt{MonsterCatalog} 与 \texttt{monsterDefine} 切换图标皮肤。
+\section{进度、元游戏与跑图}
 
-\subsection{波次、追逐与伤害}
+\texttt{ExperienceSystem}、\texttt{UpgradeRewardSystem} 与奖励面板构成成长闭环。\texttt{MetaFlowController} 协调菜单与 \texttt{onEnterCombat}。\texttt{RunMapGenerator} 生成三幕 DAG，校验 Boss 可达，失败时使用保底图。
 
-\texttt{MonsterWaveSpawnSystem} 按配置在玩家周围 \texttt{MONSTER\_SPAWN\_RADIUS} 环带刷怪，保持 \texttt{MONSTER\_SPAWN\_MIN\_DISTANCE}。\texttt{MonsterChaseSystem} 更新追逐速度 \texttt{MONSTER\_CHASE\_SPEED}，可叠加 Worker 返回的分离力与随机摆动（\texttt{MONSTER\_RANDOM\_SWAY\_*}）。\texttt{MonsterContactDamageSystem} 处理接触扣血；\texttt{MonsterRecycleSystem} 回收远离视野实体。
+\section{技能装配 UI}
 
-\texttt{MonsterAutoCastSystem} 驱动怪物远程攻击；经验奖励由 \texttt{ExperienceReward} 与 \texttt{MONSTER\_EXP\_REWARD\_*} 计算。
+\texttt{SkillSelectPanelController} 以 Tab 切换面板并设置 \texttt{GameSession.paused}。\texttt{SkillDragService} 长按拖拽，\texttt{SkillLoadoutSyncSystem} 写回战斗实体。\texttt{UIStackManager} 管理全屏路由，生命周期由 \texttt{UiControllerBase} 约定。
 
-\section{进度、奖励与战斗胜利}
+\section{配置加载}
 
-\texttt{ExperienceSystem} 监听怪物死亡事件增加经验；升级时 \texttt{UpgradeRewardSystem} 触发 \texttt{RewardPanelController}，由 \texttt{RewardPoolService} 加权随机奖励，\texttt{RewardApplyService} 应用至实体。
+\texttt{ConfigBootstrap} 双通道加载 JSON 并 \texttt{initData} 填充 \texttt{Data}，是数据驱动枢纽\cite{gregory2018game,munaiah2017github}。
 
-\texttt{Main.ts} 中 \texttt{CombatSurvivalTimer} 在达到 \texttt{COMBAT\_SURVIVE\_VICTORY\_SEC}（Boss 为 \texttt{BOSS\_COMBAT\_SURVIVE\_VICTORY\_SEC}）后判定胜利，与跑图推进或返回元游戏流程衔接。
+\section{典型场景剖析}
 
-\section{元游戏与跑图模块}
+\textbf{首次进入战斗：} \texttt{Main} 加载配表 $\rightarrow$ 元菜单选关 $\rightarrow$ \texttt{demo.init()} 创建玩家与系统 $\rightarrow$ 生存计时启动。
 
-\subsection{流程控制}
+\textbf{Tab 装配技能：} 暂停战斗 $\rightarrow$ 拖拽更新 \texttt{SkillLoadoutState} $\rightarrow$ 同步至自动施法 $\rightarrow$ 恢复战斗。
 
-\texttt{MetaFlowController} 封装开始面板、选关、跑图面板回调；\texttt{MetaMenuBootstrap} 注册 UI 路由。\texttt{MetaRunSession} 持有 \texttt{combatDemo}，避免重复构造世界。
-
-\subsection{跑图生成算法}
-
-\texttt{RunMapGenerator.generate(seed, difficulty)} 在最多 \texttt{RUN\_MAP\_GENERATION\_MAX\_RETRIES} 次尝试内构建三幕 \texttt{RunAct}，每幕 \texttt{RUN\_MAP\_GRID\_ROWS} 行 $\times$ 多列节点：
-\begin{itemize}
-  \item 首行固定为 \texttt{Rest}，末行 Boss；
-  \item 中间行每行随机 2--3 个节点，列号由 \texttt{pickDistinctCols} 去重选取；
-  \item \texttt{connectRows} 建立行际边，保证 Boss 可达；
-  \item 失败时 \texttt{generateFallback} 返回保底图。
-\end{itemize}
-
-节点类型权重受 \texttt{RunDifficulty} 影响。该算法满足 Roguelite“路径选择”体验\cite{kw_dag_run_map,kw_seeded_rng}。
-
-\section{技能装配 UI 模块}
-
-\texttt{SkillSelectPanelController} 监听 Tab 键切换可见性，联动 \texttt{GameSession.paused}。\texttt{SkillLoadoutState} 存储三装备栏与背包；\texttt{SkillDragService} 实现长按 \texttt{LONG\_PRESS\_MS} 后拖拽，同类槽位可互换；\texttt{SkillSlotLayout} 根据 \texttt{EFFECT\_BOX\_SLOT\_COUNT} 与按钮宽高间距计算坐标，禁止硬编码每槽 x 坐标。
-
-\texttt{SkillLoadoutSyncSystem} 将装配结果写入 \texttt{Skill} 与自动施法列表。UI 使用 Laya UI2（\texttt{GPanel}/\texttt{GBox}），符合项目 UI 规范。
-
-\section{UI 栈与 MVC}
-
-\texttt{UIStackManager} 管理路由 id 到 Controller 工厂的映射，提供 push/pop。\texttt{RestartPanelController}、\texttt{RunMapPanelController}、\texttt{StartPanelController} 等继承 \texttt{UiControllerBase}，生命周期为：构造 $\rightarrow$ 依赖注入 $\rightarrow$ init $\rightarrow$ 入栈显示 $\rightarrow$ 隐藏 $\rightarrow$ 销毁\cite{kw_mvc_ui_pattern}。
-
-\texttt{add-mvc-ui-stack-redpoint-pooling} 提案还定义红点树与 UI 对象池；当前项目已实现栈管理与战斗相关面板，红点与全局 UI 池为后续扩展点。
-
-\section{配置加载模块}
-
-\texttt{ConfigBootstrap} 通过 \texttt{fetch} 与 \texttt{Laya.loader} 双通道加载 JSON，bases 包含 \texttt{config/}、\texttt{CONFIG\_BASE} 及发布根路径。加载完成后调用 \texttt{initData} 填充 \texttt{Data} 静态类。\texttt{TableLoader} 解析 registry 中声明的表文件。
-
-该模块是数据驱动架构的枢纽：技能图标、角色 hp、子弹速度等均依赖此路径成功\cite{kw_data_driven_game}。
-
-\section{法杖法术编程（规划与部分实现）}
-
-变更 \texttt{add-three-wand-systems-and-config-tables} 与 \texttt{add-meta-flow-run-map-spellcraft} 定义法杖槽位、法术片段表 \texttt{spell\_piece\_table.json} 及链式求值 \texttt{SpellEval}。当前仓库已具备技能 effect 链式修饰器语义，法杖三槽上限、修饰器 + 子弹类法术组合与 Noita 式设计思想一致\cite{kw_noita_spellcraft}。论文初稿将此法杖系统作为\textbf{已实现技能链式 effect}与\textbf{规划中的 wand 表驱动 UI}两部分描述：前者对应 \texttt{EffectExecutor} 对 modifier 与 bullet 的顺序解释；后者待 \texttt{WandLoadout} 类落地后补充界面截图与测试用例。
+\textbf{高密度战斗：} 实体数达标时 \texttt{CombatDataBridge} 启用 Worker，主线程仍处理子弹碰撞与渲染\cite{cantrell2018unity,bott2014unreal}。
 
 \section{本章小结}
 
-本章按 ECS、属性、技能、子弹、怪物、进度、元游戏、跑图、技能 UI、配置等模块展开了详细设计与实现说明，覆盖了 OpenSpec 主要变更范围。性能优化将在下一章集中讨论。
+本章详述了 ECS、技能、子弹、怪物、元游戏、UI 与配置等模块实现，下一章讨论性能优化。

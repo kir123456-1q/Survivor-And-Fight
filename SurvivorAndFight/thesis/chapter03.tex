@@ -5,15 +5,15 @@
 
 \subsection{技术可行性}
 
-项目选用 LayaAir 3.x + TypeScript，团队已在仓库中完成 ECS 核心、战斗 Demo、元菜单、跑图生成、技能装配 UI 等模块的落地代码。引擎支持 2D 预制体实例化、帧循环与键盘输入；浏览器支持 Web Worker。配表通过 \texttt{tools/sync-config-to-bin.ps1} 同步至运行目录，技术路线可行\cite{kw_layaair_html5_engine,kw_typescript_large_scale}。
+项目选用 LayaAir 3.x 与 TypeScript，已实现 ECS 核心、战斗 Demo、元菜单、跑图生成、技能装配 UI 等模块。引擎支持 2D 预制体、帧循环与键盘输入；浏览器支持 Web Worker。SyDRA 等研究表明，理解引擎子系统结构有助于降低维护成本\cite{ullmann2025sydra}；Cantrell 等验证了商业游戏引擎用于复杂物理仿真的可行性\cite{cantrell2018unity}。配表经同步脚本发布至运行目录，技术路线可行。
 
 \subsection{经济与社会可行性}
 
-作为毕业设计原型，主要成本为开发与测试人力，无大规模服务器依赖。游戏内容为奇幻战斗题材，须控制暴力表现尺度，并在用户协议与适龄提示方面符合相关法规\cite{kw_ethics_game_design}。长时间游戏可能带来视觉疲劳，应在 UI 与难度曲线上提供休息节点（如跑图 \texttt{Rest} 节点）。
+作为毕业设计原型，主要成本为开发与测试人力。游戏为奇幻战斗题材，须控制暴力表现并提示合理游戏时长；跑图中的休息节点提供节奏缓冲。
 
 \section{功能性需求}
 
-依据 OpenSpec 变更提案，功能性需求归纳如表~\ref{tab:func-req}。
+主要功能需求如表~\ref{tab:func-req} 所示。
 
 \begin{table}[htbp]
   \centering
@@ -23,59 +23,53 @@
     \toprule
     \textbf{模块} & \textbf{需求描述} \\
     \midrule
-    ECS 核心 & 创建/销毁实体；按类型存取组件；系统按 input/logic/physics/render 分组更新 \\
-    玩法实体 & 玩家/怪物标签；移动、旋转、视图同步；属性 hp/maxHp 与 modifier \\
-    技能战斗 & 多 effect 技能；自动/手动索敌；冷却；子弹表驱动伤害与穿透 \\
-    怪物系统 & 波次刷怪；追逐玩家；接触伤害；离屏回收 \\
-    进度系统 & 经验值、升级、随机奖励面板 \\
-    元游戏 & 开始/选关界面；进入战斗；生存计时胜利条件 \\
-    跑图 & 三大关 DAG；节点类型与战斗载荷；种子可复现 \\
-    技能装配 UI & Tab 暂停；三装备栏；拖拽装配；同步至 \texttt{SkillLoadoutState} \\
-    配置 & JSON 表注册加载；缺失配置日志与默认值 \\
+    ECS 核心 & 创建/销毁实体；按类型存取组件；系统分组更新 \\
+    玩法实体 & 玩家/怪物标签；移动、视图同步；hp/maxHp 与 modifier \\
+    技能战斗 & 多 effect 技能；索敌；冷却；子弹表驱动伤害与穿透 \\
+    怪物系统 & 波次刷怪；追逐；接触伤害；离屏回收 \\
+    进度系统 & 经验、升级、随机奖励 \\
+    元游戏 & 开始/选关；进入战斗；生存计时胜利 \\
+    跑图 & 三大关 DAG；节点类型；种子可复现 \\
+    技能装配 UI & Tab 暂停；三装备栏；拖拽装配 \\
+    配置 & JSON 表注册加载；缺失时默认值与日志 \\
     \bottomrule
   \end{tabular}
 \end{table}
 
 \subsection{用例：局内战斗}
 
-\textbf{参与者：}玩家。\\
-\textbf{前置条件：}配表已加载，\texttt{SimpleEcsDemo.init()} 完成。\\
-\textbf{主成功场景：}
-\begin{enumerate}[label=\arabic*.]
-  \item 玩家通过键盘/适配器输入移动，\texttt{ControlSystem} 写入 \texttt{Velocity}；
-  \item \texttt{PlayerAutoCastSystem} 按装备技能与冷却自动施法；
-  \item \texttt{BulletSystem} 生成子弹并检测与怪物碰撞，扣血并处理穿透/分裂/连锁；
-  \item 怪物死亡给予经验，达到升级阈值时弹出 \texttt{RewardPanel}；
-  \item 玩家按 Tab 打开技能面板，\texttt{GameSession.paused=true}，装配变更经 \texttt{SkillLoadoutSyncSystem} 写回战斗实体。
-\end{enumerate}
-\textbf{扩展：}玩家 hp 归零触发 \texttt{PlayerDeathSystem} 与重启面板。
+\textbf{参与者：}玩家。\textbf{前置条件：}配表已加载，\texttt{SimpleEcsDemo.init()} 完成。\textbf{主成功场景：}（1）输入移动；（2）自动施法；（3）子弹碰撞、穿透/分裂/连锁；（4）击杀获经验并升级；（5）Tab 打开技能面板暂停并装配。\textbf{扩展：}玩家死亡显示重启面板。
 
 \subsection{用例：元游戏进入战斗}
 
-\textbf{主成功场景：}用户在 \texttt{MetaFlowController} 中选择关卡或跑图节点 $\rightarrow$ 回调 \texttt{onEnterCombat} $\rightarrow$ 显示战斗容器、初始化 Demo、启动 \texttt{CombatSurvivalTimer}（普通关/ Boss 关时长由 \texttt{COMBAT\_SURVIVE\_VICTORY\_SEC} 与 \texttt{BOSS\_COMBAT\_SURVIVE\_VICTORY\_SEC} 区分）。
+用户在 \texttt{MetaFlowController} 选择关卡或跑图节点，触发 \texttt{onEnterCombat}，显示战斗场景、初始化 Demo、启动生存计时（Boss 关使用更长胜利时间）。
 
 \section{非功能性需求}
 
-\subsection{性能需求}
+\textbf{性能：}目标 60 FPS；同屏怪物受常量与波次控制；配合对象池与 Worker。\textbf{可维护性：}模块边界清晰；静态配置集中于 \texttt{defines}。\textbf{兼容性：}优先 Chromium；Worker 不可用时主线程回退\cite{cantrell2018unity}。
 
-\begin{itemize}
-  \item 目标帧率：主流桌面浏览器 60 FPS（战斗高峰期允许短暂波动）；
-  \item 同屏怪物数量：由 \texttt{MONSTER\_COUNT} 与波次系统控制，须配合对象池与 Worker 阈值；
-  \item 配表加载：首次启动异步完成，不阻塞引擎启动超过可接受时间（须显示加载或延迟进入菜单）。
-\end{itemize}
+\section{需求优先级}
 
-\subsection{可维护性需求}
+\begin{table}[htbp]
+  \centering
+  \caption{需求优先级（MoSCoW）}
+  \begin{tabular}{cl}
+    \toprule
+    \textbf{级别} & \textbf{需求} \\
+    \midrule
+    Must & ECS 战斗、子弹碰撞、移动、刷怪、配表 \\
+    Must & 主菜单进战斗、生存胜利计时 \\
+    Should & 跑图、技能装配、升级奖励、对象池与 Worker \\
+    Could & 法杖三槽完整 UI、全量 Effect 独立特效 \\
+    Won't & 联机、账号、支付（本期） \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
-模块边界与 OpenSpec \texttt{change-id} 对齐；静态配置仅存在于 \texttt{src/defines/*Define.ts}；禁止在 \texttt{Entry.ts} 的 \texttt{main} 中提交测试代码（引擎规范）。
+\section{运行环境}
 
-\subsection{兼容性需求}
-
-优先支持 Chromium 内核浏览器；Worker 不可用时 \texttt{CombatDataBridge} 回退主线程同步逻辑，保证功能一致\cite{kw_green_web_perf}。
-
-\section{需求追踪矩阵}
-
-项目采用 OpenSpec 任务清单（各变更目录下 \texttt{tasks.md}）追踪实现进度。例如 \texttt{add-bullet-hp-ui-verification} 覆盖血条绑定与阵营碰撞；\texttt{add-combat-skill-loadout-ui} 覆盖 13 技能 + 74 效果图标配表与拖拽 UI。毕业设计论文中的模块描述与仓库 \texttt{openspec/changes/} 目录一一对应，便于答辩时演示规格与代码一致性\cite{kw_spec_driven_dev,kw_project_management_agile}。
+建议配置：四核 CPU、8GB 内存、支持 WebGL2 的浏览器；开发环境为 LayaAir IDE 3.x、TypeScript、Node.js 工具链。
 
 \section{本章小结}
 
-本章从技术、社会角度论证了项目可行性，列出了功能与非功能需求，并给出战斗与元游戏用例。下一章将给出满足上述需求的总体架构设计。
+本章论证了可行性，列出功能与非功能需求及典型用例，下一章给出总体设计。

@@ -3,22 +3,19 @@
 
 \section{测试策略}
 
-测试分为单元验证、模块集成测试与系统手工测试三层，对应 OpenSpec 中 Scenario 驱动的验收条件\cite{kw_software_testing_game}。
+测试分为单元验证、集成测试与系统手工测试。仿真与游戏系统须经过验证确认模型可信度\cite{petty2010vv,oberkampf2010vv}，本项目采用脚本验证、用例表与性能对比相结合。
 
-\section{单元与验证脚本}
+\section{单元验证}
 
-仓库提供可在 Node 或构建管线中执行的验证模块：
 \begin{itemize}
-  \item \texttt{ecsCorePhase1.verify.ts}：实体创建销毁、组件增删查、系统顺序；
-  \item \texttt{formulaParser.verify.ts}：公式解析边界（除零、未知变量）；
-  \item \texttt{attributeModifier.verify.ts}：modifier 叠加与按来源移除。
+  \item \texttt{ecsCorePhase1.verify.ts}：实体与组件、系统顺序；
+  \item \texttt{formulaParser.verify.ts}：公式边界；
+  \item \texttt{attributeModifier.verify.ts}：modifier 叠加与移除。
 \end{itemize}
 
-执行方式（示例）：在项目根目录运行 TypeScript 编译后执行对应脚本，或通过 IDE 运行。全部通过方可认为核心契约未回归。
+\section{功能测试}
 
-\section{功能测试用例}
-
-表~\ref{tab:test-func} 列出代表性功能测试用例（手工）。
+表~\ref{tab:test-func} 列出代表性用例（手工执行）。
 
 \begin{longtable}{p{2.2cm}p{4.5cm}p{6.3cm}}
   \caption{功能测试用例摘要} \label{tab:test-func} \\
@@ -30,60 +27,46 @@
   \textbf{编号} & \textbf{步骤} & \textbf{预期结果} \\
   \midrule
   \endhead
-  T-F-01 & 启动游戏，等待配表加载 & \texttt{Data.Skill.GetAll()} 数量 $\geq 13$ \\
-  T-F-02 & 进入战斗，观察玩家移动 & 角色随输入移动，相机平滑跟随 \\
-  T-F-03 & 等待怪物接近 & 怪物追逐并接触扣血，血条下降 \\
-  T-F-04 & 观察自动攻击 & 子弹飞出并命中怪物，支持穿透/分裂/连锁 \\
-  T-F-05 & 按 Tab 打开技能面板 & 战斗暂停，面板可见，拖拽可交换槽位 \\
+  T-F-01 & 启动并等待加载 & 技能表加载成功 \\
+  T-F-02 & 进入战斗移动 & 角色与相机正常 \\
+  T-F-03 & 怪物接近 & 追逐、扣血、血条更新 \\
+  T-F-04 & 观察自动攻击 & 子弹命中，穿透/分裂/连锁 \\
+  T-F-05 & Tab 打开技能面板 & 暂停，可拖拽装配 \\
   T-F-06 & 关闭面板 & 战斗恢复，新技能生效 \\
-  T-F-07 & 击杀怪物至升级 & 弹出奖励面板，选择后属性或技能增强 \\
-  T-F-08 & 玩家死亡 & 显示重启面板，可重新初始化 \\
-  T-F-09 & 元游戏选关进入 & 战斗容器显示，生存计时启动 \\
-  T-F-10 & 跑图选择战斗节点 & 携带 Boss 标记时使用 Boss 胜利时长 \\
+  T-F-07 & 升级 & 奖励面板与应用 \\
+  T-F-08 & 玩家死亡 & 重启面板 \\
+  T-F-09 & 元游戏进战斗 & 计时启动 \\
+  T-F-10 & Boss 节点 & Boss 胜利时长 \\
   \bottomrule
 \end{longtable}
 
 \section{性能测试}
 
-在 Chromium 浏览器、1920$\times$1080 窗口下记录 60 秒战斗场景（怪物数量接近日标上限）：
+在 Chromium、1920$\times$1080 下录制 60 秒战斗，对比无池/有池/池+Worker 的平均 FPS 与 P95 帧时间（终稿填入实测值）。Cantrell 等通过对比真实疏散事件验证模型\cite{cantrell2018unity}，本项目性能测试侧重帧率稳定性而非人群标定。
 
 \begin{table}[htbp]
   \centering
-  \caption{性能对比实验（示例数据，答辩前请用实测替换）}
+  \caption{性能对比实验（待填入实测数据）}
   \label{tab:perf}
   \begin{tabular}{lccc}
     \toprule
-    \textbf{配置} & \textbf{平均 FPS} & \textbf{帧时间 P95 (ms)} & \textbf{备注} \\
+    \textbf{配置} & \textbf{平均 FPS} & \textbf{P95 (ms)} & \textbf{备注} \\
     \midrule
-    基线（无池、无 Worker） & （待测） & （待测） & 仅用于对比 \\
-    仅对象池 & （待测） & （待测） & \\
-    池 + Worker（实体数达标） & （待测） & （待测） & \\
+    基线 & 待测 & 待测 & 无池、无 Worker \\
+    仅对象池 & 待测 & 待测 & \\
+    池 + Worker & 待测 & 待测 & 实体数达标 \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-\textbf{说明：}表中数值为占位，请在提交终稿前使用 Performance 记录并替换。关注指标包括：FPS、Scripting 时间、GC 次数。若 Worker 启用，可在控制台确认 \texttt{CombatDataBridge.isWorkerActive()} 为 true。
+\section{跑图与 Worker 一致性}
 
-\section{配表与资源测试}
-
-\begin{enumerate}[label=\arabic*.]
-  \item 删除 \texttt{bin/config} 下某表，验证启动日志是否提示缺失并使用默认值；
-  \item 将材质放于 \texttt{src/} 而非 \texttt{assets/}，验证是否 404（资源规范测试）；
-  \item 修改 \texttt{skill\_table.json} 中 \texttt{iconPath}，验证 UI 图标是否更新（须先 sync-config）。
-\end{enumerate}
-
-\section{规格一致性检查}
-
-对每个已实施变更执行：
-\begin{verbatim}
-openspec validate <change-id> --strict --no-interactive
-\end{verbatim}
-确保 Requirement 与 Scenario 可被解析。答辩材料建议附带 \texttt{openspec list} 输出截图，证明提案与代码对应关系\cite{kw_spec_driven_dev}。
+对 \texttt{RunMapGenerator} 多次随机种子断言 Boss 可达；对比 Worker 开/关下怪物轨迹（允许一帧延迟），确保逻辑未漂移。
 
 \section{测试结论}
 
-当前版本在功能上覆盖 ECS 战斗、元游戏入口、跑图、技能装配与升级奖励等核心闭环；单元验证脚本通过表明基础契约稳定。性能优化项需在实测数据填入表~\ref{tab:perf} 后作定量结论。已知限制包括：部分 Effect 仅配表展示尚未独立 VFX；法杖 UI 仍在规划；同屏实体规模受 Map 存储限制。
+功能覆盖战斗、元游戏、跑图、技能装配与升级闭环；单元脚本通过表明核心契约稳定。性能数据待填；部分 Effect 尚无独立 VFX，法杖完整 UI 为后续工作。
 
 \section{本章小结}
 
-本章给出了测试策略、用例与性能实验框架。请在终稿阶段补充实测 FPS 与截图（运行图、跑图 UI、技能面板、战斗场面）。
+本章给出测试策略、用例与性能实验框架，终稿须补充实测数据与系统截图。

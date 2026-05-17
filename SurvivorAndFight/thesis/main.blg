@@ -5,65 +5,44 @@ Reallocating 'name_of_file' (item size: 1) to 6 items.
 The style file: plain.bst
 Reallocating 'name_of_file' (item size: 1) to 11 items.
 Database file #1: references.bib
-Warning--to sort, need author or key in kw_project_management_agile
-Warning--to sort, need author or key in kw_software_testing_game
-Warning--to sort, need author or key in kw_ecs_game_architecture
-Warning--to sort, need author or key in kw_survivor_genre
-Warning--to sort, need author or key in kw_dag_run_map
-Warning--to sort, need author or key in kw_layaair_html5_engine
-Warning--to sort, need author or key in kw_data_driven_game
-Warning--to sort, need author or key in kw_object_pooling
-Warning--to sort, need author or key in kw_web_worker_game
-Warning--to sort, need author or key in kw_spec_driven_dev
-Warning--to sort, need author or key in kw_roguelike_design
-Warning--to sort, need author or key in kw_mvc_ui_pattern
-Warning--to sort, need author or key in kw_typescript_large_scale
-Warning--to sort, need author or key in kw_spatial_hash_collision
-Warning--to sort, need author or key in kw_attribute_modifier
-Warning--to sort, need author or key in kw_skill_formula
-Warning--to sort, need author or key in kw_seeded_rng
-Warning--to sort, need author or key in kw_green_web_perf
-Warning--to sort, need author or key in kw_noita_spellcraft
-Warning--to sort, need author or key in kw_ethics_game_design
 You've used 20 entries,
             2118 wiz_defined-function locations,
-            577 strings with 7891 characters,
-and the built_in function-call counts, 3382 in all, are:
-= -- 340
-> -- 20
-< -- 0
-+ -- 20
-- -- 0
-* -- 102
-:= -- 391
-add.period$ -- 60
+            627 strings with 7456 characters,
+and the built_in function-call counts, 7507 in all, are:
+= -- 759
+> -- 341
+< -- 7
++ -- 136
+- -- 114
+* -- 524
+:= -- 1212
+add.period$ -- 67
 call.type$ -- 20
-change.case$ -- 60
+change.case$ -- 113
 chr.to.int$ -- 0
-cite$ -- 40
-duplicate$ -- 140
-empty$ -- 461
-format.name$ -- 0
-if$ -- 841
+cite$ -- 20
+duplicate$ -- 288
+empty$ -- 594
+format.name$ -- 114
+if$ -- 1605
 int.to.chr$ -- 0
 int.to.str$ -- 20
-missing$ -- 0
-newline$ -- 103
-num.names$ -- 0
-pop$ -- 200
+missing$ -- 23
+newline$ -- 104
+num.names$ -- 40
+pop$ -- 128
 preamble$ -- 1
-purify$ -- 40
+purify$ -- 96
 quote$ -- 0
-skip$ -- 99
+skip$ -- 198
 stack$ -- 0
-substring$ -- 100
-swap$ -- 20
-text.length$ -- 0
+substring$ -- 502
+swap$ -- 75
+text.length$ -- 7
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 80
-warning$ -- 20
-while$ -- 0
+type$ -- 72
+warning$ -- 0
+while$ -- 74
 width$ -- 22
-write$ -- 182
-(There were 20 warnings)
+write$ -- 231
