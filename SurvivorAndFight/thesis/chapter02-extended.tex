@@ -1,0 +1,42 @@
+
+\section{游戏品类与玩法机制分析}
+
+Survivor-like 游戏的核心循环可形式化为：\emph{移动躲避} $\rightarrow$ \emph{自动输出伤害} $\rightarrow$ \emph{击杀获取经验} $\rightarrow$ \emph{升级强化 Build} $\rightarrow$ \emph{更高密度敌人}。与传统射击游戏相比，玩家认知负荷从“瞄准射击”转向“走位与构筑决策”。因此系统架构必须支持：（1）在不停移动下稳定运行碰撞与伤害结算；（2）在数分钟内多次升级并即时应用奖励；（3）通过配表快速迭代技能数值而不改动核心代码\cite{kw_survivor_genre,kw_data_driven_game}。
+
+本项目在 \texttt{SimpleEcsDemo} 中默认生成玩家实体与怪物波次，玩家自动施法降低操作门槛，同时保留 \texttt{ControlSystem} 以支持走位。经验曲线与 \texttt{MONSTER\_EXP\_REWARD\_BASE}、\texttt{MONSTER\_EXP\_REWARD\_LEVEL\_BONUS} 共同决定升级节奏，属于可调参的“节奏设计”而非硬编码逻辑。
+
+\section{Unity DOTS 与轻量 ECS 对比}
+
+Unity DOTS 采用 ECS + Job System + Burst 编译，追求大规模实体与多核并行\cite{kw_ecs_game_architecture}。毕业设计项目规模与团队人力有限，若直接引入完整 DOTS 将导致学习曲线陡峭、与 Laya 节点体系集成成本过高。因此 OpenSpec \texttt{add-ecs-core-phase1} 明确第 1 期目标为“清晰结构 + 几十至几百实体”，组件存储使用 \texttt{Map} 而非 chunk，系统调度为单线程顺序执行。
+
+下表从工程维度对比两种路线：
+
+\begin{table}[htbp]
+  \centering
+  \caption{Unity DOTS 与项目轻量 ECS 对比}
+  \begin{tabular}{p{3.5cm}p{4.5cm}p{4.5cm}}
+    \toprule
+    \textbf{维度} & \textbf{Unity DOTS} & \textbf{本项目 ECS} \\
+    \midrule
+    并行 & Job System 多线程 & 单线程；战斗片段可选 Worker \\
+    内存布局 & Archetype/Chunk & 按组件类型 Map \\
+    引擎绑定 & Entities Graphics & \texttt{ViewComponent} 直绑 Laya 节点 \\
+    适用规模 & 数万+ & 数百级 \\
+    迭代成本 & 高 & 中低 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{JSON 配表与代码生成模式}
+
+手游与 H5 项目常见三种配表消费方式：（1）运行时加载 JSON 反射填充 \texttt{Data} 类；（2）构建期生成 TypeScript 常量；（3）混合模式——registry 声明表结构，运行时加载。本项目采用（3）：\texttt{tables.registry.json} 声明表名与文件路径，\texttt{initData} 将行数据挂载到 \texttt{Data.Skill} 等命名空间\cite{kw_data_driven_game}。优势是策划可直接编辑 JSON；风险是类型安全弱，须通过验证脚本与 \texttt{isGameConfigReady} 检查行数。
+
+技能图标路径 \texttt{iconPath} 与资源目录 \texttt{Skillicon/}、\texttt{EffectIcon/} 约定文件名即 id，减少配表冗余。Effect 图标 id 规则（去掉 \texttt{fx\_} 前缀）在 \texttt{add-combat-skill-loadout-ui} 设计中有明确定义，避免 UI 与战斗逻辑使用不同主键。
+
+\section{浏览器游戏引擎选型说明}
+
+除 LayaAir 外，业界尚有 Cocos Creator、Phaser、PixiJS 等方案\cite{kw_layaair_html5_engine}。选型 LayaAir 的原因包括：IDE 一体化工作流、预制体系统与当前课程/项目栈一致；3.x 版本对 TypeScript 与 2D/3D 混合场景支持较好。项目 \texttt{Main} 脚本刻意挂载在 \texttt{Area2D} 子节点，规避 3D 渲染管线对纯 2D Demo 的干扰，属于引擎使用层面的实践经验。
+
+\section{软件工程与文档驱动开发}
+
+传统“先写代码后补文档”在多人协作时易产生需求漂移。OpenSpec 通过变更目录 \texttt{openspec/changes/<id>/} 固化 Why/What/Impact，并以 \texttt{spec.md} 增量定义 SHALL 需求与 \texttt{#### Scenario:} 验收场景\cite{kw_spec_driven_dev}。例如 \texttt{add-monster-spawn-and-movement-patterns} 对刷怪半径、追逐、回收的约束可直接映射到 \texttt{MonsterWaveSpawnSystem} 参数。毕业设计论文与 OpenSpec 双向引用，可提升答辩时“需求—设计—实现”链条的可信度\cite{kw_project_management_agile}。

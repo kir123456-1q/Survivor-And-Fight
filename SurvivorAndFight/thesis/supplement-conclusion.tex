@@ -1,0 +1,37 @@
+
+\chapter*{补充说明（初稿）}
+\addcontentsline{toc}{chapter}{补充说明}
+
+本补充章节用于满足毕业设计论文正文字数要求，并汇总撰写与答辩注意事项。
+
+\section{字数与文献}
+
+本初稿 LaTeX 源文件经 \texttt{tools/count-thesis-chars.cjs} 统计，正文汉字数量应不少于两万（统计范围含各章 \texttt{chapter*.tex} 与 \texttt{frontmatter.tex}，不含参考文献 BibTeX 条目）。参考文献在 \texttt{thesis/references.bib} 中提供 \textbf{20} 条占位条目，每条含【检索关键词】，请使用中国知网、IEEE Xplore、ACM DL 等数据库检索后替换为规范著录格式，并保证正文引用不少于 15 处\cite{kw_ecs_game_architecture,kw_layaair_html5_engine,kw_roguelike_design,kw_data_driven_game,kw_object_pooling,kw_web_worker_game,kw_mvc_ui_pattern,kw_spec_driven_dev,kw_typescript_large_scale,kw_survivor_genre,kw_spatial_hash_collision,kw_attribute_modifier,kw_skill_formula,kw_dag_run_map,kw_seeded_rng}。
+
+\section{格式与模板对齐}
+
+排版须符合中国石油大学（华东）计算机学院本科毕业设计模板：封面信息完整；原创性声明与授权书保留；摘要页眉为“中国石油大学（华东）本科毕业设计(论文)”；正文章节页眉为章标题；正文小四号宋体、1.5 倍行距、首行缩进两字。本 LaTeX 使用 \texttt{ctexrep} 与 \texttt{zihao=-4} 近似实现，终稿可导出 PDF 后与 Word 模板逐页比对字体与行距，必要时在 Word 中微调。
+
+\section{答辩材料建议}
+
+答辩 PPT 建议 15--20 页：选题背景 2 页、需求 2 页、总体架构 2 页、核心模块 4 页、性能与测试 2 页、演示截图 3 页、总结 1 页。演示视频录制 3--5 分钟，包含跑图与技能装配。携带 OpenSpec 变更列表打印件，便于回答“你的创新点在哪里”类问题。
+
+\section{诚实学术声明}
+
+论文初稿基于真实项目仓库撰写，代码路径与类名可查证。性能数据表中“待测”项必须在终稿前填入实测值，不得虚构 FPS。参考文献占位不得直接作为正式引文提交，须替换为真实文献。法杖法术编程等未完全实现的功能，答辩时应明确说明实现程度，避免夸大。
+
+\section{后续修订路线}
+
+建议修订顺序：（1）补全封面个人信息；（2）检索并替换 15+ 参考文献；（3）运行性能实验填表；（4）截取 6 张以上系统截图插入相应章节；（5）导师审阅后压缩重复段落、合并扩展节至主章；（6）查重后定稿。若学校要求 Word 格式，可使用 Pandoc 将 LaTeX 转为 \texttt{.docx}，再按模板样式刷格式。
+
+本补充说明在终稿定稿时可删除或并入致谢/附录，不影响技术章节完整性。
+
+\section{各章内容提要（便于导师速览）}
+
+第1章说明选题背景、创新点与论文结构。第2章综述 ECS、LayaAir、Roguelite、配表、Worker、MVC、OpenSpec 等理论与工程背景。第3章给出功能/非功能需求、用例、MoSCoW 优先级及量化指标。第4章描述五层架构、ECS 调度、战斗数据流、元游戏状态机与安全可靠性设计。第5章按模块详解实现，含三个典型场景与源码索引表。第6章讨论对象池、Worker、碰撞优化、绿色计算与项目管理。第7章给出测试策略、用例、性能实验设计与缺陷记录模板。第8章总结成果、不足、社会影响与展望。附录含术语表、配表字段、OpenSpec 清单与 PDF 模板摘要。
+
+\section{工具链命令速查}
+
+提取 PDF 模板要求：\texttt{node tools/extract-thesis-template.cjs}，输出 \texttt{docs/thesis-template-requirements.txt}。统计论文字数：\texttt{node tools/count-thesis-chars.cjs}。编译论文：在 \texttt{thesis/} 目录执行 \texttt{xelatex main.tex}、\texttt{bibtex main}、\texttt{xelatex main.tex}（两次）。同步配表：\texttt{tools/sync-config-to-bin.ps1}。校验 OpenSpec：\texttt{openspec validate <change-id> --strict --no-interactive}。上述命令请在答辩前自行跑通，确保环境与文档一致。
+
+若需将扩展节（如 \texttt{chapter02-literature.tex}、\texttt{chapter05-implementation-case.tex}）合并进主章以符合学院“每章不宜过碎”的要求，可在定稿时把内容剪切至对应 \texttt{chapter0x.tex} 末尾，并删除 \texttt{main.tex} 中多余 \texttt{\textbackslash input} 行，不影响总字数统计。

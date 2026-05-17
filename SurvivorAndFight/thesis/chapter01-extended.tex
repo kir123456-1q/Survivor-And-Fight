@@ -1,0 +1,27 @@
+
+\section{课题来源与项目背景}
+
+本课题来源于本科毕业设计教学安排，选题方向为“基于 Web 技术的 2D 动作/Roguelite 游戏设计与实现”。指导教师与项目组（若为单位选题则填写实验室名称）希望学生在真实引擎环境中完成可运行原型，而非仅提交概念设计。Survivor And Fight 仓库已包含可编译的 LayaAir 工程、OpenSpec 变更集与部分美术资源，论文工作是在此基础上进行\textbf{系统化总结、架构阐释与实验验证}，而非从零开始编写全部代码。
+
+从产业视角看，国产 H5 游戏与小游戏平台对轻量、高留存玩法需求旺盛；Roguelite 与 Survivor-like 叠加的玩法降低了美术与关卡成本，更适合教学周期内完成 MVP。学术视角则可将本项目视作“规格驱动 + ECS + 数据驱动”在中小型客户端中的案例研究\cite{kw_spec_driven_dev,kw_ecs_game_architecture}。
+
+\section{主要创新点与特色}
+
+尽管毕业设计不强调学术创新，本项目仍具有以下\textbf{工程特色}：
+\begin{enumerate}[label=(\arabic*)]
+  \item 在 LayaAir 上实现可扩展的轻量 ECS，并与 UI、配表、Worker 协同；
+  \item 使用 OpenSpec 管理十余项能力变更，需求可追踪至代码模块；
+  \item 技能 effect 链式修饰器（穿透/分裂/连锁）与 74 效果图标配表一体化；
+  \item 爬塔式三大关 DAG 跑图与战斗入口载荷联动；
+  \item 战斗数值片段可选 Web Worker 卸载，并保留主线程回退路径。
+\end{enumerate}
+
+\section{论文工作与方法}
+
+论文撰写采用“模板约束 + 自动化提取 + LaTeX 排版”流程：通过 \texttt{tools/extract-thesis-template.cjs} 从学院 PDF 模板提取格式要求；正文使用 XeLaTeX + ctex 排版；参考文献以 BibTeX 占位，\textbf{检索关键词}标注于 \texttt{references.bib} 的 \texttt{howpublished} 字段，由作者自行检索补全 15 篇以上正式文献\cite{kw_ecs_game_architecture,kw_layaair_html5_engine,kw_roguelike_design,kw_data_driven_game,kw_object_pooling,kw_web_worker_game,kw_mvc_ui_pattern,kw_spec_driven_dev,kw_typescript_large_scale,kw_survivor_genre,kw_spatial_hash_collision,kw_attribute_modifier,kw_skill_formula,kw_dag_run_map,kw_seeded_rng,kw_green_web_perf,kw_project_management_agile,kw_software_testing_game,kw_noita_spellcraft,kw_ethics_game_design}。
+
+研究方法包括：文献调研（关键词检索）、面向对象/组件化分析与设计、原型实现、手工与脚本测试、性能对比实验。第~\ref{chap:test}~章性能表预留实测数据填入位置，避免论文结论缺乏数据支撑。
+
+\section{伦理与合规说明}
+
+游戏涉及虚拟战斗与生命值减少，不涉及真实暴力。项目未采集用户个人敏感信息。若部署至公网，须遵守网络游戏管理与未成年人保护相关规定，在说明中标注适龄提示与游戏时长建议\cite{kw_ethics_game_design}。论文第~\ref{chap:conclusion}~章对社会影响作了补充讨论，满足学院模板建议项。

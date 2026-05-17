@@ -1,0 +1,34 @@
+
+\section{内存与垃圾回收分析}
+
+JavaScript 引擎（如 V8）对短生命周期对象敏感。未池化时，每发子弹 \texttt{instantiate} 预制体、每死亡怪物 \texttt{destroy} 节点，将产生大量临时对象与 DOM/渲染树变更，触发 GC 停顿。对象池通过复用节点将分配模式从“脉冲式”变为“平稳式”，使帧时间更稳定\cite{kw_object_pooling}。
+
+建议在性能测试中对比 GC 次数：Chrome Performance $\rightarrow$ Memory 勾选 “Collect garbage” 前后对比。论文终稿应附一张 GC 时间轴截图（占位说明：答辩前补充）。
+
+\section{帧预算分配建议}
+
+以 60 FPS 为例，每帧预算约 16.67ms。推荐分配：
+\begin{itemize}
+  \item 输入与 UI：1--2ms；
+  \item ECS 逻辑（含子弹）：6--8ms；
+  \item Worker 通信：$\leq$1ms（异步）；
+  \item 渲染（引擎）：余量。
+\end{itemize}
+
+当逻辑超过预算时，优先启用 Worker 与减少刷怪密度，而非降低渲染分辨率（引擎层决策）\cite{kw_green_web_perf}。
+
+\section{配表热更新与构建优化}
+
+当前配表随包发布，修改需重新同步 \texttt{bin/config}。若未来支持热更新，可：（1）版本号校验 JSON；（2）增量下载表文件；（3）\texttt{initData} 局部重载。构建阶段可压缩 JSON、合并小表，减少 HTTP 请求数。该部分为展望，不计入本期实现。
+
+\section{可观测性：日志与调试}
+
+项目使用 \texttt{SkillDragLog}、\texttt{missingConfigLogged} 等去重日志避免刷屏。建议在性能调优阶段增加：每 60 帧输出活跃子弹数、池命中率、Worker 活跃比例。OpenSpec 任务完成后可将关键指标写入调试面板（Could 级需求）。
+
+\section{与同类 H5 游戏优化策略对比}
+
+部分 H5 游戏采用 Canvas 自绘全部精灵以避免 DOM；Laya 则使用引擎渲染树。本项目选择引擎预制体以降低动画与 UI 成本。优化手段上，与 Phaser 社区常见的 Group/Pool 类似\cite{kw_object_pooling}；Worker 用法与部分 HTML5 MMORPG 的战斗验算迁移思路一致\cite{kw_web_worker_game}。差异在于：子弹碰撞仍留主线程，因需访问引擎碰撞体与显示对象。
+
+\section{低功耗与绿色计算补充}
+
+移动设备上，降低 CPU 占用可延长电池续航。对象池减少实例化；暂停机制减少无效计算；合理限制 \texttt{MONSTER\_COUNT} 避免无意义满屏。建议在设置中提供“降低特效”“限制帧率”选项（未来工作）。兼容性方面，旧版浏览器不支持 Worker 时仍可通过回退路径运行，避免强制升级导致用户流失\cite{kw_green_web_perf}。

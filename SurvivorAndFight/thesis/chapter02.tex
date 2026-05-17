@@ -1,0 +1,49 @@
+\chapter{相关技术与理论基础}
+\label{chap:related}
+
+\section{LayaAir 游戏引擎与 TypeScript}
+
+LayaAir 是面向 HTML5 的跨平台游戏引擎，支持 2D、3D 与 UI 系统。本项目使用 LayaAir 3.x，脚本以 TypeScript 编写，通过 \texttt{Laya.Script} 挂载至场景节点（如 \texttt{Main} 挂载在 \texttt{Area2D} 子节点以避免 3D 渲染管线干扰）。引擎主循环通过 \texttt{Laya.timer.frameLoop} 驱动，本项目的 ECS 更新入口 \texttt{EcsWorld.update(deltaTime)} 在每帧被调用，从而将逻辑更新与引擎渲染解耦\cite{kw_layaair_html5_engine}。
+
+TypeScript 为 JavaScript 提供静态类型与模块化支持，有利于大型项目中接口契约的维护\cite{kw_typescript_large_scale}。项目约定所有引擎 API 使用 \texttt{Laya.} 前缀访问，静态常量集中于 \texttt{src/defines/} 各模块 define 文件并经 \texttt{index.ts} 统一导出，避免魔法数散落业务代码。
+
+\section{实体组件系统（ECS）}
+
+ECS 将游戏对象拆为：
+\begin{itemize}
+  \item \textbf{Entity（实体）}：仅作为标识符（本项目为 \texttt{number} 型 \texttt{EntityId}）；
+  \item \textbf{Component（组件）}：纯数据，如 \texttt{Position}、\texttt{Attribute}、\texttt{Skill}；
+  \item \textbf{System（系统）}：无状态或轻状态逻辑，按帧处理拥有特定组件组合的实体。
+\end{itemize}
+
+第 1 期 ECS 核心（\texttt{add-ecs-core-phase1}）明确 MVP 目标：提供 \texttt{EntityManager}、\texttt{ComponentStore}、\texttt{EcsWorld} 与分组系统调度，\textbf{不}追求多线程 Job System 与 archetype 内存布局，但接口预留扩展空间\cite{kw_ecs_game_architecture}。玩法层变更（\texttt{add-ecs-gameplay-phase1}）在核心之上增加 \texttt{PlayerTag}/\texttt{MonsterTag}、\texttt{MovementSystem}、\texttt{AttributeSystem}（含可溯源 modifier）、\texttt{SkillSystem}、\texttt{ControlSystem} 及 \texttt{FilterRegistry} 命名筛选器。
+
+\section{数据驱动与配表系统}
+
+数据驱动设计将策划可调参数外置为 JSON 表，由 \texttt{tables.registry.json} 注册，经 \texttt{ConfigBootstrap.ensureGameConfigLoaded()} 加载\cite{kw_data_driven_game}。本项目包含 \texttt{Character}、\texttt{Bullet}、\texttt{Skill}、\texttt{SkillEffect} 等表，运行时通过 \texttt{Data.*.GetByID} 访问。技能效果支持 \texttt{bullet}、\texttt{modifier\_split}、\texttt{modifier\_chain}、\texttt{modifier\_pierce}、\texttt{direct\_damage} 等类型，由 \texttt{EffectExecutor} 映射至 \texttt{BulletSystem} 与公式直伤。
+
+技能伤害等参数可通过 \texttt{FormulaParser.evaluate} 解析含属性别名的表达式\cite{kw_skill_formula}。索敌策略包括 \texttt{auto}（威胁度与血量加权）与 \texttt{simple}（指向鼠标/输入方向）。
+
+\section{Roguelite 与跑图生成}
+
+Roguelite 强调单局随机与局外成长。本项目跑图（\texttt{add-meta-flow-run-map-spellcraft}）每局生成三个大关，每关为多层 DAG：节点类型含 \texttt{Rest}、\texttt{Combat}、\texttt{Boss}、\texttt{Treasure} 等，边由 \texttt{RunMapGenerator.connectRows} 连接并校验可达 Boss\cite{kw_dag_run_map,kw_roguelike_design}。随机性由 \texttt{SeededRng} 基于种子字符串实现，支持同种子复现，便于调试\cite{kw_seeded_rng}。
+
+\section{Web 平台性能相关技术}
+
+H5 游戏常见性能瓶颈包括：预制体频繁实例化、每帧临时对象分配、主线程过重逻辑。对策包括：
+\begin{enumerate}[label=\arabic*.]
+  \item \textbf{对象池}：\texttt{BulletPool}、\texttt{MonsterPool} 按预制体路径分桶回收节点\cite{kw_object_pooling}；
+  \item \textbf{Web Worker}：\texttt{CombatDataBridge} 在实体数 $\geq$ \texttt{COMBAT\_WORKER\_MIN\_ENTITY\_COUNT} 时将战斗快照提交 Worker 执行 \texttt{processCombatFrame}\cite{kw_web_worker_game}；
+  \item \textbf{碰撞简化}：\texttt{BulletHitTest} 使用半径平方比较，避免开方；
+  \item \textbf{逻辑暂停}：\texttt{GameSession.paused} 在 Tab 打开技能面板时冻结战斗系统更新。
+\end{enumerate}
+
+\section{UI 架构与规格驱动开发}
+
+UI 采用 MVC 模式：\texttt{UiControllerBase} 定义生命周期，\texttt{UIStackManager} 作为全屏界面路由唯一真相源，支持 push/pop/replace\cite{kw_mvc_ui_pattern}。变更 \texttt{add-mvc-ui-stack-redpoint-pooling} 还定义红点树与 UI 对象池策略（本项目已实现栈管理与部分面板）。
+
+OpenSpec 将需求以 \texttt{proposal.md}、\texttt{design.md}、\texttt{specs/} 增量规格管理，实现前须通过 \texttt{openspec validate --strict}，体现规格驱动开发思想\cite{kw_spec_driven_dev}。
+
+\section{本章小结}
+
+本章介绍了项目所依赖的引擎、ECS、配表、Roguelite 跑图、性能手段与 UI/规格化工程方法，为后续需求与设计章节奠定概念基础。

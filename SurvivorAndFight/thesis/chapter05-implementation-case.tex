@@ -1,0 +1,84 @@
+
+\section{典型场景实现剖析}
+
+\subsection{场景一：玩家首次进入战斗}
+
+该场景串联配置、元游戏与 ECS 初始化，是答辩演示的主路径。步骤分解如下：
+
+\textbf{步骤 1：应用启动。} \texttt{Main.onStart} 注册帧循环，调用 \texttt{loadConfigAndInitDemo}。\texttt{ensureGameConfigLoaded} 遍历 \texttt{configBases()} 路径，尝试 \texttt{fetch} 与 \texttt{Laya.loader} 加载 registry 与各表。若失败，\texttt{isGameConfigReady} 为 false，技能面板与自动施法可能退化。
+
+\textbf{步骤 2：元菜单。} \texttt{META\_MENU\_ENABLED} 为真时，\texttt{MetaMenuBootstrap} 初始化 \texttt{UIStackManager}，push 开始面板。\texttt{MetaFlowController} 监听用户操作。战斗容器 \texttt{Area2D} 暂隐藏，避免空场景渲染。
+
+\textbf{步骤 3：进入战斗。} 用户选关后触发 \texttt{onEnterCombat}。容器可见，\texttt{demo.init()} 创建玩家、注册系统更新。生存计时器 \texttt{CombatSurvivalTimer} 启动，Boss 关使用更长胜利时间常量。
+
+\textbf{步骤 4：首帧更新。} \texttt{ControlSystem} 读取输入；\texttt{PlayerAutoCastSystem} 根据默认装配施放；\texttt{MonsterWaveSpawnSystem} 开始刷怪。血条 \texttt{BloodBarSyncSystem} 将 hp 映射至 ProgressBar。
+
+该场景验证“配置—流程—ECS”贯通，对应测试用例 T-F-01、T-F-09。
+
+\subsection{场景二：Tab 打开技能面板并更换装备}
+
+用户按 Tab，\texttt{SkillSelectPanelController} 将 \texttt{GameSession.paused} 置 true。战斗 System 早退，怪物与子弹停止逻辑更新（或仅冻结施法，取决于具体 System 实现，以代码为准）。面板显示三装备栏与 Effect 槽。
+
+用户长按技能图标 300ms 后拖拽至另一槽，\texttt{SkillDragService} 更新 \texttt{SkillLoadoutState}。\texttt{SkillLoadoutSyncSystem} 写回 \texttt{Skill} 组件与自动施法列表。关闭 Tab 后恢复战斗，新技能在下一冷却周期生效。
+
+该场景验证 UI 与 ECS 状态同步，对应 T-F-05、T-F-06。若同步遗漏，可能出现“面板已换技能但仍在放旧招”的缺陷，属于高优先级回归项。
+
+\subsection{场景三：怪物密集时的 Worker 卸载}
+
+当场上怪物数量达到 \texttt{COMBAT\_WORKER\_MIN\_ENTITY\_COUNT}，\texttt{CombatDataPrepareSystem} 打包坐标快照，\texttt{CombatDataBridge} 发送至 Worker。\texttt{processCombatFrame} 计算追逐、分离、摆动，返回各怪物速度修正。主线程 \texttt{MonsterChaseSystem} 应用结果，\texttt{BulletSystem} 仍在主线程处理碰撞。
+
+关闭 Worker 或降低怪物上限后，应观察到帧时间 P95 上升（见性能表占位）。该场景说明优化手段的有效性，亦说明“并非所有逻辑都适合 Worker”。
+
+\section{关键代码文件索引}
+
+为便于评阅教师对照源码，表~\ref{tab:file-index} 列出模块与路径映射。
+
+\begin{longtable}{p{3.5cm}p{9cm}}
+  \caption{核心源码文件索引} \label{tab:file-index} \\
+  \toprule
+  \textbf{模块} & \textbf{路径} \\
+  \midrule
+  \endfirsthead
+  \toprule
+  \textbf{模块} & \textbf{路径} \\
+  \midrule
+  \endhead
+  入口 & \texttt{src/Main.ts} \\
+  ECS 世界 & \texttt{src/ecs/core/World.ts} \\
+  组件存储 & \texttt{src/ecs/core/ComponentStore.ts} \\
+  战斗 Demo & \texttt{src/game/demo/SimpleEcsDemo.ts} \\
+  子弹 & \texttt{src/game/bullet/BulletSystem.ts} \\
+  子弹池 & \texttt{src/game/bullet/BulletPool.ts} \\
+  效果执行 & \texttt{src/game/skill/EffectExecutor.ts} \\
+  Worker 桥接 & \texttt{src/game/combat/CombatDataBridge.ts} \\
+  跑图生成 & \texttt{src/game/run/RunMapGenerator.ts} \\
+  元流程 & \texttt{src/game/meta/MetaFlowController.ts} \\
+  UI 栈 & \texttt{src/game/ui/mvc/UIStackManager.ts} \\
+  技能面板 & \texttt{src/game/ui/skillselect/SkillSelectPanelController.ts} \\
+  配表引导 & \texttt{src/config/ConfigBootstrap.ts} \\
+  静态常量 & \texttt{src/defines/*.ts} \\
+  OpenSpec & \texttt{openspec/changes/*/proposal.md} \\
+  \bottomrule
+\end{longtable}
+
+\section{与 OpenSpec 变更的追溯关系}
+
+每个变更提案对应论文章节：\texttt{add-ecs-core-phase1} $\rightarrow$ 第~\ref{chap:modules}~章 ECS 小节；\texttt{add-ecs-gameplay-phase1} $\rightarrow$ 属性/技能/操控；\texttt{add-bullet-hp-ui-verification} $\rightarrow$ 子弹与血条；\texttt{add-monster-spawn-and-movement-patterns} $\rightarrow$ 怪物 AI；\texttt{add-battle-level-and-random-upgrades} $\rightarrow$ 经验奖励；\texttt{add-meta-flow-run-map-spellcraft} $\rightarrow$ 元游戏与跑图；\texttt{add-combat-skill-loadout-ui} $\rightarrow$ 技能装配 UI；\texttt{add-mvc-ui-stack-redpoint-pooling} $\rightarrow$ UI 栈与 MVC。答辩时可展示 \texttt{openspec list} 与仓库目录并列幻灯片，强化“规格—实现一致”印象\cite{kw_spec_driven_dev}。
+
+\section{设计模式应用总结}
+
+项目中显式使用的模式包括：\textbf{组合根}（\texttt{SimpleEcsDemo}）、\textbf{对象池}、\textbf{桥接}（\texttt{CombatDataBridge}）、\textbf{策略}（Targeting 自动/简单）、\textbf{状态}（\texttt{GameSession.paused}）、\textbf{观察者}（升级触发 UI）、\textbf{门面}（\texttt{EcsWorld}）。未引入过重抽象，符合毕业设计规模控制原则。
+
+\section{实现难点与解决方案}
+
+\textbf{难点 1：配表路径与预览环境 404。} 开发时 JSON 未同步至 \texttt{bin/config} 导致加载失败。解决：\texttt{sync-config-to-bin.ps1} 与 \texttt{configBases} 多路径尝试；\texttt{isGameConfigReady} 检查。
+
+\textbf{难点 2：UI2 拖拽与 GBox 命中。} 子节点遮挡导致落点判定错误。解决：顶层拖拽代理、\texttt{SkillSlotHitTest} 统一坐标系。
+
+\textbf{难点 3：Effect 链顺序与策划理解成本。} 修饰器必须位于子弹 effect 之前。解决：文档与配表样例、后续可做编辑器校验。
+
+\textbf{难点 4：Worker 与主线程逻辑一致。} 双份实现易漂移。解决：共享 \texttt{combatWorkerLogic.ts}，主线程回退调用同一函数。
+
+\section{本章案例小结}
+
+通过三个典型场景与文件索引，读者可快速定位论文叙述与仓库代码的对应关系。终稿建议补充运行截图与 Sequence 图（可用 PlantUML 绘制 Tab 装配时序）。

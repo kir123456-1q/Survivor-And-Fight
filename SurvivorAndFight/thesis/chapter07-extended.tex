@@ -1,0 +1,47 @@
+
+\section{测试环境配置}
+
+测试环境应记录：操作系统版本、浏览器版本、屏幕分辨率、是否启用硬件加速、Laya 发布版本号、Git 提交哈希。示例记录格式：“Windows 11 + Chrome 122 + 1920$\times$1080 + Laya 3.x + commit \texttt{abc1234}”。保证实验可复现\cite{kw_software_testing_game}。
+
+\section{回归测试清单}
+
+每次合并以下模块前须回归：
+\begin{enumerate}[label=\arabic*.]
+  \item 修改 \texttt{FormulaParser} $\rightarrow$ 运行 \texttt{formulaParser.verify.ts}；
+  \item 修改 \texttt{ComponentStore} $\rightarrow$ 运行 \texttt{ecsCorePhase1.verify.ts}；
+  \item 修改 \texttt{AttributeSystem} $\rightarrow$ 运行 \texttt{attributeModifier.verify.ts}；
+  \item 修改配表 $\rightarrow$ 检查 \texttt{isGameConfigReady} 与技能图标显示；
+  \item 修改 \texttt{CombatDataBridge} $\rightarrow$ 对比 Worker 开/关行为一致。
+\end{enumerate}
+
+\section{用户体验测试}
+
+邀请 5--10 名同学试玩 15 分钟，收集：
+\begin{itemize}
+  \item 是否理解 Tab 装配技能；
+  \item 是否理解跑图节点选择；
+  \item 是否感觉难度曲线合理；
+  \item 是否出现卡顿、图标缺失、无法进入战斗等缺陷。
+\end{itemize}
+
+采用简易 SUS（系统可用性量表）或五分制问卷，结果填入答辩 PPT。论文中可附问卷样例（附录）。
+
+\section{缺陷记录示例}
+
+\begin{table}[htbp]
+  \centering
+  \caption{缺陷记录表示例（撰写时替换为真实 Bug）}
+  \begin{tabular}{clll}
+    \toprule
+    ID & 描述 & 严重性 & 状态 \\
+    \midrule
+    B-01 & 配表未同步导致技能图标空白 & 中 & 已修复 \\
+    B-02 & Worker 路径错误回退主线程 & 低 & 已修复 \\
+    B-03 & 部分 Effect 仅展示无独立 VFX & 低 & 已知 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{验收标准与毕业设计对齐}
+
+学院通常要求：可运行系统、论文格式合规、答辩演示。本项目验收映射为：（1）\texttt{Main} 可进战斗并施法；（2）OpenSpec 核心变更 tasks 勾选完成；（3）论文字数与参考文献数量达标；（4）性能表有实测或说明测法。若法杖 UI 未完成，须在答辩中明确为“规划模块”，避免夸大实现范围。

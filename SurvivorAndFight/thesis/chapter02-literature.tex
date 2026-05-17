@@ -1,0 +1,42 @@
+
+\section{国内外 ECS 游戏应用综述}
+
+近年来，独立游戏与工具链社区广泛讨论 ECS 在 Unity、Unreal 插件及自研引擎中的实践\cite{kw_ecs_game_architecture}。国外论坛与 GDC 分享强调“缓存友好迭代”“系统依赖图”“并行调度”；国内院校毕业设计常见方案为简化 ECS，以课程周程内可完成为优先。本项目定位与后者接近，但通过 OpenSpec 将“简化”边界文档化，避免后期无序堆叠系统。
+
+从软件工程角度，ECS 的价值不仅在于性能，更在于\textbf{强制分离数据与逻辑}：新怪物行为可通过新增 System 或扩展组件完成，而无需继承庞大的 \texttt{MonsterBase} 类树。本项目怪物与玩家共享 \texttt{Position}、\texttt{Attribute}、\texttt{Skill} 等组件，仅通过 \texttt{PlayerTag}/\texttt{MonsterTag} 区分，体现组合优于继承的原则。
+
+\section{Roguelite 地图生成研究综述}
+
+Slay the Spire 将卡牌 Roguelike 与节点地图结合，证明 DAG 结构能有效支撑玩家路线规划\cite{kw_dag_run_map}。地图生成通常包括：（1）分层结构；（2）节点类型抽样；（3）边连接约束；（4）可达性校验。本项目 \texttt{RunMapGenerator} 实现了（1）--（4）的简化版：固定行数网格、Boss 在末行、中间行随机分叉、\texttt{validateActReachBoss} 保证可达。
+
+种子随机 \texttt{SeededRng} 使同一 \texttt{RunSeed} 可复现相同地图，便于录制演示视频与回归测试\cite{kw_seeded_rng}。难度参数 \texttt{RunDifficulty} 影响战斗节点与精英节点比例，属于可扩展的“权重表”接口，未来可外置至 \texttt{run\_map\_rules.json}。
+
+\section{数据驱动技能系统相关 work}
+
+RPG 与动作游戏常用技能表描述冷却、消耗、效果段。本项目将效果进一步拆为 \texttt{SkillEffect} 多行，一行对应一个原子效果或修饰器\cite{kw_data_driven_game,kw_skill_formula}。与 Visual Scripting 相比，JSON 表更适合版本管理与 diff；与硬编码相比，策划可并行调参。代价是运行时错误推迟到集成阶段，须依赖 \texttt{isGameConfigReady} 与验证脚本。
+
+公式字符串如 \texttt{"atk*1.5+10"} 由 \texttt{FormulaParser} 解析，上下文注入实体属性别名。该模式在 MMORPG 工具链中常见\cite{kw_skill_formula}。安全方面须限制函数集合，禁止任意代码执行。
+
+\section{H5 性能优化文献与工程经验}
+
+移动端浏览器对主线程敏感。除对象池与 Worker 外，常见建议包括：合批渲染、减少 draw call、纹理图集、音频解码异步等\cite{kw_green_web_perf,kw_object_pooling}。Laya 引擎内部已处理部分渲染优化，本项目主要从\textbf{逻辑侧}减负：暂停、回收、Worker、碰撞简化。
+
+Web Worker 通信成本为结构化克隆或 Transferable 缓冲区；本项目快照为纯数值数组，payload 较小，适合每帧或隔帧发送\cite{kw_web_worker_game}。不宜在 Worker 中操作 DOM 或 Laya 节点，故子弹碰撞保留主线程是合理架构决策。
+
+\section{UI 架构模式对比}
+
+MVC、MVP、MVVM 在游戏 UI 中均有应用\cite{kw_mvc_ui_pattern}。本项目 Controller 负责 Tab 键、拖拽、栈路由；View 绑定预制体节点；Model 来自 ECS 组件或独立 Model 类（如 \texttt{RunMapPanelModel}）。与 Immediate Mode GUI 相比，保留预制体有利于美术替换与动画。
+
+UI 栈管理避免“多个全屏界面同时 visible”的混乱。提案 \texttt{add-mvc-ui-stack-redpoint-pooling} 还讨论红点树 OR/COUNT 聚合，适用于商城、任务等元游戏功能；当前原型以战斗与跑图为主，红点可作为二期内容。
+
+\section{规格驱动开发与敏捷迭代}
+
+OpenSpec 与敏捷用户故事相似：Scenario 即验收测试描述\cite{kw_spec_driven_dev,kw_project_management_agile}。毕业设计周期内，变更 \texttt{add-combat-skill-loadout-ui} 从提案到代码涉及配表、UI、ECS 同步多条任务，\texttt{tasks.md} 勾选提供进度可视化。相比传统 Word 需求文档，机器可验证的 spec 更不易腐烂。
+
+\section{游戏伦理与社会影响文献方向}
+
+模板建议讨论社会、健康、安全、法律、文化影响\cite{kw_ethics_game_design}。相关研究方向包括：游戏成瘾预防、暴力内容分级、未成年人消费限制、文化刻板印象等。本项目为教学原型，传播范围有限，但仍应在说明书中避免夸大暴力、标注虚构内容，并鼓励合理游戏时间。
+
+\section{本章扩展小结}
+
+本节从 ECS 应用、Roguelite 地图、数据驱动技能、H5 性能、UI 模式、规格驱动与伦理等维度扩展了文献与工程背景，为第三至六章提供理论支撑。正式参考文献条目请按 \texttt{references.bib} 中关键词检索后补全。

@@ -1,0 +1,69 @@
+
+\section{用户角色与运行环境}
+
+\subsection{用户角色}
+
+系统仅设\textbf{玩家}单一角色，无管理员后台。玩家可：浏览主菜单；选择关卡或跑图节点；在战斗中移动、打开技能面板、选择升级奖励；死亡后重启。未来若扩展存档，仍不改变“玩家”唯一角色定义。
+
+\subsection{硬件与软件环境}
+
+\begin{table}[htbp]
+  \centering
+  \caption{运行环境建议配置}
+  \begin{tabular}{ll}
+    \toprule
+    \textbf{类别} & \textbf{要求} \\
+    \midrule
+    处理器 & 四核 2.0GHz 及以上 \\
+    内存 & 8GB 及以上 \\
+    显卡 & 支持 WebGL2 \\
+    浏览器 & Chrome / Edge 最新稳定版 \\
+    开发环境 & LayaAir IDE 3.x、Node.js（工具脚本）、TypeScript \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{数据需求}
+
+逻辑数据实体包括：\textbf{实体 Entity}、\textbf{角色 Character 行}、\textbf{子弹 Bullet 行}、\textbf{技能 Skill 行}、\textbf{效果 SkillEffect 行}、\textbf{跑图节点 RunNode}、\textbf{会话 GameSession}、\textbf{装配 SkillLoadoutState}。实体运行时状态存于 ECS 组件，配表行存于 \texttt{Data} 静态缓存，跑图图存于 \texttt{RunMapState}。
+
+\section{接口需求}
+
+\begin{enumerate}[label=\arabic*.]
+  \item \textbf{配置接口}：\texttt{ensureGameConfigLoaded(): Promise<boolean>}，失败时返回 false 并日志告警；
+  \item \textbf{战斗入口}：\texttt{MetaFlowController} 的 \texttt{onEnterCombat(payload?: CombatEnterPayload)}；
+  \item \textbf{输入接口}：\texttt{ControlInputSource} 供 \texttt{ControlSystem} 查询方向；
+  \item \textbf{UI 栈接口}：\texttt{UIStackManager.push(routeId)}、\texttt{pop()}；
+  \item \textbf{Worker 协议}：\texttt{CombatWorkerComputeRequest/Response} 字段须版本兼容。
+\end{enumerate}
+
+\section{约束与假设}
+
+\begin{itemize}
+  \item 假设用户浏览器开启 JavaScript 与 WebGL；
+  \item 假设开发阶段已执行配表同步脚本；
+  \item 单机本地运行，无强联网要求；
+  \item 2D 俯视角，不考虑 Z 轴复杂物理；
+  \item 同屏实体规模在数百级，非 MMO 级。
+\end{itemize}
+
+\section{需求优先级划分}
+
+\begin{table}[htbp]
+  \centering
+  \caption{需求优先级（MoSCoW）}
+  \begin{tabular}{cl}
+    \toprule
+    \textbf{级别} & \textbf{需求} \\
+    \midrule
+    Must & ECS 战斗、子弹碰撞、玩家移动、怪物刷怪、配表加载 \\
+    Must & 主菜单进入战斗、生存胜利计时 \\
+    Should & 跑图 DAG、技能装配 UI、升级奖励 \\
+    Should & 对象池、Worker 卸载 \\
+    Could & 法杖三槽完整 UI、红点树、全 Effect VFX \\
+    Won't（本期） & 联机对战、账号系统、支付 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+该优先级与 OpenSpec 各 \texttt{tasks.md} 完成度一致，便于裁剪答辩演示范围。

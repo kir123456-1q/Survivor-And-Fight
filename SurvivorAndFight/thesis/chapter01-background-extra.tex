@@ -1,0 +1,18 @@
+
+\section{相关游戏与竞品简要分析}
+
+\textbf{吸血鬼幸存者（Vampire Survivors）}：极简操作 + 自动攻击 + 海量敌人，证明 Survivor-like 品类的市场验证\cite{kw_survivor_genre}。本项目借鉴其战斗节奏，但通过 ECS 与配表实现更透明的扩展方式。
+
+\textbf{杀戮尖塔（Slay the Spire）}：卡牌 + DAG 跑图，强调路线决策\cite{kw_dag_run_map}。本项目跑图结构类似，但战斗为实时而非回合。
+
+\textbf{Noita}：法术模块组合与物理模拟\cite{kw_noita_spellcraft}。本项目 effect 链式修饰器吸收其“组合深度”思想，但未实现完整物理模拟，以降低范围。
+
+\textbf{其他 H5 生存类}：多数采用 Cocos/Laya 预制体 + 简单 OOP。本项目差异在于 ECS + OpenSpec + Worker，更适合作为软件工程毕业设计论述对象，而非商业竞品对标。
+
+\section{论文与代码仓库对应关系}
+
+论文叙述以仓库 \texttt{SurvivorAndFight} 为准：\texttt{src/} 为 TypeScript 源码，\texttt{openspec/changes/} 为规格提案，\texttt{docs/config/} 为配表，\texttt{thesis/} 为本 LaTeX 初稿。答辩演示建议顺序：主菜单 $\rightarrow$ 跑图选点 $\rightarrow$ 战斗 30s $\rightarrow$ Tab 装配 $\rightarrow$ 升级奖励 $\rightarrow$ 展示 OpenSpec 目录。代码与论文不一致时，以代码为准并修订论文。
+
+\section{术语与缩写预备说明}
+
+全文首次出现英文缩写时给出中文释义，详见附录~\ref{app:terms}。引擎 API 保留英文类名，便于与源码对照。章节中涉及的 \texttt{change-id} 均指 OpenSpec 变更目录名，不代表已归档或未完成状态，实施情况以 \texttt{tasks.md} 勾选为准。

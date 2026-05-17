@@ -1,0 +1,80 @@
+\chapter{系统总体设计}
+\label{chap:architecture}
+
+\section{设计原则}
+
+\begin{enumerate}[label=(\arabic*)]
+  \item \textbf{数据与逻辑分离}：组件只存数据，系统负责逻辑；配表驱动可变参数\cite{kw_data_driven_game}。
+  \item \textbf{单一职责}：如 \texttt{BulletSystem} 只管子弹生命周期与碰撞，\texttt{EffectExecutor} 负责效果语义到子弹参数的映射。
+  \item \textbf{可测试与可验证}：核心模块提供 \texttt{*.verify.ts}（如 \texttt{formulaParser.verify.ts}、\texttt{ecsCorePhase1.verify.ts}）。
+  \item \textbf{渐进式复杂度}：ECS 第 1 期不引入 archetype；Worker 仅在规模达标时启用。
+  \item \textbf{规格先行}：重大能力以 OpenSpec 变更提案描述 SHALL/MUST 需求与 Scenario。
+\end{enumerate}
+
+\section{系统分层架构}
+
+系统自顶向下分为五层，如图~\ref{fig:layers} 所示（文字描述版）。
+
+\begin{figure}[htbp]
+  \centering
+  \fbox{\parbox{0.92\textwidth}{
+    \centering
+    \textbf{表现层}：Laya 预制体、2D/3D UI、血条 ProgressBar、相机跟随\\
+    $\downarrow$\\
+    \textbf{UI 控制层}：MVC Controller/View/Model、UIStackManager、各 Panel\\
+    $\downarrow$\\
+    \textbf{游戏逻辑层}：ECS Systems、BulletSystem、RunMap、MetaFlow、Reward\\
+    $\downarrow$\\
+    \textbf{领域服务层}：ConfigBootstrap、FormulaParser、Targeting、CombatDataBridge\\
+    $\downarrow$\\
+    \textbf{基础设施层}：EcsWorld、ComponentStore、defines、Worker 协议
+  }}
+  \caption{系统分层架构示意}
+  \label{fig:layers}
+\end{figure}
+
+入口 \texttt{Main.ts} 负责：初始化输入服务 \texttt{InputService} 与 \texttt{ControlInputAdapter}；构造 \texttt{SimpleEcsDemo}；根据 \texttt{META\_MENU\_ENABLED} 决定直接进入战斗或启动 \texttt{MetaMenuBootstrap}；在 \texttt{frameLoop} 中更新 Demo 与生存计时器。
+
+\section{部署与运行视图}
+
+游戏以 H5 包发布至 \texttt{bin/}（或引擎发布目录），运行时通过 HTTP(S) 加载脚本与 \texttt{config/} 下 JSON。开发阶段修改配表后须执行同步脚本，否则 \texttt{Data.Skill.GetAll()} 行数不足会导致技能面板初始化失败（\texttt{isGameConfigReady} 为 false）。
+
+\section{ECS 世界与系统调度}
+
+\texttt{SimpleEcsDemo} 构造时创建 \texttt{EcsWorld}，注册系统顺序遵循分组：
+\begin{itemize}
+  \item \textbf{input}：\texttt{ControlSystem}
+  \item \textbf{logic}：\texttt{AttributeSystem}、\texttt{MovementSystem}、\texttt{SkillSystem}、\texttt{PlayerAutoCastSystem}、\texttt{MonsterAutoCastSystem}、\texttt{MonsterChaseSystem}、\texttt{ExperienceSystem}、\texttt{MonsterWaveSpawnSystem}、\texttt{UpgradeRewardSystem} 等
+  \item \textbf{render}：\texttt{ViewSyncSystem}、\texttt{BloodBarSyncSystem}、\texttt{MainHudSystem}
+\end{itemize}
+
+\texttt{GameSession} 组件挂载于独立实体，\texttt{paused} 标志被各战斗系统在 \texttt{update} 开头检查。技能装配 UI 打开时暂停战斗逻辑但 UI Controller 仍可响应拖拽。
+
+\section{数据流：战斗帧}
+
+战斗帧数据流如下：
+\begin{enumerate}[label=\arabic*.]
+  \item \texttt{CombatDataPrepareSystem} 采集玩家/怪物坐标与子弹快照；
+  \item 若 \texttt{CombatDataBridge.shouldUseWorker()} 为真，向 Worker 发送 \texttt{COMBAT\_WORKER\_MSG\_COMPUTE}；
+  \item Worker 执行 \texttt{processCombatFrame}（与主线程共享逻辑文件 \texttt{combatWorkerLogic.ts}）；
+  \item 主线程在后续帧应用返回的追逐偏移、分离力等结果；
+  \item \texttt{BulletSystem} 在主线程更新子弹位置并执行命中检测（因需访问 Laya 节点与池化对象）。
+\end{enumerate}
+
+该拆分体现了“重数值模拟可卸载、渲染与碰撞仍留主线程”的工程折中\cite{kw_web_worker_game}。
+
+\section{元游戏状态机}
+
+\texttt{MetaFlowController} 协调界面路由与战斗入口，\texttt{MetaRunSession} 保存跨界面会话数据（如 \texttt{combatDemo} 引用）。跑图状态 \texttt{RunMapState} 记录当前节点、已访问集合与可推进边；选择战斗节点时构造 \texttt{CombatEnterPayload}（含是否 Boss）。
+
+\section{配置与静态常量}
+
+JSON 配表描述“可变策划数据”，\texttt{defines} 描述“工程常量”（如 \texttt{MONSTER\_COUNT}、\texttt{CHAIN\_HIT\_RADIUS}、\texttt{LONG\_PRESS\_MS}）。二者不得混用：业务文件禁止硬编码本应在 define 中的常量（仓库规则 \texttt{static-config-define.mdc}）。
+
+\section{数据库设计说明}
+
+本游戏为纯客户端 H5 项目，无服务端关系型数据库。持久化需求（若未来扩展）可通过 \texttt{localStorage} 或云存档 API 实现，当前范围外。配表逻辑结构等价于“逻辑数据模型”，见第~\ref{chap:modules}~章配表小节。
+
+\section{本章小结}
+
+本章给出了分层架构、ECS 调度、战斗数据流与元游戏状态机设计，明确了入口与配置加载路径。下一章将分模块深入实现细节。

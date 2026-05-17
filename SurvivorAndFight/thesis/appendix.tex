@@ -1,0 +1,77 @@
+\appendix
+\chapter{名词术语及缩略词}
+\label{app:terms}
+
+\begin{longtable}{ll}
+  \toprule
+  \textbf{术语/缩略语} & \textbf{含义} \\
+  \midrule
+  ECS & Entity Component System，实体组件系统 \\
+  Roguelite & 轻 Roguelike，通常含元进度与单局随机 \\
+  DAG & Directed Acyclic Graph，有向无环图 \\
+  MVP & Minimum Viable Product，最小可行产品 \\
+  H5 & HTML5 网页游戏 \\
+  UI2 & LayaAir 新一代 UI 组件（GBox/GPanel 等） \\
+  Worker & Web Worker，浏览器后台线程 \\
+  OpenSpec & 本项目采用的规格驱动变更管理工具链 \\
+  SOA & Structure of Arrays，结构数组，ECS 优化布局 \\
+  \bottomrule
+\end{longtable}
+
+\chapter{核心配表字段示例（节选）}
+\label{app:config}
+
+\textbf{Character 表}（逻辑字段）：\texttt{id}、\texttt{prefabPath}、\texttt{bodyPrefabPath}、\texttt{hp}、\texttt{maxHp}、\texttt{roleType}。
+
+\textbf{Bullet 表}：\texttt{id}、\texttt{prefabPath}、\texttt{duration}、\texttt{speed}、\texttt{damage}、\texttt{penetration}。
+
+\textbf{SkillEffect 表}：\texttt{id}、\texttt{effect}、\texttt{damage}、\texttt{params}、\texttt{iconPath}。
+
+完整 JSON 见仓库 \texttt{docs/config/} 目录。
+
+\chapter{OpenSpec 变更清单（截至初稿）}
+\label{app:openspec}
+
+\begin{itemize}
+  \item \texttt{add-ecs-core-phase1} — ECS 核心 MVP
+  \item \texttt{add-ecs-gameplay-phase1} — 玩法组件与系统
+  \item \texttt{add-bullet-hp-ui-verification} — 子弹、血量、血条
+  \item \texttt{add-monster-spawn-and-movement-patterns} — 怪物波次与移动
+  \item \texttt{add-battle-level-and-random-upgrades} — 升级与奖励
+  \item \texttt{add-mvc-ui-stack-redpoint-pooling} — MVC 与 UI 栈
+  \item \texttt{add-meta-flow-run-map-spellcraft} — 元游戏与跑图
+  \item \texttt{add-combat-skill-loadout-ui} — 技能装配 UI
+  \item \texttt{add-three-wand-systems-and-config-tables} — 法杖与配表（进行中）
+  \item \texttt{add-main-menu-mvc-panels} — 主菜单面板
+\end{itemize}
+
+\chapter{PDF 模板格式要求摘要}
+\label{app:template}
+
+以下内容摘自 \texttt{本科毕业设计(论文)参考模板-计算机学院.pdf}（中国石油大学华东），撰写与排版时请遵守：
+
+\begin{enumerate}[label=\arabic*.]
+  \item 结构含：封面、原创性声明、版权授权、中英文摘要、目录、正文章节、致谢、参考文献、附录。
+  \item 正文页眉为对应章名；摘要、目录、致谢、参考文献、附录页眉为“中国石油大学（华东）本科毕业设计(论文)”，楷体五号居中。
+  \item 正文至附录页脚为阿拉伯数字连续页码，Times New Roman 五号居中；封面、摘要、目录不编页码。
+  \item 正文小四号宋体，1.5 倍行距，首行缩进 2 字符；三级以下标题可用“1、”“1）”“（1）”“①”等。
+  \item 建议补充：社会/安全/法律/文化影响分析；绿色节能与兼容性评价；项目管理应用心得。
+\end{enumerate}
+
+模板提取命令：\texttt{node tools/extract-thesis-template.cjs}（输出 \texttt{docs/thesis-template-requirements.txt}）。
+
+\chapter{LaTeX 编译与环境说明}
+\label{app:latex-build}
+
+推荐使用 TeX Live 或 MiKTeX，编译器为 \textbf{XeLaTeX}（支持中文）。Windows 下可安装 TeX Live 后，在 \texttt{thesis} 目录打开终端执行：
+\begin{verbatim}
+xelatex main.tex
+bibtex main
+xelatex main.tex
+xelatex main.tex
+\end{verbatim}
+若缺少 \texttt{ctex} 宏包，可通过 tlmgr 安装。生成 PDF 后检查目录、参考文献与图表编号。若 bibtex 报错，确认 \texttt{references.bib} 编码为 UTF-8 且无非法字符。
+
+论文类名、学号、指导教师等请在 \texttt{main.tex} 顶部 \texttt{\textbackslash newcommand} 处修改。封面日期、摘要关键词可按学院要求微调。图表占位可在终稿阶段插入 \texttt{.png} 截图，路径建议置于 \texttt{thesis/figures/} 目录（需自行创建）。
+
+字数统计脚本统计所有 \texttt{*.tex} 文件中 Unicode 汉字范围字符，与 Word “字数”统计可能略有差异；若学院以 Word 为准，定稿时可 Pandoc 转换后复核。本初稿目标为正文字数不少于 20000 汉字，当前源文件统计应达到该阈值，提交前请再次运行 \texttt{node tools/count-thesis-chars.cjs} 确认。

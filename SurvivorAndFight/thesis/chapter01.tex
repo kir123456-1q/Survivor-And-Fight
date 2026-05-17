@@ -1,0 +1,33 @@
+\chapter{绪论}
+\label{chap:intro}
+
+\section{研究背景与意义}
+
+移动互联网与浏览器平台的普及，使得“打开即玩”的 H5 游戏成为独立游戏与教学实践的重要载体。相较于原生客户端，H5 游戏在分发成本、跨平台兼容与快速迭代方面具有显著优势；与此同时，JavaScript 单线程事件循环、垃圾回收（GC）抖动以及 DOM/Canvas 混合渲染等约束，也对实时战斗类游戏的架构设计提出了更高要求。Roguelite 作为近年来快速增长的品类，以《吸血鬼幸存者》为代表，将“自动攻击 + 大量敌人 + 局内升级构筑”为核心循环，玩家关注点从精细操作转向路线选择与 Build 组合，这对系统的\textbf{数据驱动能力}、\textbf{同屏实体规模}与\textbf{元游戏流程编排}提出了系统化工程需求。
+
+本课题来源于本科毕业设计项目 \textbf{Survivor And Fight}。项目目标是在 LayaAir 3.x 引擎上实现一款 2D 俯视角生存战斗游戏原型，覆盖从主菜单、选关、爬塔式跑图到局内战斗、升级奖励与技能装配的完整闭环，并在代码层面探索 ECS 架构、配表驱动技能、对象池与 Web Worker 等性能手段。该课题兼具\textbf{工程实践价值}与\textbf{学术研究切入点}：一方面可验证轻量 ECS 在中小型 H5 项目中的可维护性；另一方面可将规格驱动开发（OpenSpec）、性能优化与软件工程方法纳入论文论述框架，满足计算机专业毕业设计对“分析—设计—实现—测试—总结”的完整要求\cite{kw_project_management_agile,kw_software_testing_game}。
+
+\section{国内外研究现状}
+
+在游戏客户端架构领域，实体组件系统（ECS）已被广泛用于解耦数据与逻辑、提升缓存友好性与并行潜力\cite{kw_ecs_game_architecture}。Unity DOTS、EnTT 等方案代表了“面向数据设计”的极致路线，而教学与独立游戏场景更常采用简化 ECS：以 \texttt{Map<EntityId, Component>} 存储组件，按系统顺序每帧更新，在清晰度与性能之间折中。Survivor-like 玩法的商业成功案例推动了关于波次刷怪、经验曲线与随机升级池的设计讨论\cite{kw_survivor_genre}；Roguelite 元游戏方面，Slay the Spire 式 DAG 跑图成为关卡结构事实标准\cite{kw_dag_run_map}。
+
+在 Web 游戏引擎层面，LayaAir 支持 WebGL2/WebGPU 与 TypeScript 开发，提供 2D/3D 混合管线\cite{kw_layaair_html5_engine}。数据驱动方面，JSON 配表 + 代码生成或运行时反射加载是手游与 H5 项目常见模式\cite{kw_data_driven_game}。性能优化文献与工程经验强调对象池、减少每帧分配、将重计算迁移至 Worker 等手段\cite{kw_object_pooling,kw_web_worker_game}。本课题在上述脉络中，选择“轻量 ECS + 配表技能 + 元游戏跑图”的组合路径，与项目 OpenSpec 提案（\texttt{add-ecs-core-phase1}、\texttt{add-ecs-gameplay-phase1}、\texttt{add-meta-flow-run-map-spellcraft} 等）保持一致。
+
+\section{研究内容与论文结构}
+
+本文主要研究内容包括：
+\begin{enumerate}[label=(\arabic*)]
+  \item 基于 LayaAir 与 TypeScript 的游戏总体架构设计，含入口 \texttt{Main.ts}、配置引导 \texttt{ConfigBootstrap} 与 \texttt{SimpleEcsDemo} 集成；
+  \item 轻量 ECS 核心的实体管理、组件存储、系统分组调度及与 Laya 主循环的挂接；
+  \item 玩法层：移动/属性/技能/操控、子弹碰撞、怪物追逐与波次生成、经验与升级奖励；
+  \item 元游戏层：\texttt{MetaFlowController} 流程、\texttt{RunMapGenerator} 随机 DAG 跑图、战斗入口载荷；
+  \item UI 层：MVC 生命周期、\texttt{UIStackManager} 路由、技能装配面板与血条同步；
+  \item 性能优化：\texttt{BulletPool}/\texttt{MonsterPool}、\texttt{CombatDataBridge} Worker 卸载及静态 \texttt{defines} 配置集中管理；
+  \item 测试验证与工程管理、社会影响及绿色计算方面的讨论。
+\end{enumerate}
+
+全文共分八章：第~\ref{chap:related}~章介绍相关技术；第~\ref{chap:requirement}~章给出需求分析；第~\ref{chap:architecture}~章描述总体设计；第~\ref{chap:modules}~章详述核心模块实现；第~\ref{chap:performance}~章讨论性能优化；第~\ref{chap:test}~章说明测试方案与结果；第~\ref{chap:conclusion}~章总结与展望。
+
+\section{本章小结}
+
+本章阐述了 H5 Roguelite 生存游戏的背景与课题意义，梳理了 ECS、数据驱动、跑图生成与 Web 性能优化等相关研究线索，并给出了全文结构。后续章节将围绕项目实际代码与 OpenSpec 规格展开设计与实现细节，读者可结合仓库目录与附录中的文件索引对照阅读。

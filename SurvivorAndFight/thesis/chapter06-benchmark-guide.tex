@@ -1,0 +1,45 @@
+
+\section{性能测试实验设计}
+
+\subsection{实验目的}
+
+验证对象池与 Web Worker 对帧时间与 GC 的影响，为论文提供定量依据\cite{kw_object_pooling,kw_web_worker_game,kw_green_web_perf}。
+
+\subsection{实验变量}
+
+自变量：（A）子弹/怪物池化开/关；（B）Worker 开/关（在实体数达标时）；（C）同屏怪物上限。因变量：平均 FPS、P95 帧时间、Scripting 耗时、Major GC 次数。控制变量：浏览器版本、分辨率、战斗场景、测试时长 60s、关闭后台占用。
+
+\subsection{实验步骤}
+
+\begin{enumerate}[label=\arabic*.]
+  \item 发布或预览运行构建，打开 Chrome DevTools Performance；
+  \item 进入战斗，等待怪物数量稳定至上限附近；
+  \item 录制 60s，导出 Summary；
+  \item 修改 defines 关闭池化或 Worker，重新构建，重复录制；
+  \item 填入第~\ref{chap:test}~章表~\ref{tab:perf}；
+  \item 在论文中用文字对比 A/B 差异，避免只贴图不分析。
+\end{enumerate}
+
+\subsection{预期结论方向}
+
+预期池化降低 GC 峰值；Worker 在怪物 $\geq$ 阈值时降低主线程 Scripting 时间；两者可同时启用获得最佳稳定性。若实测与预期不符，须分析原因（如 Worker 通信开销大于计算收益），体现科学态度。
+
+\section{性能优化检查清单}
+
+开发者在合并性能相关 PR 前应自检：
+\begin{itemize}
+  \item 是否在热路径 \texttt{new} 大量临时对象？
+  \item 销毁节点前是否尝试 \texttt{pool.put}？
+  \item 碰撞检测是否使用平方距离？
+  \item 暂停状态是否阻止无关 System？
+  \item Worker 消息 payload 是否仅含数值？
+  \item 配表是否在启动时一次加载而非每帧读取？
+\end{itemize}
+
+\section{与学院模板“绿色节能”要求的对应}
+
+模板建议从绿色节能、低功耗、兼容性评价系统\cite{kw_green_web_perf}。本项目通过降低平均 CPU 占用支撑该要求：池化减少分配器压力；暂停减少空转；Worker 均衡多核利用（在支持的设备上）。兼容性通过 Worker 回退与多路径配表加载实现。终稿可附“开启/关闭优化”时的设备功耗对比（可选，手机 + 电量统计 App）。
+
+\section{工程度量与 OpenSpec 任务完成度}
+
+除帧率外，可统计：已归档/已实施变更数、\texttt{tasks.md} 完成比例、单元验证脚本通过率。这些度量反映项目管理成效\cite{kw_project_management_agile}，可在答辩 PPT 中展示，增强“工程完整性”印象。

@@ -1,0 +1,48 @@
+
+\section{技术选型说明}
+
+\begin{table}[htbp]
+  \centering
+  \caption{技术选型汇总}
+  \label{tab:tech-stack}
+  \begin{tabular}{lll}
+    \toprule
+    \textbf{层次} & \textbf{选型} & \textbf{理由} \\
+    \midrule
+    引擎 & LayaAir 3.x & 教学栈一致、2D 预制体工作流成熟 \\
+    语言 & TypeScript & 类型安全、与引擎脚本一致 \\
+    架构 & 轻量 ECS + MVC UI & 解耦、可扩展 \\
+    配置 & JSON + defines & 策划可调 + 工程常量分离 \\
+    并发 & Web Worker（可选） & 主线程减压 \\
+    规格 & OpenSpec & 需求可验证、变更有档 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{类与模块划分}
+
+核心类职责（节选）：
+\begin{itemize}
+  \item \texttt{EcsWorld}：实体组件系统门面；
+  \item \texttt{SimpleEcsDemo}：游戏场景组合根（Composition Root）；
+  \item \texttt{BulletSystem}：子弹模拟与碰撞；
+  \item \texttt{CombatDataBridge}：Worker 桥接；
+  \item \texttt{MetaFlowController}：元游戏流程；
+  \item \texttt{RunMapGenerator}：跑图生成；
+  \item \texttt{UIStackManager}：界面路由；
+  \item \texttt{SkillSelectPanelController}：技能装配。
+\end{itemize}
+
+类图可在终稿中使用 PlantUML 绘制；初稿以文字描述为主，避免与快速迭代的代码签名不一致。
+
+\section{安全设计}
+
+H5 客户端安全重点包括：（1）配表 JSON 不包含密钥；（2）若未来接入 API，须 HTTPS 与输入校验；（3）避免在 \texttt{eval} 中执行不可信策划公式——\texttt{FormulaParser} 应仅支持白名单运算\cite{kw_skill_formula}。当前单机原型攻击面较小，但公式解析器仍是潜在风险点，须在代码审查中禁止任意 JS 执行。
+
+\section{可靠性设计}
+
+Worker 失败时自动回退主线程；配表加载失败时使用 \texttt{DEFAULT\_*} 常量并 \texttt{missingConfigLogged} 去重日志；\texttt{RunMapGenerator} 生成失败使用 \texttt{generateFallback} 保底图，避免卡死进度。重启流程通过 \texttt{restarting} 标志防止重入。
+
+\section{开发与部署流程}
+
+开发：Laya IDE 编辑场景与预制体 $\rightarrow$ TypeScript 编译 $\rightarrow$ 预览。配表修改后执行 \texttt{tools/sync-config-to-bin.ps1}。规格变更：\texttt{openspec validate} $\rightarrow$ 实现 $\rightarrow$ 勾选 \texttt{tasks.md} $\rightarrow$ 归档。部署：发布至 \texttt{bin/}，静态服务器托管，无服务端渲染要求\cite{kw_project_management_agile}。

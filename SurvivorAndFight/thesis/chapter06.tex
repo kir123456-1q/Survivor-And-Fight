@@ -1,0 +1,64 @@
+\chapter{性能优化与工程实践}
+\label{chap:performance}
+
+\section{性能目标与瓶颈分析}
+
+H5 生存战斗游戏的性能热点通常集中在：（1）大量怪物与子弹的更新与碰撞；（2）预制体实例化与销毁引发的 GC；（3）主线程单线程限制导致的帧时间尖峰。项目通过浏览器 Performance 面板与引擎统计观察，确认在关闭对象池、强制主线程战斗重算时，帧时间 P95 明显上升；开启优化后帧曲线更平稳。以下优化均可在 \texttt{defines} 中开关或调参，便于 A/B 对比\cite{kw_green_web_perf,kw_object_pooling}。
+
+\section{对象池优化}
+
+\subsection{子弹池}
+
+\texttt{BulletPool} 以 \texttt{prefabPath} 为键维护节点数组。\texttt{get} 时弹出栈顶节点；\texttt{put} 时从父节点移除并压栈。调用方在复用前须重置位置、速度、碰撞状态与 effect 修饰器残留。该模式将“每发子弹 new 预制体”变为“峰值后复用”，显著降低分配次数\cite{kw_object_pooling}。
+
+\subsection{怪物池}
+
+\texttt{MonsterPool} 同理，配合 \texttt{MonsterRecycleSystem} 在怪物离屏或死亡后回收而非 \texttt{destroy}。波次刷怪从池中取出实体并重新挂载组件数据，避免重复加载贴图资源。
+
+\subsection{与 ECS 的协同}
+
+池化对象仍通过 \texttt{ViewComponent} 关联实体；销毁实体时组件先清理，视图节点回池。须注意：池节点隐藏期间不应参与碰撞，\texttt{BulletSystem} 在回收时注销碰撞监听。
+
+\section{Web Worker 战斗卸载}
+
+\subsection{设计动机}
+
+\texttt{MonsterChaseSystem} 对大量怪物计算追逐向量、分离力（\texttt{MONSTER\_SEPARATION\_DISTANCE}、\texttt{MONSTER\_SEPARATION\_FORCE}）与随机摆动，属于纯数值运算，适合从主线程剥离\cite{kw_web_worker_game}。
+
+\subsection{协议与回退}
+
+\texttt{combatWorkerProtocol.ts} 定义消息类型 \texttt{COMBAT\_WORKER\_MSG\_COMPUTE}、\texttt{COMBAT\_WORKER\_MSG\_READY}。\texttt{CombatDataPrepareSystem} 打包 \texttt{CombatEntitySnapshot} 与 \texttt{CombatBulletSnapshot}；Worker 内调用 \texttt{processCombatFrame}；主线程在 \texttt{CombatDataBridge} 中匹配 \texttt{frameId} 应用结果。
+
+当 \texttt{COMBAT\_WORKER\_ENABLED} 为 false、\texttt{Worker} 不可用或实体数小于 \texttt{COMBAT\_WORKER\_MIN\_ENTITY\_COUNT} 时，主线程直接调用同一 \texttt{processCombatFrame}，保证\textbf{逻辑一致性}优于\textbf{强制并行}。该设计符合“渐进增强”原则。
+
+\subsection{延迟与一致性}
+
+Worker 方案引入一帧级异步延迟；追逐力应用滞后于位置同步，在视觉上可接受。子弹碰撞仍留主线程，避免跨线程传递 Laya 节点引用。
+
+\section{碰撞与算法微优化}
+
+\texttt{BulletHitTest.hitRadiusSq} 比较距离平方，避免 \texttt{Math.sqrt}。\texttt{CHAIN\_HIT\_RADIUS} 限制连锁搜索范围，减少嵌套循环规模。后续可引入均匀网格或四叉树作为 broad phase\cite{kw_spatial_hash_collision}，当前实体规模下线性扫描仍可满足毕业设计演示。
+
+\section{逻辑暂停与更新裁剪}
+
+Tab 打开 \texttt{SkillSelectPanel} 时，\texttt{GameSession.paused} 为 true，战斗相关 System 早退，避免无意义物理与 AI 计算。元游戏界面显示时，\texttt{SimpleEcsDemo} 容器可隐藏，停止渲染战斗场景。
+
+\section{静态配置集中与加载优化}
+
+所有常量集中于 \texttt{*Define.ts}，减少运行时对象创建。配表一次性异步加载并缓存于 \texttt{Data}，避免每帧读表。开发流程要求修改 JSON 后执行 \texttt{sync-config-to-bin.ps1}，防止预览环境 404 导致重复失败重试。
+
+\section{ECS 存储的未来优化方向}
+
+当前 \texttt{ComponentStore} 为按类型 Map，遍历友好但非 SoA。OpenSpec 已记录后续将迁移至 archetype/chunk 结构\cite{kw_ecs_game_architecture}。论文阶段以可维护性为主，性能数据作为对比实验记录于第~\ref{chap:test}~章。
+
+\section{绿色计算与兼容性评价}
+
+从可持续发展角度，降低每帧 CPU 占用可减少终端能耗与发热\cite{kw_green_web_perf}。对象池与 Worker 卸载直接降低平均功耗。兼容性方面，Worker 回退保证低端设备可玩；配表双通道加载兼容不同发布路径。浏览器版本升级时须回归测试 \texttt{combat.worker.ts} 的打包路径 \texttt{COMBAT\_WORKER\_SCRIPT\_URL}。
+
+\section{项目管理与规格驱动实践}
+
+项目采用 OpenSpec 管理变更：提案 $\rightarrow$ 评审 $\rightarrow$ \texttt{tasks.md} 实施 $\rightarrow$ 归档。该流程将需求、设计与任务清单绑定，降低“代码与文档不一致”风险\cite{kw_spec_driven_dev,kw_project_management_agile}。多工作流文档 \texttt{WORKSTREAMS.md} 支持并行开发（如元游戏与战斗 UI 分工），体现软件工程方法在毕业设计中的运用。
+
+\section{本章小结}
+
+本章分析了性能瓶颈并阐述了对象池、Web Worker、碰撞微优化、逻辑暂停与配置管理等手段。测试数据见下一章。

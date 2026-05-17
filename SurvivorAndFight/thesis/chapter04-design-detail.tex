@@ -1,0 +1,47 @@
+
+\section{数据库与配表逻辑模型}
+
+虽无关系数据库，配表行仍构成逻辑 ER 关系：\textbf{Character} 1:1 关联玩家或怪物预制体；\textbf{Skill} 1:N \textbf{SkillEffect}；\textbf{SkillEffect} N:1 \textbf{Bullet}（当 effect 类型为 bullet）；\textbf{RunNode} N:N 通过边连接。图~\ref{fig:config-er} 以文字描述该关系。
+
+\begin{figure}[htbp]
+  \centering
+  \fbox{\parbox{0.9\textwidth}{
+    Character(id, prefabPath, hp, maxHp)\\
+    Skill(id, cooldown, effectSlotCount)\\
+    SkillEffect(id, skillId, effect, damage, params)\\
+    Bullet(id, prefabPath, speed, penetration)\\
+    RunNode(id, type, payloadId) — edges $\rightarrow$ RunNode
+  }}
+  \caption{配表逻辑关系示意}
+  \label{fig:config-er}
+\end{figure}
+
+\section{系统顺序图（文字描述）}
+
+\textbf{施法顺序图：} PlayerAutoCast $\rightarrow$ CastPlan $\rightarrow$ EffectExecutor $\rightarrow$ BulletSystem $\rightarrow$ AttributeSystem（伤害）。\textbf{升级顺序图：} MonsterDeath $\rightarrow$ ExperienceSystem $\rightarrow$ UpgradeRewardSystem $\rightarrow$ RewardPanel $\rightarrow$ RewardApplyService $\rightarrow$ AttributeSystem。
+
+\section{部署拓扑}
+
+单机浏览器访问静态资源服务器；无后端集群。发布包包含 JS 编译产物、资源包、config JSON。CDN 部署时可缓存资源、短缓存 config 以便热更新\cite{kw_data_driven_game}。
+
+\section{容错与降级策略}
+
+\begin{enumerate}[label=\arabic*.]
+  \item 配表缺失：使用 \texttt{DEFAULT\_*} 常量，记录一次日志；
+  \item Worker 失败：主线程 \texttt{processCombatFrame}；
+  \item 跑图生成失败：\texttt{generateFallback}；
+  \item 预制体加载失败：占位半径碰撞体，保证可继续调试；
+  \item UI 面板加载失败：跳过该路由并日志，不阻断战斗。
+\end{enumerate}
+
+\section{可扩展性设计}
+
+新增怪物行为：添加 System 或扩展 \texttt{MonsterDef} 组件字段。新增技能效果类型：扩展 \texttt{EffectExecutor} 分支与 spec。新增界面：注册 UI 栈路由与 Controller。新增跑图节点类型：扩展 \texttt{RunNodeType} 与生成器权重。扩展点均已在 OpenSpec 中预留，避免修改 \texttt{EcsWorld} 内核\cite{kw_ecs_game_architecture}。
+
+\section{安全与隐私设计扩展}
+
+客户端不存储密码。若接入分析 SDK，须在隐私政策中披露。配表 JSON 禁止包含 API 密钥。用户输入仅用于游戏操控，不上传聊天记录。公式解析器禁止 \texttt{eval}，防止配表被恶意篡改时 RCE\cite{kw_skill_formula,kw_ethics_game_design}。
+
+\section{总体设计评审结论}
+
+总体设计满足当前 OpenSpec 已提案能力范围，模块边界清晰，性能与可维护性有明确手段。风险在于法杖系统与部分 Effect 视觉未完全实现，须在论文与答辩中如实标注。下一章实现细节与本章设计一一对应，便于评阅。

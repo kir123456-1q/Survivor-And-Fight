@@ -1,0 +1,76 @@
+
+\section{系统初始化与主循环实现}
+
+\subsection{入口与配置加载时序}
+
+\texttt{Main.onStart} 中依次完成：创建 \texttt{InputService}、\texttt{ControlInputAdapter}、\texttt{SimpleEcsDemo}；注册 \texttt{frameLoop}；调用 \texttt{loadConfigAndInitDemo}。该异步函数 \texttt{await ensureGameConfigLoaded()}，若 \texttt{META\_MENU\_ENABLED} 为真则 \texttt{startMetaMenu}，否则直接 \texttt{demo.init()}。时序设计保证\textbf{配表优先于实体生成}，避免 \texttt{Data.Character.GetByID} 返回空导致预制体路径缺失。
+
+\subsection{SimpleEcsDemo 构造过程}
+
+构造函数内完成世界初始化与系统注册，核心步骤包括：创建 \texttt{FilterRegistry} 并 \texttt{registerNamedFilters}；注册 \texttt{RESTART\_PANEL\_ROUTE\_ID}；创建 \texttt{GameSession} 实体；实例化 \texttt{AttributeSystem}、\texttt{ExperienceSystem}、\texttt{BulletSystem}（注入 \texttt{BulletPool} 与 \texttt{CombatDataBridge}）、\texttt{CombatDataPrepareSystem}、\texttt{SkillSystem}、\texttt{MonsterWaveSpawnSystem}、\texttt{UpgradeRewardSystem}、\texttt{MainHudSystem}、\texttt{SkillSelectPanelController} 等。该集中注册点便于查阅系统拓扑，亦可在未来改为反射或配置文件驱动注册。
+
+\subsection{init 阶段实体生成}
+
+\texttt{init()} 在配表就绪后加载玩家预制体：读取 \texttt{Character} 行中 \texttt{prefabPath}、\texttt{bodyPrefabPath}、\texttt{hp}/\texttt{maxHp}；创建实体并挂载 \texttt{PlayerTag}、\texttt{Position}、\texttt{Velocity}、\texttt{Attribute}、\texttt{Skill}、\texttt{SkillLoadoutState}、\texttt{Control}、\texttt{Experience}、\texttt{ViewComponent} 等；默认写入 \texttt{createDefaultLoadoutState()} 与自动施法技能 id。怪物由波次系统动态生成，而非 init 静态放置，以降低初始场景负担。
+
+\section{战斗效果执行详细流程}
+
+当 \texttt{PlayerAutoCastSystem} 决定施放技能时，流程如下：
+\begin{enumerate}[label=\arabic*.]
+  \item 从 \texttt{SkillLoadoutState} 读取装备栏技能 id 列表，检查 \texttt{Skill.cooldownRemain}；
+  \item 调用 \texttt{CastPlan} 解析技能包含的 effect 行（按配表顺序）；
+  \item 对每个 effect，\texttt{EffectExecutor} 根据 \texttt{effect} 字段分发；
+  \item 若为 \texttt{modifier\_*}，将分裂数、连锁数、穿透增量写入上下文，供\textbf{下一条} \texttt{bullet} effect 消费；
+  \item 若为 \texttt{bullet}，合并上下文参数调用 \texttt{spawnBulletWithOptions}，设置 \texttt{ownerSide} 为玩家阵营；
+  \item 若为 \texttt{direct\_damage}，\texttt{FormulaParser} 计算伤害并 \texttt{AttributeSystem} 扣血。
+\end{enumerate}
+
+该“修饰器 + 子弹”顺序语义与 Noita 式法术链思想一致：修饰器本身不直接产生视觉效果，而是改变后续子弹行为\cite{kw_noita_spellcraft}。实现上须保证 effect 表内顺序可被策划理解，建议在工具链中提供顺序预览。
+
+\section{子弹碰撞与连锁算法说明}
+
+设子弹 $b$ 与怪物 $m$ 圆半径分别为 $r_b, r_m$，中心距离平方 $d^2 = (x_b-x_m)^2 + (y_b-y_m)^2$，若 $d^2 \leq (r_b+r_m)^2$ 则判定命中\cite{kw_spatial_hash_collision}。命中后：
+\begin{itemize}
+  \item 对 $m$ 应用 \texttt{damage}（可含公式）；
+  \item \texttt{penetration} 减 1，为 0 则回收子弹；
+  \item 若存在 \texttt{chainCount}，在 \texttt{CHAIN\_HIT\_RADIUS} 内选取下一未命中目标，递归扣血直至次数耗尽；
+  \item 若存在 \texttt{splitCount}，在原位置扇形生成多颗衍生子弹（速度方向扰动）。
+\end{itemize}
+
+怪物子弹对玩家同理，仅阵营判断相反。该逻辑在 spec 中要求“玩家子弹仅对 MonsterTag 生效”，防止误伤。
+
+\section{怪物 AI 与波次协同}
+
+\texttt{MonsterChaseSystem} 每帧计算指向玩家的单位方向向量，乘以 \texttt{MONSTER\_CHASE\_SPEED} 写入速度或位移。密集人群时叠加分离力：当两怪距离小于 \texttt{MONSTER\_SEPARATION\_DISTANCE}，沿连线方向施加排斥，强度 \texttt{MONSTER\_SEPARATION\_FORCE}，降低模型重叠。随机摆动项使用 \texttt{MONSTER\_RANDOM\_SWAY\_DEGREE} 与 \texttt{MONSTER\_RANDOM\_SWAY\_FREQ} 增加轨迹不可预测性。
+
+\texttt{MonsterWaveSpawnSystem} 根据当前存活数与上限 \texttt{MONSTER\_COUNT} 决定刷怪，使用 \texttt{pickMonsterIdForWave} 从 \texttt{MonsterCatalog} 按波次权重选 id。\texttt{MonsterRecycleSystem} 在怪物远离玩家超过阈值后回收实体与节点，维持活跃集合规模。
+
+\section{经验、升级与奖励闭环}
+
+\texttt{Experience} 组件记录当前经验与等级。\texttt{ExperienceSystem} 在怪物死亡时读取 \texttt{ExperienceReward}，增加经验并判断是否升级。升级后 \texttt{UpgradeState} 标记待选奖励，\texttt{UpgradeRewardSystem} 暂停战斗或打开 \texttt{RewardPanel}（具体交互由 UI Controller 实现）。\texttt{RewardPoolService} 按权重抽取奖励条目，\texttt{RewardApplyService} 可能执行：增加属性 modifier、提升 hp 上限、解锁技能等。
+
+该闭环将“生存时间”转化为“数值成长”，是 Survivor-like 品类留存关键\cite{kw_survivor_genre}。配表 \texttt{rewardDefine.ts} 中常量控制池子 id 与 UI 路由。
+
+\section{元游戏界面与 UI 栈交互}
+
+\texttt{MetaMenuBootstrap} 向 \texttt{UIStackManager} 注册 \texttt{StartPanel}、\texttt{SelectLevelPanel}、\texttt{RunMapPanel} 等路由。用户点击“开始”后 Controller 调用 \texttt{MetaFlowController} 方法切换栈顶界面。选关或跑图确认后触发 \texttt{onEnterCombat} 回调，\texttt{Main} 中隐藏菜单容器、显示战斗 \texttt{Area2D}、调用 \texttt{demo.init()} 并启动生存计时。
+
+\texttt{RunMapPanelView} 根据 \texttt{RunMapState} 渲染节点图标与连线，\texttt{MapNodeIconUtil}、\texttt{LineLayoutUtil} 负责布局。玩家仅可选择与当前节点相邻且已解锁的边，保证 DAG 规则。
+
+\section{技能装配 UI 实现细节}
+
+\texttt{SkillSelectPanelView} 绑定 \texttt{MainUIPanel.lh} 预制体。初始化时 \texttt{SkillIconBinder} 根据配表加载图标纹理。\texttt{SkillDragService} 在指针按下超过 \texttt{LONG\_PRESS\_MS} 后进入拖拽模式，使用顶层代理图标跟随指针，避免被 \texttt{GBox} 裁剪。\texttt{SkillSlotHitTest} 判断落点属于装备栏、Effect 槽或背包区，\texttt{SkillDragService} 仅允许同类 \texttt{DragKind} 放置。
+
+关闭面板时 \texttt{SkillLoadoutSyncSystem} 将 \texttt{SkillLoadoutState} 同步至 \texttt{Skill} 与 \texttt{PlayerAutoCastSystem} 的 pending 列表，并调用 \texttt{getCombatEffectIds} 刷新可战斗 effect 集合。该同步必须是原子性的，防止半状态导致施法失败。
+
+\section{输入系统}
+
+\texttt{InputService} 封装键盘/指针事件，\texttt{ControlInputAdapter} 转换为 \texttt{ControlSystem} 可读的方向向量。输入层与 UI 层解耦：Tab 打开面板时，战斗 Control 不更新，但 UI 仍可接收指针事件。该分离符合 MVC 职责划分\cite{kw_mvc_ui_pattern}。
+
+\section{重启与死亡流程}
+
+\texttt{PlayerDeathSystem} 监测 \texttt{Attribute.hp} $\leq 0$，触发死亡标志。\texttt{RestartPanelSystem} 通过 UI 栈显示重启面板，玩家确认后 \texttt{SimpleEcsDemo} 执行 re-init：清理实体、重置池、重新生成玩家与波次。须防止重复 re-init 导致监听器泄漏，\texttt{restarting} 标志用于重入保护。
+
+\section{模块间依赖关系小结}
+
+依赖关系遵循单向原则：UI $\rightarrow$ ECS 组件读写；Systems $\rightarrow$ 配表/Data；BulletSystem $\rightarrow$ BulletPool/CombatBridge；MetaFlow $\rightarrow$ Main 回调。禁止 Systems 直接操作 UI 节点，须通过 Controller 或专门 SyncSystem。该约束降低循环依赖，利于单元测试\cite{kw_software_testing_game}。

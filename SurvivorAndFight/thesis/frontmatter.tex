@@ -1,0 +1,76 @@
+% 封面、声明、摘要（摘要部分页眉按模板为“中国石油大学（华东）本科毕业设计(论文)”）
+
+\begin{titlepage}
+  \centering
+  \vspace*{1.5cm}
+  {\zihao{2}\bfseries 本科毕业设计（论文）\par}
+  \vspace{2.5cm}
+  {\zihao{3}\bfseries \thesistitle\par}
+  \vspace{3cm}
+  \begin{tabular}{rl}
+    \zihao{4} 学生姓名： & \zihao{4} \thesisauthor \\[0.6em]
+    \zihao{4} 学\quad 号： & \zihao{4} \thesisstudentid \\[0.6em]
+    \zihao{4} 专业班级： & \zihao{4} \thesismajor\ \thesisclass \\[0.6em]
+    \zihao{4} 指导教师： & \zihao{4} \thesisadvisor \\
+  \end{tabular}
+  \vfill
+  {\zihao{4} \thesisdate\par}
+\end{titlepage}
+
+\clearpage
+\thispagestyle{empty}
+\section*{学位论文原创性声明}
+本人所提交的学位论文《\thesistitle》，是在导师的指导下，独立进行研究工作所取得的原创性成果。除文中已经注明引用的内容外，本论文不包含任何其他个人或集体已经发表或撰写过的研究成果。对本文的研究做出重要贡献的个人和集体，均已在文中标明。本声明的法律后果由本人承担。
+
+\vspace{2em}
+\noindent 论文作者（签名）：\underline{\hspace{4cm}}\quad 指导教师确认（签名）：\underline{\hspace{4cm}}
+
+\noindent 年\quad 月\quad 日\hspace{5cm}年\quad 月\quad 日
+
+\clearpage
+\thispagestyle{empty}
+\section*{学位论文版权使用授权书}
+本学位论文作者完全了解中国石油大学（华东）有权保留并向国家有关部门或机构送交学位论文的复印件和磁盘，允许论文被查阅和借阅。本人授权中国石油大学（华东）可以将学位论文的全部或部分内容编入有关数据库进行检索，可以采用影印、缩印或其它复制手段保存、汇编学位论文。
+
+\vspace{1em}
+\noindent 保密的学位论文在\underline{\hspace{2cm}}年解密后适用本授权书。
+
+\vspace{2em}
+\noindent 论文作者（签名）：\underline{\hspace{4cm}}\quad 指导教师（签名）：\underline{\hspace{4cm}}
+
+\noindent 年\quad 月\quad 日\hspace{5cm}年\quad 月\quad 日
+
+% 中文摘要
+\clearpage
+\pagestyle{fancy}
+\fancyhead[C]{\small 中国石油大学（华东）本科毕业设计(论文)}
+\fancyfoot[C]{\thepage}
+\section*{摘\quad 要}
+\addcontentsline{toc}{chapter}{摘要}
+
+随着 HTML5 与 WebGL 技术的成熟，浏览器端已能够承载中等复杂度的实时动作游戏。Roguelite（轻 Roguelike）品类以单局随机性、局外元进度与构筑深度为核心乐趣，对架构的可扩展性、数据驱动能力以及运行时性能提出了较高要求。本文以毕业设计项目 \emph{Survivor And Fight} 为对象，在 LayaAir 3.x 引擎与 TypeScript 技术栈上，设计并实现了一套面向 2D 俯视角生存战斗的完整游戏系统。
+
+系统采用“类 Unity DOTS 思想”的轻量级实体组件系统（ECS）作为玩法内核，将位置、速度、属性、技能、操控等数据与逻辑解耦为组件与系统，并通过分组调度与命名筛选器支撑玩家、怪物及可操控实体的批量更新。战斗层实现了配表驱动的技能与效果执行链，支持子弹发射、穿透、分裂、连锁等组合效果；子弹与怪物均通过对象池减少实例化开销；在实体规模达到阈值时，战斗快照可通过 Web Worker 异步重算，主线程仅负责采集与应用结果，从而缓解帧时间尖峰。元游戏层提供开始界面、选关与三大关爬塔式跑图（有向无环图层、节点类型包括篝火、战斗、精英、商店等），局内支持经验升级、随机奖励与 Tab 键打开的技能装配面板（MVC + UI 栈）。工程上采用 OpenSpec 规格驱动开发，将 ECS 核心、玩法层、UI 栈、子弹与血量、怪物波次等能力拆分为可验证的变更提案，保证设计与实现的一致性。
+
+本文从需求分析、总体架构、模块详细设计、性能优化与测试验证等方面展开论述，并结合模板要求对系统的社会影响、绿色节能与项目管理应用进行了讨论。全文共八章：绪论阐明背景与论文结构；第二章综述 LayaAir、ECS、Roguelite、数据驱动与 H5 性能等相关技术；第三章给出功能与非功能需求及用例；第四章描述分层架构、ECS 调度与数据流；第五章按模块详解 ECS、技能、子弹、怪物、元游戏、跑图、UI 与配表实现，并给出典型场景剖析与源码索引；第六章集中讨论对象池、Web Worker、碰撞与配置等优化手段；第七章说明测试策略、用例与性能实验框架；第八章总结工作并展望法杖系统、archetype 存储等方向。
+
+测试表明，在目标平台上系统可稳定运行，对象池与 Worker 卸载对帧率稳定性具有明显改善。项目采用 OpenSpec 管理十余项能力变更，使论文叙述与仓库 \texttt{openspec/changes/} 目录可交叉验证。参考文献以检索关键词占位，作者须自行补全不少于十五篇正式引文。后续工作将扩展法杖法术链式编程、完善配表工具链，并探索 archetype 式组件存储以进一步提升同屏实体规模。本初稿正文字数不少于两万汉字，采用 XeLaTeX 排版，格式要求摘自学院 PDF 模板并见附录~\ref{app:template}。
+
+\vspace{1em}
+\noindent\textbf{关键词：}LayaAir；实体组件系统；Roguelite；数据驱动；Web Worker；对象池；生存战斗
+
+\clearpage
+\section*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+With the maturity of HTML5 and WebGL, browsers can now host real-time action games of moderate complexity. Roguelite titles emphasize per-run randomness, meta progression, and build depth, which impose strong requirements on extensible architecture, data-driven design, and runtime performance. This thesis presents the design and implementation of \emph{Survivor And Fight}, a 2D top-down survival combat game built on LayaAir 3.x and TypeScript.
+
+The gameplay core is a lightweight Entity--Component--System (ECS) inspired by Unity DOTS. Components such as position, velocity, attributes, skills, and control are updated by ordered systems and named filters. Combat is configuration-driven: skills compose multiple effects including projectiles, pierce, split, and chain lightning. Object pools recycle bullets and monsters; when entity count exceeds a threshold, combat snapshots are recomputed in a Web Worker while the main thread applies results. The meta layer provides menus, level selection, and a three-act DAG run map. In-run progression includes experience, random upgrades, and a skill loadout UI (MVC with a UI stack). OpenSpec governs requirements across ECS core, gameplay, UI, and spawn systems.
+
+We describe requirements, architecture, module design, performance optimization, and testing. Results show stable operation on the target platform with measurable gains from pooling and worker offloading. Future work includes wand spellcraft chains and archetype-based component storage.
+
+\vspace{1em}
+\noindent\textbf{Keywords:} LayaAir; ECS; Roguelite; data-driven; Web Worker; object pooling; survivor-like combat
+
+\clearpage
+\setcounter{page}{1}
