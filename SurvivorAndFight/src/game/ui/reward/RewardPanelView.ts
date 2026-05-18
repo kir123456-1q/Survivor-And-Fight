@@ -8,16 +8,8 @@ import {
     REWARD_PANEL_PREFAB,
 } from '../../../defines';
 import type { RewardOption } from '../../reward/RewardTypes';
+import { applyTextureToImage } from '../../render/TextureAtlasService';
 import { bindClick, findDescendantByName, setNodeVisible, unbindClick } from '../UiNodeUtil';
-
-const textureCache = new Map<string, any>();
-
-async function loadTexture(url: string): Promise<any> {
-    if (textureCache.has(url)) return textureCache.get(url);
-    const tex = await Laya.loader.load(url);
-    textureCache.set(url, tex);
-    return tex;
-}
 
 async function applyIconToImg(img: any, iconPath: string | undefined, size: number): Promise<void> {
     if (!img) return;
@@ -25,16 +17,8 @@ async function applyIconToImg(img: any, iconPath: string | undefined, size: numb
         setNodeVisible(img, false);
         return;
     }
-    const tex = await loadTexture(iconPath);
-    img.width = size;
-    img.height = size;
-    if (img.autoSize !== undefined) img.autoSize = false;
+    await applyTextureToImage(img, iconPath, size);
     setNodeVisible(img, true);
-    if (img.texture !== undefined) {
-        img.texture = tex;
-    } else if (img.src !== undefined) {
-        img.src = iconPath;
-    }
 }
 
 function findTextField(root: any): any | null {

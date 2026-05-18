@@ -21,6 +21,7 @@ import { evaluate } from './FormulaParser';
 import * as Targeting from './Targeting';
 import type { BulletSpawnSpec, DirectDamageSpec, SkillCastPlan } from './CastPlan';
 import { getEffectIconPath, getSkillIconPath } from './SkillLoadoutModel';
+import { MetaRunSession } from '../meta/MetaRunSession';
 
 export type GetEffectRowFn = (effectId: string) => Record<string, unknown> | undefined;
 export type GetBulletRowFn = (id: string) => Record<string, unknown> | undefined;
@@ -105,6 +106,8 @@ export function buildSkillCastPlan(
             };
             const dmg = num(row, 'damage', 0);
             if (dmg > 0) spec.damageOverride = dmg;
+            const burstCount = Math.max(1, Math.floor(num(row, 'burstCount', 1)));
+            if (burstCount > 1) spec.burstCount = burstCount;
 
             plan.bullets.push(spec);
             pendingSplit = 0;
@@ -189,23 +192,32 @@ export function executeSkillCastPlan(plan: SkillCastPlan, ctx: ExecuteCastContex
         }
 
         const len = Math.sqrt(dir.x * dir.x + dir.y * dir.y) || 1;
-        dir = { x: dir.x / len, y: dir.y / len, z: 0 };
+        const baseDir = { x: dir.x / len, y: dir.y / len, z: 0 };
 
         const splitCount = spec.splitCount;
         const splitRemaining = splitCount > 0
             ? Math.max(spec.splitRemaining, DEFAULT_SPLIT_REMAINING)
             : 0;
 
-        ctx.bulletSystem.spawnBulletWithOptions(spec.bulletSlot, pos, dir, ownerType, {
-            damageScale: damageScaleBase,
-            speedScale: spec.speedScale,
-            penetration: spec.penetration,
-            splitCount,
-            splitRemaining,
-            chainCount: spec.chainCount,
-            damageOverride: spec.damageOverride,
-            iconPath: spec.iconPath,
-        });
+        const burstCount = Math.max(1, spec.burstCount ?? 1);
+        for (let burstIndex = 0; burstIndex < burstCount; burstIndex++) {
+            let shotDir = baseDir;
+            if (burstCount > 1) {
+                const angle = (Math.PI * 2 * burstIndex) / burstCount;
+                shotDir = { x: Math.cos(angle), y: Math.sin(angle), z: 0 };
+            }
+
+            ctx.bulletSystem.spawnBulletWithOptions(spec.bulletSlot, pos, shotDir, ownerType, {
+                damageScale: damageScaleBase,
+                speedScale: spec.speedScale,
+                penetration: spec.penetration,
+                splitCount,
+                splitRemaining,
+                chainCount: spec.chainCount,
+                damageOverride: spec.damageOverride,
+                iconPath: spec.iconPath,
+            });
+        }
     }
 
     for (const dmg of plan.directDamages) {
@@ -217,6 +229,7 @@ export function executeSkillCastPlan(plan: SkillCastPlan, ctx: ExecuteCastContex
             targetId = Targeting.resolveSimple(ctx.entity, castTargetPos, ctx.world);
         }
         if (targetId == null) continue;
+        if (MetaRunSession.testMode) continue;
         const value = evaluate(dmg.paramsFormula, context);
         const targetAttr = ctx.world.getComponent(targetId, Attribute);
         if (targetAttr && typeof targetAttr.base.hp === 'number') {

@@ -13,6 +13,7 @@ import {
     SKILL_SELECT_PANEL_NAME,
 } from '../../defines';
 import type { SkillSelectPanelController } from './skillselect/SkillSelectPanelController';
+import { FpsOverlay } from './FpsOverlay';
 
 function findNodeByName(root: any, name: string): any {
     if (!root || !name) return null;
@@ -51,6 +52,7 @@ export class MainHudSystem implements System {
     private levelProgressBar: any = null;
     private levelTxt: any = null;
     private skillTxt: any = null;
+    private readonly fpsOverlay = new FpsOverlay();
 
     constructor(
         private readonly world: EcsWorld,
@@ -78,6 +80,7 @@ export class MainHudSystem implements System {
                         if (typeof selectPanel.displayed !== 'undefined') selectPanel.displayed = false;
                     }
                     this.tryInitSkillSelect(node);
+                    this.fpsOverlay.attach(node);
                 })
                 .catch((e) => {
                     console.warn('MainHudSystem: failed to load main ui panel', e);
@@ -90,6 +93,7 @@ export class MainHudSystem implements System {
 
         if (!this.panelNode) return;
 
+        this.fpsOverlay.update();
         this.tryInitSkillSelect(this.panelNode);
 
         const players = this.filters.getNamedFilter('Players');
@@ -112,6 +116,7 @@ export class MainHudSystem implements System {
     }
 
     dispose(): void {
+        this.fpsOverlay.dispose();
         this.skillSelectController?.dispose();
         if (this.panelNode?.destroy) this.panelNode.destroy();
         this.panelNode = null;

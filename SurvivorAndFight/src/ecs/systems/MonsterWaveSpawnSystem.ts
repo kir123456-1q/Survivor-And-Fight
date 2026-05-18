@@ -16,6 +16,7 @@ export class MonsterWaveSpawnSystem implements System {
 
     private elapsed = 0;
     private spawning = false;
+    private waveSpawnEnabled = true;
 
     constructor(
         private readonly world: EcsWorld,
@@ -24,7 +25,16 @@ export class MonsterWaveSpawnSystem implements System {
         private readonly isPaused?: () => boolean,
     ) {}
 
+    setWaveSpawnEnabled(enabled: boolean): void {
+        this.waveSpawnEnabled = enabled;
+        if (!enabled) {
+            this.elapsed = 0;
+            this.spawning = false;
+        }
+    }
+
     update(deltaTime: number): void {
+        if (!this.waveSpawnEnabled) return;
         if (this.isPaused?.()) return;
         if (this.spawning) return;
 
@@ -44,6 +54,7 @@ export class MonsterWaveSpawnSystem implements System {
     reset(): void {
         this.elapsed = 0;
         this.spawning = false;
+        this.waveSpawnEnabled = true;
     }
 
     private getPlayerLevel(): number {

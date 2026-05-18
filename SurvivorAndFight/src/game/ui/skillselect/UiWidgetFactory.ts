@@ -7,6 +7,7 @@ import {
     EFFECT_ICON_SIZE,
     SKILL_ICON_SIZE,
 } from '../../../defines';
+import { loadTexture } from '../../render/TextureAtlasService';
 import { findDescendantByName } from '../UiNodeUtil';
 import { enableSlotPointer } from './SkillSlotHitTest';
 
@@ -77,8 +78,8 @@ export function applyEffectBtnStyle(btn: any): void {
         if (typeof img.src !== 'undefined') {
             img.src = EFFECT_BTN_BASE_BAR_PATH;
         }
-        void Laya.loader.load(EFFECT_BTN_BASE_BAR_PATH).then((tex) => {
-            if (img.texture !== undefined) img.texture = tex;
+        void loadTexture(EFFECT_BTN_BASE_BAR_PATH).then((tex) => {
+            if (tex && img.texture !== undefined) img.texture = tex;
         }).catch(() => {});
     }
 }

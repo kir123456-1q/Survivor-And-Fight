@@ -1,4 +1,5 @@
 import { CONFIG_BASE } from '../defines';
+import { preloadCombatIcons } from '../game/render/TextureAtlasService';
 import { Data, initData } from './Data';
 import type { ConfigTableJson } from './TableLoader';
 import type { TablesRegistryJson } from './TablesRegistry';
@@ -76,6 +77,7 @@ async function loadAllTables(): Promise<boolean> {
             if (skillCount > 0) {
                 configLoaded = true;
                 console.log('[Config] loaded', base, { skillCount, effectCount, tables: Object.keys(Data) });
+                void preloadCombatIcons().catch(() => {});
                 return true;
             }
             console.warn('[Config] registry ok but Skill empty at', base);

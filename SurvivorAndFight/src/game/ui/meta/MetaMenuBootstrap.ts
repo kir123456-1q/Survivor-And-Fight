@@ -17,7 +17,12 @@ export class MetaMenuBootstrap {
     static registerRoutes(uiStack: UIStackManager, metaFlow: MetaFlowController): void {
         this.metaFlow = metaFlow;
         uiStack.register(START_PANEL_ROUTE_ID, () => new StartPanelController(uiStack));
-        uiStack.register(SELECT_LEVEL_PANEL_ROUTE_ID, () => new SelectLevelPanelController(uiStack));
+        uiStack.register(SELECT_LEVEL_PANEL_ROUTE_ID, () => {
+            if (!this.metaFlow) {
+                throw new Error('[MetaMenu] MetaFlowController not initialized');
+            }
+            return new SelectLevelPanelController(uiStack, this.metaFlow);
+        });
         uiStack.register(REWARD_PANEL_ROUTE_ID, () => new RewardPanelController(uiStack));
         uiStack.register(RUN_MAP_PANEL_ROUTE_ID, () => {
             if (!this.metaFlow) {
@@ -32,8 +37,8 @@ export class MetaMenuBootstrap {
         await uiStack.push(START_PANEL_ROUTE_ID);
     }
 
-    /** 场景内嵌的 StartPanel 与运行时 MVC 实例互斥显示。 */
-    private static hideSceneEmbeddedStartPanel(): void {
+    /** 隐藏场景内嵌 StartPanel（与 MVC 菜单互斥；进入战斗前也应调用）。 */
+    static hideSceneEmbeddedStartPanel(): void {
         const stage = Laya.stage as any;
         if (!stage?.numChildren) return;
         for (let i = 0; i < stage.numChildren; i++) {

@@ -4,6 +4,7 @@ import type { EntityId } from '../core/EntityManager';
 import type { FilterRegistry } from '../filters/FilterRegistry';
 import { Attribute } from '../components/Attribute';
 import { GameSession } from '../components/GameSession';
+import { MetaRunSession } from '../../game/meta/MetaRunSession';
 
 /**
  * Marks session paused when player hp reaches zero.
@@ -19,6 +20,7 @@ export class PlayerDeathSystem implements System {
     ) {}
 
     update(_deltaTime: number): void {
+        if (MetaRunSession.testMode) return;
         const session = this.world.getComponent(this.sessionEntity, GameSession);
         if (!session || session.paused) return;
 

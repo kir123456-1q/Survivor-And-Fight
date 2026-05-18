@@ -1,14 +1,6 @@
 import { BULLET_SKIN_IMAGE_NAME, BULLET_WORLD_ICON_SIZE } from '../../defines';
+import { loadTexture } from '../render/TextureAtlasService';
 import { findDescendantByName } from '../ui/UiNodeUtil';
-
-const textureCache = new Map<string, any>();
-
-async function loadTexture(url: string): Promise<any> {
-    if (textureCache.has(url)) return textureCache.get(url);
-    const tex = await Laya.loader.load(url);
-    textureCache.set(url, tex);
-    return tex;
-}
 
 function findFirstImageNode(root: any): any | null {
     if (!root) return null;

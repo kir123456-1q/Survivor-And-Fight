@@ -9,6 +9,8 @@ export interface BulletSpawnSpec {
     splitCount: number;
     splitRemaining: number;
     chainCount: number;
+    /** 单次施放同时发射的子弹数（扇形均分 360°）。 */
+    burstCount?: number;
     damageOverride?: number;
 }
 

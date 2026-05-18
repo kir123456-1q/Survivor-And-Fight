@@ -17,6 +17,7 @@ import type { CombatDataPrepareSystem } from '../combat/CombatDataPrepareSystem'
 import type { CombatBulletSnapshot } from '../combat/CombatDataBridge';
 import type { CombatWorkerComputeResponse } from '../combat/combatWorkerProtocol';
 import { applyBulletIconSkin } from './BulletVisual';
+import { MetaRunSession } from '../meta/MetaRunSession';
 
 export type GetBulletRowFn = (id: string) => Record<string, unknown> | undefined;
 export type InstantiateBulletFn = (prefabPath: string) => any;
@@ -62,8 +63,13 @@ export class BulletSystem implements System {
         private readonly instantiateBullet: InstantiateBulletFn,
         private readonly bulletPool?: BulletPool,
         private readonly isPaused?: () => boolean,
+        private readonly isObjectPoolEnabled?: () => boolean,
         private combatPrepare?: CombatDataPrepareSystem,
     ) {}
+
+    private useBulletPool(): boolean {
+        return !!this.bulletPool && (this.isObjectPoolEnabled?.() ?? true);
+    }
 
     setCombatPrepare(prepare: CombatDataPrepareSystem): void {
         this.combatPrepare = prepare;
@@ -124,7 +130,8 @@ export class BulletSystem implements System {
         const damage = baseDamage * (options.damageScale ?? 1);
         const penetration = options.penetration ?? (Number(row.penetration) ?? 0);
         const chainCount = Math.max(0, Math.floor(options.chainCount ?? 0));
-        const node = this.bulletPool?.get(prefabPath) ?? this.instantiateBullet(prefabPath);
+        const pooled = this.useBulletPool() ? this.bulletPool!.get(prefabPath) : null;
+        const node = pooled ?? this.instantiateBullet(prefabPath);
         if (!node) return;
         const len = Math.sqrt(direction.x * direction.x + direction.y * direction.y) || 1;
         const dir = {
@@ -292,7 +299,7 @@ export class BulletSystem implements System {
                 for (const eid of chainTargets) {
                     const hitPos = this.world.getComponent(eid, Position);
                     const attr = this.world.getComponent(eid, Attribute);
-                    if (attr && typeof attr.base.hp === 'number') {
+                    if (!MetaRunSession.testMode && attr && typeof attr.base.hp === 'number') {
                         attr.base.hp = Math.max(0, attr.base.hp - b.damage);
                         if (COMBAT_DEBUG_LOG && this.hitLogCount < 80) {
                             this.hitLogCount += 1;
@@ -354,8 +361,8 @@ export class BulletSystem implements System {
     }
 
     private destroyBullet(b: BulletInstance): void {
-        if (this.bulletPool && b.node) {
-            this.bulletPool.put(b.prefabPath, b.node);
+        if (this.useBulletPool() && b.node) {
+            this.bulletPool!.put(b.prefabPath, b.node);
         } else if (b.node && b.node.destroy) {
             b.node.destroy();
         } else if (b.node && b.node.parent) {
@@ -384,7 +391,7 @@ export class BulletSystem implements System {
             for (const eid of chainTargets) {
                 const hitPos = this.world.getComponent(eid, Position);
                 const attr = this.world.getComponent(eid, Attribute);
-                if (attr && typeof attr.base.hp === 'number') {
+                if (!MetaRunSession.testMode && attr && typeof attr.base.hp === 'number') {
                     attr.base.hp = Math.max(0, attr.base.hp - b.damage);
                 }
                 if (

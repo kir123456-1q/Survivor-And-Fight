@@ -26,12 +26,22 @@ export const ESC_BTN_NAME = 'EscBtn';
 export const LEVEL1_BTN_NAME = 'Level1Btn';
 export const LEVEL2_BTN_NAME = 'Level2Btn';
 export const LEVEL3_BTN_NAME = 'Level3Btn';
+/** SelectLevelPanel Level3Btn 标题区域尺寸（与按钮一致）。 */
+export const SELECT_LEVEL_LEVEL3_BTN_TITLE_WIDTH = 394;
+export const SELECT_LEVEL_LEVEL3_BTN_TITLE_HEIGHT = 85;
 export const BACK_BTN_NAME = 'BackBtn';
 export const MAP_PANEL_NAME = 'MapPanel';
 export const MOVED_LINE_NODE_NAME = 'MovedlineNode';
 export const LEVEL_PROGRESS_BAR_NAME = 'LevelProgressBar';
 export const LEVEL_TEXT_NAME = 'LevelTxt';
 export const SKILL_TEXT_NAME = 'SKillTxt';
+
+/** 主界面左下角帧率显示（代码动态创建）。 */
+export const FPS_TEXT_NAME = 'FpsTxt';
+export const FPS_MARGIN_LEFT = 12;
+export const FPS_MARGIN_BOTTOM = 12;
+export const FPS_FONT_SIZE = 22;
+export const FPS_Z_ORDER = 10000;
 
 /** SkillSelectPanel 子节点（与 MainUIPanel.lh 一致）。 */
 export {

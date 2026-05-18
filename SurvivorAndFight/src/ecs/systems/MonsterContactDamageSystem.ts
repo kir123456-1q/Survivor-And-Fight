@@ -6,6 +6,7 @@ import { Attribute } from '../components/Attribute';
 import { MONSTER_COLLISION_DPS, MONSTER_COLLISION_RADIUS } from '../../defines';
 import { MonsterDef } from '../components/MonsterDef';
 import { getMonsterRow } from '../../game/monster/MonsterCatalog';
+import { MetaRunSession } from '../../game/meta/MetaRunSession';
 
 /**
  * Applies continuous contact damage when monsters overlap the player.
@@ -21,6 +22,7 @@ export class MonsterContactDamageSystem implements System {
     ) {}
 
     update(deltaTime: number): void {
+        if (MetaRunSession.testMode) return;
         if (this.isPaused?.()) return;
         const players = this.filters.getNamedFilter('Players');
         if (players.length === 0) return;

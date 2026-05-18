@@ -1,14 +1,6 @@
 import { MONSTER_BODY_IMAGE_NAME, MONSTER_WORLD_ICON_SIZE } from '../../defines';
+import { loadTexture } from '../render/TextureAtlasService';
 import { findDescendantByName } from '../ui/UiNodeUtil';
-
-const textureCache = new Map<string, unknown>();
-
-async function loadTexture(url: string): Promise<unknown> {
-    if (textureCache.has(url)) return textureCache.get(url)!;
-    const tex = await Laya.loader.load(url);
-    textureCache.set(url, tex);
-    return tex;
-}
 
 /** 将 MonsterBody 的 img 节点换为对应怪物 icon。 */
 export async function applyMonsterIconSkin(

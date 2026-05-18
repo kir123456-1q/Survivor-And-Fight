@@ -6,6 +6,8 @@ export interface CombatEnterPayload {
     nodeId: string;
     payloadId: string | null;
     isBoss?: boolean;
+    /** Level3 性能测试关卡：每波 10s 晋级，双方无敌，无生存倒计时。 */
+    testMode?: boolean;
 }
 
 export interface MetaFlowCallbacks {

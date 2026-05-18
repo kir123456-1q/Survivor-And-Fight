@@ -5,30 +5,8 @@ import {
     SKILL_ICON_CHILD_NAME,
     SKILL_ICON_SIZE,
 } from '../../../defines';
+import { applyTextureToImage } from '../../render/TextureAtlasService';
 import { findDescendantByName } from '../UiNodeUtil';
-
-const textureCache = new Map<string, any>();
-
-async function loadTexture(url: string): Promise<any> {
-    if (textureCache.has(url)) return textureCache.get(url);
-    const tex = await Laya.loader.load(url);
-    textureCache.set(url, tex);
-    return tex;
-}
-
-async function applyTextureToImage(img: any, url: string, size: number): Promise<void> {
-    if (!img || !url) return;
-    const tex = await loadTexture(url);
-    img.width = size;
-    img.height = size;
-    if (img.autoSize !== undefined) img.autoSize = false;
-    img.visible = true;
-    if (img.texture !== undefined) {
-        img.texture = tex;
-    } else if (img.src !== undefined) {
-        img.src = url;
-    }
-}
 
 function bringToFront(parent: any, child: any): void {
     if (!parent || !child || typeof parent.setChildIndex !== 'function') return;

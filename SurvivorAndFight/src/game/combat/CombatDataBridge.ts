@@ -1,3 +1,4 @@
+import { MetaRunSession } from '../meta/MetaRunSession';
 import {
     COMBAT_WORKER_ENABLED,
     COMBAT_WORKER_MIN_ENTITY_COUNT,
@@ -79,8 +80,18 @@ export class CombatDataBridge {
      * 是否建议本帧走 Worker（实体规模足够且 Worker 可用）。
      */
     shouldUseWorker(entityCount: number, bulletCount: number): boolean {
+        if (MetaRunSession.testMode && MetaRunSession.isAblationWave() && !MetaRunSession.testUseCombatWorker) {
+            return false;
+        }
         if (!this.isWorkerActive()) return false;
         return entityCount + bulletCount >= COMBAT_WORKER_MIN_ENTITY_COUNT;
+    }
+
+    /** 消融段切换时丢弃在途 Worker 结果，避免套用上一段配置。 */
+    resetWorkerFrameState(): void {
+        this.pendingRequestFrameId = -1;
+        this.latestResult = null;
+        this.latestResultFrameId = -1;
     }
 
     /**

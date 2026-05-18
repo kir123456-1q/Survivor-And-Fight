@@ -742,6 +742,45 @@
                      "enabled":  false
                  },
                  {
+                     "id":  "fx_test_burst_10",
+                     "name":  "Test Burst x10",
+                     "iconPath":  "atlas/EffectIcon/fx_shot_delay_burst_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  50,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "penetration":  5,
+                     "burstCount":  10,
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_test_burst_100",
+                     "name":  "Test Burst x100",
+                     "iconPath":  "atlas/EffectIcon/fx_shot_split_two_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  50,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "penetration":  10,
+                     "burstCount":  100,
+                     "cooldownSec":  0.35
+                 },
+                 {
+                     "id":  "fx_test_burst_1000",
+                     "name":  "Test Burst x1000",
+                     "iconPath":  "atlas/EffectIcon/fx_shot_chain_arc_icon.png",
+                     "effect":  "bullet",
+                     "target":  "auto",
+                     "damage":  50,
+                     "enabled":  true,
+                     "bulletSlot":  "player_bullet_fast_1",
+                     "penetration":  99,
+                     "burstCount":  1000,
+                     "cooldownSec":  0.35
+                 },
+                 {
                      "id":  "player_auto_shot_effect_1",
                      "name":  "Auto Shot",
                      "iconPath":  "atlas/EffectIcon/fx_shot_split_two_icon.png",

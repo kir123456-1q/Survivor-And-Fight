@@ -7,6 +7,8 @@ import {
     DESIGN_HEIGHT,
     META_MENU_ENABLED,
     REWARD_PANEL_ROUTE_ID,
+    SELECT_LEVEL_PANEL_ROUTE_ID,
+    START_PANEL_ROUTE_ID,
 } from './defines';
 import { CombatSurvivalTimer } from './game/combat/CombatSurvivalTimer';
 import { SimpleEcsDemo } from './game/demo/SimpleEcsDemo';
@@ -18,6 +20,11 @@ import { UIStackManager } from './game/ui/mvc/UIStackManager';
 import { InputService } from './input/InputService';
 import { ControlInputAdapter } from './input/ControlInputAdapter';
 import { ensureGameConfigLoaded } from './config/ConfigBootstrap';
+import {
+    installTextureAtlasLifecycle,
+    onCombatEnter,
+    onCombatLeave,
+} from './game/render/TextureAtlasBootstrap';
 
 /** 参考 LayaProject2：脚本挂在 Area2D 子节点上，不挂在场景根，避免 3D 管线（_addRenderObject / cullInfoCamera）。 */
 @regClass()
@@ -32,12 +39,14 @@ export class Main extends Laya.Script {
     private readonly combatSurvivalTimer = new CombatSurvivalTimer();
     private combatSurvivalDurationSec = COMBAT_SURVIVE_VICTORY_SEC;
     private pendingBossVictory = false;
+    private enteringCombat = false;
     /** 2D 相机跟随：平滑系数 0~1，越大跟得越紧；0 表示不跟随。 */
     private cameraFollowSmooth = 0.12;
 
     onStart() {
         // 2D：this.owner 为场景中的 Area2D（GameRoot），用作游戏根容器
         const container = this.owner && (this.owner as any).addChild ? this.owner : null;
+        installTextureAtlasLifecycle(container);
         this.input = new InputService();
         this.controlInput = new ControlInputAdapter(this.input);
         this.demo = new SimpleEcsDemo(container, null, this.controlInput);
@@ -53,6 +62,7 @@ export class Main extends Laya.Script {
         if (META_MENU_ENABLED) {
             await this.startMetaMenu();
         } else if (this.demo) {
+            onCombatEnter();
             await this.demo.init();
         }
     }
@@ -64,18 +74,46 @@ export class Main extends Laya.Script {
         this.metaUiStack = new UIStackManager();
         this.metaFlow = new MetaFlowController({
             onEnterCombat: async (payload?: CombatEnterPayload) => {
-                this.stopCombatSurvivalTimer();
-                if (container) container.visible = true;
-                if (this.demo) {
-                    MetaRunSession.combatDemo = this.demo;
-                    await this.demo.init();
-                    this.demo.setSessionPaused(false);
+                if (this.enteringCombat) return;
+                this.enteringCombat = true;
+                try {
+                    this.stopCombatSurvivalTimer();
+                    MetaMenuBootstrap.hideSceneEmbeddedStartPanel();
+
+                    const testMode = !!payload?.testMode;
+                    if (testMode) {
+                        MetaRunSession.testMode = true;
+                        MetaRunSession.testWaveIndex = 0;
+                        MetaRunSession.testWaveAwaitingClear = false;
+                        await this.metaUiStack?.clearAll();
+                    } else {
+                        MetaRunSession.resetTestSession();
+                        this.demo?.resetCombatEntry();
+                    }
+
+                    if (container) container.visible = true;
+
+                    onCombatEnter();
+
+                    if (this.demo) {
+                        MetaRunSession.combatDemo = this.demo;
+                        await this.demo.init();
+                        this.demo.setSessionPaused(false);
+                    }
+
+                    if (testMode) {
+                        MetaRunSession.onTestCombatComplete = () => this.onTestCombatComplete();
+                        return;
+                    }
+
+                    this.pendingBossVictory = !!payload?.isBoss;
+                    this.combatSurvivalDurationSec = payload?.isBoss
+                        ? BOSS_COMBAT_SURVIVE_VICTORY_SEC
+                        : COMBAT_SURVIVE_VICTORY_SEC;
+                    this.startCombatSurvivalTimer();
+                } finally {
+                    this.enteringCombat = false;
                 }
-                this.pendingBossVictory = !!payload?.isBoss;
-                this.combatSurvivalDurationSec = payload?.isBoss
-                    ? BOSS_COMBAT_SURVIVE_VICTORY_SEC
-                    : COMBAT_SURVIVE_VICTORY_SEC;
-                this.startCombatSurvivalTimer();
             },
         });
         MetaMenuBootstrap.registerRoutes(this.metaUiStack, this.metaFlow);
@@ -116,9 +154,28 @@ export class Main extends Laya.Script {
         await this.metaUiStack.push(REWARD_PANEL_ROUTE_ID, { context, applyInCombat: true });
     }
 
+    /** 测试三关全部清场后返回选关界面。 */
+    private async onTestCombatComplete(): Promise<void> {
+        this.stopCombatSurvivalTimer();
+        this.demo?.setSessionPaused(true);
+        MetaRunSession.onTestCombatComplete = null;
+        MetaRunSession.resetTestSession();
+        this.demo?.resetCombatEntry();
+        onCombatLeave();
+
+        const container = this.owner as any;
+        if (container) container.visible = false;
+
+        if (!this.metaUiStack) return;
+        await this.metaUiStack.clearAll();
+        MetaMenuBootstrap.hideSceneEmbeddedStartPanel();
+        await this.metaUiStack.push(START_PANEL_ROUTE_ID);
+    }
+
     private async afterCombatReward(_picked: boolean): Promise<void> {
         const container = this.owner as any;
         if (container) container.visible = false;
+        onCombatLeave();
         this.demo?.setSessionPaused(false);
 
         if (this.pendingBossVictory) {

@@ -20,6 +20,7 @@ export class MonsterRecycleSystem implements System {
         private readonly monsterPool: MonsterPool,
         private readonly experienceSystem: ExperienceSystem,
         private readonly isPaused?: () => boolean,
+        private readonly isObjectPoolEnabled?: () => boolean,
     ) {}
 
     update(_deltaTime: number): void {
@@ -44,7 +45,11 @@ export class MonsterRecycleSystem implements System {
                 node.visible = false;
                 const bloodBar = node.getChildByName ? node.getChildByName('BloodBar') : null;
                 if (bloodBar) bloodBar.visible = false;
-                this.monsterPool.put(node);
+                if (this.isObjectPoolEnabled?.() ?? true) {
+                    this.monsterPool.put(node);
+                } else if (node.destroy) {
+                    node.destroy();
+                }
             }
             this.world.destroyEntity(entity);
         }

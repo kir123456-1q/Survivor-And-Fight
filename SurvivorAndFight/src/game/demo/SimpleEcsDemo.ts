@@ -37,11 +37,15 @@ import { RewardApplyService } from '../reward/RewardApplyService';
 import {
     applySkillCastStagger,
     createDefaultLoadoutState,
+    createTestLoadoutState,
     getCombatEffectIds,
 } from '../skill/SkillLoadoutModel';
 import { SkillSelectPanelController } from '../ui/skillselect/SkillSelectPanelController';
 import { ExperienceSystem } from '../../ecs/systems/ExperienceSystem';
 import { MonsterWaveSpawnSystem } from '../../ecs/systems/MonsterWaveSpawnSystem';
+import { TestWaveVictorySystem } from '../../ecs/systems/TestWaveVictorySystem';
+import { MetaRunSession } from '../meta/MetaRunSession';
+import { testLevelFpsTracker } from '../test/TestLevelFpsTracker';
 import { UpgradeRewardSystem } from '../../ecs/systems/UpgradeRewardSystem';
 import { FilterRegistry } from '../../ecs/filters/FilterRegistry';
 import { registerNamedFilters } from '../../ecs/filters/NamedFilters';
@@ -69,6 +73,8 @@ import {
     BULLET_PREFAB_2D,
     MONSTER_EXP_REWARD_BASE,
     MONSTER_EXP_REWARD_LEVEL_BONUS,
+    TEST_WAVE_COUNT,
+    TEST_WAVE_MONSTER_COUNTS,
 } from '../../defines';
 
 function getCharacterRow(roleType: 'player' | 'monster'): Record<string, unknown> | undefined {
@@ -91,6 +97,7 @@ export class SimpleEcsDemo {
     private readonly skillSystem: SkillSystem;
     private readonly experienceSystem: ExperienceSystem;
     private readonly monsterWaveSpawnSystem: MonsterWaveSpawnSystem;
+    private readonly testWaveVictorySystem: TestWaveVictorySystem;
     private readonly upgradeRewardSystem: UpgradeRewardSystem;
     private readonly mainHudSystem: MainHudSystem;
     private readonly skillSelectController = new SkillSelectPanelController();
@@ -124,6 +131,7 @@ export class SimpleEcsDemo {
             (prefabPath) => this.instantiateBulletNode(prefabPath),
             this.bulletPool,
             () => this.isPaused(),
+            () => this.isObjectPoolEnabled(),
         );
         this.combatPrepareSystem = new CombatDataPrepareSystem(
             this.world,
@@ -149,6 +157,10 @@ export class SimpleEcsDemo {
             this.filters,
             (count, monsterLevel) => this.spawnMonsters(count, monsterLevel),
             () => this.isPaused(),
+        );
+        this.testWaveVictorySystem = new TestWaveVictorySystem(
+            () => this.isPaused(),
+            () => this.advanceTestWave(),
         );
         this.upgradeRewardSystem = new UpgradeRewardSystem(
             this.world,
@@ -178,10 +190,82 @@ export class SimpleEcsDemo {
      * 异步加载配表指定的预制体并生成玩家与怪物。在 Main 中于 new SimpleEcsDemo 后调用。
      */
     async init(): Promise<void> {
+        if (MetaRunSession.testMode) {
+            await this.initTestCombat();
+            return;
+        }
         if (this.initDone) return;
-        await this.spawnPlayer();
+        this.monsterWaveSpawnSystem.setWaveSpawnEnabled(true);
+        await this.spawnPlayer(false);
         await this.spawnMonsters(MONSTER_COUNT);
         this.initDone = true;
+    }
+
+    /**
+     * 测试关卡：6 波（10/100/1000 + 消融 1000×3），每波 10s，第 4–6 波自动切换池/Worker。
+     */
+    async initTestCombat(): Promise<void> {
+        testLevelFpsTracker.resetSession();
+        this.monsterWaveSpawnSystem.setWaveSpawnEnabled(false);
+        this.monsterWaveSpawnSystem.reset();
+        this.clearAllGameplayEntities();
+        this.playerEntity = -1;
+        MetaRunSession.testWaveIndex = 0;
+        MetaRunSession.testWaveAwaitingClear = false;
+        MetaRunSession.resetTestCombatOptimizations();
+        await this.spawnPlayer(true);
+        await this.spawnTestWave(0);
+        this.initDone = true;
+        console.log(
+            '[TestLevel] started',
+            `wave 1/${TEST_WAVE_COUNT}`,
+            'monsters=',
+            TEST_WAVE_MONSTER_COUNTS[0],
+            '(waves 4–6: ablation after wave 3)',
+        );
+    }
+
+    private isObjectPoolEnabled(): boolean {
+        if (MetaRunSession.testMode && MetaRunSession.isAblationWave()) {
+            return MetaRunSession.testUseObjectPool;
+        }
+        return true;
+    }
+
+    private async spawnTestWave(waveIndex: number): Promise<void> {
+        const count = TEST_WAVE_MONSTER_COUNTS[waveIndex] ?? 0;
+        if (count <= 0) return;
+
+        if (MetaRunSession.isAblationWave(waveIndex)) {
+            MetaRunSession.applyAblationForWave(waveIndex);
+            this.combatBridge.resetWorkerFrameState();
+            if (!MetaRunSession.testUseObjectPool) {
+                this.bulletPool.clear();
+                this.monsterPool.clear();
+            }
+        } else {
+            MetaRunSession.resetTestCombatOptimizations();
+        }
+
+        MetaRunSession.testWaveAwaitingClear = false;
+        this.clearMonsters();
+        await this.spawnMonsters(count);
+        MetaRunSession.testWaveAwaitingClear = true;
+        this.testWaveVictorySystem.resetTimer();
+        testLevelFpsTracker.beginWave(waveIndex);
+        console.log('[TestLevel] wave', waveIndex + 1, '/', TEST_WAVE_COUNT, 'spawned', count);
+    }
+
+    private async advanceTestWave(): Promise<void> {
+        MetaRunSession.testWaveIndex += 1;
+        if (MetaRunSession.testWaveIndex >= TEST_WAVE_COUNT) {
+            testLevelFpsTracker.logSessionSummary();
+            testLevelFpsTracker.logAblationTable();
+            console.log('[TestLevel] all 6 waves cleared');
+            await MetaRunSession.onTestCombatComplete?.();
+            return;
+        }
+        await this.spawnTestWave(MetaRunSession.testWaveIndex);
     }
 
     private setupSystems(): void {
@@ -199,7 +283,15 @@ export class SimpleEcsDemo {
         this.world.registerSystem(new RotationSystem(this.world, isPaused), 'logic', -1);
         this.world.registerSystem(this.attributeSystem, 'logic', -1);
         this.world.registerSystem(new MonsterContactDamageSystem(this.world, this.filters, isPaused), 'logic', -5);
-        this.world.registerSystem(new MonsterRecycleSystem(this.world, this.filters, this.monsterPool, this.experienceSystem, isPaused), 'logic', -6);
+        this.world.registerSystem(new MonsterRecycleSystem(
+            this.world,
+            this.filters,
+            this.monsterPool,
+            this.experienceSystem,
+            isPaused,
+            () => this.isObjectPoolEnabled(),
+        ), 'logic', -6);
+        this.world.registerSystem(this.testWaveVictorySystem, 'logic', -6.5);
         this.world.registerSystem(this.experienceSystem, 'logic', -7);
         this.world.registerSystem(this.monsterWaveSpawnSystem, 'logic', -8);
         this.world.registerSystem(this.upgradeRewardSystem, 'logic', -9);
@@ -210,7 +302,7 @@ export class SimpleEcsDemo {
         this.world.registerSystem(new BloodBarSyncSystem(this.world, this.attributeSystem), 'render', -1);
     }
 
-    private async spawnPlayer(): Promise<void> {
+    private async spawnPlayer(useTestLoadout: boolean): Promise<void> {
         await ensureGameConfigLoaded();
         const entity = this.world.createEntity();
         const row = getCharacterRow('player');
@@ -225,7 +317,7 @@ export class SimpleEcsDemo {
         this.world.addComponent(entity, Attribute, new Attribute({ hp, maxHp }));
         this.world.addComponent(entity, Experience, new Experience(1, 0));
         this.world.addComponent(entity, UpgradeState, new UpgradeState());
-        const loadout = createDefaultLoadoutState();
+        const loadout = useTestLoadout ? createTestLoadoutState() : createDefaultLoadoutState();
         this.world.addComponent(entity, SkillLoadoutState, loadout);
         const primarySkill = loadout.equippedSkillIds.find((id) => !!id) ?? null;
         const skillComp = new Skill(primarySkill, {});
@@ -289,7 +381,7 @@ export class SimpleEcsDemo {
             skillComp.cooldownRemain[mRow.skillId] = MonsterAutoCastSystem.initialCooldownForIndex(i);
             this.world.addComponent(entity, Skill, skillComp);
 
-            let node: any = this.monsterPool?.get() ?? null;
+            let node: any = this.isObjectPoolEnabled() ? this.monsterPool.get() : null;
             if (!node) node = await this.instantiateCharacterNode(prefabPath);
             if (!node) node = this.createPlaceholderNode();
             this.resetMonsterNodeForSpawn(node);
@@ -374,6 +466,9 @@ export class SimpleEcsDemo {
     }
 
     update(deltaTime: number): void {
+        if (MetaRunSession.testMode) {
+            testLevelFpsTracker.tick(deltaTime, this.isPaused());
+        }
         this.world.update(deltaTime);
         if (!this.restarting) {
             void this.tryRestartFromSession();
@@ -390,6 +485,11 @@ export class SimpleEcsDemo {
 
     isInitDone(): boolean {
         return this.initDone;
+    }
+
+    /** 再次进入战斗前重置（例如测试关结束后进入普通关卡）。 */
+    resetCombatEntry(): void {
+        this.initDone = false;
     }
 
     destroy(): void {
@@ -553,8 +653,17 @@ export class SimpleEcsDemo {
             session.paused = false;
             this.monsterWaveSpawnSystem.reset();
             this.playerEntity = -1;
-            await this.spawnPlayer();
-            await this.spawnMonsters(MONSTER_COUNT);
+            if (MetaRunSession.testMode) {
+                MetaRunSession.testWaveIndex = 0;
+                MetaRunSession.testWaveAwaitingClear = false;
+                this.monsterWaveSpawnSystem.setWaveSpawnEnabled(false);
+                await this.spawnPlayer(true);
+                await this.spawnTestWave(0);
+            } else {
+                this.monsterWaveSpawnSystem.setWaveSpawnEnabled(true);
+                await this.spawnPlayer(false);
+                await this.spawnMonsters(MONSTER_COUNT);
+            }
         } finally {
             this.restarting = false;
         }
@@ -564,14 +673,25 @@ export class SimpleEcsDemo {
         const all = this.world.entities.getAllEntities();
         for (const entity of all) {
             if (entity === this.sessionEntity) continue;
-            const view = this.world.getComponent(entity, ViewComponent);
-            const node = view?.node as any;
-            if (node?.destroy) {
-                node.destroy();
-            } else if (node?.parent?.removeChild) {
-                node.parent.removeChild(node);
-            }
-            this.world.destroyEntity(entity);
+            this.destroyGameplayEntity(entity);
         }
+    }
+
+    private clearMonsters(): void {
+        const monsters = [...this.filters.getNamedFilter('Monsters')];
+        for (const entity of monsters) {
+            this.destroyGameplayEntity(entity);
+        }
+    }
+
+    private destroyGameplayEntity(entity: number): void {
+        const view = this.world.getComponent(entity, ViewComponent);
+        const node = view?.node as any;
+        if (node?.destroy) {
+            node.destroy();
+        } else if (node?.parent?.removeChild) {
+            node.parent.removeChild(node);
+        }
+        this.world.destroyEntity(entity);
     }
 }

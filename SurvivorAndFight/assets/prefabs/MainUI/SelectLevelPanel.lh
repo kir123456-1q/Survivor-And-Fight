@@ -100,7 +100,7 @@
           "valign": "middle",
           "fontSize": 40,
           "x": -3,
-          "y": -8
+          "y": 3
         }
       ]
     },
@@ -136,9 +136,10 @@
           "color": "#5d5e44",
           "valign": "middle",
           "fontSize": 40,
-          "x": -8,
-          "y": 3,
-          "height": 76
+          "x": 0,
+          "y": 0,
+          "height": 77,
+          "width": 385
         }
       ]
     },
@@ -190,8 +191,8 @@
           "fontSize": 40,
           "x": -8,
           "y": 3,
-          "height": 75,
-          "width": 89
+          "height": 255,
+          "width": 0
         }
       ]
     }

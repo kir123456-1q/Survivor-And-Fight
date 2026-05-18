@@ -16,3 +16,5 @@ export * from './combatEffectDefine';
 export * from './skillSelectDefine';
 export * from './monsterDefine';
 export * from './rewardDefine';
+export * from './testDefine';
+export * from './atlasDefine';

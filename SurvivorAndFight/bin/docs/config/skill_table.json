@@ -196,6 +196,42 @@
                      "sortOrder":  15
                  },
                  {
+                     "id":  "wand_test_burst_10",
+                     "name":  "Test Wand x10",
+                     "iconPath":  "atlas/WeaponIcon/wand_melee_ash_guard_icon.png",
+                     "effectIds":  [
+                                       "fx_test_burst_10"
+                                   ],
+                     "cooldownSec":  0.8,
+                     "effectSlotCount":  8,
+                     "defaultEquipped":  false,
+                     "sortOrder":  901
+                 },
+                 {
+                     "id":  "wand_test_burst_100",
+                     "name":  "Test Wand x100",
+                     "iconPath":  "atlas/WeaponIcon/wand_melee_bronze_orbit_icon.png",
+                     "effectIds":  [
+                                       "fx_test_burst_100"
+                                   ],
+                     "cooldownSec":  0.8,
+                     "effectSlotCount":  8,
+                     "defaultEquipped":  false,
+                     "sortOrder":  902
+                 },
+                 {
+                     "id":  "wand_test_burst_1000",
+                     "name":  "Test Wand x1000",
+                     "iconPath":  "atlas/WeaponIcon/wand_melee_celestial_halo_icon.png",
+                     "effectIds":  [
+                                       "fx_test_burst_1000"
+                                   ],
+                     "cooldownSec":  0.8,
+                     "effectSlotCount":  8,
+                     "defaultEquipped":  false,
+                     "sortOrder":  903
+                 },
+                 {
                      "id":  "player_auto_shot",
                      "name":  "Player Auto Shot",
                      "iconPath":  "atlas/WeaponIcon/wand_melee_ash_guard_icon.png",

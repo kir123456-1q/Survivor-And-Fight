@@ -3,6 +3,8 @@ import {
     LEVEL1_BTN_NAME,
     LEVEL2_BTN_NAME,
     LEVEL3_BTN_NAME,
+    SELECT_LEVEL_LEVEL3_BTN_TITLE_HEIGHT,
+    SELECT_LEVEL_LEVEL3_BTN_TITLE_WIDTH,
     SELECT_LEVEL_PANEL_PREFAB,
 } from '../../../defines';
 import type { RunDifficulty } from '../../../defines';
@@ -24,6 +26,14 @@ export class SelectLevelPanelView {
         this.level1Btn = findDescendantByName(this.root, LEVEL1_BTN_NAME);
         this.level2Btn = findDescendantByName(this.root, LEVEL2_BTN_NAME);
         this.level3Btn = findDescendantByName(this.root, LEVEL3_BTN_NAME);
+        this.configureLevel3BtnTitle();
+    }
+
+    private configureLevel3BtnTitle(): void {
+        const title = this.level3Btn?.titleWidget;
+        if (!title) return;
+        title.width = SELECT_LEVEL_LEVEL3_BTN_TITLE_WIDTH;
+        title.height = SELECT_LEVEL_LEVEL3_BTN_TITLE_HEIGHT;
     }
 
     setOnEsc(handler: (() => void) | null): void {

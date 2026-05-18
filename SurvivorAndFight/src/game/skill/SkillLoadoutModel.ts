@@ -9,6 +9,8 @@ import {
     START_RANDOM_EFFECT_COUNT,
     START_RANDOM_SKILL_COUNT,
     STARTER_BULLET_EFFECT_BY_SLOT,
+    TEST_WAND_EFFECT_IDS,
+    TEST_WAND_SKILL_IDS,
 } from '../../defines';
 import { SkillLoadoutState } from '../../ecs/components/SkillLoadoutState';
 import type { Skill } from '../../ecs/components/Skill';
@@ -90,6 +92,31 @@ export function createDefaultLoadoutState(): SkillLoadoutState {
 
     assignStarterEffectsToEquippedSkills(state, effectPool);
 
+    state.dirty = true;
+    return state;
+}
+
+/** 测试关卡：前三装备栏固定为 10 / 100 / 1000 发弹幕测试法杖。 */
+export function createTestLoadoutState(): SkillLoadoutState {
+    const state = new SkillLoadoutState();
+
+    for (let i = 0; i < EQUIPPED_SKILL_SLOT_COUNT; i++) {
+        const skillId = TEST_WAND_SKILL_IDS[i] ?? null;
+        state.equippedSkillIds[i] = skillId;
+        if (!skillId) continue;
+
+        const row = skillRow(skillId);
+        const slotCount = Number(row?.effectSlotCount) || DEFAULT_EFFECT_SLOT_COUNT;
+        const slots: (string | null)[] = Array.from({ length: slotCount }, () => null);
+        const effectId = TEST_WAND_EFFECT_IDS[i];
+        if (effectId && isEffectEnabled(effectId)) {
+            slots[0] = effectId;
+        }
+        state.skillEffectMap[skillId] = slots;
+    }
+
+    state.ownedSkillIds = [...TEST_WAND_SKILL_IDS];
+    state.unequippedEffectIds = Array.from({ length: EFFECT_BOX_SLOT_COUNT }, () => '');
     state.dirty = true;
     return state;
 }
