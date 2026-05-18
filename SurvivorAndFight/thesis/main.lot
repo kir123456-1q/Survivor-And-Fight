@@ -10,7 +10,11 @@
 \addvspace {10.0pt}
 \addvspace {10.0pt}
 \contentsline {table}{\numberline {7.1}{\ignorespaces 功能测试用例摘要}}{16}{table.7.1}%
-\contentsline {table}{\numberline {7.2}{\ignorespaces 性能对比实验（待填入实测数据）}}{17}{table.caption.9}%
+\contentsline {table}{\numberline {7.2}{\ignorespaces 测试环境配置}}{17}{table.caption.9}%
+\contentsline {table}{\numberline {7.3}{\ignorespaces 测试关卡分波 FPS（接入动态图集，前三波历史实测）}}{18}{table.caption.10}%
+\contentsline {table}{\numberline {7.4}{\ignorespaces 动态图集接入前后 FPS 对比（前三波）}}{18}{table.caption.11}%
+\contentsline {table}{\numberline {7.5}{\ignorespaces Level3 五波测试帧率（单次运行）}}{18}{table.caption.12}%
+\contentsline {table}{\numberline {7.6}{\ignorespaces 性能对比实验（对象池消融，1000 怪 / 10\,s）}}{19}{table.caption.13}%
 \addvspace {10.0pt}
 \addvspace {10.0pt}
 \addvspace {10.0pt}
