@@ -1,5 +1,7 @@
-% 封面（参照学院 Word 模板版式；校徽来自模板 image1.emf，已转 cover-logo.png）
+% 封面
 \begin{titlepage}
+  \thispagestyle{empty}
+  % 校徽单独一行（左上）
   \noindent
   \IfFileExists{figures/cover-logo.png}{%
     \includegraphics[height=2.0cm]{figures/cover-logo.png}%
@@ -8,31 +10,43 @@
       \includegraphics[height=2.0cm]{../docs/thesis-docx-extract/media/cover-logo.png}%
     }{}%
   }%
-  \vspace{0.8cm}
-  \centering
-  {\zihao{2}\bfseries 本科毕业设计（论文）\par}
-  \vspace{2.2cm}
-  {\zihao{3}\bfseries 题\quad 目：\par}
-  \vspace{0.8cm}
-  {\zihao{3}\bfseries \thesistitle\par}
-  \vspace{2.8cm}
-  \begin{tabular}{rl}
-    \zihao{4} 学生姓名： & \zihao{4}\underline{\hspace{5.5cm}\thesisauthor\hspace{0.5cm}} \\[0.8em]
-    \zihao{4} 学\quad 号： & \zihao{4}\underline{\hspace{5.5cm}\thesisstudentid\hspace{0.5cm}} \\[0.8em]
-    \zihao{4} 专业班级： & \zihao{4}\underline{\hspace{5.5cm}\thesismajor\ \thesisclass\hspace{0.5cm}} \\[0.8em]
-    \zihao{4} 指导教师： & \zihao{4}\underline{\hspace{5.5cm}\thesisadvisor\hspace{0.5cm}} \\
-  \end{tabular}
+  \par\vspace{1.2cm}
+  % 本科毕业设计（论文）：黑体、小初、加粗，单独一行居中
+  \begin{center}
+    {\heiti\zihao{-0}\bfseries 本科毕业设计（论文）\par}
+  \end{center}
+  \vspace{2.0cm}
+  % 题目：小二；中文黑体、英文 TNR；两端对齐
+  \noindent{\heiti\zihao{-2}\bfseries 题\quad 目：}\par
+  \vspace{0.6cm}
+  \begin{minipage}{\textwidth}
+    \setstretch{1.2}
+    \justifying
+    {\heiti\zihao{-2}\bfseries 基于 LayaAir 与 ECS 的 Roguelite 生存战斗游戏\par}
+    {\heiti\zihao{-2}\bfseries 设计与实现\par}
+  \end{minipage}
+  \vspace{2.5cm}
+  % 专业、班级：仿宋三号，1 倍行距
+  {\fangsong\zihao{3}\linespread{1}\selectfont
+  \begin{tabular}{@{}l@{\quad}l@{}}
+    学生姓名： & \underline{\hspace{5cm}\thesisauthor\hspace{0.5cm}} \\[0.9em]
+    学\qquad 号： & \underline{\hspace{5cm}\thesisstudentid\hspace{0.5cm}} \\[0.9em]
+    专\qquad 业： & \underline{\hspace{5cm}\thesismajor\hspace{0.5cm}} \\[0.9em]
+    班\qquad 级： & \underline{\hspace{5cm}\thesisclass\hspace{0.5cm}} \\[0.9em]
+    指导教师： & \underline{\hspace{5cm}\thesisadvisor\hspace{0.5cm}} \\
+  \end{tabular}\par}
   \vfill
-  {\zihao{4} \thesisdate\par}
+  {\fangsong\zihao{3}\thesisdate\par}
 \end{titlepage}
 
-% 原创性声明与版权授权（同一页）
+% 原创性声明与版权授权
 \clearpage
 \thispagestyle{empty}
 \vspace*{0.5cm}
-{\zihao{3}\bfseries 学位论文原创性声明\par}
+{\heiti\zihao{3}\bfseries 学位论文原创性声明\par}
 \vspace{1em}
-\zihao{-4}
+\songti\zihao{-4}
+\setlength{\parindent}{2em}
 本人所提交的学位论文《\thesistitle》，是在导师的指导下，独立进行研究工作所取得的原创性成果。除文中已经注明引用的内容外，本论文不包含任何其他个人或集体已经发表或撰写过的研究成果。对本文的研究做出重要贡献的个人和集体，均已在文中标明。本声明的法律后果由本人承担。
 
 \vspace{1.5em}
@@ -41,7 +55,7 @@
 \noindent 年\quad 月\quad 日\hspace{4.5cm}年\quad 月\quad 日
 
 \vspace{2.5em}
-{\zihao{3}\bfseries 学位论文版权使用授权书\par}
+{\heiti\zihao{3}\bfseries 学位论文版权使用授权书\par}
 \vspace{1em}
 本学位论文作者完全了解中国石油大学（华东）有权保留并向国家有关部门或机构送交学位论文的复印件和磁盘，允许论文被查阅和借阅。本人授权中国石油大学（华东）可以将学位论文的全部或部分内容编入有关数据库进行检索，可以采用影印、缩印或其它复制手段保存、汇编学位论文。
 
@@ -53,26 +67,25 @@
 
 \noindent 年\quad 月\quad 日\hspace{4.5cm}年\quad 月\quad 日
 
-% 中文摘要
+% 中文摘要（不入目录）
 \clearpage
 \pagestyle{frontmatterheader}
-\section*{摘\quad 要}
-\addcontentsline{toc}{chapter}{摘要}
+\upcabstracttitle
+\songti\zihao{-4}
+\setlength{\parindent}{2em}
+随着 HTML5 与 WebGL 技术的成熟，浏览器端已能够承载中等复杂度的实时动作游戏。Roguelite 品类以单局随机性、局外元进度与构筑深度为核心乐趣，对架构可扩展性、数据驱动能力与运行时性能提出了较高要求。本文以毕业设计项目 Survivor And Fight 为对象，在 LayaAir 3.x 引擎与 TypeScript 技术栈上，设计并实现了一套面向 2D 俯视角生存战斗的完整游戏系统。
 
-随着 HTML5 与 WebGL 技术的成熟，浏览器端已能够承载中等复杂度的实时动作游戏。Roguelite 品类以单局随机性、局外元进度与构筑深度为核心乐趣，对架构可扩展性、数据驱动能力与运行时性能提出了较高要求。本文以毕业设计项目 \emph{Survivor And Fight} 为对象，在 LayaAir 3.x 引擎与 TypeScript 技术栈上，设计并实现了一套面向 2D 俯视角生存战斗的完整游戏系统。
-
-系统采用轻量级实体组件系统（ECS）作为玩法内核，将位置、速度、属性、技能、操控等数据与逻辑解耦为组件与系统，并通过分组调度与命名筛选器支撑玩家、怪物及可操控实体的批量更新。战斗层实现配表驱动的技能与效果执行链，支持子弹发射、穿透、分裂、连锁等组合效果；子弹与怪物通过对象池减少实例化开销；在实体规模达到阈值时，战斗快照可通过 Web Worker 异步重算，主线程负责采集与应用结果。元游戏层提供开始界面、选关与三大关爬塔式跑图，局内支持经验升级、随机奖励与技能装配界面（MVC 与 UI 栈）。游戏引擎架构理解、物理模拟与模块化设计方面的研究为本文提供了理论依据\cite{ullmann2025sydra,gregory2018game,cantrell2018unity}。
+系统采用轻量级实体组件系统（ECS）作为玩法内核，将位置、速度、属性、技能、操控等数据与逻辑解耦为组件与系统，并通过分组调度与命名筛选器支撑玩家、怪物及可操控实体的批量更新。战斗层实现配表驱动的技能与效果执行链，支持子弹发射、穿透、分裂、连锁等组合效果；子弹与怪物通过对象池减少实例化开销；在实体规模达到阈值时，战斗快照可通过 Web Worker 异步重算，主线程负责采集与应用结果。元游戏层提供开始界面、选关与三大关爬塔式跑图，局内支持经验升级、随机奖励与技能装配界面。游戏引擎架构理解、物理模拟与模块化设计方面的研究为本文提供了理论依据\cite{ullmann2025sydra,gregory2018game,cantrell2018unity}。
 
 本文从需求分析、总体架构、模块设计与实现、性能优化与测试验证等方面展开论述。测试表明：系统在目标平台上可稳定运行；五波压力测试中，同屏 1000 怪条件下对象池使 P95 帧时间由 76.50\,ms 降至 48.60\,ms；动态图集在千怪波次上提升平均 FPS 约 13.4\%。Web Worker 已集成于架构，同窗定量消融留作后续工作。
 
-\vspace{1em}
-\noindent\textbf{关键词：}LayaAir；实体组件系统；Roguelite；数据驱动；Web Worker；对象池；生存战斗
+\upckeywords{LayaAir；实体组件系统；Roguelite；数据驱动；Web Worker；对象池；生存战斗}
 
+% 英文摘要（不入目录）
 \clearpage
-\section*{Abstract}
-\addcontentsline{toc}{chapter}{Abstract}
+\upcabstracten
+\zihao{-4}
+\setlength{\parindent}{2em}
+With the maturity of HTML5 and WebGL, browsers can host real-time action games of moderate complexity. This thesis presents the design and implementation of Survivor And Fight, a 2D top-down survival combat game built on LayaAir 3.x and TypeScript. A lightweight ECS drives gameplay; combat is configuration-driven with object pooling and optional Web Worker offloading. A meta layer provides menus, level selection, and a three-act DAG run map. Testing shows stable operation; object pooling reduces P95 frame time under 1000 on-screen monsters, and texture atlasing improves average FPS on the heaviest wave. Quantitative ablation of Worker offloading under warmed-up conditions is left for future work.
 
-With the maturity of HTML5 and WebGL, browsers can host real-time action games of moderate complexity. This thesis presents the design and implementation of \emph{Survivor And Fight}, a 2D top-down survival combat game built on LayaAir 3.x and TypeScript. A lightweight ECS drives gameplay; combat is configuration-driven with object pooling and optional Web Worker offloading. A meta layer provides menus, level selection, and a three-act DAG run map. Testing shows stable operation; object pooling reduces P95 frame time under 1000 on-screen monsters, and texture atlasing improves average FPS on the heaviest wave. Quantitative ablation of Worker offloading under warmed-up conditions is left for future work.
-
-\vspace{1em}
-\noindent\textbf{Keywords:} LayaAir; ECS; Roguelite; data-driven; Web Worker; object pooling; survivor-like combat
+\upckeywordsen{LayaAir, ECS, Roguelite, data-driven, Web Worker, object pooling, survivor-like combat}

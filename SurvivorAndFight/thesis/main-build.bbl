@@ -1,0 +1,121 @@
+\begin{thebibliography}{10}
+
+\bibitem{agrahari2021unreal}
+Vartika Agrahari and Sridhar Chimalakonda.
+\newblock What's inside unreal engine? - a curious gaze!
+\newblock In {\em 14th Innovations in Software Engineering Conference}, pages
+  1--5. ACM, 2021.
+
+\bibitem{baabad2020degradation}
+Ahmed Baabad, Hazura~Binti Zulzalil, Sa'adah Hassan, and Salmi~Binti Baharom.
+\newblock Software architecture degradation in open source software: A
+  systematic literature review.
+\newblock {\em IEEE Access}, 8:173681--173709, 2020.
+
+\bibitem{bott2014unreal}
+M.~Bott, S.~R. Musse, L.~P. de~Oliveira, and B.~E. Bodmann.
+\newblock Implementing a physics based model of crowd movement using unreal
+  development kit.
+\newblock {\em Journal of Gaming \& Virtual Worlds}, 6(3):275--296, 2014.
+
+\bibitem{briand2001maintainability}
+L.~C. Briand, C.~Bunse, and J.~W. Daly.
+\newblock A controlled experiment for evaluating quality guidelines on the
+  maintainability of object-oriented designs.
+\newblock {\em IEEE Transactions on Software Engineering}, 27(6):513--530,
+  2001.
+
+\bibitem{cantrell2018unity}
+Walter~Alan Cantrell, Mikel~D. Petty, Samantha~L. Knight, and Whitney~K.
+  Schueler.
+\newblock Physics-based modeling of crowd evacuation in the {Unity} game
+  engine.
+\newblock {\em International Journal of Modeling, Simulation, and Scientific
+  Computing}, 9(4):1850029, 2018.
+
+\bibitem{goslin2004panda}
+M.~Goslin and M.~R. Mine.
+\newblock The {Panda3D} graphics engine.
+\newblock {\em Computer}, 37(10):112--114, 2004.
+
+\bibitem{gregory2018game}
+Jason Gregory.
+\newblock {\em Game Engine Architecture}.
+\newblock CRC Press, Boca Raton, 3 edition, 2018.
+
+\bibitem{heijstek2011empirical}
+Werner Heijstek, Thomas K{\"u}hne, and Michel R.~V. Chaudron.
+\newblock Experimental analysis of textual and graphical representations for
+  software architecture design.
+\newblock In {\em 2011 International Symposium on Empirical Software
+  Engineering and Measurement}, pages 167--176. IEEE, 2011.
+
+\bibitem{helbing2000panic}
+Dirk Helbing, Ill{\'e}s Farkas, and Tam{\'a}s Vicsek.
+\newblock Simulating dynamical features of escape panic.
+\newblock {\em Nature}, 407:487--490, 2000.
+
+\bibitem{mckenzie2008crowd}
+F.~D. McKenzie, M.~D. Petty, P.~A. Kruszewski, et~al.
+\newblock Integrating crowd-behavior modeling into military simulation using
+  game technology.
+\newblock {\em Simulation \& Gaming}, 39(1):10--38, 2008.
+
+\bibitem{munaiah2017github}
+Nuthan Munaiah, Steven Kroh, Craig Cabrey, and Meiyappan Nagappan.
+\newblock Curating {GitHub} for engineered software projects.
+\newblock {\em Empirical Software Engineering}, 22(6):3219--3253, 2017.
+
+\bibitem{munro2009quake}
+James Munro, Cornelia Boldyreff, and Andrea Capiluppi.
+\newblock Architectural studies of games engines -- the quake series.
+\newblock In {\em 2009 International IEEE Consumer Electronics Society's Games
+  Innovations Conference}, pages 246--255. IEEE, 2009.
+
+\bibitem{oberkampf2010vv}
+William~L. Oberkampf and Christopher~J. Roy.
+\newblock {\em Verification and Validation in Scientific Computing}.
+\newblock Cambridge University Press, Cambridge, UK, 2010.
+
+\bibitem{pelechano2008virtual}
+Nuria Pelechano, Jan Allbeck, and Norman Badler.
+\newblock {\em Virtual Crowds: Methods, Simulation, and Control}.
+\newblock Morgan and Claypool, San Rafael, 2008.
+
+\bibitem{petty2010vv}
+Mikel~D. Petty.
+\newblock Verification, validation, and accreditation.
+\newblock In {\em Modeling and Simulation Fundamentals}, pages 325--372. John
+  Wiley \& Sons, 2010.
+
+\bibitem{reynolds1987flocks}
+Craig~W. Reynolds.
+\newblock Flocks, herds, and schools: A distributed behavioral model.
+\newblock In {\em Proceedings of the 14th Annual Conference on Computer
+  Graphics and Interactive Techniques}, pages 25--34. ACM, 1987.
+
+\bibitem{thalmann2007crowd}
+Daniel Thalmann and Soraia~R. Musse.
+\newblock {\em Crowd Simulation}.
+\newblock Springer, London, 2007.
+
+\bibitem{ullmann2023coupling}
+Gabriel~C. Ullmann, Yann-Ga{\"e}l Gu{\'e}h{\'e}neuc, Fabio Petrillo, Nicolas
+  Anquetil, and Cristiano Politowski.
+\newblock Visualising game engine subsystem coupling patterns.
+\newblock In {\em Entertainment Computing -- ICEC 2023}, volume 14455 of {\em
+  Lecture Notes in Computer Science}, pages 263--274. Springer, 2023.
+
+\bibitem{ullmann2025sydra}
+Gabriel~C. Ullmann, Yann-Ga{\"e}l Gu{\'e}h{\'e}neuc, Fabio Petrillo, Nicolas
+  Anquetil, and Cristiano Politowski.
+\newblock {SyDRA}: An approach to understand game engine architecture.
+\newblock {\em Entertainment Computing}, 52:100832, 2025.
+
+\bibitem{unitymanual2016}
+{Unity Technologies}.
+\newblock {Unity} manual.
+\newblock \url{https://docs.unity3d.com/Manual/index.html}, 2016.
+\newblock Accessed 2026-05-17.
+
+\end{thebibliography}

@@ -1,46 +1,102 @@
-% 中国石油大学（华东）计算机学院本科毕业设计格式
-% 依据 本科毕业设计(论文)参考模板-计算机学院.docx 与 tools/read-docx-thesis-template.py 提取结果
+% 中国石油大学（华东）计算机学院本科毕业设计格式（2026 规范要点）
+% 目录样式不依赖 tocloft；上标引用不依赖 cite（避免 MiKTeX 缺包导致编译失败）
 
-% 页边距（模板 sectPr + 学院惯例）
 \usepackage{geometry}
 \geometry{left=3.0cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
 \setlength{\headheight}{13pt}
 \setlength{\headsep}{25pt}
 
-% 正文：小四号宋体、1.5 倍行距、首行缩进 2 字符
+\usepackage{setspace}
+
+% 参考文献上标 [1]（plain + hyperref 环境）
+\makeatletter
+\def\@cite#1{\textsuperscript{\hbox{[#1]}}}
+\makeatother
+
+% ---------- 正文字体与行距 ----------
 \setlength{\parindent}{2em}
-\renewcommand{\baselinestretch}{1.5}
+\setstretch{1.5}
 
-% 章标题：第 X 章，黑体三号居中（Word heading 1: 16pt 黑体居中）
-\CTEXsetup[name={第,章},number={\arabic{chapter}}]{chapter}
-\CTEXsetup[format={\heiti\zihao{-3}\centering}]{chapter}
-\CTEXsetup[beforeskip=12pt,afterskip=12pt]{chapter}
+% ---------- 章/节/小节 ----------
+\CTEXsetup[
+  name={第,章},
+  number={\arabic{chapter}},
+  format={\heiti\zihao{-3}\bfseries\raggedright},
+  beforeskip=0.5\baselineskip,
+  afterskip=0.5\baselineskip,
+  indent={0pt}
+]{chapter}
 
-% 节标题：黑体小三（Word heading 2: 15pt）
-\CTEXsetup[format={\heiti\zihao{4}}]{section}
-\CTEXsetup[beforeskip=6pt,afterskip=6pt]{section}
+\CTEXsetup[
+  format={\heiti\zihao{3}\bfseries\raggedright},
+  beforeskip=0.5\baselineskip,
+  afterskip=0.5\baselineskip,
+  indent={0pt}
+]{section}
 
-% 小节：黑体四号（Word heading 3: 14pt）
-\CTEXsetup[format={\heiti\zihao{-4}}]{subsection}
-\CTEXsetup[beforeskip=6pt,afterskip=6pt]{subsection}
+\CTEXsetup[
+  format={\heiti\zihao{4}\bfseries\raggedright},
+  beforeskip=0.5\baselineskip,
+  afterskip=0.5\baselineskip,
+  indent={0pt}
+]{subsection}
 
-% 三级以下：小四号宋体（模板说明：1、（1）等）
-\CTEXsetup[format={\songti\zihao{-4}}]{subsubsection}
+\CTEXsetup[
+  format={\songti\zihao{-4}\raggedright},
+  indent={0pt}
+]{subsubsection}
 
-% 图表题：五号宋体居中（近似模板 caption）
-\captionsetup{font=small,labelfont=bf,labelsep=quad,format=hang}
+% ---------- 图表题 ----------
+\captionsetup{
+  font={small},
+  labelfont={bf,small},
+  labelsep=quad,
+  skip=6pt
+}
+\captionsetup[figure]{
+  position=bottom,
+  font={small},
+  labelfont={bf,small},
+  textfont={small},
+  justification=centering
+}
+\captionsetup[table]{
+  position=top,
+  font={small},
+  labelfont={bf,small},
+  textfont={small},
+  justification=centering
+}
 
-% 页眉页脚宏
+\renewcommand{\thefigure}{\thechapter-\arabic{figure}}
+\renewcommand{\thetable}{\thechapter-\arabic{table}}
+\renewcommand{\figurename}{图}
+\renewcommand{\tablename}{表}
+
+% ---------- 目录（不含摘要；二级缩进 2 字、三级 4 字）----------
+\renewcommand{\contentsname}{目\quad 录}
+\usepackage{etoolbox}
+\patchcmd{\tableofcontents}{%
+  \@starttoc{toc}}{%
+  \begingroup
+  \songti\zihao{-4}%
+  \@starttoc{toc}%
+  \endgroup}{}{}
+\makeatletter
+\renewcommand*\l@section{\@dottedtocline{1}{2em}{1.8em}}
+\renewcommand*\l@subsection{\@dottedtocline{2}{4em}{2.2em}}
+\renewcommand*\l@subsubsection{\@dottedtocline{3}{6em}{2.8em}}
+\makeatother
+
+% ---------- 页眉页脚 ----------
 \newcommand{\upcfrontmatterheadertext}{中国石油大学（华东）本科毕业设计(论文)}
 
-% 前置部分页眉：楷体五号居中，带下划线
 \fancypagestyle{frontmatterheader}{%
   \fancyhf{}%
   \fancyhead[C]{\kaishu\zihao{-5}\upcfrontmatterheadertext}%
   \renewcommand{\headrulewidth}{0.4pt}%
 }
 
-% 正文页眉：章标题（黑体小五）；页脚：Times New Roman 五号阿拉伯数字居中
 \fancypagestyle{upcbody}{%
   \fancyhf{}%
   \fancyhead[C]{\songti\zihao{-5}\leftmark}%
@@ -56,5 +112,40 @@
   \renewcommand{\headrulewidth}{0.4pt}%
 }
 
-% 章标题写入页眉（去掉“第X章”前缀中的默认空格）
 \renewcommand{\chaptermark}[1]{\markboth{#1}{#1}}
+
+% ---------- 摘要 ----------
+\newcommand{\upcabstracttitle}{%
+  \vspace{0.5\baselineskip}%
+  \begin{center}
+    {\heiti\zihao{3}摘\quad 要}
+  \end{center}
+  \vspace{0.5\baselineskip}%
+}
+
+\newcommand{\upckeywords}[1]{%
+  \vspace{\baselineskip}%
+  \noindent{\heiti\bfseries 关键词：}#1\par
+}
+
+\newcommand{\upcabstracten}{%
+  \vspace{0.5\baselineskip}%
+  \begin{center}
+    {\zihao{3}\textbf{Abstract}}
+  \end{center}
+  \vspace{0.5\baselineskip}%
+}
+
+\newcommand{\upckeywordsen}[1]{%
+  \vspace{\baselineskip}%
+  \indent{\bfseries Keywords:} #1\par
+}
+
+\renewcommand{\bibname}{参\quad 考\quad 文\quad 献}
+\newcommand{\upcbibliography}{%
+  \begingroup
+  \setstretch{1.5}
+  \songti\zihao{-4}
+  \bibliography{references}
+  \endgroup
+}

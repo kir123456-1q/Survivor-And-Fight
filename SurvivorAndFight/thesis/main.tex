@@ -1,49 +1,28 @@
-\documentclass[UTF8,a4paper,zihao=-4,linespread=1.5]{ctexrep}
+\documentclass[UTF8,a4paper,zihao=-4]{ctexrep}
 
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{longtable}
-\usepackage{amsmath}
-\usepackage{listings}
 \usepackage{xcolor}
 \usepackage{hyperref}
 \usepackage{fancyhdr}
-\usepackage{titlesec}
 \usepackage{caption}
 \usepackage{enumitem}
-\usepackage{setspace}
 \usepackage{url}
+\usepackage{amsmath}
+\usepackage{ragged2e}
 
-\hypersetup{colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue}
+\hypersetup{colorlinks=false,hidelinks}
 
-% 学院模板版式（页边距、标题、页眉页脚）
 \input{upc-thesis-format}
 
-% ctexrep 无 \backmatter
 \providecommand{\backmatter}{}
-
-\lstset{
-  basicstyle=\ttfamily\small,
-  keywordstyle=\color{blue},
-  commentstyle=\color{gray},
-  stringstyle=\color{teal},
-  breaklines=true,
-  frame=single,
-  tabsize=2,
-  numbers=left,
-  numberstyle=\tiny\color{gray}
-}
-
-% 封面等无页眉
-\newcommand{\frontmatterstyle}{%
-  \pagestyle{empty}%
-}
 
 \newcommand{\thesistitle}{基于 LayaAir 与 ECS 的 Roguelite 生存战斗游戏\\设计与实现}
 \newcommand{\thesisauthor}{刘瀚文}
 \newcommand{\thesisstudentid}{2207020509}
-\newcommand{\thesismajor}{计算机科学与技术}
-\newcommand{\thesisclass}{（请填写班级）}
+\newcommand{\thesismajor}{计算机科学与技术专业}
+\newcommand{\thesisclass}{软件工程2205班}
 \newcommand{\thesisadvisor}{董玉坤}
 \newcommand{\thesisdate}{2026年6月}
 
@@ -51,6 +30,7 @@
 
 \input{frontmatter}
 
+% 目录（不含摘要、Abstract）
 \pagestyle{frontmatterheader}
 \tableofcontents
 \clearpage
@@ -59,7 +39,6 @@
 \listoftables
 \clearpage
 
-% 正文从第 1 页开始编号
 \pagenumbering{arabic}
 \setcounter{page}{1}
 \pagestyle{upcbody}
@@ -78,7 +57,11 @@
 \input{acknowledgement}
 \clearpage
 \bibliographystyle{plain}
-\bibliography{references}
+\upcbibliography
+\clearpage
+\chapter*{附\quad 录}
+\addcontentsline{toc}{chapter}{附录}
+\appendix
 \input{appendix}
 
 \end{document}
