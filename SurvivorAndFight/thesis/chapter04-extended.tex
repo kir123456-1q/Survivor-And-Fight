@@ -1,4 +1,4 @@
-
+﻿
 \section{技术选型说明}
 
 \begin{table}[htbp]
@@ -14,7 +14,7 @@
     架构 & 轻量 ECS + MVC UI & 解耦、可扩展 \\
     配置 & JSON + defines & 策划可调 + 工程常量分离 \\
     并发 & Web Worker（可选） & 主线程减压 \\
-    规格 & OpenSpec & 需求可验证、变更有档 \\
+    文档 & 需求/设计说明 & 与实现、测试可追溯 \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -37,7 +37,7 @@
 
 \section{安全设计}
 
-H5 客户端安全重点包括：（1）配表 JSON 不包含密钥；（2）若未来接入 API，须 HTTPS 与输入校验；（3）避免在 \texttt{eval} 中执行不可信策划公式——\texttt{FormulaParser} 应仅支持白名单运算\cite{kw_skill_formula}。当前单机原型攻击面较小，但公式解析器仍是潜在风险点，须在代码审查中禁止任意 JS 执行。
+H5 客户端安全重点包括：（1）配表 JSON 不包含密钥；（2）若未来接入 API，须 HTTPS 与输入校验；（3）避免在 \texttt{eval} 中执行不可信策划公式——\texttt{FormulaParser} 应仅支持白名单运算\cite{gregory2018game}。当前单机原型攻击面较小，但公式解析器仍是潜在风险点，须在代码审查中禁止任意 JS 执行。
 
 \section{可靠性设计}
 
@@ -45,4 +45,4 @@ Worker 失败时自动回退主线程；配表加载失败时使用 \texttt{DEFA
 
 \section{开发与部署流程}
 
-开发：Laya IDE 编辑场景与预制体 $\rightarrow$ TypeScript 编译 $\rightarrow$ 预览。配表修改后执行 \texttt{tools/sync-config-to-bin.ps1}。规格变更：\texttt{openspec validate} $\rightarrow$ 实现 $\rightarrow$ 勾选 \texttt{tasks.md} $\rightarrow$ 归档。部署：发布至 \texttt{bin/}，静态服务器托管，无服务端渲染要求\cite{kw_project_management_agile}。
+开发：Laya IDE 编辑场景与预制体 $\rightarrow$ TypeScript 编译 $\rightarrow$ 预览。配表修改后执行 \texttt{tools/sync-config-to-bin.ps1} 同步至运行目录。功能变更：更新需求与设计说明 $\rightarrow$ 实现 $\rightarrow$ 单元验证与手工回归 $\rightarrow$ 修订论文对应章节。部署：发布至 \texttt{bin/}，由静态服务器托管，无服务端渲染要求\cite{munaiah2017github}。

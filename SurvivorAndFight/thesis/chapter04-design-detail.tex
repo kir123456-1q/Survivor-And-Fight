@@ -1,4 +1,4 @@
-
+﻿
 \section{数据库与配表逻辑模型}
 
 虽无关系数据库，配表行仍构成逻辑 ER 关系：\textbf{Character} 1:1 关联玩家或怪物预制体；\textbf{Skill} 1:N \textbf{SkillEffect}；\textbf{SkillEffect} N:1 \textbf{Bullet}（当 effect 类型为 bullet）；\textbf{RunNode} N:N 通过边连接。图~\ref{fig:config-er} 以文字描述该关系。
@@ -22,7 +22,7 @@
 
 \section{部署拓扑}
 
-单机浏览器访问静态资源服务器；无后端集群。发布包包含 JS 编译产物、资源包、config JSON。CDN 部署时可缓存资源、短缓存 config 以便热更新\cite{kw_data_driven_game}。
+单机浏览器访问静态资源服务器；无后端集群。发布包包含 JS 编译产物、资源包、config JSON。CDN 部署时可缓存资源、短缓存 config 以便热更新\cite{gregory2018game}。
 
 \section{容错与降级策略}
 
@@ -36,12 +36,12 @@
 
 \section{可扩展性设计}
 
-新增怪物行为：添加 System 或扩展 \texttt{MonsterDef} 组件字段。新增技能效果类型：扩展 \texttt{EffectExecutor} 分支与 spec。新增界面：注册 UI 栈路由与 Controller。新增跑图节点类型：扩展 \texttt{RunNodeType} 与生成器权重。扩展点均已在 OpenSpec 中预留，避免修改 \texttt{EcsWorld} 内核\cite{kw_ecs_game_architecture}。
+新增怪物行为：添加 System 或扩展 \texttt{MonsterDef} 组件字段。新增技能效果类型：扩展 \texttt{EffectExecutor} 分支。新增界面：注册 UI 栈路由与 Controller。新增跑图节点类型：扩展 \texttt{RunNodeType} 与生成器权重。上述扩展均在不修改 \texttt{EcsWorld} 内核的前提下完成\cite{gregory2018game}。
 
 \section{安全与隐私设计扩展}
 
-客户端不存储密码。若接入分析 SDK，须在隐私政策中披露。配表 JSON 禁止包含 API 密钥。用户输入仅用于游戏操控，不上传聊天记录。公式解析器禁止 \texttt{eval}，防止配表被恶意篡改时 RCE\cite{kw_skill_formula,kw_ethics_game_design}。
+客户端不存储密码。若接入分析 SDK，须在隐私政策中披露。配表 JSON 禁止包含 API 密钥。用户输入仅用于游戏操控，不上传聊天记录。公式解析器禁止 \texttt{eval}，防止配表被恶意篡改时 RCE\cite{gregory2018game,petty2010vv}。
 
 \section{总体设计评审结论}
 
-总体设计满足当前 OpenSpec 已提案能力范围，模块边界清晰，性能与可维护性有明确手段。风险在于法杖系统与部分 Effect 视觉未完全实现，须在论文与答辩中如实标注。下一章实现细节与本章设计一一对应，便于评阅。
+总体设计满足第~\ref{chap:requirement}~章所列 Must/Should 级需求，模块边界清晰，性能与可维护性有明确手段。风险在于法杖系统与部分 Effect 视觉未完全实现，须在论文与答辩中如实标注。下一章实现细节与本章设计一一对应，便于评阅。

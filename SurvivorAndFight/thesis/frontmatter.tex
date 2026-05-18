@@ -1,16 +1,26 @@
-% 封面
+% 封面（参照学院 Word 模板版式；校徽来自模板 image1.emf，已转 cover-logo.png）
 \begin{titlepage}
+  \noindent
+  \IfFileExists{figures/cover-logo.png}{%
+    \includegraphics[height=2.0cm]{figures/cover-logo.png}%
+  }{%
+    \IfFileExists{../docs/thesis-docx-extract/media/cover-logo.png}{%
+      \includegraphics[height=2.0cm]{../docs/thesis-docx-extract/media/cover-logo.png}%
+    }{}%
+  }%
+  \vspace{0.8cm}
   \centering
-  \vspace*{1.5cm}
   {\zihao{2}\bfseries 本科毕业设计（论文）\par}
-  \vspace{2.5cm}
+  \vspace{2.2cm}
+  {\zihao{3}\bfseries 题\quad 目：\par}
+  \vspace{0.8cm}
   {\zihao{3}\bfseries \thesistitle\par}
-  \vspace{3cm}
+  \vspace{2.8cm}
   \begin{tabular}{rl}
-    \zihao{4} 学生姓名： & \zihao{4} \thesisauthor \\[0.6em]
-    \zihao{4} 学\quad 号： & \zihao{4} \thesisstudentid \\[0.6em]
-    \zihao{4} 专业班级： & \zihao{4} \thesismajor\ \thesisclass \\[0.6em]
-    \zihao{4} 指导教师： & \zihao{4} \thesisadvisor \\
+    \zihao{4} 学生姓名： & \zihao{4}\underline{\hspace{5.5cm}\thesisauthor\hspace{0.5cm}} \\[0.8em]
+    \zihao{4} 学\quad 号： & \zihao{4}\underline{\hspace{5.5cm}\thesisstudentid\hspace{0.5cm}} \\[0.8em]
+    \zihao{4} 专业班级： & \zihao{4}\underline{\hspace{5.5cm}\thesismajor\ \thesisclass\hspace{0.5cm}} \\[0.8em]
+    \zihao{4} 指导教师： & \zihao{4}\underline{\hspace{5.5cm}\thesisadvisor\hspace{0.5cm}} \\
   \end{tabular}
   \vfill
   {\zihao{4} \thesisdate\par}

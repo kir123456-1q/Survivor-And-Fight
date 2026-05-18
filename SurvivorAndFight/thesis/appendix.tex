@@ -10,18 +10,73 @@
   Roguelite & 轻 Roguelike，含元进度与单局随机 \\
   DAG & Directed Acyclic Graph，有向无环图 \\
   H5 & HTML5 网页游戏 \\
-  UI2 & LayaAir 新一代 UI 组件 \\
+  UI2 & LayaAir 新一代 UI 组件（GBox/GButton 等） \\
   Worker & Web Worker，浏览器后台线程 \\
+  MoSCoW & Must/Should/Could/Won't 需求优先级方法 \\
+  V\&V & Verification and Validation，验证与确认 \\
+  P95 & 第 95 百分位帧时间，反映卡顿尖峰 \\
   \bottomrule
 \end{longtable}
 
 \chapter{核心配表字段示例（节选）}
 \label{app:config}
 
-\textbf{Character 表}：\texttt{id}、\texttt{prefabPath}、\texttt{bodyPrefabPath}、\texttt{hp}、\texttt{maxHp}、\texttt{roleType}。
+\textbf{Character 表}：\texttt{id}、\texttt{prefabPath}、\texttt{bodyPrefabPath}、\texttt{hp}、\texttt{maxHp}、\texttt{roleType}。玩家与怪物共用表结构，通过 \texttt{roleType} 区分预制体与默认数值。
 
-\textbf{Bullet 表}：\texttt{id}、\texttt{prefabPath}、\texttt{duration}、\texttt{speed}、\texttt{damage}、\texttt{penetration}。
+\textbf{Bullet 表}：\texttt{id}、\texttt{prefabPath}、\texttt{duration}、\texttt{speed}、\texttt{damage}、\texttt{penetration}。子弹系统按 id 查表生成运动参数与伤害。
 
-\textbf{SkillEffect 表}：\texttt{id}、\texttt{effect}、\texttt{damage}、\texttt{params}、\texttt{iconPath}。
+\textbf{Skill 表}：\texttt{id}、\texttt{cooldown}、\texttt{effectSlotCount}、图标路径等。一个技能可关联多行 \texttt{SkillEffect}。
 
-完整 JSON 见项目 \texttt{docs/config/} 目录。
+\textbf{SkillEffect 表}：\texttt{id}、\texttt{effect}、\texttt{damage}、\texttt{params}、\texttt{iconPath}。\texttt{effect} 取值包括 \texttt{bullet}、\texttt{modifier\_split}、\texttt{modifier\_chain}、\texttt{modifier\_pierce}、\texttt{direct\_damage}。
+
+完整 JSON 见项目 \texttt{docs/config/} 目录；运行前须执行 \texttt{tools/sync-config-to-bin.ps1} 同步至 \texttt{bin/config/}。
+
+\chapter{需求与测试用例映射（节选）}
+\label{app:req-test}
+
+表~\ref{tab:req-test-matrix} 给出需求标识与测试用例、验证方式的对应关系，便于答辩时说明“需求—测试”可追溯性。
+
+\begin{longtable}{p{2.2cm}p{4.2cm}p{6.8cm}}
+  \caption{需求—测试映射（节选）} \label{tab:req-test-matrix} \\
+  \toprule
+  \textbf{需求 ID} & \textbf{需求摘要} & \textbf{验证方式} \\
+  \midrule
+  \endfirsthead
+  \toprule
+  \textbf{需求 ID} & \textbf{需求摘要} & \textbf{验证方式} \\
+  \midrule
+  \endhead
+  R-ECS-01 & 实体销毁时清理全部组件 & \texttt{ecsCorePhase1.verify.ts} \\
+  R-ECS-02 & 系统按分组与优先级顺序执行 & \texttt{ecsCorePhase1.verify.ts} \\
+  R-SKILL-01 & 三装备栏独立冷却与自动施法 & T-F-04，观察多技能轮替 \\
+  R-SKILL-02 & Tab 打开面板暂停战斗 & T-F-05，\texttt{GameSession.paused} \\
+  R-SKILL-03 & 拖拽装配写回战斗实体 & T-F-06，装配同步用例 \\
+  R-BULLET-01 & 穿透/分裂/连锁按配表生效 & T-F-04，高密度战斗观察 \\
+  R-MON-01 & 波次刷怪与追逐分离 & T-F-03，Worker 一致性对比 \\
+  R-META-01 & 主菜单进入战斗与计时 & T-F-09 \\
+  R-MAP-01 & 跑图 DAG Boss 可达 & 100 次随机种子断言 \\
+  R-PERF-01 & 对象池降低帧时间尖峰 & 表~\ref{tab:perf}，第 4--5 波 \\
+  R-PERF-02 & 动态图集提升千怪 FPS & 表~\ref{tab:test-level-fps-compare} \\
+  R-UI-01 & 升级奖励三选一 & T-F-07 \\
+  R-UI-02 & 死亡重启面板 & T-F-08 \\
+  \bottomrule
+\end{longtable}
+
+\chapter{缺陷记录（项目实测）}
+\label{app:bugs}
+
+\begin{table}[htbp]
+  \centering
+  \caption{缺陷记录表}
+  \begin{tabular}{clll}
+    \toprule
+    ID & 描述 & 严重性 & 状态 \\
+    \midrule
+    B-01 & 配表未同步至 \texttt{bin/config} 导致技能图标空白 & 中 & 已修复（同步脚本） \\
+    B-02 & Worker 脚本路径错误时回退主线程 & 低 & 已修复 \\
+    B-03 & 部分 Effect 仅 UI 展示无独立 VFX & 低 & 已知，论文已说明 \\
+    B-04 & 法杖三槽运行时与专用 UI 未实现 & 中 & 规划项，第~\ref{chap:conclusion}~章 \\
+    B-05 & 千怪首次波次 FPS 低于预热后基线 & 低 & 已分析，见第~\ref{chap:test}~章 \\
+    \bottomrule
+  \end{tabular}
+\end{table}

@@ -1,9 +1,9 @@
-
+﻿
 \section{单元测试详细说明}
 
 \subsection{ECS 核心验证}
 
-\texttt{ecsCorePhase1.verify.ts} 覆盖：创建多个实体并验证 ID 唯一；添加与移除组件后 \texttt{getComponent} 行为；销毁实体后组件不可访问；注册两个不同优先级 System 时执行顺序符合分组与 priority。该脚本可在 CI 中作为门禁，防止内核回归\cite{kw_software_testing_game}。
+\texttt{ecsCorePhase1.verify.ts} 覆盖：创建多个实体并验证 ID 唯一；添加与移除组件后 \texttt{getComponent} 行为；销毁实体后组件不可访问；注册两个不同优先级 System 时执行顺序符合分组与 priority。该脚本可在 CI 中作为门禁，防止内核回归\cite{petty2010vv}。
 
 \subsection{公式解析器验证}
 
@@ -11,13 +11,13 @@
 
 \subsection{属性修饰器验证}
 
-\texttt{attributeModifier.verify.ts} 覆盖：同属性多个 modifier 叠加顺序；按 \texttt{sourceId} 批量移除后恢复 base；\texttt{getModifierContributions} 返回可追溯列表。升级奖励与技能 Buff 均依赖该机制，回归意义重大\cite{kw_attribute_modifier}。
+\texttt{attributeModifier.verify.ts} 覆盖：同属性多个 modifier 叠加顺序；按 \texttt{sourceId} 批量移除后恢复 base；\texttt{getModifierContributions} 返回可追溯列表。升级奖励与技能 Buff 均依赖该机制，回归意义重大\cite{briand2001maintainability}。
 
 \section{集成测试场景扩展}
 
 \subsection{跑图可达性测试}
 
-对 \texttt{RunMapGenerator.generate} 运行 100 次随机种子，断言每次 \texttt{validateActReachBoss} 为真；记录失败次数，应接近 0（仅 fallback 路径例外）。可将种子与 Act 索引打印，便于复现失败样例\cite{kw_seeded_rng}。
+对 \texttt{RunMapGenerator.generate} 运行 100 次随机种子，断言每次 \texttt{validateActReachBoss} 为真；记录失败次数，应接近 0（仅 fallback 路径例外）。可将种子与 Act 索引打印，便于复现失败样例\cite{gregory2018game}。
 
 \subsection{装配同步测试}
 
@@ -25,16 +25,12 @@
 
 \subsection{Worker 一致性测试}
 
-在相同随机种子与输入序列下，分别运行 Worker 开/关各 30 秒，对比怪物位置轨迹是否一致（允许一帧延迟）。若偏差过大，说明主线程与 Worker 逻辑漂移，须统一 \texttt{combatWorkerLogic.ts}\cite{kw_web_worker_game}。
+在相同随机种子与输入序列下，分别运行 Worker 开/关各 30 秒，对比怪物位置轨迹是否一致（允许一帧延迟）。若偏差过大，说明主线程与 Worker 逻辑漂移，须统一 \texttt{combatWorkerLogic.ts}\cite{mckenzie2008crowd}。
 
 \section{测试数据与截图要求}
 
 终稿建议包含不少于 6 张截图：主菜单、跑图界面、战斗场面、技能面板、升级奖励、重启面板。每张图配 100--200 字说明。性能测试附 1 张 Performance 时间轴截图。缺少截图会降低论文说服力。
 
-\section{测试结论模板（供终稿填写）}
+\section{测试结论补充说明}
 
-经测试，系统在功能上满足 Must 级需求；Should 级需求中跑图与技能装配通过；Could 级法杖 UI 部分未实现。性能方面，在（填写环境）下，开启池化与 Worker 后平均 FPS 为（填写），较基线提升（填写）\%。单元验证脚本全部通过。遗留缺陷见缺陷表，计划在（日期）前修复（填写）。
-
-\section{测试章节扩展小结}
-
-本章扩展细化了单元、集成测试步骤与终稿数据填写要求，与第~\ref{chap:test}~章主文合并阅读。完成实测后，请将占位数据替换为真实结果，并删除“模板”“占位”等提示语。
+综合第~\ref{chap:test}~章主文与上文扩展用例，可得出如下结论：系统在功能上满足 Must 级需求；Should 级需求中跑图 DAG、技能装配 UI、升级奖励与对象池均已通过手工用例；Could 级法杖三槽完整 UI 与部分 Effect 独立特效尚未实现，与第~\ref{chap:conclusion}~章展望一致。性能方面，在 Windows + Laya IDE 内置 Chromium、1920$\times$1080 预览环境下，Level3 五波实验整场平均 FPS 约 34.48；千怪同窗消融表明对象池将 P95 帧时间由 76.50\,ms 降至 48.60\,ms（约降 36.5\%），而平均 FPS 提升有限。动态图集在千怪波次上带来约 13.4\% 的 FPS 提升。单元验证脚本 \texttt{ecsCorePhase1.verify.ts}、\texttt{formulaParser.verify.ts}、\texttt{attributeModifier.verify.ts} 在提交前均通过。遗留缺陷以配置同步、部分特效占位为主，不影响答辩演示主路径。

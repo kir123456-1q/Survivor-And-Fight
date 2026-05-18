@@ -1,7 +1,7 @@
 \chapter{核心模块详细设计与实现}
 \label{chap:modules}
 
-本章结合 \texttt{src/} 实现，对核心模块作详细说明。
+本章结合 \texttt{src/} 实现，对核心模块作详细说明。\texttt{SimpleEcsDemo} 作为组合根（Composition Root）集中注册系统、池与 UI 控制器，是阅读源码的首选入口；表~\ref{tab:file-index}（见本章扩展节）给出模块与路径索引，便于评阅对照。
 
 \section{ECS 核心模块}
 
@@ -54,13 +54,8 @@
 
 \texttt{ConfigBootstrap} 双通道加载 JSON 并 \texttt{initData} 填充 \texttt{Data}，是数据驱动枢纽\cite{gregory2018game,munaiah2017github}。
 
-\section{典型场景剖析}
-
-\textbf{首次进入战斗：} \texttt{Main} 加载配表 $\rightarrow$ 元菜单选关 $\rightarrow$ \texttt{demo.init()} 创建玩家与系统 $\rightarrow$ 生存计时启动。
-
-\textbf{Tab 装配技能：} 暂停战斗 $\rightarrow$ 拖拽更新 \texttt{SkillLoadoutState} $\rightarrow$ 同步至自动施法 $\rightarrow$ 恢复战斗。
-
-\textbf{高密度战斗：} 实体数达标时 \texttt{CombatDataBridge} 启用 Worker，主线程仍处理子弹碰撞与渲染\cite{cantrell2018unity,bott2014unreal}。
+\input{chapter05-extended}
+\input{chapter05-implementation-case}
 
 \section{本章小结}
 

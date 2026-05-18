@@ -1,4 +1,4 @@
-
+﻿
 \section{系统初始化与主循环实现}
 
 \subsection{入口与配置加载时序}
@@ -25,11 +25,11 @@
   \item 若为 \texttt{direct\_damage}，\texttt{FormulaParser} 计算伤害并 \texttt{AttributeSystem} 扣血。
 \end{enumerate}
 
-该“修饰器 + 子弹”顺序语义与 Noita 式法术链思想一致：修饰器本身不直接产生视觉效果，而是改变后续子弹行为\cite{kw_noita_spellcraft}。实现上须保证 effect 表内顺序可被策划理解，建议在工具链中提供顺序预览。
+该“修饰器 + 子弹”顺序语义与 Noita 式法术链思想一致：修饰器本身不直接产生视觉效果，而是改变后续子弹行为\cite{gregory2018game}。实现上须保证 effect 表内顺序可被策划理解，建议在工具链中提供顺序预览。
 
 \section{子弹碰撞与连锁算法说明}
 
-设子弹 $b$ 与怪物 $m$ 圆半径分别为 $r_b, r_m$，中心距离平方 $d^2 = (x_b-x_m)^2 + (y_b-y_m)^2$，若 $d^2 \leq (r_b+r_m)^2$ 则判定命中\cite{kw_spatial_hash_collision}。命中后：
+设子弹 $b$ 与怪物 $m$ 圆半径分别为 $r_b, r_m$，中心距离平方 $d^2 = (x_b-x_m)^2 + (y_b-y_m)^2$，若 $d^2 \leq (r_b+r_m)^2$ 则判定命中\cite{helbing2000panic}。命中后：
 \begin{itemize}
   \item 对 $m$ 应用 \texttt{damage}（可含公式）；
   \item \texttt{penetration} 减 1，为 0 则回收子弹；
@@ -49,7 +49,7 @@
 
 \texttt{Experience} 组件记录当前经验与等级。\texttt{ExperienceSystem} 在怪物死亡时读取 \texttt{ExperienceReward}，增加经验并判断是否升级。升级后 \texttt{UpgradeState} 标记待选奖励，\texttt{UpgradeRewardSystem} 暂停战斗或打开 \texttt{RewardPanel}（具体交互由 UI Controller 实现）。\texttt{RewardPoolService} 按权重抽取奖励条目，\texttt{RewardApplyService} 可能执行：增加属性 modifier、提升 hp 上限、解锁技能等。
 
-该闭环将“生存时间”转化为“数值成长”，是 Survivor-like 品类留存关键\cite{kw_survivor_genre}。配表 \texttt{rewardDefine.ts} 中常量控制池子 id 与 UI 路由。
+该闭环将“生存时间”转化为“数值成长”，是 Survivor-like 品类留存关键\cite{gregory2018game}。配表 \texttt{rewardDefine.ts} 中常量控制池子 id 与 UI 路由。
 
 \section{元游戏界面与 UI 栈交互}
 
@@ -65,7 +65,7 @@
 
 \section{输入系统}
 
-\texttt{InputService} 封装键盘/指针事件，\texttt{ControlInputAdapter} 转换为 \texttt{ControlSystem} 可读的方向向量。输入层与 UI 层解耦：Tab 打开面板时，战斗 Control 不更新，但 UI 仍可接收指针事件。该分离符合 MVC 职责划分\cite{kw_mvc_ui_pattern}。
+\texttt{InputService} 封装键盘/指针事件，\texttt{ControlInputAdapter} 转换为 \texttt{ControlSystem} 可读的方向向量。输入层与 UI 层解耦：Tab 打开面板时，战斗 Control 不更新，但 UI 仍可接收指针事件。该分离符合 MVC 职责划分\cite{heijstek2011empirical}。
 
 \section{重启与死亡流程}
 
@@ -73,4 +73,4 @@
 
 \section{模块间依赖关系小结}
 
-依赖关系遵循单向原则：UI $\rightarrow$ ECS 组件读写；Systems $\rightarrow$ 配表/Data；BulletSystem $\rightarrow$ BulletPool/CombatBridge；MetaFlow $\rightarrow$ Main 回调。禁止 Systems 直接操作 UI 节点，须通过 Controller 或专门 SyncSystem。该约束降低循环依赖，利于单元测试\cite{kw_software_testing_game}。
+依赖关系遵循单向原则：UI $\rightarrow$ ECS 组件读写；Systems $\rightarrow$ 配表/Data；BulletSystem $\rightarrow$ BulletPool/CombatBridge；MetaFlow $\rightarrow$ Main 回调。禁止 Systems 直接操作 UI 节点，须通过 Controller 或专门 SyncSystem。该约束降低循环依赖，利于单元测试\cite{petty2010vv}。

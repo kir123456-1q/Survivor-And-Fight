@@ -1,0 +1,28 @@
+[
+  {
+    "rel_id": "rId16",
+    "target": "media/image1.emf",
+    "source": "document.xml",
+    "format": "emf",
+    "index": 1,
+    "paragraph_index": 1,
+    "paragraph_text_preview": "",
+    "abs_path": "docs/thesis-docx-extract/media/image1.emf",
+    "role": "cover_logo",
+    "png_converted": "docs/thesis-docx-extract/media/cover-logo.png",
+    "latex_path": "figures/cover-logo.png",
+    "note": "封面左上角中国石油大学校徽；Word 内为 EMF 矢量图，XeLaTeX 需使用 PNG"
+  },
+  {
+    "rel_id": "rId17",
+    "target": "media/image2.png",
+    "source": "document.xml",
+    "format": "png",
+    "index": 2,
+    "paragraph_index": 42,
+    "paragraph_text_preview": "基于可扩展性和独立性特点",
+    "abs_path": "docs/thesis-docx-extract/media/image2.png",
+    "role": "body",
+    "note": "正文示例类图（Quark 模块）"
+  }
+]

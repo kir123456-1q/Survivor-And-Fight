@@ -1,0 +1,52 @@
+{
+  "documentclass": "ctexrep",
+  "options": ["UTF8", "a4paper", "zihao=-4", "linespread=1.5"],
+  "geometry_cm": {
+    "top_cm": 2.54,
+    "bottom_cm": 2.54,
+    "left_cm": 3.18,
+    "right_cm": 3.18,
+    "header_cm": 1.5,
+    "footer_cm": 1.75
+  },
+  "body": {
+    "font": "songti",
+    "zihao": "xiaosi",
+    "linespread": 1.5,
+    "indent": "2em"
+  },
+  "chapter": {
+    "format": "第\\arabic{chapter}章",
+    "font": "heiti",
+    "zihao": "sanhao",
+    "align": "center",
+    "size_pt": 16
+  },
+  "section": {
+    "font": "heiti",
+    "zihao": "xiaosan",
+    "size_pt": 15
+  },
+  "subsection": {
+    "font": "heiti",
+    "zihao": "sihao",
+    "size_pt": 14
+  },
+  "pagestyle": {
+    "frontmatter_header": "中国石油大学（华东）本科毕业设计(论文)",
+    "frontmatter_font": "kaishu",
+    "frontmatter_zihao": "wuhao",
+    "body_header": "chapter_title",
+    "footer_font": "Times New Roman",
+    "footer_zihao": "wuhao",
+    "footer_align": "center"
+  },
+  "media": ["word/media/image1.emf", "word/media/image2.png"],
+  "notes_from_template": [
+    "封面、摘要、目录无页眉页码",
+    "摘要/目录/致谢/参考文献/附录页眉为固定学校标题（楷体五号）",
+    "正文各章页眉为章标题",
+    "正文至附录页脚阿拉伯数字居中（Times New Roman 五号）",
+    "三级以下标题可用 1、（1）① 等，小四号宋体"
+  ]
+}

@@ -5,7 +5,9 @@
 
 \subsection{技术可行性}
 
-项目选用 LayaAir 3.x 与 TypeScript，已实现 ECS 核心、战斗 Demo、元菜单、跑图生成、技能装配 UI 等模块。引擎支持 2D 预制体、帧循环与键盘输入；浏览器支持 Web Worker。SyDRA 等研究表明，理解引擎子系统结构有助于降低维护成本\cite{ullmann2025sydra}；Cantrell 等验证了商业游戏引擎用于复杂物理仿真的可行性\cite{cantrell2018unity}。配表经同步脚本发布至运行目录，技术路线可行。
+项目选用 LayaAir 3.x 与 TypeScript，已实现 ECS 核心、战斗 Demo、元菜单、跑图生成、技能装配 UI 等模块。引擎支持 2D 预制体、帧循环与键盘输入；现代 Chromium 内核浏览器支持 Web Worker 与 WebGL2。SyDRA 等研究表明，理解引擎子系统结构有助于降低维护成本\cite{ullmann2025sydra}；Cantrell 等验证了商业游戏引擎用于复杂物理仿真的可行性\cite{cantrell2018unity}，说明在引擎之上叠加领域逻辑（人群/怪物运动）具有先例。
+
+配表经 \texttt{tools/sync-config-to-bin.ps1} 发布至 \texttt{bin/config/}，\texttt{ConfigBootstrap.ensureGameConfigLoaded()} 在启动时双通道加载（\texttt{fetch} 与 \texttt{Laya.loader}），并通过 \texttt{isGameConfigReady} 检查行数。单元验证脚本覆盖 ECS、公式与属性修饰器，可在不启动完整 UI 的情况下验证核心契约。技术风险主要包括：同屏千级实体时的帧率、Worker 与主线程逻辑一致性、UI2 拖拽命中——均已通过性能实验与手工用例部分缓解。综上，在毕业设计周期内完成可运行原型并撰写配套论文，技术路线可行。
 
 \subsection{经济与社会可行性}
 
@@ -66,9 +68,8 @@
   \end{tabular}
 \end{table}
 
-\section{运行环境}
-
-建议配置：四核 CPU、8GB 内存、支持 WebGL2 的浏览器；开发环境为 LayaAir IDE 3.x、TypeScript、Node.js 工具链。
+\input{chapter03-extended}
+\input{chapter03-requirements-detail}
 
 \section{本章小结}
 

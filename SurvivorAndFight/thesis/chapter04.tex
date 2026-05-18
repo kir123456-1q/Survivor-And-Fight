@@ -3,13 +3,18 @@
 
 \section{设计原则}
 
+系统总体设计遵循以下原则，并在后续模块实现中反复体现：
+
 \begin{enumerate}[label=(\arabic*)]
-  \item \textbf{数据与逻辑分离}：组件存数据，系统执逻辑；配表驱动参数\cite{gregory2018game}。
-  \item \textbf{单一职责}：\texttt{BulletSystem} 负责子弹与碰撞，\texttt{EffectExecutor} 负责效果语义映射。
-  \item \textbf{可验证}：核心模块提供单元验证脚本（公式解析、ECS 核心、属性修饰器）。
-  \item \textbf{渐进复杂度}：轻量 ECS；Worker 仅在规模达标时启用。
-  \item \textbf{低耦合}：参考游戏引擎子系统解耦经验，避免 UI 直接操作战斗节点\cite{ullmann2023coupling}。
+  \item \textbf{数据与逻辑分离}：组件仅存数据，系统执逻辑；可调参数尽量外置 JSON 配表，工程常量集中于 \texttt{src/defines/}\cite{gregory2018game}。该原则使策划可在不改动 TypeScript 的前提下调整技能冷却、子弹速度等，也便于版本管理与 diff 审查。
+  \item \textbf{单一职责}：\texttt{BulletSystem} 负责子弹运动与圆碰撞；\texttt{EffectExecutor} 负责将配表 \texttt{effect} 字段映射为运行时行为；\texttt{MetaFlowController} 仅协调元游戏流程，不直接修改 ECS 组件。职责清晰可降低修改时的意外副作用，符合 Briand 等关于可维护性准则的实验结论\cite{briand2001maintainability}。
+  \item \textbf{可验证}：核心模块提供单元验证脚本（公式解析、ECS 核心、属性修饰器），变更后可在 CI 或本地快速回归，呼应 Petty 对仿真与交互系统 V\&V 的要求\cite{petty2010vv}。
+  \item \textbf{渐进复杂度}：第 1 期采用轻量 ECS 与单线程调度；对象池与 Web Worker 作为可选增强，仅在实体规模达标时启用，避免过早引入难以调试的并发模型。
+  \item \textbf{低耦合}：UI 通过 Controller 与 SyncSystem 读写 ECS 状态，禁止 System 直接操作 UI 节点；战斗数值 Worker 与主线程共享 \texttt{combatWorkerLogic.ts}，避免双份逻辑漂移\cite{ullmann2023coupling,mckenzie2008crowd}。
+  \item \textbf{可降级}：配表缺失、Worker 不可用、跑图生成失败时均有明确回退路径，保证演示与测试不中断（详见第~\ref{chap:architecture}~章容错设计）。
 \end{enumerate}
+
+上述原则共同支撑“教学可完成、工程可扩展”的目标：在毕业设计周期内先交付闭环，再为法杖编程、空间划分碰撞等留出扩展点。
 
 \section{系统分层架构}
 
@@ -43,9 +48,8 @@
 
 \texttt{MetaFlowController} 协调界面与战斗入口；\texttt{RunMapState} 维护 DAG 进度。逻辑数据关系：\texttt{Character}、\texttt{Skill} 1:N \texttt{SkillEffect}，\texttt{SkillEffect} 可关联 \texttt{Bullet}；跑图节点通过边构成 DAG。
 
-\section{部署与容错}
-
-H5 静态发布至 \texttt{bin/}；无服务端数据库。配表缺失时使用默认常量；Worker 失败回退主线程；跑图生成失败使用保底图；预制体加载失败可用占位碰撞体调试。
+\input{chapter04-extended}
+\input{chapter04-design-detail}
 
 \section{本章小结}
 

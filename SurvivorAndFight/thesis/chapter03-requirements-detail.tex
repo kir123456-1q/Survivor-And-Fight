@@ -1,25 +1,25 @@
-
+﻿
 \section{功能需求详细说明}
 
 \subsection{ECS 核心需求}
 
-系统须提供实体创建与销毁 API，销毁时自动移除该实体全部组件。组件类型以 TypeScript 类为键，同一实体不得重复挂载同类型组件。系统注册须指定分组与优先级，\texttt{update} 调用顺序确定且可预测。须提供按组件类型遍历与多组件交集查询能力，供筛选器与系统使用\cite{kw_ecs_game_architecture}。
+系统须提供实体创建与销毁 API，销毁时自动移除该实体全部组件。组件类型以 TypeScript 类为键，同一实体不得重复挂载同类型组件。系统注册须指定分组与优先级，\texttt{update} 调用顺序确定且可预测。须提供按组件类型遍历与多组件交集查询能力，供筛选器与系统使用\cite{gregory2018game}。
 
 \subsection{战斗与技能需求}
 
-玩家实体须具备 hp/maxHp，可通过 modifier 动态调整上限与当前值。技能由配表定义，包含冷却、effect 列表。自动施法系统须支持至少三个装备栏位独立冷却。效果类型须覆盖子弹、穿透修饰、分裂修饰、连锁修饰、直伤。子弹须携带阵营信息，碰撞时仅对敌对阵营生效。连锁搜索半径由工程常量定义，避免无界遍历\cite{kw_spatial_hash_collision,kw_skill_formula}。
+玩家实体须具备 hp/maxHp，可通过 modifier 动态调整上限与当前值。技能由配表定义，包含冷却、effect 列表。自动施法系统须支持至少三个装备栏位独立冷却。效果类型须覆盖子弹、穿透修饰、分裂修饰、连锁修饰、直伤。子弹须携带阵营信息，碰撞时仅对敌对阵营生效。连锁搜索半径由工程常量定义，避免无界遍历\cite{helbing2000panic,gregory2018game}。
 
 \subsection{怪物与波次需求}
 
-怪物自玩家周围环带生成，保持最小间距，避免与玩家重叠。怪物须追逐玩家并可造成接触伤害。远离玩家或死亡后应回收实体与显示对象。怪物可配置自动远程攻击。击杀须给予经验，经验公式可含等级加成项\cite{kw_survivor_genre}。
+怪物自玩家周围环带生成，保持最小间距，避免与玩家重叠。怪物须追逐玩家并可造成接触伤害。远离玩家或死亡后应回收实体与显示对象。怪物可配置自动远程攻击。击杀须给予经验，经验公式可含等级加成项\cite{gregory2018game}。
 
 \subsection{元游戏与跑图需求}
 
-启动后须可进入开始界面。用户可选择关卡或进入跑图界面。跑图每局生成三个 Act，每 Act 为 DAG。节点类型至少包括休息、战斗、Boss、宝藏（命名以代码枚举为准）。用户只能沿已解锁边移动。选择战斗节点进入局内场景，Boss 节点携带特殊胜利计时参数\cite{kw_dag_run_map,kw_roguelike_design}。
+启动后须可进入开始界面。用户可选择关卡或进入跑图界面。跑图每局生成三个 Act，每 Act 为 DAG。节点类型至少包括休息、战斗、Boss、宝藏（命名以代码枚举为准）。用户只能沿已解锁边移动。选择战斗节点进入局内场景，Boss 节点携带特殊胜利计时参数\cite{gregory2018game,gregory2018game}。
 
 \subsection{UI 与交互需求}
 
-全屏界面切换须经 UI 栈。技能装配面板由 Tab 切换，打开时战斗暂停。拖拽装配须区分技能与效果两类，不可跨类放置。长按阈值可配置。血条须随 hp 变化实时更新。升级时须弹出奖励选择界面。死亡后须提供重启入口\cite{kw_mvc_ui_pattern}。
+全屏界面切换须经 UI 栈。技能装配面板由 Tab 切换，打开时战斗暂停。拖拽装配须区分技能与效果两类，不可跨类放置。长按阈值可配置。血条须随 hp 变化实时更新。升级时须弹出奖励选择界面。死亡后须提供重启入口\cite{heijstek2011empirical}。
 
 \subsection{配置与工具需求}
 
@@ -47,8 +47,8 @@
 
 \section{需求变更管理}
 
-需求变更通过 OpenSpec 新提案完成，禁止直接修改已归档 spec 而不留记录。每个变更须包含 \texttt{proposal.md}、\texttt{tasks.md}，必要时 \texttt{design.md} 与 \texttt{INTERFACES.md}。毕业设计答辩前应冻结范围，仅接受文档修订与 bug 修复，避免功能蔓延导致论文与代码不一致\cite{kw_spec_driven_dev,kw_project_management_agile}。
+需求变更应在设计文档与版本控制中留痕：新增功能先更新第~\ref{chap:requirement}~章需求描述与第~\ref{chap:architecture}~章设计说明，再修改实现，避免“代码先行、论文滞后”。毕业设计答辩前应冻结功能范围，仅接受文档修订与缺陷修复，防止范围蔓延导致论文与代码不一致\cite{munaiah2017github}。
 
 \section{需求与测试用例映射}
 
-需求 ID 与测试用例映射示例：R-ECS-01（实体销毁清理组件）$\rightarrow$ 单元验证 \texttt{ecsCorePhase1.verify.ts}；R-SKILL-01（Tab 暂停）$\rightarrow$ T-F-05；R-MAP-01（Boss 可达）$\rightarrow$ 跑图生成后 \texttt{validateActReachBoss} 断言。完整矩阵可在终稿附录中以表格形式给出，增强测试章节可信度\cite{kw_software_testing_game}。
+需求 ID 与测试用例映射示例：R-ECS-01（实体销毁清理组件）$\rightarrow$ 单元验证 \texttt{ecsCorePhase1.verify.ts}；R-SKILL-01（Tab 暂停）$\rightarrow$ T-F-05；R-MAP-01（Boss 可达）$\rightarrow$ 跑图生成后 \texttt{validateActReachBoss} 断言。完整矩阵可在终稿附录中以表格形式给出，增强测试章节可信度\cite{petty2010vv}。

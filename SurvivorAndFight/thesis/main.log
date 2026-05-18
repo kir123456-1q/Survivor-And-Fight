@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.5.17)  18 MAY 2026 18:47
+This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.5.17)  18 MAY 2026 21:48
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -488,36 +488,13 @@ Package fontspec Info:
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/ctex/config\ctex.cfg
 File: ctex.cfg 2022/07/14 v2.5.10 Configuration file (CTEX)
 )
-(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.sty
-Package: geometry 2026/03/07 v6.0 Page Geometry
+(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.sty
+Package: graphicx 2024/12/31 v1.2e Enhanced LaTeX Graphics (DPC,SPQR)
 
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/graphics\keyval.sty
 Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
 \KV@toks@=\toks17
 )
-(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/generic/iftex\ifvtex.sty
-Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
-
-(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/generic/iftex\iftex.sty
-Package: iftex 2024/12/12 v1.0g TeX engine tests
-))
-\Gm@cnth=\count311
-\Gm@cntv=\count312
-\c@Gm@tempcnt=\count313
-\Gm@bindingoffset=\dimen182
-\Gm@wd@mp=\dimen183
-\Gm@odd@mp=\dimen184
-\Gm@even@mp=\dimen185
-\Gm@layoutwidth=\dimen186
-\Gm@layoutheight=\dimen187
-\Gm@layouthoffset=\dimen188
-\Gm@layoutvoffset=\dimen189
-\Gm@dimlist=\toks18
-
-(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.cfg))
-(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.sty
-Package: graphicx 2024/12/31 v1.2e Enhanced LaTeX Graphics (DPC,SPQR)
-
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphics.sty
 Package: graphics 2024/08/06 v1.4g Standard LaTeX Graphics (DPC,SPQR)
 
@@ -533,28 +510,28 @@ Package graphics Info: Driver file: xetex.def on input line 106.
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/graphics-def\xetex.def
 File: xetex.def 2025/11/01 v5.0p Graphics/color driver for xetex
 ))
-\Gin@req@height=\dimen190
-\Gin@req@width=\dimen191
+\Gin@req@height=\dimen182
+\Gin@req@width=\dimen183
 )
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/booktabs\booktabs.sty
 Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
-\heavyrulewidth=\dimen192
-\lightrulewidth=\dimen193
-\cmidrulewidth=\dimen194
-\belowrulesep=\dimen195
-\belowbottomsep=\dimen196
-\aboverulesep=\dimen197
-\abovetopsep=\dimen198
-\cmidrulesep=\dimen199
-\cmidrulekern=\dimen256
-\defaultaddspace=\dimen257
-\@cmidla=\count314
-\@cmidlb=\count315
-\@aboverulesep=\dimen258
-\@belowrulesep=\dimen259
-\@thisruleclass=\count316
-\@lastruleclass=\count317
-\@thisrulewidth=\dimen260
+\heavyrulewidth=\dimen184
+\lightrulewidth=\dimen185
+\cmidrulewidth=\dimen186
+\belowrulesep=\dimen187
+\belowbottomsep=\dimen188
+\aboverulesep=\dimen189
+\abovetopsep=\dimen190
+\cmidrulesep=\dimen191
+\cmidrulekern=\dimen192
+\defaultaddspace=\dimen193
+\@cmidla=\count311
+\@cmidlb=\count312
+\@aboverulesep=\dimen194
+\@belowrulesep=\dimen195
+\@thisruleclass=\count313
+\@lastruleclass=\count314
+\@thisrulewidth=\dimen196
 )
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/tools\longtable.sty
 Package: longtable 2025-10-13 v4.24 Multi-page Table package (DPC)
@@ -562,18 +539,18 @@ Package: longtable 2025-10-13 v4.24 Multi-page Table package (DPC)
 \LTright=\skip61
 \LTpre=\skip62
 \LTpost=\skip63
-\LTchunksize=\count318
-\LTcapwidth=\dimen261
+\LTchunksize=\count315
+\LTcapwidth=\dimen197
 \LT@head=\box56
 \LT@firsthead=\box57
 \LT@foot=\box58
 \LT@lastfoot=\box59
 \LT@gbox=\box60
-\LT@cols=\count319
-\LT@rows=\count320
-\c@LT@tables=\count321
-\c@LT@chunks=\count322
-\LT@p@ftn=\toks19
+\LT@cols=\count316
+\LT@rows=\count317
+\c@LT@tables=\count318
+\c@LT@chunks=\count319
+\LT@p@ftn=\toks18
 )
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsmath.sty
 Package: amsmath 2025/07/09 v2.17z AMS math features
@@ -585,24 +562,24 @@ Package: amstext 2024/11/17 v2.01 AMS text
 
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
-\@emptytoks=\toks20
-\ex@=\dimen262
+\@emptytoks=\toks19
+\ex@=\dimen198
 ))
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
-\pmbraise@=\dimen263
+\pmbraise@=\dimen199
 )
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsopn.sty
 Package: amsopn 2022/04/08 v2.04 operator names
 )
-\inf@bad=\count323
+\inf@bad=\count320
 LaTeX Info: Redefining \frac on input line 233.
-\uproot@=\count324
-\leftroot@=\count325
+\uproot@=\count321
+\leftroot@=\count322
 LaTeX Info: Redefining \overline on input line 398.
 LaTeX Info: Redefining \colon on input line 409.
-\classnum@=\count326
-\DOTSCASE@=\count327
+\classnum@=\count323
+\DOTSCASE@=\count324
 LaTeX Info: Redefining \ldots on input line 495.
 LaTeX Info: Redefining \dots on input line 498.
 LaTeX Info: Redefining \cdots on input line 619.
@@ -612,58 +589,58 @@ LaTeX Info: Redefining \big on input line 721.
 LaTeX Info: Redefining \Big on input line 722.
 LaTeX Info: Redefining \bigg on input line 723.
 LaTeX Info: Redefining \Bigg on input line 724.
-\big@size=\dimen264
+\big@size=\dimen256
 LaTeX Font Info:    Redeclaring font encoding OML on input line 742.
 LaTeX Font Info:    Redeclaring font encoding OMS on input line 743.
-\macc@depth=\count328
+\macc@depth=\count325
 LaTeX Info: Redefining \bmod on input line 904.
 LaTeX Info: Redefining \pmod on input line 909.
 LaTeX Info: Redefining \smash on input line 939.
 LaTeX Info: Redefining \relbar on input line 969.
 LaTeX Info: Redefining \Relbar on input line 970.
-\c@MaxMatrixCols=\count329
+\c@MaxMatrixCols=\count326
 \dotsspace@=\muskip17
-\c@parentequation=\count330
-\dspbrk@lvl=\count331
-\tag@help=\toks21
-\row@=\count332
-\column@=\count333
-\maxfields@=\count334
-\andhelp@=\toks22
-\eqnshift@=\dimen265
-\alignsep@=\dimen266
-\tagshift@=\dimen267
-\tagwidth@=\dimen268
-\totwidth@=\dimen269
-\lineht@=\dimen270
-\@envbody=\toks23
+\c@parentequation=\count327
+\dspbrk@lvl=\count328
+\tag@help=\toks20
+\row@=\count329
+\column@=\count330
+\maxfields@=\count331
+\andhelp@=\toks21
+\eqnshift@=\dimen257
+\alignsep@=\dimen258
+\tagshift@=\dimen259
+\tagwidth@=\dimen260
+\totwidth@=\dimen261
+\lineht@=\dimen262
+\@envbody=\toks22
 \multlinegap=\skip65
 \multlinetaggap=\skip66
-\mathdisplay@stack=\toks24
+\mathdisplay@stack=\toks23
 LaTeX Info: Redefining \[ on input line 2950.
 LaTeX Info: Redefining \] on input line 2951.
 )
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/listings\listings.sty
-\lst@mode=\count335
+\lst@mode=\count332
 \lst@gtempboxa=\box63
-\lst@token=\toks25
-\lst@length=\count336
-\lst@currlwidth=\dimen271
-\lst@column=\count337
-\lst@pos=\count338
-\lst@lostspace=\dimen272
-\lst@width=\dimen273
-\lst@newlines=\count339
-\lst@lineno=\count340
-\lst@maxwidth=\dimen274
+\lst@token=\toks24
+\lst@length=\count333
+\lst@currlwidth=\dimen263
+\lst@column=\count334
+\lst@pos=\count335
+\lst@lostspace=\dimen264
+\lst@width=\dimen265
+\lst@newlines=\count336
+\lst@lineno=\count337
+\lst@maxwidth=\dimen266
 
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstpatch.sty
 File: lstpatch.sty 2025/11/14 1.11b (Carsten Heinz)
 )
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstmisc.sty
 File: lstmisc.sty 2025/11/14 1.11b (Carsten Heinz)
-\c@lstnumber=\count341
-\lst@skipnumbers=\count342
+\c@lstnumber=\count338
+\lst@skipnumbers=\count339
 \lst@framebox=\box64
 )
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/listings\listings.cfg
@@ -674,8 +651,8 @@ Package: listings 2025/11/14 1.11b (Carsten Heinz)
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/xelatex/xecjk\xeCJK-listings.
 sty
 Package: xeCJK-listings 2022/08/05 v3.9.1 xeCJK patch file for listings
-\l__xeCJK_listings_max_char_int=\count343
-\l__xeCJK_listings_flag_int=\count344
+\l__xeCJK_listings_max_char_int=\count340
+\l__xeCJK_listings_flag_int=\count341
 )
 ==> First Aid for listings.sty no longer applied!
     Expected:
@@ -701,7 +678,9 @@ Package xcolor Info: Model `Gray' substituted by `gray' on input line 1371.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1372.
 ) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hyperref.sty
 Package: hyperref 2025-07-12 v7.01o Hypertext links for LaTeX
-
+(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/generic/iftex\iftex.sty
+Package: iftex 2024/12/12 v1.0g TeX engine tests
+)
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/kvsetkeys\kvsetkeys.sty
 Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
 )
@@ -745,26 +724,26 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/kvoptions\kvoptions.sty
 Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
 ))
-\c@section@level=\count345
+\c@section@level=\count342
 )
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/etoolbox\etoolbox.sty
 Package: etoolbox 2025/10/02 v2.5m e-TeX tools for LaTeX (JAW)
-\etb@tempcnta=\count346
+\etb@tempcnta=\count343
 )
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/generic/stringenc\stringenc.s
 ty
 Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO
 )
 )
-\@linkdim=\dimen275
-\Hy@linkcounter=\count347
-\Hy@pagecounter=\count348
+\@linkdim=\dimen267
+\Hy@linkcounter=\count344
+\Hy@pagecounter=\count345
  (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\pd1enc.def
 File: pd1enc.def 2025-07-12 v7.01o Hyperref: PDFDocEncoding definition (HO)
 ) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/generic/intcalc\intcalc.sty
 Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 )
-\Hy@SavedSpaceFactor=\count349
+\Hy@SavedSpaceFactor=\count346
  (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\puenc.def
 File: puenc.def 2025-07-12 v7.01o Hyperref: PDF Unicode definition (HO)
 )
@@ -776,14 +755,14 @@ Package hyperref Info: Plain pages OFF on input line 4210.
 Package hyperref Info: Backreferencing OFF on input line 4215.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4462.
-\c@Hy@tempcnt=\count350
+\c@Hy@tempcnt=\count347
 
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/url\url.sty
 \Urlmuskip=\muskip18
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
 LaTeX Info: Redefining \url on input line 4801.
-\XeTeXLinkMargin=\dimen276
+\XeTeXLinkMargin=\dimen268
 
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/generic/bitset\bitset.sty
 Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
@@ -793,9 +772,9 @@ Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
 Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
 )
 ))
-\Fld@menulength=\count351
-\Field@Width=\dimen277
-\Fld@charsize=\dimen278
+\Fld@menulength=\count348
+\Field@Width=\dimen269
+\Fld@charsize=\dimen270
 Package hyperref Info: Hyper figures OFF on input line 6078.
 Package hyperref Info: Link nesting OFF on input line 6083.
 Package hyperref Info: Hyper index ON on input line 6086.
@@ -803,19 +782,19 @@ Package hyperref Info: backreferencing OFF on input line 6093.
 Package hyperref Info: Link coloring OFF on input line 6098.
 Package hyperref Info: Link coloring with OCG OFF on input line 6103.
 Package hyperref Info: PDF/A mode OFF on input line 6108.
-\Hy@abspage=\count352
-\c@Item=\count353
-\c@Hfootnote=\count354
+\Hy@abspage=\count349
+\c@Item=\count350
+\c@Hfootnote=\count351
 )
 Package hyperref Info: Driver (autodetected): hxetex.
 
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hxetex.def
 File: hxetex.def 2025-07-12 v7.01o Hyperref driver for XeTeX
 \pdfm@box=\box65
-\c@Hy@AnnotLevel=\count355
-\HyField@AnnotCount=\count356
-\Fld@listcount=\count357
-\c@bookmark@seq@number=\count358
+\c@Hy@AnnotLevel=\count352
+\HyField@AnnotCount=\count353
+\Fld@listcount=\count354
+\c@bookmark@seq@number=\count355
 
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/rerunfilecheck\rerunfil
 echeck.sty
@@ -847,37 +826,37 @@ Package: fancyhdr 2025/02/07 v5.2 Extensive control of page headers and footers
 \f@nch@widthL=\skip79
 \f@nch@widthC=\skip80
 \f@nch@widthR=\skip81
-\@temptokenb=\toks26
+\@temptokenb=\toks25
 )
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/titlesec\titlesec.sty
 Package: titlesec 2025/01/04 v2.17 Sectioning titles
 \ttl@box=\box66
 \beforetitleunit=\skip82
 \aftertitleunit=\skip83
-\ttl@plus=\dimen279
-\ttl@minus=\dimen280
-\ttl@toksa=\toks27
-\titlewidth=\dimen281
-\titlewidthlast=\dimen282
-\titlewidthfirst=\dimen283
+\ttl@plus=\dimen271
+\ttl@minus=\dimen272
+\ttl@toksa=\toks26
+\titlewidth=\dimen273
+\titlewidthlast=\dimen274
+\titlewidthfirst=\dimen275
 )
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption.sty
 Package: caption 2023/08/05 v3.6o Customizing captions (AR)
 
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption3.sty
 Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
-\caption@tempdima=\dimen284
-\captionmargin=\dimen285
-\caption@leftmargin=\dimen286
-\caption@rightmargin=\dimen287
-\caption@width=\dimen288
-\caption@indent=\dimen289
-\caption@parindent=\dimen290
-\caption@hangindent=\dimen291
+\caption@tempdima=\dimen276
+\captionmargin=\dimen277
+\caption@leftmargin=\dimen278
+\caption@rightmargin=\dimen279
+\caption@width=\dimen280
+\caption@indent=\dimen281
+\caption@parindent=\dimen282
+\caption@hangindent=\dimen283
 Package caption Info: Standard document class detected.
 )
-\c@caption@flags=\count359
-\c@continuedfloat=\count360
+\c@caption@flags=\count356
+\c@continuedfloat=\count357
 Package caption Info: hyperref package is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: longtable package is loaded.
@@ -888,38 +867,99 @@ Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
 y
 Package: enumitem 2025/02/06 v3.11 Customized lists
 \labelindent=\skip84
-\enit@outerparindent=\dimen292
-\enit@toks=\toks28
+\enit@outerparindent=\dimen284
+\enit@toks=\toks27
 \enit@inbox=\box67
-\enit@count@id=\count361
-\enitdp@description=\count362
+\enit@count@id=\count358
+\enitdp@description=\count359
 ) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/setspace\setspace.sty
 Package: setspace 2022/12/04 v6.7b set line spacing
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 19.
-(main.aux)
+Package hyperref Info: Option `colorlinks' set `true' on input line 17.
+(upc-thesis-format.tex
+(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.sty
+Package: geometry 2026/03/07 v6.0 Page Geometry
+
+(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/generic/iftex\ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+)
+\Gm@cnth=\count360
+\Gm@cntv=\count361
+\c@Gm@tempcnt=\count362
+\Gm@bindingoffset=\dimen285
+\Gm@wd@mp=\dimen286
+\Gm@odd@mp=\dimen287
+\Gm@even@mp=\dimen288
+\Gm@layoutwidth=\dimen289
+\Gm@layoutheight=\dimen290
+\Gm@layouthoffset=\dimen291
+\Gm@layoutvoffset=\dimen292
+\Gm@dimlist=\toks28
+
+(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.cfg))
+
+Class ctexrep Warning: Command `\CTEXsetup' is deprecated.
+(ctexrep)              \ctexset { chapter = { name={第,章},number={\arabic
+(ctexrep)              {chapter}} } } is set.
+
+
+Class ctexrep Warning: Command `\CTEXsetup' is deprecated.
+(ctexrep)              \ctexset { chapter = { format={\heiti \zihao
+(ctexrep)              {-3}\centering } } } is set.
+
+
+Class ctexrep Warning: Command `\CTEXsetup' is deprecated.
+(ctexrep)              \ctexset { chapter = { beforeskip=12pt,afterskip=12pt }
+(ctexrep)              } is set.
+
+
+Class ctexrep Warning: Command `\CTEXsetup' is deprecated.
+(ctexrep)              \ctexset { section = { format={\heiti \zihao {4}} } }
+(ctexrep)              is set.
+
+
+Class ctexrep Warning: Command `\CTEXsetup' is deprecated.
+(ctexrep)              \ctexset { section = { beforeskip=6pt,afterskip=6pt } }
+(ctexrep)              is set.
+
+
+Class ctexrep Warning: Command `\CTEXsetup' is deprecated.
+(ctexrep)              \ctexset { subsection = { format={\heiti \zihao {-4}} }
+(ctexrep)              } is set.
+
+
+Class ctexrep Warning: Command `\CTEXsetup' is deprecated.
+(ctexrep)              \ctexset { subsection = { beforeskip=6pt,afterskip=6pt
+(ctexrep)              } } is set.
+
+
+Class ctexrep Warning: Command `\CTEXsetup' is deprecated.
+(ctexrep)              \ctexset { subsubsection = { format={\songti \zihao
+(ctexrep)              {-4}} } } is set.
+
+) (main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
 
 Package fontspec Info: 
 (fontspec)             Adjusting the maths setup (use [no-math] to avoid
@@ -927,56 +967,64 @@ Package fontspec Info:
 
 \symlegacymaths=\mathgroup4
 LaTeX Font Info:    Overwriting symbol font `legacymaths' in version `bold'
-(Font)                  OT1/cmr/m/n --> OT1/cmr/bx/n on input line 63.
-LaTeX Font Info:    Redeclaring math accent \acute on input line 63.
-LaTeX Font Info:    Redeclaring math accent \grave on input line 63.
-LaTeX Font Info:    Redeclaring math accent \ddot on input line 63.
-LaTeX Font Info:    Redeclaring math accent \tilde on input line 63.
-LaTeX Font Info:    Redeclaring math accent \bar on input line 63.
-LaTeX Font Info:    Redeclaring math accent \breve on input line 63.
-LaTeX Font Info:    Redeclaring math accent \check on input line 63.
-LaTeX Font Info:    Redeclaring math accent \hat on input line 63.
-LaTeX Font Info:    Redeclaring math accent \dot on input line 63.
-LaTeX Font Info:    Redeclaring math accent \mathring on input line 63.
-LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 63.
-LaTeX Font Info:    Redeclaring math symbol \Delta on input line 63.
-LaTeX Font Info:    Redeclaring math symbol \Theta on input line 63.
-LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 63.
-LaTeX Font Info:    Redeclaring math symbol \Xi on input line 63.
-LaTeX Font Info:    Redeclaring math symbol \Pi on input line 63.
-LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 63.
-LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 63.
-LaTeX Font Info:    Redeclaring math symbol \Phi on input line 63.
-LaTeX Font Info:    Redeclaring math symbol \Psi on input line 63.
-LaTeX Font Info:    Redeclaring math symbol \Omega on input line 63.
-LaTeX Font Info:    Redeclaring math symbol \mathdollar on input line 63.
-LaTeX Font Info:    Redeclaring symbol font `operators' on input line 63.
+(Font)                  OT1/cmr/m/n --> OT1/cmr/bx/n on input line 50.
+LaTeX Font Info:    Redeclaring math accent \acute on input line 50.
+LaTeX Font Info:    Redeclaring math accent \grave on input line 50.
+LaTeX Font Info:    Redeclaring math accent \ddot on input line 50.
+LaTeX Font Info:    Redeclaring math accent \tilde on input line 50.
+LaTeX Font Info:    Redeclaring math accent \bar on input line 50.
+LaTeX Font Info:    Redeclaring math accent \breve on input line 50.
+LaTeX Font Info:    Redeclaring math accent \check on input line 50.
+LaTeX Font Info:    Redeclaring math accent \hat on input line 50.
+LaTeX Font Info:    Redeclaring math accent \dot on input line 50.
+LaTeX Font Info:    Redeclaring math accent \mathring on input line 50.
+LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 50.
+LaTeX Font Info:    Redeclaring math symbol \Delta on input line 50.
+LaTeX Font Info:    Redeclaring math symbol \Theta on input line 50.
+LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 50.
+LaTeX Font Info:    Redeclaring math symbol \Xi on input line 50.
+LaTeX Font Info:    Redeclaring math symbol \Pi on input line 50.
+LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 50.
+LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 50.
+LaTeX Font Info:    Redeclaring math symbol \Phi on input line 50.
+LaTeX Font Info:    Redeclaring math symbol \Psi on input line 50.
+LaTeX Font Info:    Redeclaring math symbol \Omega on input line 50.
+LaTeX Font Info:    Redeclaring math symbol \mathdollar on input line 50.
+LaTeX Font Info:    Redeclaring symbol font `operators' on input line 50.
 LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
-(Font)              `operators' in the math version `normal' on input line 63.
+(Font)              `operators' in the math version `normal' on input line 50.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  OT1/cmr/m/n --> TU/lmr/m/n on input line 63.
+(Font)                  OT1/cmr/m/n --> TU/lmr/m/n on input line 50.
 LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
-(Font)              `operators' in the math version `bold' on input line 63.
+(Font)              `operators' in the math version `bold' on input line 50.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  OT1/cmr/bx/n --> TU/lmr/m/n on input line 63.
+(Font)                  OT1/cmr/bx/n --> TU/lmr/m/n on input line 50.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  TU/lmr/m/n --> TU/lmr/m/n on input line 63.
+(Font)                  TU/lmr/m/n --> TU/lmr/m/n on input line 50.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
-(Font)                  OT1/cmr/m/it --> TU/lmr/m/it on input line 63.
+(Font)                  OT1/cmr/m/it --> TU/lmr/m/it on input line 50.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
-(Font)                  OT1/cmr/bx/n --> TU/lmr/b/n on input line 63.
+(Font)                  OT1/cmr/bx/n --> TU/lmr/b/n on input line 50.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
-(Font)                  OT1/cmss/m/n --> TU/lmss/m/n on input line 63.
+(Font)                  OT1/cmss/m/n --> TU/lmss/m/n on input line 50.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
-(Font)                  OT1/cmtt/m/n --> TU/lmtt/m/n on input line 63.
+(Font)                  OT1/cmtt/m/n --> TU/lmtt/m/n on input line 50.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  TU/lmr/m/n --> TU/lmr/b/n on input line 63.
+(Font)                  TU/lmr/m/n --> TU/lmr/b/n on input line 50.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmr/bx/it --> TU/lmr/b/it on input line 63.
+(Font)                  OT1/cmr/bx/it --> TU/lmr/b/it on input line 50.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/bx/n --> TU/lmss/b/n on input line 63.
+(Font)                  OT1/cmss/bx/n --> TU/lmss/b/n on input line 50.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> TU/lmtt/b/n on input line 63.
+(Font)                  OT1/cmtt/m/n --> TU/lmtt/b/n on input line 50.
+\c@lstlisting=\count363
+Package hyperref Info: Link coloring ON on input line 50.
+ (main.out) (main.out)
+\@outlinefile=\write3
+\openout3 = `main.out'.
+
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: xetex
@@ -995,7 +1043,7 @@ LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
 * \oddsidemargin=13.08827pt
 * \evensidemargin=13.08827pt
 * \topmargin=-38.1381pt
-* \headheight=12.0pt
+* \headheight=13.0pt
 * \headsep=25.0pt
 * \topskip=12.0pt
 * \footskip=30.0pt
@@ -1012,97 +1060,134 @@ LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-\c@lstlisting=\count363
-Package hyperref Info: Link coloring ON on input line 63.
-(main.out) (main.out)
-\@outlinefile=\write3
-\openout3 = `main.out'.
+(frontmatter.tex
+File: figures/cover-logo.png Graphic file (type bmp)
+<figures/cover-logo.png>
 
-Package caption Info: Begin \AtBeginDocument code.
-Package caption Info: End \AtBeginDocument code.
- (frontmatter.tex [1
+
+LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <10.53937> not available
+(Font)              size <10.95> substituted on input line 20.
+
+
+Overfull \hbox (29.06482pt too wide) in paragraph at lines 19--25
+ [][] 
+ []
+
+[1
 
 ] [1
 
 ]
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
+Package fontspec Info: 
+(fontspec)             Could not resolve font "SimHei/BI" (it probably doesn't
+(fontspec)             exist).
 
-[2
 
-])
+Package fontspec Info: 
+(fontspec)             Could not resolve font "SimHei/B" (it probably doesn't
+(fontspec)             exist).
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
 
-[3
+Package fontspec Info: 
+(fontspec)             Could not resolve font "SimHei/I" (it probably doesn't
+(fontspec)             exist).
 
-] (main.toc [4
 
-]
+Package fontspec Info: 
+(fontspec)             Font family 'SimHei(0)' created for font 'SimHei' with
+(fontspec)             options [Script={CJK}].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->"SimHei/OT:script=hani;language=dflt;"
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
 
-[5])
+Package fontspec Info: 
+(fontspec)             Could not resolve font "KaiTi/BI" (it probably doesn't
+(fontspec)             exist).
+
+
+Package fontspec Info: 
+(fontspec)             Could not resolve font "KaiTi/B" (it probably doesn't
+(fontspec)             exist).
+
+
+Package fontspec Info: 
+(fontspec)             Could not resolve font "KaiTi/I" (it probably doesn't
+(fontspec)             exist).
+
+
+Package fontspec Info: 
+(fontspec)             Font family 'KaiTi(0)' created for font 'KaiTi' with
+(fontspec)             options [Script={CJK}].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->"KaiTi/OT:script=hani;language=dflt;"
+
+ [2
+
+]) [3
+
+] (main.toc
+
+Package fontspec Info: 
+(fontspec)             Could not resolve font "SimSun/BI" (it probably doesn't
+(fontspec)             exist).
+
+
+Package fontspec Info: 
+(fontspec)             Could not resolve font "SimSun/B" (it probably doesn't
+(fontspec)             exist).
+
+
+Package fontspec Info: 
+(fontspec)             Could not resolve font "SimSun/I" (it probably doesn't
+(fontspec)             exist).
+
+
+Package fontspec Info: 
+(fontspec)             Font family 'SimSun(1)' created for font 'SimSun' with
+(fontspec)             options [Script={CJK}].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->"SimSun/OT:script=hani;language=dflt;"
+
+ [4
+
+] [5] [6] [7] [8])
 \tf@toc=\write4
 \openout4 = `main.toc'.
 
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[6] (main.lof)
+ [9] (main.lof)
 \tf@lof=\write5
 \openout5 = `main.lof'.
 
- [7
+ [10
 
 
 ] (main.lot)
 \tf@lot=\write6
 \openout6 = `main.lot'.
 
- [8
+
+[11
 
 
 ] (chapter01.tex
-第一章
+第1章
 [1
 
 
-]) (chapter02.tex
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[2]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[3]
-第二章
+]
 
 Package fontspec Info: 
 (fontspec)             Could not resolve font "FangSong/BI" (it probably
@@ -1130,112 +1215,125 @@ Package fontspec Info:
 (fontspec)             <->"FangSong/OT:script=hani;language=dflt;"
 
 
-Overfull \hbox (8.59503pt too wide) in paragraph at lines 8--9
-[]\TU/lmr/m/n/12.045 TypeScript \TU/SimSun(0)/m/n/12.045 提 供 静 态 类 型 与 模 块 化，| 
- 静 态 常 量 集 中 于 \TU/lmtt/m/n/12.045 src/defines/ \TU/SimSun(0)/m/n/12.045 并 由 \T
-U/lmtt/m/n/12.045 index.ts
+Missing character: There is no ≠ in font [lmroman12-regular]:mapping=tex-text;!
+[2] (chapter01-extended.tex [3]) (chapter01-background-extra.tex [4]))
+(chapter02.tex [5]
+第2章
+
+Underfull \hbox (badness 1424) in paragraph at lines 27--27
+[]\TU/SimSun(0)/m/n/12.045 文 档 与 社 区 小 于 头 部
  []
 
 
-Overfull \hbox (10.22072pt too wide) in paragraph at lines 12--13
-\TU/lmtt/m/n/12.045 MovementSystem\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.0
-45 AttributeSystem |\TU/SimSun(0)/m/n/12.045 （含 可 溯 源 \TU/lmr/m/n/12.045 modifi
-er\TU/SimSun(0)/m/n/12.045 ） 、| \TU/lmtt/m/n/12.045 SkillSystem\TU/SimSun(0)/m/
-n/12.045 、| \TU/lmtt/m/n/12.045 ControlSystem
+Overfull \hbox (5.32083pt too wide) in paragraph at lines 21--30
+ [][] 
  []
 
-
-Overfull \hbox (138.45483pt too wide) in paragraph at lines 16--17
-[]\TU/SimSun(0)/m/n/12.045 策 划 参 数 外 置 为 \TU/lmr/m/n/12.045 JSON \TU/SimSun(0)/
-m/n/12.045 表，|  由 \TU/lmtt/m/n/12.045 tables.registry.json \TU/SimSun(0)/m/n/12
-.045 注 册，| \TU/lmtt/m/n/12.045 ConfigBootstrap.ensureGameConfigLoaded()
- []
-
-
-Overfull \hbox (29.46336pt too wide) in paragraph at lines 16--17
-\TU/lmtt/m/n/12.045 modifier_split\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.0
-45 modifier_chain\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 modifier_pierc
-e\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 direct_damage\TU/SimSun(0)/m/n
-/12.045 ，|  由 \TU/lmtt/m/n/12.045 EffectExecutor
- []
-
-[4
-
-]
-Overfull \hbox (34.80414pt too wide) in paragraph at lines 24--25
-\TU/SimSun(0)/m/n/12.045 标 时 将 战 斗 快 照 提 交 \TU/lmr/m/n/12.045 Web Worker\TU/Sim
-Sun(0)/m/n/12.045 ；| \TU/lmtt/m/n/12.045 BulletHitTest \TU/SimSun(0)/m/n/12.045
- 使 用 距 离 平 方 比 较。| \TU/lmtt/m/n/12.045 GameSession.paused
- []
-
-
-Underfull \hbox (badness 4366) in paragraph at lines 37--38
-[]\TU/SimSun(0)/m/n/12.045 单 线 程；|  战 斗 片 段 可 选
- []
-
-
-Underfull \hbox (badness 2368) in paragraph at lines 39--40
-[]\TU/lmtt/m/n/12.045 ViewComponent \TU/SimSun(0)/m/n/12.045 绑 \TU/lmr/m/n/12.0
-45 Laya
- []
-
-) (chapter03.tex
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[5]
-第三章
 [6
 
 ]
+Overfull \hbox (37.60855pt too wide) in paragraph at lines 38--39
+[]\TU/SimSun(0)/m/n/12.045 游 戏 主 循 环 由 \TU/lmtt/m/n/12.045 Laya.timer.frameLoop
+ \TU/SimSun(0)/m/n/12.045 驱 动：|  每 帧 先 执 行 \TU/lmtt/m/n/12.045 EcsWorld.update(
+deltaTime)
+ []
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
 
-[7]) (chapter04.tex
+Overfull \hbox (32.32268pt too wide) in paragraph at lines 49--50
+\TU/lmtt/m/n/12.045 ExperienceSystem \TU/SimSun(0)/m/n/12.045 完 成，|  击 杀 奖 励 与 
+等 级 加 成 通 过 \TU/lmtt/m/n/12.045 defines \TU/SimSun(0)/m/n/12.045 中 \TU/lmtt/m/n
+/12.045 MONSTER_EXP_REWARD_BASE\TU/SimSun(0)/m/n/12.045 、|
+ []
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
+[7]
+Underfull \hbox (badness 10000) in paragraph at lines 67--68
+[]\TU/lmtt/m/n/12.045 ViewComponent \TU/SimSun(0)/m/n/12.045 绑 定
+ []
+
+
+Overfull \hbox (41.02078pt too wide) in paragraph at lines 74--75
+\TU/SimSun(0)/m/n/12.045 溯 源 \TU/lmr/m/n/12.045 modifier\TU/SimSun(0)/m/n/12.04
+5 ） 、| \TU/lmtt/m/n/12.045 Skill\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045
+ SkillLoadoutState \TU/SimSun(0)/m/n/12.045 等；|  系 统 包 括 \TU/lmtt/m/n/12.045 Mo
+vementSystem\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 AttributeSystem\TU/
+SimSun(0)/m/n/12.045 、|
+ []
+
+
+Overfull \hbox (8.78801pt too wide) in paragraph at lines 74--75
+\TU/lmtt/m/n/12.045 SkillSystem\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 
+BulletSystem\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 MonsterChaseSystem 
+\TU/SimSun(0)/m/n/12.045 等。| \TU/lmtt/m/n/12.045 FilterRegistry \TU/SimSun(0)/m
+/n/12.045 提 供 \TU/lmtt/m/n/12.045 Players\TU/SimSun(0)/m/n/12.045 、|
+ []
 
 [8]
-第四章
+Overfull \hbox (40.93808pt too wide) in paragraph at lines 88--89
+[]\TU/lmtt/m/n/12.045 SeededRng \TU/SimSun(0)/m/n/12.045 使 相 同 种 子 可 复 现 地 图，| 
+ 便 于 录 制 答 辩 视 频 与 回 归 测 试。| \TU/lmtt/m/n/12.045 MetaFlowController
+ []
 
-Overfull \hbox (14.86984pt too wide) in paragraph at lines 34--35
+
+Overfull \hbox (29.2464pt too wide) in paragraph at lines 94--95
+\TU/lmr/m/n/12.045 tem\TU/SimSun(0)/m/n/12.045 。|  当 实 体 数 达 到 阈 值 时，| \TU/lmtt
+/m/n/12.045 CombatDataPrepareSystem \TU/SimSun(0)/m/n/12.045 将 坐 标 等 快 照 经 \TU/
+lmtt/m/n/12.045 CombatDataBridge
+ []
+
+[9]
+Overfull \hbox (0.43665pt too wide) in paragraph at lines 106--107
+[]\TU/lmr/bx/n/12.045 Model\TU/SimSun(0)/m/n/12.045 ：|  来 自 \TU/lmr/m/n/12.045 
+ECS \TU/SimSun(0)/m/n/12.045 组 件  |（如 \TU/lmr/m/n/12.045 hp\TU/SimSun(0)/m/n/12
+.045 、|  装 配 状 态）|  或 独 立 模 型 类  |（如 \TU/lmtt/m/n/12.045 RunMapPanelModel\TU/Si
+mSun(0)/m/n/12.045 、|
+ []
+
+[10]) (chapter03.tex [11]
+第3章
+
+Overfull \hbox (158.04535pt too wide) in paragraph at lines 10--11
+[]\TU/SimSun(0)/m/n/12.045 配 表 经 \TU/lmtt/m/n/12.045 tools/sync-config-to-bin.p
+s1 \TU/SimSun(0)/m/n/12.045 发 布 至 \TU/lmtt/m/n/12.045 bin/config/\TU/SimSun(0)/
+m/n/12.045 ，| \TU/lmtt/m/n/12.045 ConfigBootstrap.ensureGameConfigLoaded()
+ []
+
+[12
+
+] (chapter03-extended.tex [13]
+Overfull \hbox (42.85574pt too wide) in paragraph at lines 34--35
+[]\TU/SimHei(0)/m/n/12.045 战 斗 入 口\TU/SimSun(0)/m/n/12.045 ：| \TU/lmtt/m/n/12.0
+45 MetaFlowController \TU/SimSun(0)/m/n/12.045 的 \TU/lmtt/m/n/12.045 onEnterCom
+bat(payload?: CombatEnterPayload)\TU/SimSun(0)/m/n/12.045 ；| 
+ []
+
+[14]) (chapter03-requirements-detail.tex [15]) [16]) (chapter04.tex [17]
+第4章
+
+Overfull \hbox (14.86984pt too wide) in paragraph at lines 39--40
 []\TU/lmtt/m/n/12.045 Main.ts \TU/SimSun(0)/m/n/12.045 初 始 化 输 入、|  构 造 \TU/lmt
 t/m/n/12.045 SimpleEcsDemo\TU/SimSun(0)/m/n/12.045 ，|  按 配 置 进 入 元 菜 单 或 战 斗，| 
  在 \TU/lmtt/m/n/12.045 frameLoop
  []
 
-[9
+[18
 
 ]
-Overfull \hbox (63.8413pt too wide) in paragraph at lines 40--41
+Overfull \hbox (63.8413pt too wide) in paragraph at lines 45--46
 []\TU/SimSun(0)/m/n/12.045 战 斗 帧 流 程：| \TU/lmtt/m/n/12.045 CombatDataPrepareSys
 tem \TU/SimSun(0)/m/n/12.045 采 集 快 照 $\OMS/cmsy/m/n/12.045 !$ \TU/SimSun(0)/m/n
 /12.045 可 选 \TU/lmr/m/n/12.045 Worker \TU/SimSun(0)/m/n/12.045 执 行 \TU/lmtt/m/n
 /12.045 processCombatFrame
  []
 
-) (chapter05.tex
+(chapter04-extended.tex [19]
+Overfull \hbox (74.27866pt too wide) in paragraph at lines 44--45
+[]\TU/lmr/m/n/12.045 Worker \TU/SimSun(0)/m/n/12.045 失 败 时 自 动 回 退 主 线 程；|  配 表
+ 加 载 失 败 时 使 用 \TU/lmtt/m/n/12.045 DEFAULT_* \TU/SimSun(0)/m/n/12.045 常 量 并 \TU
+/lmtt/m/n/12.045 missingConfigLogged
+ []
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[10]
-第五章
+) (chapter04-design-detail.tex [20] [21])) (chapter05.tex [22]
+第5章
 
 Overfull \hbox (98.6015pt too wide) in paragraph at lines 8--9
 \TU/lmtt/m/n/12.045 Map<EntityId, Component>\TU/SimSun(0)/m/n/12.045 。| \TU/lmt
@@ -1258,7 +1356,7 @@ Overfull \hbox (24.12202pt too wide) in paragraph at lines 18--19
 tt/m/n/12.045 EffectExecutor
  []
 
-[11
+[23
 
 ]
 Overfull \hbox (58.48048pt too wide) in paragraph at lines 47--48
@@ -1274,148 +1372,296 @@ t/m/n/12.045 SkillLoadoutSyncSystem \TU/SimSun(0)/m/n/12.045 写 回 战 斗 实
 lmtt/m/n/12.045 UIStackManager
  []
 
+(chapter05-extended.tex
+Overfull \hbox (39.15025pt too wide) in paragraph at lines 6--7
+[]\TU/lmtt/m/n/12.045 Main.onStart \TU/SimSun(0)/m/n/12.045 中 依 次 完 成：|  创 建 \T
+U/lmtt/m/n/12.045 InputService\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 C
+ontrolInputAdapter\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 SimpleEcsDemo
+\TU/SimSun(0)/m/n/12.045 ；|
+ []
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
 
-[12]) (chapter06.tex
+Overfull \hbox (61.40512pt too wide) in paragraph at lines 6--7
+\TU/SimSun(0)/m/n/12.045 注 册 \TU/lmtt/m/n/12.045 frameLoop\TU/SimSun(0)/m/n/12.
+045 ；|  调 用 \TU/lmtt/m/n/12.045 loadConfigAndInitDemo\TU/SimSun(0)/m/n/12.045 。
+|  该 异 步 函 数 \TU/lmtt/m/n/12.045 await ensureGameConfigLoaded()\TU/SimSun(0)/m/
+n/12.045 ，|
+ []
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
+[24]
+Overfull \hbox (32.14813pt too wide) in paragraph at lines 10--11
+\TU/lmtt/m/n/12.045 CombatDataBridge\TU/SimSun(0)/m/n/12.045 ） 、| \TU/lmtt/m/n/
+12.045 CombatDataPrepareSystem\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 S
+killSystem\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 MonsterWaveSpawnSyste
+m\TU/SimSun(0)/m/n/12.045 、|
+ []
 
-[13]
-第六章
-[14
 
-]) (chapter07.tex
+Overfull \hbox (54.67743pt too wide) in paragraph at lines 14--15
+[]\TU/lmtt/m/n/12.045 init() \TU/SimSun(0)/m/n/12.045 在 配 表 就 绪 后 加 载 玩 家 预 制 体
+：|  读 取 \TU/lmtt/m/n/12.045 Character \TU/SimSun(0)/m/n/12.045 行 中 \TU/lmtt/m/n
+/12.045 prefabPath\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 bodyPrefabPat
+h\TU/SimSun(0)/m/n/12.045 、|
+ []
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
 
-[15]
-第七章
-ignored error: Infinite glue shrinkage found in box being split [16
+Overfull \hbox (104.97974pt too wide) in paragraph at lines 14--15
+\TU/lmtt/m/n/12.045 SkillLoadoutState\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/1
+2.045 Control\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 Experience\TU/SimS
+un(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 ViewComponent \TU/SimSun(0)/m/n/12.045 
+等；|  默 认 写 入 \TU/lmtt/m/n/12.045 createDefaultLoadoutState()
+ []
 
-]
+[25]
+Overfull \hbox (27.38922pt too wide) in paragraph at lines 44--45
+[]\TU/lmtt/m/n/12.045 MonsterChaseSystem \TU/SimSun(0)/m/n/12.045 每 帧 计 算 指 向 玩
+ 家 的 单 位 方 向 向 量，|  乘 以 \TU/lmtt/m/n/12.045 MONSTER_CHASE_SPEED
+ []
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
 
-[17]
+Overfull \hbox (32.18686pt too wide) in paragraph at lines 44--45
+\TU/SimSun(0)/m/n/12.045 写 入 速 度 或 位 移。|  密 集 人 群 时 叠 加 分 离 力：|  当 两 怪 距 离 小 于 
+\TU/lmtt/m/n/12.045 MONSTER_SEPARATION_DISTANCE\TU/SimSun(0)/m/n/12.045 ，|
+ []
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
 
-[18]
+Overfull \hbox (19.1595pt too wide) in paragraph at lines 46--47
+\TU/SimSun(0)/m/n/12.045 用 \TU/lmtt/m/n/12.045 pickMonsterIdForWave \TU/SimSun(
+0)/m/n/12.045 从 \TU/lmtt/m/n/12.045 MonsterCatalog \TU/SimSun(0)/m/n/12.045 按 波
+ 次 权 重 选 \TU/lmr/m/n/12.045 id\TU/SimSun(0)/m/n/12.045 。| \TU/lmtt/m/n/12.045 M
+onsterRecycleSystem
+ []
+
+[26]
+Overfull \hbox (11.8321pt too wide) in paragraph at lines 62--63
+[]\TU/lmtt/m/n/12.045 SkillSelectPanelView \TU/SimSun(0)/m/n/12.045 绑 定 \TU/lmt
+t/m/n/12.045 MainUIPanel.lh \TU/SimSun(0)/m/n/12.045 预 制 体。|  初 始 化 时 \TU/lmtt/
+m/n/12.045 SkillIconBinder
+ []
+
+
+Overfull \hbox (7.0613pt too wide) in paragraph at lines 68--69
+[]\TU/lmtt/m/n/12.045 InputService \TU/SimSun(0)/m/n/12.045 封 装 键 盘\TU/lmr/m/n/
+12.045 /\TU/SimSun(0)/m/n/12.045 指 针 事 件，| \TU/lmtt/m/n/12.045 ControlInputAdap
+ter \TU/SimSun(0)/m/n/12.045 转 换 为 \TU/lmtt/m/n/12.045 ControlSystem
+ []
+
+
+Overfull \hbox (8.17328pt too wide) in paragraph at lines 72--73
+[]\TU/lmtt/m/n/12.045 PlayerDeathSystem \TU/SimSun(0)/m/n/12.045 监 测 \TU/lmtt/m
+/n/12.045 Attribute.hp $\OMS/cmsy/m/n/12.045 ^^T \OT1/cmr/m/n/12.045 0$\TU/SimS
+un(0)/m/n/12.045 ，|  触 发 死 亡 标 志。| \TU/lmtt/m/n/12.045 RestartPanelSystem
+ []
+
+[27]) (chapter05-implementation-case.tex [28]
+Overfull \hbox (44.0906pt too wide) in paragraph at lines 22--23
+[]\TU/SimSun(0)/m/n/12.045 用 户 长 按 技 能 图 标 \TU/lmr/m/n/12.045 300ms \TU/SimSun(
+0)/m/n/12.045 后 拖 拽 至 另 一 槽，| \TU/lmtt/m/n/12.045 SkillDragService \TU/SimSun(0
+)/m/n/12.045 更 新 \TU/lmtt/m/n/12.045 SkillLoadoutState\TU/SimSun(0)/m/n/12.045 
+。|
+ []
+
+
+Overfull \hbox (27.66225pt too wide) in paragraph at lines 28--29
+[]\TU/SimSun(0)/m/n/12.045 当 场 上 怪 物 数 量 达 到 \TU/lmtt/m/n/12.045 COMBAT_WORKER_
+MIN_ENTITY_COUNT\TU/SimSun(0)/m/n/12.045 ，| \TU/lmtt/m/n/12.045 CombatDataPrepa
+reSystem
+ []
+
+
+Overfull \hbox (72.69342pt too wide) in paragraph at lines 57--58
+[]|\TU/lmtt/m/n/12.045 src/game/ui/skillselect/SkillSelectPanelController.ts| 
+ []
+
+ignored error: Infinite glue shrinkage found in box being split [29]
+Overfull \hbox (49.31532pt too wide) in paragraph at lines 90--91
+[]\TU/SimSun(0)/m/n/12.045 项 目 中 显 式 使 用 的 模 式 包 括：|  \TU/SimHei(0)/m/n/12.045 
+组 合 根  |\TU/SimSun(0)/m/n/12.045 （\TU/lmtt/m/n/12.045 SimpleEcsDemo\TU/SimSun(0
+)/m/n/12.045 ） 、|  \TU/SimHei(0)/m/n/12.045 对 象 池\TU/SimSun(0)/m/n/12.045 、|  \
+TU/SimHei(0)/m/n/12.045 桥 接  |\TU/SimSun(0)/m/n/12.045 （\TU/lmtt/m/n/12.045 Com
+batDataBridge\TU/SimSun(0)/m/n/12.045 ） 、|
+ []
+
+
+Overfull \hbox (12.82973pt too wide) in paragraph at lines 94--95
+\TU/SimSun(0)/m/n/12.045 失 败。|  解 决：| \TU/lmtt/m/n/12.045 sync-config-to-bin.ps
+1 \TU/SimSun(0)/m/n/12.045 与 \TU/lmtt/m/n/12.045 configBases \TU/SimSun(0)/m/n/
+12.045 多 路 径 尝 试；| \TU/lmtt/m/n/12.045 isGameConfigReady
+ []
+
+[30]
+Overfull \hbox (45.30275pt too wide) in paragraph at lines 100--101
+[]\TU/SimHei(0)/m/n/12.045 难 点 \TU/lmr/bx/n/12.045 4\TU/SimHei(0)/m/n/12.045 ：|
+ \TU/lmr/bx/n/12.045 Worker \TU/SimHei(0)/m/n/12.045 与 主 线 程 逻 辑 一 致。|  \TU/Sim
+Sun(0)/m/n/12.045 双 份 实 现 易 漂 移。|  解 决：|  共 享 \TU/lmtt/m/n/12.045 combatWorkerL
+ogic.ts\TU/SimSun(0)/m/n/12.045 ，|
+ []
+
+)) (chapter06.tex [31]
+第6章
+(chapter06-extended.tex
+Overfull \hbox (5.41508pt too wide) in paragraph at lines 4--5
+[]\TU/lmr/m/n/12.045 JavaScript \TU/SimSun(0)/m/n/12.045 引 擎  |（如 \TU/lmr/m/n/1
+2.045 V8\TU/SimSun(0)/m/n/12.045 ）|  对 短 生 命 周 期 对 象 敏 感。|  未 池 化 时，|  每 发 子 弹 
+\TU/lmtt/m/n/12.045 instantiate
+ []
+
+[32
+
+] [33]) (chapter06-benchmark-guide.tex [34])) (chapter07.tex [35] [36]
+第7章
+[37
+
+] [38]
 Overfull \hbox (31.7111pt too wide) in paragraph at lines 157--158
 \TU/SimSun(0)/m/n/12.045 明 预 热 后 瓶 颈 主 要 在 每 帧 子 弹 碰 撞 与 绘 制，|  而 非 怪 物 节 点 反 复
  \TU/lmtt/m/n/12.045 instantiate/destroy\TU/SimSun(0)/m/n/12.045 。| 
  []
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[19]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[20]) (chapter08.tex
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[21]
-第八章
-)
-! Undefined control sequence.
-l.89 \backmatter
-                
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-(acknowledgement.tex [22
-
-]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
-
-[23]) [24
-
-] (main.bbl [25
+[39] [40] [41] (chapter07-extended.tex [42]) (chapter07-test-detail.tex
+[43]
+Overfull \hbox (6.91739pt too wide) in paragraph at lines 14--15
+[]\TU/lmtt/m/n/12.045 attributeModifier.verify.ts \TU/SimSun(0)/m/n/12.045 覆 盖：
+|  同 属 性 多 个 \TU/lmr/m/n/12.045 modifier \TU/SimSun(0)/m/n/12.045 叠 加 顺 序；|  按 
+\TU/lmtt/m/n/12.045 sourceId
+ []
 
 
-]
+Overfull \hbox (36.14595pt too wide) in paragraph at lines 20--21
+[]\TU/SimSun(0)/m/n/12.045 对 \TU/lmtt/m/n/12.045 RunMapGenerator.generate \TU/S
+imSun(0)/m/n/12.045 运 行 \TU/lmr/m/n/12.045 100 \TU/SimSun(0)/m/n/12.045 次 随 机 种
+ 子，|  断 言 每 次 \TU/lmtt/m/n/12.045 validateActReachBoss
+ []
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
+) [44]) (chapter08.tex [45]
+第8章
+(chapter08-extended.tex [46
 
-[26]) (appendix.tex
+] [47])) (acknowledgement.tex [48]) [49
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.64723pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.64723pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.64723pt}.
+] (main.bbl
+[50
 
-[27]
+
+]) (appendix.tex [51]
 附录 A
-[28
+[52
 
 ]
 附录 B
-) [29
+
+Overfull \hbox (36.20584pt too wide) in paragraph at lines 32--33
+[]\TU/SimSun(0)/m/n/12.045 完 整 \TU/lmr/m/n/12.045 JSON \TU/SimSun(0)/m/n/12.045
+ 见 项 目 \TU/lmtt/m/n/12.045 docs/config/ \TU/SimSun(0)/m/n/12.045 目 录；|  运 行 前 须
+ 执 行 \TU/lmtt/m/n/12.045 tools/sync-config-to-bin.ps1
+ []
+
+[53
+
+]
+附录 C
+
+Underfull \hbox (badness 1424) in paragraph at lines 49--49
+[]|\TU/SimSun(0)/m/n/12.045 实 体 销 毁 时 清 理 全 部
+ []
+
+
+Underfull \hbox (badness 1424) in paragraph at lines 50--50
+[]|\TU/SimSun(0)/m/n/12.045 系 统 按 分 组 与 优 先 级
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 51--51
+[]|\TU/lmr/m/n/12.045 R-SKILL-
+ []
+
+
+Underfull \hbox (badness 1424) in paragraph at lines 51--51
+[]|\TU/SimSun(0)/m/n/12.045 三 装 备 栏 独 立 冷 却 与
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 52--52
+[]|\TU/lmr/m/n/12.045 R-SKILL-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 53--53
+[]|\TU/lmr/m/n/12.045 R-SKILL-
+ []
+
+
+Underfull \hbox (badness 1424) in paragraph at lines 53--53
+[]|\TU/SimSun(0)/m/n/12.045 拖 拽 装 配 写 回 战 斗 实
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 54--54
+[]|\TU/lmr/m/n/12.045 R-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 54--54
+\TU/lmr/m/n/12.045 BULLET-
+ []
+
+
+Underfull \hbox (badness 6220) in paragraph at lines 54--54
+[]|\TU/SimSun(0)/m/n/12.045 穿 透\TU/lmr/m/n/12.045 /\TU/SimSun(0)/m/n/12.045 分 裂
+\TU/lmr/m/n/12.045 /\TU/SimSun(0)/m/n/12.045 连 锁 按 配
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 56--56
+[]|\TU/lmr/m/n/12.045 R-META-
+ []
+
+
+Underfull \hbox (badness 1424) in paragraph at lines 56--56
+[]|\TU/SimSun(0)/m/n/12.045 主 菜 单 进 入 战 斗 与 计
+ []
+
+
+Underfull \hbox (badness 1424) in paragraph at lines 58--58
+[]|\TU/SimSun(0)/m/n/12.045 对 象 池 降 低 帧 时 间 尖
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 59--59
+[]|\TU/SimSun(0)/m/n/12.045 动 态 图 集 提 升 千 怪
+ []
+
+[54
+
+]
+附录 D
+
+Overfull \hbox (7.29295pt too wide) in paragraph at lines 71--82
+ [][] 
+ []
+
+) [55
 
 ] (main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2022/08/05>
  ***********
+
+
+LaTeX Font Warning: Size substitutions with differences
+(Font)              up to 0.41063pt have occurred.
+
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: EE38E1234E2D5628A9E39BDF82FE98B0;8364.
+(rerunfilecheck)             Checksum: 0AFF93F65372001D25A5F3E7F5706278;20817.
  ) 
 Here is how much of TeX's memory you used:
- 20282 strings out of 402987
- 443039 string characters out of 5448524
- 872752 words of memory out of 5000000
- 48707 multiletter control sequences out of 15000+600000
- 633493 words of font info for 100 fonts, out of 8000000 for 9000
+ 20713 strings out of 402987
+ 463245 string characters out of 5448524
+ 883944 words of memory out of 5000000
+ 49084 multiletter control sequences out of 15000+600000
+ 636937 words of font info for 115 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 93i,12n,111p,1192b,547s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 93i,12n,128p,1192b,671s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.pdf (38 pages).
+Output written on main.pdf (67 pages).

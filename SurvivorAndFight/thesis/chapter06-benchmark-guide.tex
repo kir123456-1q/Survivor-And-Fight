@@ -1,9 +1,9 @@
-
+﻿
 \section{性能测试实验设计}
 
 \subsection{实验目的}
 
-验证对象池与 Web Worker 对帧时间与 GC 的影响，为论文提供定量依据\cite{kw_object_pooling,kw_web_worker_game,kw_green_web_perf}。
+验证对象池与 Web Worker 对帧时间与 GC 的影响，为论文提供定量依据\cite{gregory2018game,mckenzie2008crowd,gregory2018game}。
 
 \subsection{实验变量}
 
@@ -38,8 +38,8 @@
 
 \section{与学院模板“绿色节能”要求的对应}
 
-模板建议从绿色节能、低功耗、兼容性评价系统\cite{kw_green_web_perf}。本项目通过降低平均 CPU 占用支撑该要求：池化减少分配器压力；暂停减少空转；Worker 均衡多核利用（在支持的设备上）。兼容性通过 Worker 回退与多路径配表加载实现。终稿可附“开启/关闭优化”时的设备功耗对比（可选，手机 + 电量统计 App）。
+模板建议从绿色节能、低功耗、兼容性评价系统\cite{gregory2018game}。本项目通过降低平均 CPU 占用支撑该要求：池化减少分配器压力；暂停减少空转；Worker 均衡多核利用（在支持的设备上）。兼容性通过 Worker 回退与多路径配表加载实现。终稿可附“开启/关闭优化”时的设备功耗对比（可选，手机 + 电量统计 App）。
 
-\section{工程度量与 OpenSpec 任务完成度}
+\section{工程度量与质量门禁}
 
-除帧率外，可统计：已归档/已实施变更数、\texttt{tasks.md} 完成比例、单元验证脚本通过率。这些度量反映项目管理成效\cite{kw_project_management_agile}，可在答辩 PPT 中展示，增强“工程完整性”印象。
+除帧率外，可统计：单元验证脚本通过率、功能用例通过率、配表加载成功率、同屏实体规模上限下的平均 FPS 与 P95 帧时间。上述指标反映实现质量与项目管理成效\cite{munaiah2017github,petty2010vv}，可在答辩材料中辅以 Performance 截图说明。

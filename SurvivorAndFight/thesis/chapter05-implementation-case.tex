@@ -1,4 +1,4 @@
-
+﻿
 \section{典型场景实现剖析}
 
 \subsection{场景一：玩家首次进入战斗}
@@ -57,13 +57,33 @@
   技能面板 & \texttt{src/game/ui/skillselect/SkillSelectPanelController.ts} \\
   配表引导 & \texttt{src/config/ConfigBootstrap.ts} \\
   静态常量 & \texttt{src/defines/*.ts} \\
-  OpenSpec & \texttt{openspec/changes/*/proposal.md} \\
   \bottomrule
 \end{longtable}
 
-\section{与 OpenSpec 变更的追溯关系}
+\section{功能模块与论文章节对照}
 
-每个变更提案对应论文章节：\texttt{add-ecs-core-phase1} $\rightarrow$ 第~\ref{chap:modules}~章 ECS 小节；\texttt{add-ecs-gameplay-phase1} $\rightarrow$ 属性/技能/操控；\texttt{add-bullet-hp-ui-verification} $\rightarrow$ 子弹与血条；\texttt{add-monster-spawn-and-movement-patterns} $\rightarrow$ 怪物 AI；\texttt{add-battle-level-and-random-upgrades} $\rightarrow$ 经验奖励；\texttt{add-meta-flow-run-map-spellcraft} $\rightarrow$ 元游戏与跑图；\texttt{add-combat-skill-loadout-ui} $\rightarrow$ 技能装配 UI；\texttt{add-mvc-ui-stack-redpoint-pooling} $\rightarrow$ UI 栈与 MVC。答辩时可展示 \texttt{openspec list} 与仓库目录并列幻灯片，强化“规格—实现一致”印象\cite{kw_spec_driven_dev}。
+表~\ref{tab:module-chapter-map} 给出主要功能模块与论文章节的对应关系，便于评阅时从叙述定位到源码。
+
+\begin{table}[htbp]
+  \centering
+  \caption{功能模块与论文章节对照}
+  \label{tab:module-chapter-map}
+  \begin{tabular}{p{4.0cm}p{8.5cm}}
+    \toprule
+    \textbf{功能模块} & \textbf{论文章节} \\
+    \midrule
+    ECS 核心（\texttt{EcsWorld}、组件存储） & 第~\ref{chap:modules}~章第 1 节 \\
+    属性、移动、筛选器 & 第~\ref{chap:modules}~章第 2 节 \\
+    技能与效果执行 & 第~\ref{chap:modules}~章第 3 节 \\
+    子弹与碰撞 & 第~\ref{chap:modules}~章第 4 节 \\
+    怪物 AI 与波次 & 第~\ref{chap:modules}~章第 5 节 \\
+    经验、升级与元游戏跑图 & 第~\ref{chap:modules}~章第 6 节 \\
+    技能装配 UI、UI 栈 & 第~\ref{chap:modules}~章第 7--8 节 \\
+    对象池与 Web Worker & 第~\ref{chap:performance}~章 \\
+    测试与性能实验 & 第~\ref{chap:test}~章 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
 \section{设计模式应用总结}
 

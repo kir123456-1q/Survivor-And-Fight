@@ -1,0 +1,60 @@
+% 中国石油大学（华东）计算机学院本科毕业设计格式
+% 依据 本科毕业设计(论文)参考模板-计算机学院.docx 与 tools/read-docx-thesis-template.py 提取结果
+
+% 页边距（模板 sectPr + 学院惯例）
+\usepackage{geometry}
+\geometry{left=3.0cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\setlength{\headheight}{13pt}
+\setlength{\headsep}{25pt}
+
+% 正文：小四号宋体、1.5 倍行距、首行缩进 2 字符
+\setlength{\parindent}{2em}
+\renewcommand{\baselinestretch}{1.5}
+
+% 章标题：第 X 章，黑体三号居中（Word heading 1: 16pt 黑体居中）
+\CTEXsetup[name={第,章},number={\arabic{chapter}}]{chapter}
+\CTEXsetup[format={\heiti\zihao{-3}\centering}]{chapter}
+\CTEXsetup[beforeskip=12pt,afterskip=12pt]{chapter}
+
+% 节标题：黑体小三（Word heading 2: 15pt）
+\CTEXsetup[format={\heiti\zihao{4}}]{section}
+\CTEXsetup[beforeskip=6pt,afterskip=6pt]{section}
+
+% 小节：黑体四号（Word heading 3: 14pt）
+\CTEXsetup[format={\heiti\zihao{-4}}]{subsection}
+\CTEXsetup[beforeskip=6pt,afterskip=6pt]{subsection}
+
+% 三级以下：小四号宋体（模板说明：1、（1）等）
+\CTEXsetup[format={\songti\zihao{-4}}]{subsubsection}
+
+% 图表题：五号宋体居中（近似模板 caption）
+\captionsetup{font=small,labelfont=bf,labelsep=quad,format=hang}
+
+% 页眉页脚宏
+\newcommand{\upcfrontmatterheadertext}{中国石油大学（华东）本科毕业设计(论文)}
+
+% 前置部分页眉：楷体五号居中，带下划线
+\fancypagestyle{frontmatterheader}{%
+  \fancyhf{}%
+  \fancyhead[C]{\kaishu\zihao{-5}\upcfrontmatterheadertext}%
+  \renewcommand{\headrulewidth}{0.4pt}%
+}
+
+% 正文页眉：章标题（黑体小五）；页脚：Times New Roman 五号阿拉伯数字居中
+\fancypagestyle{upcbody}{%
+  \fancyhf{}%
+  \fancyhead[C]{\songti\zihao{-5}\leftmark}%
+  \fancyfoot[C]{\zihao{-5}\textrm{\thepage}}%
+  \renewcommand{\headrulewidth}{0.4pt}%
+}
+
+\pagestyle{upcbody}
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyhead[C]{\songti\zihao{-5}\leftmark}%
+  \fancyfoot[C]{\zihao{-5}\textrm{\thepage}}%
+  \renewcommand{\headrulewidth}{0.4pt}%
+}
+
+% 章标题写入页眉（去掉“第X章”前缀中的默认空格）
+\renewcommand{\chaptermark}[1]{\markboth{#1}{#1}}

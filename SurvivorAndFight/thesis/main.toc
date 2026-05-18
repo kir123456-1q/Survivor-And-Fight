@@ -1,77 +1,174 @@
 \contentsline {chapter}{摘要}{2}{Doc-Start}%
 \contentsline {chapter}{Abstract}{3}{Doc-Start}%
-\contentsline {chapter}{\numberline {第一章\hspace {.3em}}绪论}{1}{chapter.1}%
+\contentsline {chapter}{\numberline {第1章\hspace {.3em}}绪论}{1}{chapter.1}%
 \contentsline {section}{\numberline {1.1}研究背景与意义}{1}{section.1.1}%
-\contentsline {section}{\numberline {1.2}国内外研究现状}{1}{section.1.2}%
-\contentsline {subsection}{\numberline {1.2.1}游戏引擎架构}{1}{subsection.1.2.1}%
+\contentsline {section}{\numberline {1.2}国内外研究现状}{2}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}游戏引擎架构}{2}{subsection.1.2.1}%
 \contentsline {subsection}{\numberline {1.2.2}实体组件系统与玩法架构}{2}{subsection.1.2.2}%
 \contentsline {subsection}{\numberline {1.2.3}物理模拟、人群与性能}{2}{subsection.1.2.3}%
-\contentsline {section}{\numberline {1.3}研究内容与论文结构}{2}{section.1.3}%
-\contentsline {section}{\numberline {1.4}竞品与项目定位简要分析}{2}{section.1.4}%
-\contentsline {section}{\numberline {1.5}本章小结}{3}{section.1.5}%
-\contentsline {chapter}{\numberline {第二章\hspace {.3em}}相关技术与理论基础}{4}{chapter.2}%
-\contentsline {section}{\numberline {2.1}LayaAir 游戏引擎与 TypeScript}{4}{section.2.1}%
-\contentsline {section}{\numberline {2.2}实体组件系统}{4}{section.2.2}%
-\contentsline {section}{\numberline {2.3}数据驱动与配表}{4}{section.2.3}%
-\contentsline {section}{\numberline {2.4}Roguelite 与跑图}{5}{section.2.4}%
-\contentsline {section}{\numberline {2.5}Web 性能与 UI 架构}{5}{section.2.5}%
-\contentsline {section}{\numberline {2.6}Unity DOTS 与轻量 ECS 对比}{5}{section.2.6}%
-\contentsline {section}{\numberline {2.7}本章小结}{5}{section.2.7}%
-\contentsline {chapter}{\numberline {第三章\hspace {.3em}}系统需求分析}{6}{chapter.3}%
-\contentsline {section}{\numberline {3.1}可行性分析}{6}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}技术可行性}{6}{subsection.3.1.1}%
-\contentsline {subsection}{\numberline {3.1.2}经济与社会可行性}{6}{subsection.3.1.2}%
-\contentsline {section}{\numberline {3.2}功能性需求}{6}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}用例：局内战斗}{6}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}用例：元游戏进入战斗}{7}{subsection.3.2.2}%
-\contentsline {section}{\numberline {3.3}非功能性需求}{7}{section.3.3}%
-\contentsline {section}{\numberline {3.4}需求优先级}{7}{section.3.4}%
-\contentsline {section}{\numberline {3.5}运行环境}{8}{section.3.5}%
-\contentsline {section}{\numberline {3.6}本章小结}{8}{section.3.6}%
-\contentsline {chapter}{\numberline {第四章\hspace {.3em}}系统总体设计}{9}{chapter.4}%
-\contentsline {section}{\numberline {4.1}设计原则}{9}{section.4.1}%
-\contentsline {section}{\numberline {4.2}系统分层架构}{9}{section.4.2}%
-\contentsline {section}{\numberline {4.3}ECS 调度与战斗数据流}{10}{section.4.3}%
-\contentsline {section}{\numberline {4.4}元游戏与配表模型}{10}{section.4.4}%
-\contentsline {section}{\numberline {4.5}部署与容错}{10}{section.4.5}%
-\contentsline {section}{\numberline {4.6}本章小结}{10}{section.4.6}%
-\contentsline {chapter}{\numberline {第五章\hspace {.3em}}核心模块详细设计与实现}{11}{chapter.5}%
-\contentsline {section}{\numberline {5.1}ECS 核心模块}{11}{section.5.1}%
-\contentsline {section}{\numberline {5.2}属性、移动与筛选器}{11}{section.5.2}%
-\contentsline {section}{\numberline {5.3}技能与效果执行}{11}{section.5.3}%
-\contentsline {section}{\numberline {5.4}子弹系统与碰撞}{11}{section.5.4}%
-\contentsline {section}{\numberline {5.5}怪物系统}{12}{section.5.5}%
-\contentsline {section}{\numberline {5.6}进度、元游戏与跑图}{12}{section.5.6}%
-\contentsline {section}{\numberline {5.7}技能装配 UI}{12}{section.5.7}%
-\contentsline {section}{\numberline {5.8}配置加载}{12}{section.5.8}%
-\contentsline {section}{\numberline {5.9}典型场景剖析}{13}{section.5.9}%
-\contentsline {section}{\numberline {5.10}本章小结}{13}{section.5.10}%
-\contentsline {chapter}{\numberline {第六章\hspace {.3em}}性能优化与工程实践}{14}{chapter.6}%
-\contentsline {section}{\numberline {6.1}性能目标与瓶颈}{14}{section.6.1}%
-\contentsline {section}{\numberline {6.2}对象池}{14}{section.6.2}%
-\contentsline {section}{\numberline {6.3}Web Worker 卸载}{14}{section.6.3}%
-\contentsline {section}{\numberline {6.4}其它优化}{14}{section.6.4}%
-\contentsline {section}{\numberline {6.5}绿色计算与兼容性}{15}{section.6.5}%
-\contentsline {section}{\numberline {6.6}本章小结}{15}{section.6.6}%
-\contentsline {chapter}{\numberline {第七章\hspace {.3em}}系统测试与验证}{16}{chapter.7}%
-\contentsline {section}{\numberline {7.1}测试策略}{16}{section.7.1}%
-\contentsline {section}{\numberline {7.2}单元验证}{16}{section.7.2}%
-\contentsline {section}{\numberline {7.3}功能测试}{16}{section.7.3}%
-\contentsline {section}{\numberline {7.4}性能测试}{17}{section.7.4}%
-\contentsline {subsection}{\numberline {7.4.1}测试环境}{17}{subsection.7.4.1}%
-\contentsline {subsection}{\numberline {7.4.2}动态图集对比（历史两轮，前三波）}{17}{subsection.7.4.2}%
-\contentsline {subsection}{\numberline {7.4.3}五波完整帧率（实测，2026-05-18）}{18}{subsection.7.4.3}%
-\contentsline {subsection}{\numberline {7.4.4}对象池消融（第 4--5 波）}{18}{subsection.7.4.4}%
-\contentsline {paragraph}{结果解读}{18}{table.caption.13}%
-\contentsline {section}{\numberline {7.5}系统运行截图}{19}{section.7.5}%
-\contentsline {section}{\numberline {7.6}跑图与 Worker 一致性}{19}{section.7.6}%
-\contentsline {section}{\numberline {7.7}测试结论}{21}{section.7.7}%
-\contentsline {section}{\numberline {7.8}本章小结}{21}{section.7.8}%
-\contentsline {chapter}{\numberline {第八章\hspace {.3em}}总结与展望}{22}{chapter.8}%
-\contentsline {section}{\numberline {8.1}工作总结}{22}{section.8.1}%
-\contentsline {section}{\numberline {8.2}不足与展望}{22}{section.8.2}%
-\contentsline {section}{\numberline {8.3}社会、健康与文化影响}{22}{section.8.3}%
-\contentsline {section}{\numberline {8.4}本章小结}{23}{section.8.4}%
-\contentsline {chapter}{致谢}{24}{chapter*.20}%
-\contentsline {chapter}{\numberline {附录 A\hspace {.3em}}名词术语及缩略词}{28}{appendix.A}%
-\contentsline {chapter}{\numberline {附录 B\hspace {.3em}}核心配表字段示例（节选）}{29}{appendix.B}%
+\contentsline {section}{\numberline {1.3}研究内容与论文结构}{3}{section.1.3}%
+\contentsline {section}{\numberline {1.4}项目背景}{3}{section.1.4}%
+\contentsline {section}{\numberline {1.5}主要创新点与特色}{4}{section.1.5}%
+\contentsline {section}{\numberline {1.6}伦理与合规说明}{4}{section.1.6}%
+\contentsline {section}{\numberline {1.7}相关游戏与竞品简要分析}{5}{section.1.7}%
+\contentsline {section}{\numberline {1.8}术语与缩写预备说明}{5}{section.1.8}%
+\contentsline {section}{\numberline {1.9}本章小结}{5}{section.1.9}%
+\contentsline {chapter}{\numberline {第2章\hspace {.3em}}相关技术与理论基础}{6}{chapter.2}%
+\contentsline {section}{\numberline {2.1}引擎语言选择}{6}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}H5 游戏引擎选型}{6}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}TypeScript 与工程常量管理}{6}{subsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.1.3}主循环、预制体与引擎使用约束}{7}{subsection.2.1.3}%
+\contentsline {section}{\numberline {2.2}项目玩法架构选择}{7}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Survivor-like 品类与核心循环}{7}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}轻量实体组件系统（ECS）}{8}{subsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.2.3}数据驱动与 JSON 配表}{9}{subsection.2.2.3}%
+\contentsline {subsection}{\numberline {2.2.4}Roguelite 跑图与关卡结构}{9}{subsection.2.2.4}%
+\contentsline {subsection}{\numberline {2.2.5}战斗性能与密集实体仿真}{9}{subsection.2.2.5}%
+\contentsline {section}{\numberline {2.3}UI 架构选择}{10}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}MVC 分层与全屏界面栈}{10}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}战斗内 UI：HUD、暂停与技能装配}{10}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}UI 架构选型的综合评价}{11}{subsection.2.3.3}%
+\contentsline {section}{\numberline {2.4}本章小结}{11}{section.2.4}%
+\contentsline {chapter}{\numberline {第3章\hspace {.3em}}系统需求分析}{12}{chapter.3}%
+\contentsline {section}{\numberline {3.1}可行性分析}{12}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}技术可行性}{12}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}经济与社会可行性}{12}{subsection.3.1.2}%
+\contentsline {section}{\numberline {3.2}功能性需求}{12}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}用例：局内战斗}{12}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}用例：元游戏进入战斗}{13}{subsection.3.2.2}%
+\contentsline {section}{\numberline {3.3}非功能性需求}{13}{section.3.3}%
+\contentsline {section}{\numberline {3.4}需求优先级}{13}{section.3.4}%
+\contentsline {section}{\numberline {3.5}用户角色与运行环境}{14}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}用户角色}{14}{subsection.3.5.1}%
+\contentsline {subsection}{\numberline {3.5.2}硬件与软件环境}{14}{subsection.3.5.2}%
+\contentsline {section}{\numberline {3.6}数据需求}{14}{section.3.6}%
+\contentsline {section}{\numberline {3.7}接口需求}{14}{section.3.7}%
+\contentsline {section}{\numberline {3.8}约束与假设}{15}{section.3.8}%
+\contentsline {section}{\numberline {3.9}功能需求详细说明}{15}{section.3.9}%
+\contentsline {subsection}{\numberline {3.9.1}ECS 核心需求}{15}{subsection.3.9.1}%
+\contentsline {subsection}{\numberline {3.9.2}战斗与技能需求}{15}{subsection.3.9.2}%
+\contentsline {subsection}{\numberline {3.9.3}怪物与波次需求}{15}{subsection.3.9.3}%
+\contentsline {subsection}{\numberline {3.9.4}元游戏与跑图需求}{16}{subsection.3.9.4}%
+\contentsline {subsection}{\numberline {3.9.5}UI 与交互需求}{16}{subsection.3.9.5}%
+\contentsline {subsection}{\numberline {3.9.6}配置与工具需求}{16}{subsection.3.9.6}%
+\contentsline {section}{\numberline {3.10}非功能需求量化指标}{16}{section.3.10}%
+\contentsline {section}{\numberline {3.11}需求变更管理}{16}{section.3.11}%
+\contentsline {section}{\numberline {3.12}需求与测试用例映射}{17}{section.3.12}%
+\contentsline {section}{\numberline {3.13}本章小结}{17}{section.3.13}%
+\contentsline {chapter}{\numberline {第4章\hspace {.3em}}系统总体设计}{18}{chapter.4}%
+\contentsline {section}{\numberline {4.1}设计原则}{18}{section.4.1}%
+\contentsline {section}{\numberline {4.2}系统分层架构}{18}{section.4.2}%
+\contentsline {section}{\numberline {4.3}ECS 调度与战斗数据流}{19}{section.4.3}%
+\contentsline {section}{\numberline {4.4}元游戏与配表模型}{19}{section.4.4}%
+\contentsline {section}{\numberline {4.5}技术选型说明}{19}{section.4.5}%
+\contentsline {section}{\numberline {4.6}类与模块划分}{20}{section.4.6}%
+\contentsline {section}{\numberline {4.7}安全设计}{20}{section.4.7}%
+\contentsline {section}{\numberline {4.8}可靠性设计}{20}{section.4.8}%
+\contentsline {section}{\numberline {4.9}开发与部署流程}{21}{section.4.9}%
+\contentsline {section}{\numberline {4.10}数据库与配表逻辑模型}{21}{section.4.10}%
+\contentsline {section}{\numberline {4.11}系统顺序图（文字描述）}{21}{section.4.11}%
+\contentsline {section}{\numberline {4.12}部署拓扑}{21}{section.4.12}%
+\contentsline {section}{\numberline {4.13}容错与降级策略}{21}{section.4.13}%
+\contentsline {section}{\numberline {4.14}可扩展性设计}{22}{section.4.14}%
+\contentsline {section}{\numberline {4.15}安全与隐私设计扩展}{22}{section.4.15}%
+\contentsline {section}{\numberline {4.16}总体设计评审结论}{22}{section.4.16}%
+\contentsline {section}{\numberline {4.17}本章小结}{22}{section.4.17}%
+\contentsline {chapter}{\numberline {第5章\hspace {.3em}}核心模块详细设计与实现}{23}{chapter.5}%
+\contentsline {section}{\numberline {5.1}ECS 核心模块}{23}{section.5.1}%
+\contentsline {section}{\numberline {5.2}属性、移动与筛选器}{23}{section.5.2}%
+\contentsline {section}{\numberline {5.3}技能与效果执行}{23}{section.5.3}%
+\contentsline {section}{\numberline {5.4}子弹系统与碰撞}{24}{section.5.4}%
+\contentsline {section}{\numberline {5.5}怪物系统}{24}{section.5.5}%
+\contentsline {section}{\numberline {5.6}进度、元游戏与跑图}{24}{section.5.6}%
+\contentsline {section}{\numberline {5.7}技能装配 UI}{24}{section.5.7}%
+\contentsline {section}{\numberline {5.8}配置加载}{24}{section.5.8}%
+\contentsline {section}{\numberline {5.9}系统初始化与主循环实现}{24}{section.5.9}%
+\contentsline {subsection}{\numberline {5.9.1}入口与配置加载时序}{24}{subsection.5.9.1}%
+\contentsline {subsection}{\numberline {5.9.2}SimpleEcsDemo 构造过程}{25}{subsection.5.9.2}%
+\contentsline {subsection}{\numberline {5.9.3}init 阶段实体生成}{25}{subsection.5.9.3}%
+\contentsline {section}{\numberline {5.10}战斗效果执行详细流程}{25}{section.5.10}%
+\contentsline {section}{\numberline {5.11}子弹碰撞与连锁算法说明}{26}{section.5.11}%
+\contentsline {section}{\numberline {5.12}怪物 AI 与波次协同}{26}{section.5.12}%
+\contentsline {section}{\numberline {5.13}经验、升级与奖励闭环}{26}{section.5.13}%
+\contentsline {section}{\numberline {5.14}元游戏界面与 UI 栈交互}{27}{section.5.14}%
+\contentsline {section}{\numberline {5.15}技能装配 UI 实现细节}{27}{section.5.15}%
+\contentsline {section}{\numberline {5.16}输入系统}{27}{section.5.16}%
+\contentsline {section}{\numberline {5.17}重启与死亡流程}{28}{section.5.17}%
+\contentsline {section}{\numberline {5.18}模块间依赖关系小结}{28}{section.5.18}%
+\contentsline {section}{\numberline {5.19}典型场景实现剖析}{28}{section.5.19}%
+\contentsline {subsection}{\numberline {5.19.1}场景一：玩家首次进入战斗}{28}{subsection.5.19.1}%
+\contentsline {subsection}{\numberline {5.19.2}场景二：Tab 打开技能面板并更换装备}{29}{subsection.5.19.2}%
+\contentsline {subsection}{\numberline {5.19.3}场景三：怪物密集时的 Worker 卸载}{29}{subsection.5.19.3}%
+\contentsline {section}{\numberline {5.20}关键代码文件索引}{29}{section.5.20}%
+\contentsline {section}{\numberline {5.21}功能模块与论文章节对照}{30}{section.5.21}%
+\contentsline {section}{\numberline {5.22}设计模式应用总结}{30}{section.5.22}%
+\contentsline {section}{\numberline {5.23}实现难点与解决方案}{31}{section.5.23}%
+\contentsline {section}{\numberline {5.24}本章案例小结}{31}{section.5.24}%
+\contentsline {section}{\numberline {5.25}本章小结}{31}{section.5.25}%
+\contentsline {chapter}{\numberline {第6章\hspace {.3em}}性能优化与工程实践}{32}{chapter.6}%
+\contentsline {section}{\numberline {6.1}性能目标与瓶颈}{32}{section.6.1}%
+\contentsline {section}{\numberline {6.2}对象池}{32}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Web Worker 卸载}{32}{section.6.3}%
+\contentsline {section}{\numberline {6.4}其它优化}{32}{section.6.4}%
+\contentsline {section}{\numberline {6.5}绿色计算与兼容性}{32}{section.6.5}%
+\contentsline {section}{\numberline {6.6}内存与垃圾回收分析}{33}{section.6.6}%
+\contentsline {section}{\numberline {6.7}帧预算分配建议}{33}{section.6.7}%
+\contentsline {section}{\numberline {6.8}配表热更新与构建优化}{33}{section.6.8}%
+\contentsline {section}{\numberline {6.9}可观测性：日志与调试}{33}{section.6.9}%
+\contentsline {section}{\numberline {6.10}与同类 H5 游戏优化策略对比}{34}{section.6.10}%
+\contentsline {section}{\numberline {6.11}低功耗与绿色计算补充}{34}{section.6.11}%
+\contentsline {section}{\numberline {6.12}性能测试实验设计}{34}{section.6.12}%
+\contentsline {subsection}{\numberline {6.12.1}实验目的}{34}{subsection.6.12.1}%
+\contentsline {subsection}{\numberline {6.12.2}实验变量}{34}{subsection.6.12.2}%
+\contentsline {subsection}{\numberline {6.12.3}实验步骤}{34}{subsection.6.12.3}%
+\contentsline {subsection}{\numberline {6.12.4}预期结论方向}{35}{subsection.6.12.4}%
+\contentsline {section}{\numberline {6.13}性能优化检查清单}{35}{section.6.13}%
+\contentsline {section}{\numberline {6.14}与学院模板“绿色节能”要求的对应}{35}{section.6.14}%
+\contentsline {section}{\numberline {6.15}工程度量与质量门禁}{35}{section.6.15}%
+\contentsline {section}{\numberline {6.16}本章小结}{36}{section.6.16}%
+\contentsline {chapter}{\numberline {第7章\hspace {.3em}}系统测试与验证}{37}{chapter.7}%
+\contentsline {section}{\numberline {7.1}测试策略}{37}{section.7.1}%
+\contentsline {section}{\numberline {7.2}单元验证}{37}{section.7.2}%
+\contentsline {section}{\numberline {7.3}功能测试}{37}{section.7.3}%
+\contentsline {section}{\numberline {7.4}性能测试}{38}{section.7.4}%
+\contentsline {subsection}{\numberline {7.4.1}测试环境}{38}{subsection.7.4.1}%
+\contentsline {subsection}{\numberline {7.4.2}动态图集对比（历史两轮，前三波）}{38}{subsection.7.4.2}%
+\contentsline {subsection}{\numberline {7.4.3}五波完整帧率（实测，2026-05-18）}{39}{subsection.7.4.3}%
+\contentsline {subsection}{\numberline {7.4.4}对象池消融（第 4--5 波）}{39}{subsection.7.4.4}%
+\contentsline {paragraph}{结果解读}{39}{table.caption.20}%
+\contentsline {section}{\numberline {7.5}系统运行截图}{40}{section.7.5}%
+\contentsline {section}{\numberline {7.6}跑图与 Worker 一致性}{40}{section.7.6}%
+\contentsline {section}{\numberline {7.7}测试结论}{42}{section.7.7}%
+\contentsline {section}{\numberline {7.8}测试环境配置}{42}{section.7.8}%
+\contentsline {section}{\numberline {7.9}回归测试清单}{42}{section.7.9}%
+\contentsline {section}{\numberline {7.10}用户体验测试}{43}{section.7.10}%
+\contentsline {section}{\numberline {7.11}缺陷记录示例}{43}{section.7.11}%
+\contentsline {section}{\numberline {7.12}验收标准与毕业设计对齐}{43}{section.7.12}%
+\contentsline {section}{\numberline {7.13}单元测试详细说明}{43}{section.7.13}%
+\contentsline {subsection}{\numberline {7.13.1}ECS 核心验证}{43}{subsection.7.13.1}%
+\contentsline {subsection}{\numberline {7.13.2}公式解析器验证}{44}{subsection.7.13.2}%
+\contentsline {subsection}{\numberline {7.13.3}属性修饰器验证}{44}{subsection.7.13.3}%
+\contentsline {section}{\numberline {7.14}集成测试场景扩展}{44}{section.7.14}%
+\contentsline {subsection}{\numberline {7.14.1}跑图可达性测试}{44}{subsection.7.14.1}%
+\contentsline {subsection}{\numberline {7.14.2}装配同步测试}{44}{subsection.7.14.2}%
+\contentsline {subsection}{\numberline {7.14.3}Worker 一致性测试}{44}{subsection.7.14.3}%
+\contentsline {section}{\numberline {7.15}测试数据与截图要求}{44}{section.7.15}%
+\contentsline {section}{\numberline {7.16}测试结论补充说明}{45}{section.7.16}%
+\contentsline {section}{\numberline {7.17}本章小结}{45}{section.7.17}%
+\contentsline {chapter}{\numberline {第8章\hspace {.3em}}总结与展望}{46}{chapter.8}%
+\contentsline {section}{\numberline {8.1}工作总结}{46}{section.8.1}%
+\contentsline {section}{\numberline {8.2}不足与展望}{46}{section.8.2}%
+\contentsline {section}{\numberline {8.3}社会、健康与文化影响}{46}{section.8.3}%
+\contentsline {section}{\numberline {8.4}个人收获与工程能力体现}{46}{section.8.4}%
+\contentsline {section}{\numberline {8.5}与模板要求的三项补充分析}{47}{section.8.5}%
+\contentsline {subsection}{\numberline {8.5.1}社会、健康、安全、法律与文化影响}{47}{subsection.8.5.1}%
+\contentsline {subsection}{\numberline {8.5.2}绿色节能与兼容性}{47}{subsection.8.5.2}%
+\contentsline {subsection}{\numberline {8.5.3}项目管理应用心得}{47}{subsection.8.5.3}%
+\contentsline {section}{\numberline {8.6}对后续学习者的建议}{47}{section.8.6}%
+\contentsline {section}{\numberline {8.7}结束语}{48}{section.8.7}%
+\contentsline {section}{\numberline {8.8}本章小结}{48}{section.8.8}%
+\contentsline {chapter}{致谢}{49}{chapter*.28}%
+\contentsline {chapter}{\numberline {附录 A\hspace {.3em}}名词术语及缩略词}{52}{appendix.A}%
+\contentsline {chapter}{\numberline {附录 B\hspace {.3em}}核心配表字段示例（节选）}{53}{appendix.B}%
+\contentsline {chapter}{\numberline {附录 C\hspace {.3em}}需求与测试用例映射（节选）}{54}{appendix.C}%
+\contentsline {chapter}{\numberline {附录 D\hspace {.3em}}缺陷记录（项目实测）}{55}{appendix.D}%

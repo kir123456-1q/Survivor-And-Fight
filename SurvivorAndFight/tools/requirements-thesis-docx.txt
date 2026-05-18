@@ -1,0 +1,2 @@
+# 可选：用于 read-docx-thesis-template.py 的增强解析
+python-docx>=1.1.0
