@@ -1,21 +1,22 @@
 \chapter{核心模块详细设计与实现}
 \label{chap:modules}
 
-本章结合 \texttt{src/} 实现，对核心模块作详细说明。\texttt{SimpleEcsDemo} 作为组合根（Composition Root）集中注册系统、池与 UI 控制器，是阅读源码的首选入口；表~\ref{tab:file-index}（见本章扩展节）给出模块与路径索引，便于评阅对照。
+本章按第~\ref{chap:architecture}~章总体设计，结合 \texttt{src/} 源码说明核心模块实现。\texttt{SimpleEcsDemo} 为组合根（Composition Root），集中注册系统、池与 UI 控制器，是阅读仓库的首选入口。
 
-\section{ECS 核心模块}
+\section{ECS 架构 GamePlay 实现}
+\label{sec:ecs-impl}
 
-\texttt{EntityManager} 使用自增 ID 与空闲列表复用实体。\texttt{ComponentStore} 按类型维护 \texttt{Map<EntityId, Component>}。\texttt{EcsWorld.update} 依次调用已注册系统，按 \texttt{input/logic/physics/render} 分组排序，与 Gregory 所述引擎主循环驱动子系统更新的模式相对应\cite{gregory2018game}。
+\subsection{世界、组件与筛选器}
 
-\texttt{ViewComponent}、\texttt{BodyUIComponent} 绑定 Laya 节点；\texttt{ViewSyncSystem} 同步坐标；\texttt{BloodBarSyncSystem} 用 hp/maxHp 更新 ProgressBar。
+\texttt{EntityManager} 使用自增 ID 与空闲列表复用实体。\texttt{ComponentStore} 按类型维护 \texttt{Map<EntityId, Component>}。\texttt{EcsWorld.update} 按 \texttt{input/logic/render} 分组顺序调用系统\cite{gregory2018game}。\texttt{FilterRegistry} 在构造时 \texttt{registerNamedFilters}，提供 \texttt{Players}、\texttt{Monsters} 等命名筛选。
 
-\section{属性、移动与筛选器}
+\subsection{属性、移动与自动施法}
 
-\texttt{AttributeSystem} 支持 modifier 按来源增删，供 Buff 与升级奖励使用\cite{briand2001maintainability}。\texttt{MovementSystem}、\texttt{ControlSystem} 处理位移与输入。\texttt{FilterRegistry} 提供 \texttt{Players}、\texttt{Monsters} 等命名筛选，减少重复查询。
+\texttt{AttributeSystem} 支持按来源增删 modifier，供 Buff 与升级奖励使用。\texttt{MovementSystem}、\texttt{ControlSystem} 处理位移与输入。\texttt{PlayerAutoCastSystem} 对三装备栏维护独立冷却与 \texttt{pendingCasts}；\texttt{MonsterAutoCastSystem} 驱动怪物施法。
 
-\section{技能与效果执行}
+\subsection{技能与效果执行链}
 
-\texttt{PlayerAutoCastSystem} 对三装备栏维护独立冷却与 \texttt{pendingCasts}。\texttt{EffectExecutor} 将配表 effect 映射为子弹、穿透/分裂/连锁修饰或直伤。修饰器须位于后续 \texttt{bullet} effect 之前，形成链式组合语义。
+\texttt{PlayerAutoCastSystem} 决定施放后，流程为：（1）从 \texttt{SkillLoadoutState} 读取技能 id 并检查 \texttt{Skill.cooldownRemain}；（2）\texttt{CastPlan} 按配表顺序解析 effect 行；（3）\texttt{EffectExecutor} 分发：\texttt{modifier\_*} 写入分裂/连锁/穿透上下文，供\textbf{下一条} \texttt{bullet} 消费；（4）\texttt{bullet} 调用 \texttt{BulletSystem.spawnBulletWithOptions}；（5）\texttt{direct\_damage} 经 \texttt{FormulaParser} 扣血。
 
 \begin{table}[htbp]
   \centering
@@ -34,29 +35,122 @@
   \end{tabular}
 \end{table}
 
-\section{子弹系统与碰撞}
+\subsection{子弹碰撞与怪物 AI}
 
-\texttt{BulletSystem} 从 \texttt{BulletPool} 取节点，更新运动，用 \texttt{hitRadiusSq} 做圆碰撞，按阵营过滤后扣血并处理穿透。密集命中场景可参考人群仿真中的局部相互作用与压力模型思想\cite{helbing2000panic,reynolds1987flocks}，本项目采用简化半径检测以降低开销。
+\texttt{BulletSystem} 从 \texttt{BulletPool} 取节点，用 \texttt{hitRadiusSq} 做圆碰撞；命中后扣血、递减穿透，并按配置处理连锁与分裂\cite{helbing2000panic}。\texttt{MonsterChaseSystem} 计算追逐方向，叠加分离力与随机摆动；有 Worker 结果时 \texttt{applyWorkerVelocities}，否则本地计算。\texttt{MonsterWaveSpawnSystem} 在环带刷怪；\texttt{MonsterRecycleSystem} 与 \texttt{MonsterPool} 回收离屏单位。\texttt{MonsterContactDamageSystem} 处理接触伤害。
 
-\section{怪物系统}
+\subsection{经验、升级与元游戏数据}
 
-\texttt{MonsterWaveSpawnSystem} 在玩家周围环带刷怪；\texttt{MonsterChaseSystem} 追逐并叠加分离力与随机摆动，Worker 可参与数值重算\cite{cantrell2018unity}。\texttt{MonsterContactDamageSystem} 处理接触伤害；\texttt{MonsterRecycleSystem} 与 \texttt{MonsterPool} 回收离屏单位。
+\texttt{ExperienceSystem} 在击杀时增加经验并判断升级。\texttt{UpgradeRewardSystem} 打开奖励面板；\texttt{RewardPoolService} 按权重抽取条目，\texttt{RewardApplyService} 写回属性或技能。\texttt{RunMapGenerator} 生成三幕 DAG，失败时 \texttt{generateFallback}。\texttt{MetaFlowController} 协调 \texttt{onEnterCombat} 并将节点载荷传入战斗场景。
 
-\section{进度、元游戏与跑图}
+\section{MVC 架构 UI 实现}
+\label{sec:mvc-impl}
 
-\texttt{ExperienceSystem}、\texttt{UpgradeRewardSystem} 与奖励面板构成成长闭环。\texttt{MetaFlowController} 协调菜单与 \texttt{onEnterCombat}。\texttt{RunMapGenerator} 生成三幕 DAG，校验 Boss 可达，失败时使用保底图。
+\subsection{UI 栈与元游戏界面}
 
-\section{技能装配 UI}
+\texttt{MetaMenuBootstrap} 向 \texttt{UIStackManager} 注册 \texttt{StartPanel}、\texttt{SelectLevelPanel}、\texttt{RunMapPanel} 等路由。用户确认节点后触发 \texttt{onEnterCombat}，\texttt{Main} 隐藏菜单容器、显示战斗 \texttt{Area2D} 并 \texttt{demo.init()}。\texttt{RunMapPanelView} 使用 \texttt{MapNodeIconUtil}、\texttt{LineLayoutUtil} 渲染 DAG；仅允许选择已解锁邻接边。
 
-\texttt{SkillSelectPanelController} 以 Tab 切换面板并设置 \texttt{GameSession.paused}。\texttt{SkillDragService} 长按拖拽，\texttt{SkillLoadoutSyncSystem} 写回战斗实体。\texttt{UIStackManager} 管理全屏路由，生命周期由 \texttt{UiControllerBase} 约定。
+\subsection{战斗 HUD 与技能装配}
 
-\section{配置加载}
+\texttt{MainHudSystem}、\texttt{BloodBarSyncSystem} 将 ECS 中 hp 映射至 ProgressBar。\texttt{SkillSelectPanelController} 绑定 \texttt{MainUIPanel.lh}，Tab 切换时设置 \texttt{GameSession.paused}。\texttt{SkillDragService} 在超过 \texttt{LONG\_PRESS\_MS} 后使用顶层代理图标拖拽；\texttt{SkillSlotHitTest} 判断装备栏/效果槽落点。\texttt{SkillLoadoutSyncSystem} 关闭面板时原子写回 \texttt{Skill} 与 \texttt{PlayerAutoCastSystem}，并调用 \texttt{getCombatEffectIds} 刷新可战斗 effect 集合。
 
-\texttt{ConfigBootstrap} 双通道加载 JSON 并 \texttt{initData} 填充 \texttt{Data}，是数据驱动枢纽\cite{gregory2018game,munaiah2017github}。
+\subsection{输入与重启面板}
 
-\input{chapter05-extended}
-\input{chapter05-implementation-case}
+\texttt{InputService} 封装键盘/指针；\texttt{ControlInputAdapter} 转为 \texttt{ControlSystem} 可读方向。Tab 打开面板时战斗 Control 不更新，UI 仍可接收事件\cite{heijstek2011empirical}。\texttt{PlayerDeathSystem} 在 \texttt{hp}\,$\leq$\,0 时置 \texttt{paused}；\texttt{RestartPanelSystem} 经 UI 栈显示重启面板；\texttt{tryRestartFromSession} 在 \texttt{restarting} 保护下清场重生。
+
+依赖关系保持单向：UI $\rightarrow$ ECS；Systems $\rightarrow$ 配表；禁止 System 直接操作 UI 节点。
+
+\section{Web Worker 和对象池的优化实现}
+\label{sec:worker-pool-impl}
+
+\texttt{BulletPool}、\texttt{MonsterPool} 按预制体路径分桶，\texttt{acquire} 优先复用空闲节点，不足时再 \texttt{instantiate}。\texttt{BulletHitTest} 使用距离平方减少开方。
+
+\texttt{CombatDataPrepareSystem} 在 \texttt{isPaused()} 为假时打包怪物坐标等快照，调用 \texttt{CombatDataBridge.prepareFrame}。桥接层在 Worker 就绪且实体数达标时 \texttt{postMessage}，否则 \texttt{computeSync}；\texttt{MonsterChaseSystem} 与 \texttt{BulletSystem} 按是否有 Worker 结果及是否存在连锁弹，选择应用速度或走完整主线程碰撞。性能消融可通过 \texttt{MetaRunSession.testUseCombatWorker} 与 \texttt{testDefine} 预设控制（见第~\ref{chap:performance}~章）。
+
+\section{游戏主循环设计}
+\label{sec:main-loop}
+
+\subsection{入口与配置时序}
+
+\texttt{Main.onStart} 创建 \texttt{InputService}、\texttt{ControlInputAdapter}、\texttt{SimpleEcsDemo}，注册 \texttt{frameLoop}，并 \texttt{await ensureGameConfigLoaded()}。配表优先于实体生成，避免 \texttt{Data.Character.GetByID} 为空。若 \texttt{META\_MENU\_ENABLED} 为真则 \texttt{startMetaMenu}，否则直接 \texttt{demo.init()}。
+
+\subsection{SimpleEcsDemo 构造与 init}
+
+构造函数内：创建 \texttt{FilterRegistry}；注册 \texttt{AttributeSystem}、\texttt{ExperienceSystem}、\texttt{BulletSystem}（注入池与桥接）、\texttt{CombatDataPrepareSystem}、\texttt{SkillSystem}、\texttt{MonsterWaveSpawnSystem}、\texttt{UpgradeRewardSystem}、\texttt{MainHudSystem}、\texttt{SkillSelectPanelController} 等。\texttt{init()} 在配表就绪后按 \texttt{Character} 行加载玩家预制体，挂载 \texttt{PlayerTag}、\texttt{Position}、\texttt{Attribute}、\texttt{Skill}、\texttt{SkillLoadoutState}、\texttt{ViewComponent} 等；怪物由波次系统动态生成。
+
+\subsection{帧循环与暂停}
+
+每帧：若 \texttt{restarting} 则跳过重启检测；否则 \texttt{tryRestartFromSession}；若 \texttt{isPaused()} 则战斗 System 早退；否则 \texttt{world.update(deltaTime)}。生存计时与 Tab 暂停在 \texttt{Main} 层联动，ECS 层以 \texttt{GameSession.paused} 为唯一逻辑冻结开关。
+
+\section{典型场景实现剖析}
+\label{sec:scenarios}
+
+\subsection{场景一：玩家首次进入战斗}
+
+\textbf{步骤 1}：\texttt{Main.onStart} $\rightarrow$ \texttt{ensureGameConfigLoaded}。\textbf{步骤 2}：元菜单 \texttt{UIStackManager.push(Start)}，战斗容器暂隐藏。\textbf{步骤 3}：选关/跑图 $\rightarrow$ \texttt{onEnterCombat} $\rightarrow$ \texttt{demo.init()}，\texttt{CombatSurvivalTimer} 启动。\textbf{步骤 4}：首帧 \texttt{ControlSystem}、\texttt{PlayerAutoCastSystem}、\texttt{MonsterWaveSpawnSystem} 协同运行。对应测试 T-F-01、T-F-09。
+
+\subsection{场景二：Tab 打开技能面板并更换装备}
+
+Tab $\rightarrow$ \texttt{paused=true} $\rightarrow$ 长按拖拽 $\rightarrow$ \texttt{SkillLoadoutSyncSystem} 写回 $\rightarrow$ \texttt{paused=false}，下一冷却周期生效新技能。对应 T-F-05、T-F-06。
+
+\subsection{场景三：怪物密集时的 Worker 卸载}
+
+实体数 $\geq$ 阈值时 \texttt{CombatDataPrepareSystem} 提交 Worker；主线程仍处理子弹碰撞。关闭 Worker 或降低上限后 P95 帧时间上升（见第~\ref{chap:test}~章），说明优化有效且边界清晰。
+
+\section{关键代码文件索引}
+\label{sec:file-index}
+
+\begin{longtable}{p{3.5cm}p{9cm}}
+  \caption{核心源码文件索引} \label{tab:file-index} \\
+  \toprule
+  \textbf{模块} & \textbf{路径} \\
+  \midrule
+  \endfirsthead
+  \toprule
+  \textbf{模块} & \textbf{路径} \\
+  \midrule
+  \endhead
+  入口 & \texttt{src/Main.ts} \\
+  ECS 世界 & \texttt{src/ecs/core/World.ts} \\
+  组件存储 & \texttt{src/ecs/core/ComponentStore.ts} \\
+  战斗 Demo & \texttt{src/game/demo/SimpleEcsDemo.ts} \\
+  子弹 & \texttt{src/game/bullet/BulletSystem.ts} \\
+  子弹池 & \texttt{src/game/bullet/BulletPool.ts} \\
+  效果执行 & \texttt{src/game/skill/EffectExecutor.ts} \\
+  Worker 桥接 & \texttt{src/game/combat/CombatDataBridge.ts} \\
+  Worker 逻辑 & \texttt{src/game/combat/combatWorkerLogic.ts} \\
+  跑图生成 & \texttt{src/game/run/RunMapGenerator.ts} \\
+  元流程 & \texttt{src/game/meta/MetaFlowController.ts} \\
+  UI 栈 & \texttt{src/game/ui/mvc/UIStackManager.ts} \\
+  技能面板 & \texttt{src/game/ui/skillselect/SkillSelectPanelController.ts} \\
+  配表引导 & \texttt{src/config/ConfigBootstrap.ts} \\
+  静态常量 & \texttt{src/defines/*.ts} \\
+  \bottomrule
+\end{longtable}
+
+\section{功能模块与论文章节对照}
+\label{sec:module-map}
+
+\begin{table}[htbp]
+  \centering
+  \caption{功能模块与论文章节对照}
+  \label{tab:module-chapter-map}
+  \begin{tabular}{p{4.0cm}p{8.5cm}}
+    \toprule
+    \textbf{功能模块} & \textbf{论文章节} \\
+    \midrule
+    ECS Gameplay（实体、技能、子弹、怪物） & 第~\ref{chap:modules}~章第~\ref{sec:ecs-impl}~节；第~\ref{chap:architecture}~章第~\ref{sec:ecs-design}~节 \\
+    MVC UI（栈、跑图、技能装配） & 第~\ref{chap:modules}~章第~\ref{sec:mvc-impl}~节；第~\ref{chap:architecture}~章第~\ref{sec:mvc-design}~节 \\
+    Web Worker 与对象池 & 第~\ref{chap:modules}~章第~\ref{sec:worker-pool-impl}~节；第~\ref{chap:performance}~章 \\
+    主循环与入口 & 第~\ref{chap:modules}~章第~\ref{sec:main-loop}~节 \\
+    可靠性、容错与可扩展性 & 第~\ref{chap:architecture}~章第~\ref{sec:reliability}--\ref{sec:extensibility}~节 \\
+    测试与性能实验 & 第~\ref{chap:test}~章 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
 \section{本章小结}
 
-本章详述了 ECS、技能、子弹、怪物、元游戏、UI 与配置等模块实现，下一章讨论性能优化。
+本章按 ECS Gameplay、MVC UI、Worker/对象池、主循环四条主线说明了实现细节，并以三个典型场景串联配置—流程—战斗的贯通路径。实现中显式采用\textbf{组合根}（\texttt{SimpleEcsDemo}）、\textbf{对象池}、\textbf{桥接}（\texttt{CombatDataBridge}）、\textbf{策略}（Targeting）、\textbf{状态}（\texttt{GameSession.paused}）等模式，未引入过度抽象。
+
+主要难点与对策包括：（1）配表未同步至 \texttt{bin/config} 导致 404——以 \texttt{sync-config-to-bin.ps1} 与 \texttt{isGameConfigReady} 应对；（2）UI2 拖拽命中——顶层代理与 \texttt{SkillSlotHitTest}；（3）Effect 链顺序——文档与样例配表约束；（4）Worker 与主线程逻辑一致——共享 \texttt{combatWorkerLogic.ts} 与 \texttt{computeSync} 回退。表~\ref{tab:file-index}、表~\ref{tab:module-chapter-map} 便于评阅对照源码。下一章专述性能优化与实测数据。

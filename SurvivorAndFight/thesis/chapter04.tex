@@ -6,51 +6,168 @@
 系统总体设计遵循以下原则，并在后续模块实现中反复体现：
 
 \begin{enumerate}[label=(\arabic*)]
-  \item \textbf{数据与逻辑分离}：组件仅存数据，系统执逻辑；可调参数尽量外置 JSON 配表，工程常量集中于 \texttt{src/defines/}\cite{gregory2018game}。该原则使策划可在不改动 TypeScript 的前提下调整技能冷却、子弹速度等，也便于版本管理与 diff 审查。
-  \item \textbf{单一职责}：\texttt{BulletSystem} 负责子弹运动与圆碰撞；\texttt{EffectExecutor} 负责将配表 \texttt{effect} 字段映射为运行时行为；\texttt{MetaFlowController} 仅协调元游戏流程，不直接修改 ECS 组件。职责清晰可降低修改时的意外副作用，符合 Briand 等关于可维护性准则的实验结论\cite{briand2001maintainability}。
-  \item \textbf{可验证}：核心模块提供单元验证脚本（公式解析、ECS 核心、属性修饰器），变更后可在 CI 或本地快速回归，呼应 Petty 对仿真与交互系统 V\&V 的要求\cite{petty2010vv}。
-  \item \textbf{渐进复杂度}：第 1 期采用轻量 ECS 与单线程调度；对象池与 Web Worker 作为可选增强，仅在实体规模达标时启用，避免过早引入难以调试的并发模型。
-  \item \textbf{低耦合}：UI 通过 Controller 与 SyncSystem 读写 ECS 状态，禁止 System 直接操作 UI 节点；战斗数值 Worker 与主线程共享 \texttt{combatWorkerLogic.ts}，避免双份逻辑漂移\cite{ullmann2023coupling,mckenzie2008crowd}。
-  \item \textbf{可降级}：配表缺失、Worker 不可用、跑图生成失败时均有明确回退路径，保证演示与测试不中断（详见第~\ref{chap:architecture}~章容错设计）。
+  \item \textbf{数据与逻辑分离}：组件仅存数据，系统执逻辑；可调参数尽量外置 JSON 配表，工程常量集中于 \texttt{src/defines/}\cite{gregory2018game}。
+  \item \textbf{单一职责}：\texttt{BulletSystem} 负责子弹运动与碰撞；\texttt{EffectExecutor} 负责配表效果解释；\texttt{MetaFlowController} 仅协调元游戏流程，不直接改写 ECS 组件\cite{briand2001maintainability}。
+  \item \textbf{可验证}：核心模块提供公式解析、ECS 核心、属性修饰器等单元验证脚本，变更后可快速回归\cite{petty2010vv}。
+  \item \textbf{渐进复杂度}：第 1 期采用轻量 ECS 与单线程调度；对象池与 Web Worker 仅在实体规模达标时启用。
+  \item \textbf{低耦合}：UI 经 Controller 与 SyncSystem 读写 ECS；战斗 Worker 与主线程共享 \texttt{combatWorkerLogic.ts}，避免双份逻辑漂移\cite{ullmann2023coupling}。
+  \item \textbf{可降级}：配表缺失、Worker 不可用、跑图生成失败时均有明确回退路径（见第~\ref{sec:reliability}~节与第~\ref{sec:fault-tolerance}~节）。
 \end{enumerate}
 
-上述原则共同支撑“教学可完成、工程可扩展”的目标：在毕业设计周期内先交付闭环，再为法杖编程、空间划分碰撞等留出扩展点。
+\section{系统具体设计}
+\label{sec:system-design}
 
-\section{系统分层架构}
+Survivor And Fight 在逻辑上划分为\textbf{表现层}、\textbf{UI 控制层}、\textbf{游戏逻辑层}、\textbf{领域服务层}与\textbf{基础设施层}，如图~\ref{fig:layers} 所示。\texttt{Main.ts} 作为应用入口，在 \texttt{Laya.timer.frameLoop} 中驱动 \texttt{EcsWorld.update}，再由引擎完成渲染与 UI 事件分发。元游戏（菜单、选关、跑图）与局内战斗共用同一 TypeScript 工程，通过容器显隐与 \texttt{MetaFlowController} 回调切换，避免维护两套入口。
 
 \begin{figure}[htbp]
   \centering
   \fbox{\parbox{0.92\textwidth}{
     \centering
-    \textbf{表现层}：Laya 预制体、UI、血条、相机跟随\\
+    \textbf{表现层}：Laya 预制体、UI2 节点、血条、相机跟随\\
     $\downarrow$\\
-    \textbf{UI 控制层}：MVC、UIStackManager、各 Panel\\
+    \textbf{UI 控制层}：\texttt{UIStackManager}、各 Panel Controller、\texttt{SkillLoadoutSyncSystem}\\
     $\downarrow$\\
-    \textbf{游戏逻辑层}：ECS Systems、Bullet、RunMap、MetaFlow\\
+    \textbf{游戏逻辑层}：ECS Systems（移动、技能、子弹、怪物、经验、升级等）\\
     $\downarrow$\\
-    \textbf{领域服务层}：ConfigBootstrap、FormulaParser、CombatDataBridge\\
+    \textbf{领域服务层}：\texttt{ConfigBootstrap}、\texttt{FormulaParser}、\texttt{CombatDataBridge}、\texttt{RunMapGenerator}\\
     $\downarrow$\\
-    \textbf{基础设施层}：EcsWorld、ComponentStore、defines、Worker 协议
+    \textbf{基础设施层}：\texttt{EcsWorld}、\texttt{ComponentStore}、\texttt{defines}、对象池、Worker 协议
   }}
-  \caption{系统分层架构示意}
+  \caption{系统分层架构}
   \label{fig:layers}
 \end{figure}
 
-\texttt{Main.ts} 初始化输入、构造 \texttt{SimpleEcsDemo}，按配置进入元菜单或战斗，在 \texttt{frameLoop} 中更新逻辑与生存计时。
+\subsection{基于 ECS 的 Gameplay 实现}
+\label{sec:ecs-design}
 
-\section{ECS 调度与战斗数据流}
+\textbf{实体—组件—系统}是局内玩法的核心范式。\texttt{EntityId} 为数值标识；\texttt{ComponentStore} 按组件类型使用 \texttt{Map<EntityId, Component>} 存储；\texttt{EcsWorld} 按 \texttt{input/logic/render} 分组顺序调用已注册系统。玩法数据与逻辑严格分离：\texttt{Position}、\texttt{Velocity}、\texttt{Attribute}、\texttt{Skill}、\texttt{SkillLoadoutState} 等仅存字段；\texttt{MovementSystem}、\texttt{SkillSystem}、\texttt{BulletSystem} 等无状态遍历实体并修改组件。
 
-系统分组：\texttt{input}（操控）、\texttt{logic}（属性、移动、技能、刷怪、经验等）、\texttt{render}（视图、血条、HUD）。\texttt{GameSession.paused} 控制战斗暂停。
+\textbf{标签与筛选}：玩家与怪物共享位移、属性、技能等组件，仅通过 \texttt{PlayerTag}/\texttt{MonsterTag} 区分。\texttt{FilterRegistry} 提供 \texttt{Players}、\texttt{Monsters} 等命名筛选器，避免各 System 重复编写交集查询。该设计体现\textbf{组合优于继承}：新增怪物行为时扩展组件字段或新增 System，而非维护 \texttt{MonsterBase} 类树。
 
-战斗帧流程：\texttt{CombatDataPrepareSystem} 采集快照 $\rightarrow$ 可选 Worker 执行 \texttt{processCombatFrame} $\rightarrow$ 主线程应用追逐/分离结果 $\rightarrow$ \texttt{BulletSystem} 更新碰撞。该设计与 Cantrell 等将重计算置于引擎逻辑管线、渲染与交互分离的思路一致\cite{cantrell2018unity,bott2014unreal}。
+\textbf{战斗数据流}：每帧 \texttt{CombatDataPrepareSystem} 采集坐标等快照 $\rightarrow$ 可选 \texttt{CombatDataBridge} 提交 Worker 执行 \texttt{processCombatFrame} $\rightarrow$ 主线程 \texttt{MonsterChaseSystem} 应用追逐/分离结果 $\rightarrow$ \texttt{BulletSystem} 在主线程完成碰撞（依赖 Laya 节点与阵营判定）。\texttt{GameSession.paused} 在死亡、技能 Tab 或胜利时冻结逻辑 System 的 \texttt{update} 入口。
 
-\section{元游戏与配表模型}
+\textbf{配表驱动}：\texttt{Skill} 与多行 \texttt{SkillEffect} 描述冷却与效果链；\texttt{EffectExecutor} 按序解释 \texttt{bullet}、\texttt{modifier\_*}、\texttt{direct\_damage}。修饰器须位于后续 \texttt{bullet} 之前，形成链式组合语义。伤害字符串由 \texttt{FormulaParser} 在白名单运算下解析，禁止 \texttt{eval}。
 
-\texttt{MetaFlowController} 协调界面与战斗入口；\texttt{RunMapState} 维护 DAG 进度。逻辑数据关系：\texttt{Character}、\texttt{Skill} 1:N \texttt{SkillEffect}，\texttt{SkillEffect} 可关联 \texttt{Bullet}；跑图节点通过边构成 DAG。
+\subsection{基于 MVC 的 UI 结构实现}
+\label{sec:mvc-design}
 
-\input{chapter04-extended}
-\input{chapter04-design-detail}
+元游戏与局内 UI 采用 \textbf{MVC 变体}\cite{heijstek2011empirical}：
+\begin{itemize}
+  \item \textbf{Model}：ECS 组件（hp、装配状态）或独立模型（\texttt{RunMapPanelModel}、\texttt{RunMapState}）；
+  \item \textbf{View}：Laya 预制体与 UI2 节点绑定，负责布局与显示；
+  \item \textbf{Controller}：继承 \texttt{UiControllerBase}，处理生命周期、输入与路由，\textbf{禁止}直接操作战斗场景中的实体节点。
+\end{itemize}
+
+\textbf{全屏导航}：\texttt{UIStackManager} 维护路由栈，\texttt{push(routeId)} 入栈并显示对应 Controller，\texttt{pop()} 恢复上一层，保证任意时刻仅一个全屏界面占据焦点。开始、选关、跑图等界面经 \texttt{MetaMenuBootstrap} 注册路由。
+
+\textbf{局内交互}：\texttt{SkillSelectPanelController} 监听 Tab，打开时将 \texttt{GameSession.paused} 置真，战斗 System 早退而 UI 仍接收指针事件。\texttt{SkillDragService} 长按拖拽，\texttt{SkillSlotHitTest} 统一命中判定；关闭面板时 \texttt{SkillLoadoutSyncSystem} 原子写回 \texttt{Skill} 与 \texttt{PlayerAutoCastSystem}。\texttt{RunMapPanelView} 根据 DAG 状态渲染节点与连线，可达性规则由 Model 校验而非 View 硬编码。
+
+核心约束：\textbf{界面不拥有玩法真相}——玩法状态以 ECS 与配表为准，UI 仅经 Controller/SyncSystem 读写。
+
+\subsection{基于 Web Worker 和对象池的优化实现}
+\label{sec:perf-design}
+
+\textbf{对象池}：\texttt{BulletPool}、\texttt{MonsterPool} 按预制体路径分桶复用 Laya 节点，抑制 \texttt{instantiate/destroy} 触发的 GC 尖峰。\texttt{MonsterRecycleSystem} 在怪物远离玩家超过阈值后回收实体，维持活跃集合规模。
+
+\textbf{Web Worker}：当场上实体数 $\geq$ \texttt{COMBAT\_WORKER\_MIN\_ENTITY\_COUNT} 时，\texttt{CombatDataPrepareSystem} 将快照经 \texttt{CombatDataBridge} 发送至 Worker；\texttt{combatWorkerLogic.ts} 在主线程与 Worker 间共享，计算追逐、分离与摆动。\texttt{CombatDataBridge.prepareFrame} 优先消费异步结果，失败或未就绪时调用 \texttt{computeSync} 回退。子弹碰撞、连锁与分裂仍保留主线程，因依赖引擎节点与即时命中判定。
+
+\textbf{逻辑暂停}：除 Worker/池化外，\texttt{GameSession.paused} 在技能面板、死亡与胜利结算时切断战斗 tick，属于零成本“冻结”手段，与 Cantrell 等强调的“重计算与交互渲染分离”思路一致\cite{cantrell2018unity}。
+
+\section{系统交互与时序}
+\label{sec:sequence}
+
+图~\ref{fig:system-sequence-mermaid} 与图~\ref{fig:system-sequence} 给出从应用启动到局内战斗、元游戏切换与重启的\textbf{端到端交互时序}。图源为 \texttt{figures/system-sequence.mmd}，经 Mermaid CLI 导出为 PNG 嵌入 PDF；下图为文字版摘要，便于无图环境阅读。
+
+\begin{figure}[htbp]
+  \centering
+  \IfFileExists{figures/system-sequence.png}{%
+    \includegraphics[width=0.95\textwidth]{figures/system-sequence.png}%
+  }{}
+  \caption{系统主要交互时序（Mermaid 序列图）}
+  \label{fig:system-sequence-mermaid}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \small
+  \fbox{\parbox{0.95\textwidth}{
+    \textbf{（1）应用启动}\quad Main $\rightarrow$ ConfigBootstrap：\texttt{ensureGameConfigLoaded}\\
+    $\rightarrow$ MetaMenuBootstrap：\texttt{UIStackManager.push(Start)} \quad 或 \quad SimpleEcsDemo.init\\
+    \textbf{（2）进入战斗}\quad RunMapPanel/SelectLevel $\rightarrow$ MetaFlowController.\texttt{onEnterCombat}\\
+    $\rightarrow$ Main：显示 Area2D，\texttt{demo.init()}，启动生存计时\\
+    \textbf{（3）战斗帧循环}\quad frameLoop $\rightarrow$ EcsWorld.update（若未 paused）\\
+    $\rightarrow$ CombatDataPrepareSystem $\rightarrow$ CombatDataBridge（Worker/同步）\\
+    $\rightarrow$ MonsterChaseSystem $\rightarrow$ BulletSystem $\rightarrow$ ViewSyncSystem\\
+    \textbf{（4）施法链}\quad PlayerAutoCastSystem $\rightarrow$ CastPlan $\rightarrow$ EffectExecutor\\
+    $\rightarrow$ BulletSystem.spawn $\rightarrow$ AttributeSystem（伤害）\\
+    \textbf{（5）升级}\quad MonsterDeath $\rightarrow$ ExperienceSystem $\rightarrow$ UpgradeRewardSystem\\
+    $\rightarrow$ RewardPanel $\rightarrow$ RewardApplyService $\rightarrow$ AttributeSystem\\
+    \textbf{（6）Tab 装配}\quad SkillSelectPanelController：\texttt{paused=true}\\
+    $\rightarrow$ SkillDragService $\rightarrow$ SkillLoadoutSyncSystem $\rightarrow$ \texttt{paused=false}\\
+    \textbf{（7）死亡重启}\quad PlayerDeathSystem：\texttt{paused=true} $\rightarrow$ RestartPanelSystem\\
+    $\rightarrow$ SimpleEcsDemo.\texttt{tryRestartFromSession}（\texttt{restarting} 防重入）
+  }}
+  \caption{系统主要交互时序（文字摘要）}
+  \label{fig:system-sequence}
+\end{figure}
+
+\section{可靠性设计}
+\label{sec:reliability}
+
+可靠性设计目标是在配表异常、Worker 不可用或地图生成失败时，\textbf{仍可进入可玩或可调试状态}，而非直接崩溃。实现要点如下。
+
+\textbf{（1）配表加载与就绪判据}。\texttt{ConfigBootstrap.ensureGameConfigLoaded} 遍历 \texttt{configBases()}，依次尝试 \texttt{fetch} 与 \texttt{Laya.loader} 双通道加载 \texttt{tables.registry.json} 及各表；\texttt{isGameConfigReady()} 要求 \texttt{configLoaded} 且 \texttt{Data.Skill} 非空，作为“可否进入战斗”的全局闸门。\texttt{Main.onStart} 与 \texttt{SimpleEcsDemo.spawnPlayer} 均在生成实体前等待或复查该状态。
+
+\textbf{（2）运行时缺表降级}。\texttt{SimpleEcsDemo} 维护 \texttt{missingConfigLogged: Set<string>}，通过 \texttt{logMissingConfigOnce} 对每个缺失键仅告警一次，避免刷屏。\texttt{defines} 中 \texttt{DEFAULT\_PLAYER\_HP}、\texttt{DEFAULT\_PLAYER\_PREFAB}、\texttt{DEFAULT\_PLAYER\_AUTO\_SKILL\_ID} 等在查表失败时回退；升级奖池表为空时返回内联默认条目，保证演示不中断。
+
+\textbf{（3）Worker 双路径}。\texttt{CombatDataBridge.initWorker} 失败、\texttt{onerror} 或 \texttt{postMessage} 异常时将 \texttt{workerUsable=false}；\texttt{prepareFrame} 无可用异步结果时调用 \texttt{computeSync}，与 Worker 共用 \texttt{processCombatFrame}。\texttt{MonsterChaseSystem} 无 Worker 结果时走本地追逐+分离；\texttt{BulletSystem} 在存在连锁弹等 Worker 未覆盖场景时回退完整主线程逻辑。实体数低于 \texttt{COMBAT\_WORKER\_MIN\_ENTITY\_COUNT} 时不提交 Worker，减少通信开销。
+
+\textbf{（4）跑图生成保底}。\texttt{RunMapGenerator.generate} 在最多 \texttt{RUN\_MAP\_GENERATION\_MAX\_RETRIES} 次随机尝试后，若 \texttt{validateActReachBoss} 仍失败，则调用 \texttt{generateFallback} 生成三幕各「休息$\rightarrow$战斗$\rightarrow$Boss」线性图，保证 Boss 可达、进度不卡死。
+
+\textbf{（5）重启防重入}。\texttt{RestartPanelSystem} 将 \texttt{session.restartRequested} 置真；\texttt{SimpleEcsDemo.tryRestartFromSession} 在 \texttt{restarting=true} 期间异步清场与重生，\texttt{update} 中避免重复触发，\texttt{finally} 复位标志，防止监听器与实体重复注册。
+
+\textbf{（6）预制体加载失败}。实例化失败时 \texttt{createPlaceholderNode()} 生成占位碰撞体，便于在无美术资源环境下继续调试逻辑。
+
+\section{容错与降级策略}
+\label{sec:fault-tolerance}
+
+表~\ref{tab:fault-tolerance} 汇总主要故障模式与系统响应，与第~\ref{sec:reliability}~节实现一一对应。
+
+\begin{table}[htbp]
+  \centering
+  \caption{容错与降级策略}
+  \label{tab:fault-tolerance}
+  \begin{tabular}{p{3.2cm}p{4.0cm}p{5.8cm}}
+    \toprule
+    \textbf{故障模式} & \textbf{检测方式} & \textbf{降级行为} \\
+    \midrule
+    配表 JSON 404 或空表 & \texttt{isGameConfigReady()==false} & 控制台错误提示；玩家/技能使用 \texttt{DEFAULT\_*}；自动施法可能退化 \\
+    Worker 初始化/通信失败 & \texttt{workerUsable=false} & \texttt{computeSync} 主线程重算追逐 \\
+    实体数低于 Worker 阈值 & 快照计数 & 不投递 Worker，全主线程 \\
+    跑图随机生成不可达 & \texttt{validateActReachBoss} & \texttt{generateFallback} 线性保底图 \\
+    预制体路径无效 & \texttt{instantiate} 异常 & 占位节点 + 日志 \\
+    UI 路由加载失败 & Controller 构造异常 & 跳过该路由并日志，不阻断战斗容器 \\
+  \bottomrule
+  \end{tabular}
+\end{table}
+
+\textbf{暂停语义统一}：\texttt{GameSession.paused} 同时服务死亡暂停与 Tab 装配暂停；\texttt{RestartPanelSystem} 通过 \texttt{isPlayerDead()} 区分是否弹出重启面板，避免技能面板误触重启流程。
+
+\section{可扩展性设计}
+\label{sec:extensibility}
+
+本系统的可扩展性建立在 ECS 的\textbf{组合优于继承}原则之上，而非为每种怪物或技能派生子类。
+
+\textbf{实体扩展}：新玩法维度优先\textbf{新增组件类型}（如未来的 \texttt{BuffComponent}、\texttt{ShieldComponent}），再在独立 System 中读写；已有 \texttt{MonsterTag} 实体自动参与 \texttt{FilterRegistry.Monsters}，无需修改 \texttt{EcsWorld} 内核。
+
+\textbf{行为扩展}：新行为对应新 System 或扩展现有 System 的分支；例如新增“光环”只需注册 \texttt{AuraSystem} 并在 \texttt{SimpleEcsDemo} 构造函数中 \texttt{addSystem}，不必改动 \texttt{MovementSystem}。
+
+\textbf{技能扩展}：新 \texttt{effect} 类型在 \texttt{EffectExecutor} 增加分支；修饰器仍通过“写上下文 $\rightarrow$ 后续 bullet 消费”扩展，策划在 \texttt{SkillEffect} 表调序即可组合。新子弹形态仅需配表 \texttt{Bullet} 行与预制体路径。
+
+\textbf{内容扩展}：新跑图节点类型扩展 \texttt{RunNodeType} 与 \texttt{RunMapGenerator} 权重表；新全屏界面在 \texttt{UIStackManager} 注册路由与 Controller，不修改战斗 ECS。
+
+\textbf{与继承方案对比}：若采用 \texttt{Player extends Character extends Actor}，每增加一种“会分裂的精英怪”都需新建子类并重写 \texttt{update}，导致 Laya 节点与逻辑深度耦合。当前方案下，精英怪仅是 \texttt{MonsterTag} + 额外组件（如更高 \texttt{Attribute} 或专用 \texttt{MonsterDef.waveWeight}），行为差异由 \texttt{MonsterAutoCastSystem} 等组合完成，符合 Gregory 与 ECS 文献对“数据导向、增量扩展”的论述\cite{gregory2018game}。
 
 \section{本章小结}
 
-本章给出分层架构、ECS 调度、战斗数据流与元游戏设计，下一章详述模块实现。
+本章给出设计原则、分层架构，并从 ECS Gameplay、MVC UI、Worker/对象池三方面说明系统具体设计；进一步给出端到端时序、可靠性机制、容错表与基于组合的可扩展性策略，为第~\ref{chap:modules}~章实现细节提供结构框架。

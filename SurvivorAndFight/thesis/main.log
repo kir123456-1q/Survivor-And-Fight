@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999998 (MiKTeX 26.5) (preloaded format=xelatex 2026.5.19)  19 MAY 2026 11:59
+This is XeTeX, Version 3.141592653-2.6-0.999998 (MiKTeX 26.5) (preloaded format=xelatex 2026.5.19)  19 MAY 2026 20:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1152,22 +1152,22 @@ LaTeX Font Warning: Font shape `TU/SimSun(1)/b/n' undefined
 
 [4
 
-] [5] [6] [7] [8])
+] [5] [6] [7])
 \tf@toc=\write4
 \openout4 = `main.toc'.
 
- [9] (main.lof)
+ [8] (main.lof)
 \tf@lof=\write5
 \openout5 = `main.lof'.
 
- [10
+ [9
 
 
 ] (main.lot)
 \tf@lot=\write6
 \openout6 = `main.lot'.
 
- [11
+ [10
 
 
 ] (chapter01.tex
@@ -1176,10 +1176,21 @@ LaTeX Font Warning: Font shape `TU/SimSun(1)/b/n' undefined
 
 
 ]
-Missing character: There is no ≠ in font [lmroman12-regular]:mapping=tex-text;!
+Overfull \hbox (3.74672pt too wide) in paragraph at lines 26--27
+[]\TU/SimSun(1)/m/n/12.045 在 玩 法 架 构 方 面，| \TU/lmr/m/n/12.045 Survivor-like \TU
+/SimSun(1)/m/n/12.045 强 调 波 次 刷 怪、|  自 动 输 出 与 局 内 升 级 构 筑；| \TU/lmr/m/n/12.045
+ Roguelite
+ []
+
 [2] (chapter01-extended.tex [3]) (chapter01-background-extra.tex [4]))
 (chapter02.tex [5]
 第2章
+
+Overfull \hbox (5.23872pt too wide) in paragraph at lines 4--5
+\TU/SimSun(1)/m/n/12.045 文 献 与 业 界 实 践 的 基 础 上，|  给 出 毕 业 设 计 规 模 下 的 取 舍 理 由，|
+  并 与 后 文 \TU/lmtt/m/n/12.045 SimpleEcsDemo\TU/SimSun(1)/m/n/12.045 、|
+ []
+
 
 Underfull \hbox (badness 1424) in paragraph at lines 27--27
 []\TU/SimSun(0)/m/n/12.045 文 档 与 社 区 小 于 头 部
@@ -1256,263 +1267,458 @@ mSun(0)/m/n/12.045 、|
 [10]) (chapter03.tex [11]
 第3章
 
-Overfull \hbox (158.04535pt too wide) in paragraph at lines 10--11
-[]\TU/SimSun(0)/m/n/12.045 配 表 经 \TU/lmtt/m/n/12.045 tools/sync-config-to-bin.p
-s1 \TU/SimSun(0)/m/n/12.045 发 布 至 \TU/lmtt/m/n/12.045 bin/config/\TU/SimSun(0)/
-m/n/12.045 ，| \TU/lmtt/m/n/12.045 ConfigBootstrap.ensureGameConfigLoaded()
+Overfull \hbox (80.86162pt too wide) in paragraph at lines 12--15
+[]\TU/SimSun(0)/m/n/12.045 已 具 备 能 力：| \TU/lmtt/m/n/12.045 ConfigBootstrap.ensu
+reGameConfigLoaded \TU/SimSun(0)/m/n/12.045 双 通 道 加 载 配 表；| \TU/lmtt/m/n/12.045
+ isGameConfigReady
  []
 
 [12
 
-] (chapter03-extended.tex [13]
-Overfull \hbox (42.85574pt too wide) in paragraph at lines 34--35
-[]\TU/SimSun(0)/m/n/12.045 战 斗 入 口：| \TU/lmtt/m/n/12.045 MetaFlowController \TU
-/SimSun(0)/m/n/12.045 的 \TU/lmtt/m/n/12.045 onEnterCombat(payload?: CombatEnter
-Payload)\TU/SimSun(0)/m/n/12.045 ；| 
+]
+Overfull \hbox (36.15689pt too wide) in paragraph at lines 76--77
+[]\TU/SimSun(0)/m/n/12.045 用 户 在 跑 图 或 选 关 界 面 确 认 节 点，| \TU/lmtt/m/n/12.045 Me
+taFlowController \TU/SimSun(0)/m/n/12.045 触 发 \TU/lmtt/m/n/12.045 onEnterCombat
+(payload)\TU/SimSun(0)/m/n/12.045 ；|
  []
 
-[14]) (chapter03-requirements-detail.tex [15]) [16]) (chapter04.tex [17]
+[13]
+Overfull \hbox (28.90573pt too wide) in paragraph at lines 91--92
+\TU/SimSun(0)/m/n/12.045 经 验  |（含 等 级 加 成 项） 。|  跑 图 每 局 三 幕 \TU/lmr/m/n/12.045
+ DAG\TU/SimSun(0)/m/n/12.045 ，|  仅 沿 已 解 锁 邻 接 边 前 进；| \TU/lmtt/m/n/12.045 vali
+dateActReachBoss
+ []
+
+[14]
+Overfull \hbox (102.92183pt too wide) in paragraph at lines 120--121
+[]\TU/SimSun(0)/m/n/12.045 关 键 接 口： （\TU/lmr/m/n/12.045 1\TU/SimSun(0)/m/n/12.0
+45 ）| \TU/lmtt/m/n/12.045 ensureGameConfigLoaded(): Promise<boolean>\TU/SimSun(
+0)/m/n/12.045 ； （\TU/lmr/m/n/12.045 2\TU/SimSun(0)/m/n/12.045 ）| \TU/lmtt/m/n/1
+2.045 onEnterCombat(payload?)\TU/SimSun(0)/m/n/12.045 ； （\TU/lmr/m/n/12.045 3\T
+U/SimSun(0)/m/n/12.045 ）|
+ []
+
+
+Overfull \hbox (76.48038pt too wide) in paragraph at lines 120--121
+\TU/lmtt/m/n/12.045 ControlInputSource\TU/SimSun(0)/m/n/12.045 ； （\TU/lmr/m/n/1
+2.045 4\TU/SimSun(0)/m/n/12.045 ）| \TU/lmtt/m/n/12.045 UIStackManager.push/pop\
+TU/SimSun(0)/m/n/12.045 ； （\TU/lmr/m/n/12.045 5\TU/SimSun(0)/m/n/12.045 ）| \TU/
+lmtt/m/n/12.045 CombatWorkerComputeRequest/Response
+ []
+
+
+Overfull \hbox (52.9344pt too wide) in paragraph at lines 122--123
+[]\TU/SimSun(0)/m/n/12.045 约 束 与 假 设：|  浏 览 器 启 用 \TU/lmr/m/n/12.045 JavaScript
+ \TU/SimSun(0)/m/n/12.045 与 \TU/lmr/m/n/12.045 WebGL\TU/SimSun(0)/m/n/12.045 ；|
+  开 发 阶 段 已 执 行 \TU/lmtt/m/n/12.045 sync-config-to-bin.ps1\TU/SimSun(0)/m/n/12.
+045 ；|
+ []
+
+
+Overfull \hbox (8.94514pt too wide) in paragraph at lines 154--155
+[]\TU/lmtt/m/n/12.045 ecsCorePhase1.verify.ts| 
+ []
+
+
+Overfull \hbox (8.94514pt too wide) in paragraph at lines 157--158
+[]\TU/lmtt/m/n/12.045 formulaParser.verify.ts| 
+ []
+
+) (chapter04.tex [15] [16]
 第4章
 
-Overfull \hbox (14.86984pt too wide) in paragraph at lines 39--40
-[]\TU/lmtt/m/n/12.045 Main.ts \TU/SimSun(0)/m/n/12.045 初 始 化 输 入、|  构 造 \TU/lmt
-t/m/n/12.045 SimpleEcsDemo\TU/SimSun(0)/m/n/12.045 ，|  按 配 置 进 入 元 菜 单 或 战 斗，| 
- 在 \TU/lmtt/m/n/12.045 frameLoop
+Overfull \hbox (9.12233pt too wide) in paragraph at lines 43--44
+[]\TU/SimSun(0)/m/n/12.045 实 体  |—|  组 件  |—|  系 统 是 局 内 玩 法 的 核 心 范 式。| \TU/lm
+tt/m/n/12.045 EntityId \TU/SimSun(0)/m/n/12.045 为 数 值 标 识；| \TU/lmtt/m/n/12.045
+ ComponentStore
  []
 
-[18
+
+Overfull \hbox (4.76697pt too wide) in paragraph at lines 43--44
+\TU/SimSun(0)/m/n/12.045 按 组 件 类 型 使 用 \TU/lmtt/m/n/12.045 Map<EntityId, Compon
+ent> \TU/SimSun(0)/m/n/12.045 存 储；| \TU/lmtt/m/n/12.045 EcsWorld \TU/SimSun(0)/
+m/n/12.045 按 \TU/lmtt/m/n/12.045 input/logic/render
+ []
+
+
+Overfull \hbox (5.0243pt too wide) in paragraph at lines 43--44
+\TU/SimSun(0)/m/n/12.045 分 组 顺 序 调 用 已 注 册 系 统。|  玩 法 数 据 与 逻 辑 严 格 分 离：| \TU/l
+mtt/m/n/12.045 Position\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 Velocity
+\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 Attribute\TU/SimSun(0)/m/n/12.0
+45 、|
+ []
+
+
+Overfull \hbox (9.31435pt too wide) in paragraph at lines 43--44
+\TU/lmtt/m/n/12.045 Skill\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 SkillL
+oadoutState \TU/SimSun(0)/m/n/12.045 等 仅 存 字 段；| \TU/lmtt/m/n/12.045 MovementSy
+stem\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 SkillSystem\TU/SimSun(0)/m/
+n/12.045 、| \TU/lmtt/m/n/12.045 BulletSystem
+ []
+
+[17
 
 ]
-Overfull \hbox (63.8413pt too wide) in paragraph at lines 45--46
-[]\TU/SimSun(0)/m/n/12.045 战 斗 帧 流 程：| \TU/lmtt/m/n/12.045 CombatDataPrepareSys
-tem \TU/SimSun(0)/m/n/12.045 采 集 快 照 $\OMS/cmsy/m/n/12.045 !$ \TU/SimSun(0)/m/n
-/12.045 可 选 \TU/lmr/m/n/12.045 Worker \TU/SimSun(0)/m/n/12.045 执 行 \TU/lmtt/m/n
-/12.045 processCombatFrame
+Overfull \hbox (19.28157pt too wide) in paragraph at lines 45--46
+[]\TU/SimSun(0)/m/n/12.045 标 签 与 筛 选：|  玩 家 与 怪 物 共 享 位 移、|  属 性、|  技 能 等 组 件，|
+  仅 通 过 \TU/lmtt/m/n/12.045 PlayerTag\TU/lmr/m/n/12.045 /\TU/lmtt/m/n/12.045 Mo
+nsterTag
  []
 
-(chapter04-extended.tex [19]
-Overfull \hbox (74.27866pt too wide) in paragraph at lines 44--45
-[]\TU/lmr/m/n/12.045 Worker \TU/SimSun(0)/m/n/12.045 失 败 时 自 动 回 退 主 线 程；|  配 表
- 加 载 失 败 时 使 用 \TU/lmtt/m/n/12.045 DEFAULT_* \TU/SimSun(0)/m/n/12.045 常 量 并 \TU
-/lmtt/m/n/12.045 missingConfigLogged
+
+Overfull \hbox (47.6019pt too wide) in paragraph at lines 47--48
+[]\TU/SimSun(0)/m/n/12.045 战 斗 数 据 流：|  每 帧 \TU/lmtt/m/n/12.045 CombatDataPrepa
+reSystem \TU/SimSun(0)/m/n/12.045 采 集 坐 标 等 快 照 $\OMS/cmsy/m/n/12.045 !$ \TU/Si
+mSun(0)/m/n/12.045 可 选 \TU/lmtt/m/n/12.045 CombatDataBridge
  []
 
-) (chapter04-design-detail.tex [20] [21])) (chapter05.tex [22]
+
+Overfull \hbox (10.7568pt too wide) in paragraph at lines 56--57
+[]\TU/lmr/bx/n/12.045 Model\TU/SimSun(0)/m/n/12.045 ：| \TU/lmr/m/n/12.045 ECS \
+TU/SimSun(0)/m/n/12.045 组 件  |（\TU/lmr/m/n/12.045 hp\TU/SimSun(0)/m/n/12.045 、|
+  装 配 状 态）|  或 独 立 模 型  |（\TU/lmtt/m/n/12.045 RunMapPanelModel\TU/SimSun(0)/m/n
+/12.045 、| \TU/lmtt/m/n/12.045 RunMapState\TU/SimSun(0)/m/n/12.045 ） ；| 
+ []
+
+[18]
+Overfull \hbox (13.84773pt too wide) in paragraph at lines 63--64
+[]\TU/SimSun(0)/m/n/12.045 局 内 交 互：| \TU/lmtt/m/n/12.045 SkillSelectPanelContro
+ller \TU/SimSun(0)/m/n/12.045 监 听 \TU/lmr/m/n/12.045 Tab\TU/SimSun(0)/m/n/12.04
+5 ，|  打 开 时 将 \TU/lmtt/m/n/12.045 GameSession.paused
+ []
+
+
+Overfull \hbox (53.08482pt too wide) in paragraph at lines 63--64
+\TU/SimSun(0)/m/n/12.045 置 真，|  战 斗 \TU/lmr/m/n/12.045 System \TU/SimSun(0)/m/n
+/12.045 早 退 而 \TU/lmr/m/n/12.045 UI \TU/SimSun(0)/m/n/12.045 仍 接 收 指 针 事 件。| \T
+U/lmtt/m/n/12.045 SkillDragService \TU/SimSun(0)/m/n/12.045 长 按 拖 拽，| \TU/lmtt/
+m/n/12.045 SkillSlotHitTest
+ []
+
+
+Overfull \hbox (65.13951pt too wide) in paragraph at lines 63--64
+\TU/SimSun(0)/m/n/12.045 统 一 命 中 判 定；|  关 闭 面 板 时 \TU/lmtt/m/n/12.045 SkillLoad
+outSyncSystem \TU/SimSun(0)/m/n/12.045 原 子 写 回 \TU/lmtt/m/n/12.045 Skill \TU/Si
+mSun(0)/m/n/12.045 与 \TU/lmtt/m/n/12.045 PlayerAutoCastSystem\TU/SimSun(0)/m/n/
+12.045 。|
+ []
+
+
+Overfull \hbox (96.19676pt too wide) in paragraph at lines 72--73
+[]\TU/lmr/bx/n/12.045 Web Worker\TU/SimSun(0)/m/n/12.045 ：|  当 场 上 实 体 数 $\OMS/
+cmsy/m/n/12.045 ^^U$ \TU/lmtt/m/n/12.045 COMBAT_WORKER_MIN_ENTITY_COUNT \TU/Sim
+Sun(0)/m/n/12.045 时，| \TU/lmtt/m/n/12.045 CombatDataPrepareSystem
+ []
+
+File: figures/system-sequence.png Graphic file (type bmp)
+<figures/system-sequence.png>
+
+Overfull \hbox (1.2757pt too wide) in paragraph at lines 119--120
+\TU/lmtt/m/n/12.045 configBases()\TU/SimSun(0)/m/n/12.045 ，|  依 次 尝 试 \TU/lmtt/
+m/n/12.045 fetch \TU/SimSun(0)/m/n/12.045 与 \TU/lmtt/m/n/12.045 Laya.loader \TU
+/SimSun(0)/m/n/12.045 双 通 道 加 载 \TU/lmtt/m/n/12.045 tables.registry.json
+ []
+
+[19] [20]
+Overfull \hbox (6.15988pt too wide) in paragraph at lines 121--122
+[]|\TU/SimSun(0)/m/n/12.045 （\TU/lmr/bx/n/12.045 2\TU/SimSun(0)/m/n/12.045 ）|  
+运 行 时 缺 表 降 级。| \TU/lmtt/m/n/12.045 SimpleEcsDemo \TU/SimSun(0)/m/n/12.045 维 护 
+\TU/lmtt/m/n/12.045 missingConfigLogged: Set<string>\TU/SimSun(0)/m/n/12.045 ，|
+
+ []
+
+
+Overfull \hbox (74.02473pt too wide) in paragraph at lines 121--122
+\TU/SimSun(0)/m/n/12.045 通 过 \TU/lmtt/m/n/12.045 logMissingConfigOnce \TU/SimSu
+n(0)/m/n/12.045 对 每 个 缺 失 键 仅 告 警 一 次，|  避 免 刷 屏。| \TU/lmtt/m/n/12.045 defines 
+\TU/SimSun(0)/m/n/12.045 中 \TU/lmtt/m/n/12.045 DEFAULT_PLAYER_HP\TU/SimSun(0)/m
+/n/12.045 、|
+ []
+
+
+Overfull \hbox (19.53166pt too wide) in paragraph at lines 123--124
+[]|\TU/SimSun(0)/m/n/12.045 （\TU/lmr/bx/n/12.045 3\TU/SimSun(0)/m/n/12.045 ）| \
+TU/lmr/bx/n/12.045 Worker \TU/SimSun(0)/m/n/12.045 双 路 径。| \TU/lmtt/m/n/12.045 
+CombatDataBridge.initWorker \TU/SimSun(0)/m/n/12.045 失 败、| \TU/lmtt/m/n/12.045 
+onerror \TU/SimSun(0)/m/n/12.045 或 \TU/lmtt/m/n/12.045 postMessage
+ []
+
+
+Overfull \hbox (56.57993pt too wide) in paragraph at lines 125--126
+[]|\TU/SimSun(0)/m/n/12.045 （\TU/lmr/bx/n/12.045 4\TU/SimSun(0)/m/n/12.045 ）|  
+跑 图 生 成 保 底。| \TU/lmtt/m/n/12.045 RunMapGenerator.generate \TU/SimSun(0)/m/n/12
+.045 在 最 多 \TU/lmtt/m/n/12.045 RUN_MAP_GENERATION_MAX_RETRIES
+ []
+
+
+Underfull \hbox (badness 1371) in paragraph at lines 144--144
+[]\TU/SimSun(0)/m/n/12.045 配 表 \TU/lmr/m/n/12.045 JSON 404
+ []
+
+
+Overfull \hbox (47.47151pt too wide) in paragraph at lines 144--144
+[]\TU/lmtt/m/n/12.045 isGameConfigReady()==false| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 145--145
+[]\TU/lmr/m/n/12.045 Worker \TU/SimSun(0)/m/n/12.045 初 始
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 146--146
+[]\TU/SimSun(0)/m/n/12.045 实 体 数 低 于
+ []
+
+
+Overfull \hbox (10.25247pt too wide) in paragraph at lines 147--147
+[]\TU/lmtt/m/n/12.045 validateActReachBoss| 
+ []
+
+
+Overfull \hbox (72.53322pt too wide) in paragraph at lines 154--155
+[]\TU/SimSun(0)/m/n/12.045 暂 停 语 义 统 一：| \TU/lmtt/m/n/12.045 GameSession.paused
+ \TU/SimSun(0)/m/n/12.045 同 时 服 务 死 亡 暂 停 与 \TU/lmr/m/n/12.045 Tab \TU/SimSun(0
+)/m/n/12.045 装 配 暂 停；| \TU/lmtt/m/n/12.045 RestartPanelSystem
+ []
+
+
+Overfull \hbox (38.48413pt too wide) in paragraph at lines 161--162
+[]\TU/SimSun(0)/m/n/12.045 实 体 扩 展：|  新 玩 法 维 度 优 先 新 增 组 件 类 型  |（如 未 来 的 \TU/
+lmtt/m/n/12.045 BuffComponent\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 Sh
+ieldComponent\TU/SimSun(0)/m/n/12.045 ） ，|
+ []
+
+
+Overfull \hbox (2.58183pt too wide) in paragraph at lines 161--162
+\TU/SimSun(0)/m/n/12.045 再 在 独 立 \TU/lmr/m/n/12.045 System \TU/SimSun(0)/m/n/12
+.045 中 读 写；|  已 有 \TU/lmtt/m/n/12.045 MonsterTag \TU/SimSun(0)/m/n/12.045 实 体 自
+ 动 参 与 \TU/lmtt/m/n/12.045 FilterRegistry.Monsters\TU/SimSun(0)/m/n/12.045 ，|
+ []
+
+[21]) (chapter05.tex [22]
 第5章
 
-Overfull \hbox (98.6015pt too wide) in paragraph at lines 8--9
-\TU/lmtt/m/n/12.045 Map<EntityId, Component>\TU/SimSun(0)/m/n/12.045 。| \TU/lmt
-t/m/n/12.045 EcsWorld.update \TU/SimSun(0)/m/n/12.045 依 次 调 用 已 注 册 系 统，|  按 \T
-U/lmtt/m/n/12.045 input/logic/physics/render
- []
-
-
-Overfull \hbox (45.05983pt too wide) in paragraph at lines 14--15
-[]\TU/lmtt/m/n/12.045 AttributeSystem \TU/SimSun(0)/m/n/12.045 支 持 \TU/lmr/m/n/
-12.045 modifier \TU/SimSun(0)/m/n/12.045 按 来 源 增 删，|  供 \TU/lmr/m/n/12.045 Buff
- \TU/SimSun(0)/m/n/12.045 与 升 级 奖 励 使 用$[]$。| \TU/lmtt/m/n/12.045 MovementSyste
-m\TU/SimSun(0)/m/n/12.045 、|
- []
-
-
-Overfull \hbox (24.12202pt too wide) in paragraph at lines 18--19
-[]\TU/lmtt/m/n/12.045 PlayerAutoCastSystem \TU/SimSun(0)/m/n/12.045 对 三 装 备 栏 维
- 护 独 立 冷 却 与 \TU/lmtt/m/n/12.045 pendingCasts\TU/SimSun(0)/m/n/12.045 。| \TU/lm
-tt/m/n/12.045 EffectExecutor
+Overfull \hbox (32.97404pt too wide) in paragraph at lines 15--16
+[]\TU/lmtt/m/n/12.045 AttributeSystem \TU/SimSun(0)/m/n/12.045 支 持 按 来 源 增 删 \T
+U/lmr/m/n/12.045 modifier\TU/SimSun(0)/m/n/12.045 ，|  供 \TU/lmr/m/n/12.045 Buff
+ \TU/SimSun(0)/m/n/12.045 与 升 级 奖 励 使 用。| \TU/lmtt/m/n/12.045 MovementSystem\TU
+/SimSun(0)/m/n/12.045 、|
  []
 
 [23
 
 ]
-Overfull \hbox (58.48048pt too wide) in paragraph at lines 47--48
-[]\TU/lmtt/m/n/12.045 ExperienceSystem\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/
-12.045 UpgradeRewardSystem \TU/SimSun(0)/m/n/12.045 与 奖 励 面 板 构 成 成 长 闭 环。| \TU
-/lmtt/m/n/12.045 MetaFlowController
+Overfull \hbox (10.25641pt too wide) in paragraph at lines 44--45
+\TU/SimSun(0)/m/n/12.045 能。| \TU/lmtt/m/n/12.045 RunMapGenerator \TU/SimSun(0)/
+m/n/12.045 生 成 三 幕 \TU/lmr/m/n/12.045 DAG\TU/SimSun(0)/m/n/12.045 ，|  失 败 时 \TU
+/lmtt/m/n/12.045 generateFallback\TU/SimSun(0)/m/n/12.045 。| \TU/lmtt/m/n/12.04
+5 MetaFlowController
  []
 
 
-Overfull \hbox (17.96024pt too wide) in paragraph at lines 51--52
-\TU/lmtt/m/n/12.045 SkillDragService \TU/SimSun(0)/m/n/12.045 长 按 拖 拽，| \TU/lmt
-t/m/n/12.045 SkillLoadoutSyncSystem \TU/SimSun(0)/m/n/12.045 写 回 战 斗 实 体。| \TU/
-lmtt/m/n/12.045 UIStackManager
- []
-
-(chapter05-extended.tex
-Overfull \hbox (39.15025pt too wide) in paragraph at lines 6--7
-[]\TU/lmtt/m/n/12.045 Main.onStart \TU/SimSun(0)/m/n/12.045 中 依 次 完 成：|  创 建 \T
-U/lmtt/m/n/12.045 InputService\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 C
-ontrolInputAdapter\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 SimpleEcsDemo
-\TU/SimSun(0)/m/n/12.045 ；|
+Overfull \hbox (22.21573pt too wide) in paragraph at lines 51--52
+\TU/SimSun(0)/m/n/12.045 战 斗 \TU/lmtt/m/n/12.045 Area2D \TU/SimSun(0)/m/n/12.04
+5 并 \TU/lmtt/m/n/12.045 demo.init()\TU/SimSun(0)/m/n/12.045 。| \TU/lmtt/m/n/12.
+045 RunMapPanelView \TU/SimSun(0)/m/n/12.045 使 用 \TU/lmtt/m/n/12.045 MapNodeIco
+nUtil\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 LineLayoutUtil
  []
 
 
-Overfull \hbox (61.40512pt too wide) in paragraph at lines 6--7
-\TU/SimSun(0)/m/n/12.045 注 册 \TU/lmtt/m/n/12.045 frameLoop\TU/SimSun(0)/m/n/12.
-045 ；|  调 用 \TU/lmtt/m/n/12.045 loadConfigAndInitDemo\TU/SimSun(0)/m/n/12.045 。
-|  该 异 步 函 数 \TU/lmtt/m/n/12.045 await ensureGameConfigLoaded()\TU/SimSun(0)/m/
-n/12.045 ，|
+Overfull \hbox (122.6845pt too wide) in paragraph at lines 55--56
+[]\TU/lmtt/m/n/12.045 MainHudSystem\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.
+045 BloodBarSyncSystem \TU/SimSun(0)/m/n/12.045 将 \TU/lmr/m/n/12.045 ECS \TU/Si
+mSun(0)/m/n/12.045 中 \TU/lmr/m/n/12.045 hp \TU/SimSun(0)/m/n/12.045 映 射 至 \TU/l
+mr/m/n/12.045 ProgressBar\TU/SimSun(0)/m/n/12.045 。| \TU/lmtt/m/n/12.045 SkillS
+electPanelController
+ []
+
+
+Overfull \hbox (26.85657pt too wide) in paragraph at lines 55--56
+\TU/SimSun(0)/m/n/12.045 槽 落 点。| \TU/lmtt/m/n/12.045 SkillLoadoutSyncSystem \TU
+/SimSun(0)/m/n/12.045 关 闭 面 板 时 原 子 写 回 \TU/lmtt/m/n/12.045 Skill \TU/SimSun(0)
+/m/n/12.045 与 \TU/lmtt/m/n/12.045 PlayerAutoCastSystem\TU/SimSun(0)/m/n/12.045 
+，|
+ []
+
+
+Overfull \hbox (40.51965pt too wide) in paragraph at lines 59--60
+\TU/SimSun(0)/m/n/12.045 在 \TU/lmtt/m/n/12.045 hp$\OMS/cmsy/m/n/12.045 ^^T$\TU/
+lmr/m/n/12.045 0 \TU/SimSun(0)/m/n/12.045 时 置 \TU/lmtt/m/n/12.045 paused\TU/Sim
+Sun(0)/m/n/12.045 ；| \TU/lmtt/m/n/12.045 RestartPanelSystem \TU/SimSun(0)/m/n/1
+2.045 经 \TU/lmr/m/n/12.045 UI \TU/SimSun(0)/m/n/12.045 栈 显 示 重 启 面 板；| \TU/lmtt
+/m/n/12.045 tryRestartFromSession
  []
 
 [24]
-Overfull \hbox (32.14813pt too wide) in paragraph at lines 10--11
-\TU/lmtt/m/n/12.045 CombatDataBridge\TU/SimSun(0)/m/n/12.045 ） 、| \TU/lmtt/m/n/
-12.045 CombatDataPrepareSystem\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 S
-killSystem\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 MonsterWaveSpawnSyste
-m\TU/SimSun(0)/m/n/12.045 、|
+Overfull \hbox (18.16681pt too wide) in paragraph at lines 68--69
+\TU/lmtt/m/n/12.045 CombatDataBridge.prepareFrame\TU/SimSun(0)/m/n/12.045 。|  桥
+ 接 层 在 \TU/lmr/m/n/12.045 Worker \TU/SimSun(0)/m/n/12.045 就 绪 且 实 体 数 达 标 时 \TU
+/lmtt/m/n/12.045 postMessage\TU/SimSun(0)/m/n/12.045 ，|
  []
 
 
-Overfull \hbox (54.67743pt too wide) in paragraph at lines 14--15
-[]\TU/lmtt/m/n/12.045 init() \TU/SimSun(0)/m/n/12.045 在 配 表 就 绪 后 加 载 玩 家 预 制 体
-：|  读 取 \TU/lmtt/m/n/12.045 Character \TU/SimSun(0)/m/n/12.045 行 中 \TU/lmtt/m/n
-/12.045 prefabPath\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 bodyPrefabPat
-h\TU/SimSun(0)/m/n/12.045 、|
+Overfull \hbox (132.5403pt too wide) in paragraph at lines 68--69
+\TU/SimSun(0)/m/n/12.045 是 否 存 在 连 锁 弹，|  选 择 应 用 速 度 或 走 完 整 主 线 程 碰 撞。|  性 能 
+消 融 可 通 过 \TU/lmtt/m/n/12.045 MetaRunSession.testUseCombatWorker
  []
 
 
-Overfull \hbox (104.97974pt too wide) in paragraph at lines 14--15
-\TU/lmtt/m/n/12.045 SkillLoadoutState\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/1
-2.045 Control\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 Experience\TU/SimS
-un(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 ViewComponent \TU/SimSun(0)/m/n/12.045 
-等；|  默 认 写 入 \TU/lmtt/m/n/12.045 createDefaultLoadoutState()
+Overfull \hbox (86.56895pt too wide) in paragraph at lines 79--80
+\TU/lmtt/m/n/12.045 BulletSystem |\TU/SimSun(0)/m/n/12.045 （注 入 池 与 桥 接） 、| \TU
+/lmtt/m/n/12.045 CombatDataPrepareSystem\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/
+n/12.045 SkillSystem\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 MonsterWave
+SpawnSystem\TU/SimSun(0)/m/n/12.045 、|
+ []
+
+
+Overfull \hbox (8.80305pt too wide) in paragraph at lines 79--80
+\TU/SimSun(0)/m/n/12.045 在 配 表 就 绪 后 按 \TU/lmtt/m/n/12.045 Character \TU/SimSun
+(0)/m/n/12.045 行 加 载 玩 家 预 制 体，|  挂 载 \TU/lmtt/m/n/12.045 PlayerTag\TU/SimSun(0
+)/m/n/12.045 、| \TU/lmtt/m/n/12.045 Position\TU/SimSun(0)/m/n/12.045 、| \TU/lmt
+t/m/n/12.045 Attribute\TU/SimSun(0)/m/n/12.045 、|
+ []
+
+
+Overfull \hbox (18.6206pt too wide) in paragraph at lines 83--84
+[]\TU/SimSun(0)/m/n/12.045 每 帧：|  若 \TU/lmtt/m/n/12.045 restarting \TU/SimSun(0
+)/m/n/12.045 则 跳 过 重 启 检 测；|  否 则 \TU/lmtt/m/n/12.045 tryRestartFromSession\TU/
+SimSun(0)/m/n/12.045 ；|  若 \TU/lmtt/m/n/12.045 isPaused()
  []
 
 [25]
-Overfull \hbox (27.38922pt too wide) in paragraph at lines 44--45
-[]\TU/lmtt/m/n/12.045 MonsterChaseSystem \TU/SimSun(0)/m/n/12.045 每 帧 计 算 指 向 玩
- 家 的 单 位 方 向 向 量，|  乘 以 \TU/lmtt/m/n/12.045 MONSTER_CHASE_SPEED
+Overfull \hbox (97.83456pt too wide) in paragraph at lines 90--91
+[]\TU/SimSun(0)/m/n/12.045 步 骤 \TU/lmr/bx/n/12.045 1\TU/SimSun(0)/m/n/12.045 ：|
+ \TU/lmtt/m/n/12.045 Main.onStart $\OMS/cmsy/m/n/12.045 !$ \TU/lmtt/m/n/12.045 
+ensureGameConfigLoaded\TU/SimSun(0)/m/n/12.045 。|  步 骤 \TU/lmr/bx/n/12.045 2\TU
+/SimSun(0)/m/n/12.045 ：|  元 菜 单 \TU/lmtt/m/n/12.045 UIStackManager.push(Start)\
+TU/SimSun(0)/m/n/12.045 ，|
  []
 
 
-Overfull \hbox (32.18686pt too wide) in paragraph at lines 44--45
-\TU/SimSun(0)/m/n/12.045 写 入 速 度 或 位 移。|  密 集 人 群 时 叠 加 分 离 力：|  当 两 怪 距 离 小 于 
-\TU/lmtt/m/n/12.045 MONSTER_SEPARATION_DISTANCE\TU/SimSun(0)/m/n/12.045 ，|
+Overfull \hbox (48.0391pt too wide) in paragraph at lines 90--91
+\TU/SimSun(0)/m/n/12.045 战 斗 容 器 暂 隐 藏。|  步 骤 \TU/lmr/bx/n/12.045 3\TU/SimSun(0
+)/m/n/12.045 ：|  选 关\TU/lmr/m/n/12.045 /\TU/SimSun(0)/m/n/12.045 跑 图 $\OMS/cmsy
+/m/n/12.045 !$ \TU/lmtt/m/n/12.045 onEnterCombat $\OMS/cmsy/m/n/12.045 !$ \TU/l
+mtt/m/n/12.045 demo.init()\TU/SimSun(0)/m/n/12.045 ，| \TU/lmtt/m/n/12.045 Comba
+tSurvivalTimer
  []
 
 
-Overfull \hbox (19.1595pt too wide) in paragraph at lines 46--47
-\TU/SimSun(0)/m/n/12.045 用 \TU/lmtt/m/n/12.045 pickMonsterIdForWave \TU/SimSun(
-0)/m/n/12.045 从 \TU/lmtt/m/n/12.045 MonsterCatalog \TU/SimSun(0)/m/n/12.045 按 波
- 次 权 重 选 \TU/lmr/m/n/12.045 id\TU/SimSun(0)/m/n/12.045 。| \TU/lmtt/m/n/12.045 M
-onsterRecycleSystem
- []
-
-[26]
-Overfull \hbox (11.8321pt too wide) in paragraph at lines 62--63
-[]\TU/lmtt/m/n/12.045 SkillSelectPanelView \TU/SimSun(0)/m/n/12.045 绑 定 \TU/lmt
-t/m/n/12.045 MainUIPanel.lh \TU/SimSun(0)/m/n/12.045 预 制 体。|  初 始 化 时 \TU/lmtt/
-m/n/12.045 SkillIconBinder
+Overfull \hbox (6.71565pt too wide) in paragraph at lines 90--91
+\TU/SimSun(0)/m/n/12.045 启 动。|  步 骤 \TU/lmr/bx/n/12.045 4\TU/SimSun(0)/m/n/12.0
+45 ：|  首 帧 \TU/lmtt/m/n/12.045 ControlSystem\TU/SimSun(0)/m/n/12.045 、| \TU/lmt
+t/m/n/12.045 PlayerAutoCastSystem\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.04
+5 MonsterWaveSpawnSystem
  []
 
 
-Overfull \hbox (7.0613pt too wide) in paragraph at lines 68--69
-[]\TU/lmtt/m/n/12.045 InputService \TU/SimSun(0)/m/n/12.045 封 装 键 盘\TU/lmr/m/n/
-12.045 /\TU/SimSun(0)/m/n/12.045 指 针 事 件，| \TU/lmtt/m/n/12.045 ControlInputAdap
-ter \TU/SimSun(0)/m/n/12.045 转 换 为 \TU/lmtt/m/n/12.045 ControlSystem
+Overfull \hbox (29.54852pt too wide) in paragraph at lines 94--95
+[]\TU/lmr/m/n/12.045 Tab $\OMS/cmsy/m/n/12.045 !$ \TU/lmtt/m/n/12.045 paused=tr
+ue $\OMS/cmsy/m/n/12.045 !$ \TU/SimSun(0)/m/n/12.045 长 按 拖 拽 $\OMS/cmsy/m/n/12.
+045 !$ \TU/lmtt/m/n/12.045 SkillLoadoutSyncSystem \TU/SimSun(0)/m/n/12.045 写 回 
+$\OMS/cmsy/m/n/12.045 !$ \TU/lmtt/m/n/12.045 paused=false\TU/SimSun(0)/m/n/12.0
+45 ，|
  []
 
 
-Overfull \hbox (8.17328pt too wide) in paragraph at lines 72--73
-[]\TU/lmtt/m/n/12.045 PlayerDeathSystem \TU/SimSun(0)/m/n/12.045 监 测 \TU/lmtt/m
-/n/12.045 Attribute.hp $\OMS/cmsy/m/n/12.045 ^^T \OT1/cmr/m/n/12.045 0$\TU/SimS
-un(0)/m/n/12.045 ，|  触 发 死 亡 标 志。| \TU/lmtt/m/n/12.045 RestartPanelSystem
- []
-
-[27]) (chapter05-implementation-case.tex [28]
-Overfull \hbox (44.0906pt too wide) in paragraph at lines 22--23
-[]\TU/SimSun(0)/m/n/12.045 用 户 长 按 技 能 图 标 \TU/lmr/m/n/12.045 300ms \TU/SimSun(
-0)/m/n/12.045 后 拖 拽 至 另 一 槽，| \TU/lmtt/m/n/12.045 SkillDragService \TU/SimSun(0
-)/m/n/12.045 更 新 \TU/lmtt/m/n/12.045 SkillLoadoutState\TU/SimSun(0)/m/n/12.045 
-。|
- []
-
-
-Overfull \hbox (27.66225pt too wide) in paragraph at lines 28--29
-[]\TU/SimSun(0)/m/n/12.045 当 场 上 怪 物 数 量 达 到 \TU/lmtt/m/n/12.045 COMBAT_WORKER_
-MIN_ENTITY_COUNT\TU/SimSun(0)/m/n/12.045 ，| \TU/lmtt/m/n/12.045 CombatDataPrepa
-reSystem
- []
-
-
-Overfull \hbox (72.69342pt too wide) in paragraph at lines 57--58
+Overfull \hbox (72.69342pt too wide) in paragraph at lines 125--126
 []|\TU/lmtt/m/n/12.045 src/game/ui/skillselect/SkillSelectPanelController.ts| 
  []
 
 
-ignored: Infinite glue shrinkage found in box being split [29]
-Overfull \hbox (49.31532pt too wide) in paragraph at lines 90--91
-[]\TU/SimSun(0)/m/n/12.045 项 目 中 显 式 使 用 的 模 式 包 括：|  组 合 根  |（\TU/lmtt/m/n/12.
-045 SimpleEcsDemo\TU/SimSun(0)/m/n/12.045 ） 、|  对 象 池、|  桥 接  |（\TU/lmtt/m/n/12
-.045 CombatDataBridge\TU/SimSun(0)/m/n/12.045 ） 、|
+ignored: Infinite glue shrinkage found in box being split [26]) (chapter06.tex
+Overfull \hbox (72.66782pt too wide) in paragraph at lines 156--1
+[]\TU/SimSun(0)/m/n/12.045 主 要 难 点 与 对 策 包 括： （\TU/lmr/m/n/12.045 1\TU/SimSun(0
+)/m/n/12.045 ）|  配 表 未 同 步 至 \TU/lmtt/m/n/12.045 bin/config \TU/SimSun(0)/m/n/1
+2.045 导 致 \TU/lmr/m/n/12.045 404 |\TU/SimSun(0)/m/n/12.045 — —|  以 \TU/lmtt/m/n
+/12.045 sync-config-to-bin.ps1
  []
 
 
-Overfull \hbox (12.82973pt too wide) in paragraph at lines 94--95
-\TU/SimSun(0)/m/n/12.045 失 败。|  解 决：| \TU/lmtt/m/n/12.045 sync-config-to-bin.ps
-1 \TU/SimSun(0)/m/n/12.045 与 \TU/lmtt/m/n/12.045 configBases \TU/SimSun(0)/m/n/
-12.045 多 路 径 尝 试；| \TU/lmtt/m/n/12.045 isGameConfigReady
+Overfull \hbox (5.04062pt too wide) in paragraph at lines 156--1
+\TU/SimSun(0)/m/n/12.045 与 \TU/lmtt/m/n/12.045 isGameConfigReady \TU/SimSun(0)/
+m/n/12.045 应 对； （\TU/lmr/m/n/12.045 2\TU/SimSun(0)/m/n/12.045 ）| \TU/lmr/m/n/12
+.045 UI2 \TU/SimSun(0)/m/n/12.045 拖 拽 命 中  |— —|  顶 层 代 理 与 \TU/lmtt/m/n/12.045
+ SkillSlotHitTest\TU/SimSun(0)/m/n/12.045 ； （\TU/lmr/m/n/12.045 3\TU/SimSun(0)/
+m/n/12.045 ）|
  []
 
-[30]
-Overfull \hbox (43.89124pt too wide) in paragraph at lines 100--101
-[]\TU/SimSun(0)/m/n/12.045 难 点 \TU/lmr/bx/n/12.045 4\TU/SimSun(0)/m/n/12.045 ：|
- \TU/lmr/bx/n/12.045 Worker \TU/SimSun(0)/m/n/12.045 与 主 线 程 逻 辑 一 致。|  双 份 实 现
- 易 漂 移。|  解 决：|  共 享 \TU/lmtt/m/n/12.045 combatWorkerLogic.ts\TU/SimSun(0)/m/n/
-12.045 ，|
- []
-
-)) (chapter06.tex [31]
+[27]
 第6章
-(chapter06-extended.tex
-Overfull \hbox (5.41508pt too wide) in paragraph at lines 4--5
-[]\TU/lmr/m/n/12.045 JavaScript \TU/SimSun(0)/m/n/12.045 引 擎  |（如 \TU/lmr/m/n/1
-2.045 V8\TU/SimSun(0)/m/n/12.045 ）|  对 短 生 命 周 期 对 象 敏 感。|  未 池 化 时，|  每 发 子 弹 
-\TU/lmtt/m/n/12.045 instantiate
+
+Overfull \hbox (13.73145pt too wide) in paragraph at lines 19--20
+[]\TU/lmtt/m/n/12.045 MonsterChaseSystem \TU/SimSun(0)/m/n/12.045 的 追 逐、|  分 离、
+|  摆 动 为 纯 数 值 计 算。| \TU/lmtt/m/n/12.045 CombatDataPrepareSystem
  []
 
-[32
 
-] [33]) (chapter06-benchmark-guide.tex [34])) (chapter07.tex [35]
+Overfull \hbox (0.56448pt too wide) in paragraph at lines 19--20
+\TU/SimSun(0)/m/n/12.045 交 \TU/lmr/m/n/12.045 Worker \TU/SimSun(0)/m/n/12.045 执
+ 行 \TU/lmtt/m/n/12.045 processCombatFrame\TU/SimSun(0)/m/n/12.045 ；|  主 线 程 与 \
+TU/lmr/m/n/12.045 Worker \TU/SimSun(0)/m/n/12.045 共 享 \TU/lmtt/m/n/12.045 comba
+tWorkerLogic.ts\TU/SimSun(0)/m/n/12.045 ，|
+ []
+
+
+Overfull \hbox (2.34709pt too wide) in paragraph at lines 21--22
+[]\TU/SimSun(0)/m/n/12.045 边 界：|  子 弹 碰 撞、|  连 锁 与 分 裂 依 赖 \TU/lmr/m/n/12.045 L
+aya \TU/SimSun(0)/m/n/12.045 节 点 与 阵 营 判 定，|  保 留 主 线 程  |（见 第 []\TU/lmr/m/n/12
+.045 5.1[] \TU/SimSun(0)/m/n/12.045 节） 。|
+ []
+
+[28
+
+] [29]) (chapter07.tex [30]
 第7章
-[36
 
-] [37]
-Overfull \hbox (31.7111pt too wide) in paragraph at lines 157--158
-\TU/SimSun(0)/m/n/12.045 明 预 热 后 瓶 颈 主 要 在 每 帧 子 弹 碰 撞 与 绘 制，|  而 非 怪 物 节 点 反 复
- \TU/lmtt/m/n/12.045 instantiate/destroy\TU/SimSun(0)/m/n/12.045 。| 
+Overfull \hbox (44.89224pt too wide) in paragraph at lines 8--12
+\TU/SimSun(0)/m/n/12.045 回 归 清 单：|  修 改 \TU/lmtt/m/n/12.045 FormulaParser\TU/Si
+mSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 ComponentStore\TU/SimSun(0)/m/n/12.04
+5 、| \TU/lmtt/m/n/12.045 AttributeSystem\TU/SimSun(0)/m/n/12.045 、|  配 表、| \TU/
+lmtt/m/n/12.045 CombatDataBridge
  []
 
-[38] [39] [40] (chapter07-extended.tex [41]) (chapter07-test-detail.tex
-[42]
-Overfull \hbox (6.91739pt too wide) in paragraph at lines 14--15
-[]\TU/lmtt/m/n/12.045 attributeModifier.verify.ts \TU/SimSun(0)/m/n/12.045 覆 盖：
-|  同 属 性 多 个 \TU/lmr/m/n/12.045 modifier \TU/SimSun(0)/m/n/12.045 叠 加 顺 序；|  按 
-\TU/lmtt/m/n/12.045 sourceId
+[31
+
+]
+Overfull \hbox (40.44684pt too wide) in paragraph at lines 56--59
+[]\TU/SimSun(0)/m/n/12.045 跑 图 可 达 性：|  对 \TU/lmtt/m/n/12.045 RunMapGenerator.g
+enerate \TU/SimSun(0)/m/n/12.045 多 次 随 机 种 子 断 言 \TU/lmtt/m/n/12.045 validateAc
+tReachBoss\TU/SimSun(0)/m/n/12.045 ；|
  []
 
 
-Overfull \hbox (36.14595pt too wide) in paragraph at lines 20--21
-[]\TU/SimSun(0)/m/n/12.045 对 \TU/lmtt/m/n/12.045 RunMapGenerator.generate \TU/S
-imSun(0)/m/n/12.045 运 行 \TU/lmr/m/n/12.045 100 \TU/SimSun(0)/m/n/12.045 次 随 机 种
- 子，|  断 言 每 次 \TU/lmtt/m/n/12.045 validateActReachBoss
+Overfull \hbox (67.62718pt too wide) in paragraph at lines 56--59
+\TU/SimSun(0)/m/n/12.045 装 配 同 步：|  互 换 装 备 栏 技 能 后，|  下 一 冷 却 周 期 伤 害\TU/lmr/m
+/n/12.045 /\TU/SimSun(0)/m/n/12.045 图 标 与 装 配 一 致，|  否 则 \TU/lmtt/m/n/12.045 Sk
+illLoadoutSyncSystem
  []
 
-) [43]) (chapter08.tex [44]
+[32] [33] [34] [35]) (chapter08.tex [36]
 第8章
-(chapter08-extended.tex [45
 
-] [46])) (acknowledgement.tex [47]) [48
+Overfull \hbox (2.94225pt too wide) in paragraph at lines 6--7
+[]\TU/SimSun(0)/m/n/12.045 本 文 围 绕 \TU/lmr/bx/n/12.045 Survivor And Fight\TU/Si
+mSun(0)/m/n/12.045 ，|  在 \TU/lmr/m/n/12.045 LayaAir 3.x \TU/SimSun(0)/m/n/12.04
+5 与 \TU/lmr/m/n/12.045 TypeScript \TU/SimSun(0)/m/n/12.045 上 完 成 了 \TU/lmr/m/n/
+12.045 Roguelite
+ []
 
-] (main.bbl
-[49
+[37
+
+]) (acknowledgement.tex [38]) [39
+
+] (main.bbl [40
 
 
-]) [50] (appendix.tex [51
+]) [41] (appendix.tex
+[42
 
 
 ]
 附录 A
-[52
+[43
 
 ]
 附录 B
@@ -1523,7 +1729,7 @@ Overfull \hbox (36.20584pt too wide) in paragraph at lines 31--32
  执 行 \TU/lmtt/m/n/12.045 tools/sync-config-to-bin.ps1
  []
 
-[53
+[44
 
 ]
 附录 C
@@ -1598,7 +1804,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 58--58
 []|\TU/SimSun(0)/m/n/12.045 动 态 图 集 提 升 千 怪
  []
 
-[54
+[45
 
 ]
 附录 D
@@ -1607,7 +1813,7 @@ Overfull \hbox (7.29295pt too wide) in paragraph at lines 70--81
  [][] 
  []
 
-) [55
+) [46
 
 ] (main.aux)
  ***********
@@ -1623,15 +1829,15 @@ LaTeX Font Warning: Size substitutions with differences
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: C2346B11F2EDA013C8D28DB56B0E68C9;20730.
+(rerunfilecheck)             Checksum: C5725D2DB99A182106F2B98AD1025DC1;14618.
  ) 
 Here is how much of TeX's memory you used:
- 19467 strings out of 402807
- 452032 string characters out of 5445135
- 861331 words of memory out of 5000000
- 48028 multiletter control sequences out of 15000+600000
- 636955 words of font info for 118 fonts, out of 8000000 for 9000
+ 19347 strings out of 402807
+ 445738 string characters out of 5445135
+ 855559 words of memory out of 5000000
+ 47936 multiletter control sequences out of 15000+600000
+ 637425 words of font info for 122 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  93i,12n,121p,1191b,684s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.pdf (67 pages).
+Output written on main.pdf (57 pages).

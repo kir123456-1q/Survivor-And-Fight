@@ -1,76 +1,165 @@
 \chapter{系统需求分析}
 \label{chap:requirement}
 
+本章在第~\ref{chap:related}~章技术选型基础上，给出 Survivor And Fight 的可行性论证、功能与非功能需求及验收口径，为第~\ref{chap:architecture}~章总体设计与第~\ref{chap:test}~章测试提供依据。需求描述以\textbf{可验证}为原则：每条 Must 级需求均可在代码或测试用例中找到对应实现或断言。
+
 \section{可行性分析}
 
 \subsection{技术可行性}
 
-项目选用 LayaAir 3.x 与 TypeScript，已实现 ECS 核心、战斗 Demo、元菜单、跑图生成、技能装配 UI 等模块。引擎支持 2D 预制体、帧循环与键盘输入；现代 Chromium 内核浏览器支持 Web Worker 与 WebGL2。SyDRA 等研究表明，理解引擎子系统结构有助于降低维护成本\cite{ullmann2025sydra}；Cantrell 等验证了商业游戏引擎用于复杂物理仿真的可行性\cite{cantrell2018unity}，说明在引擎之上叠加领域逻辑（人群/怪物运动）具有先例。
+项目选用 LayaAir 3.x 与 TypeScript，已实现轻量 ECS、配表战斗、元菜单、DAG 跑图、技能装配 UI 及对象池/Worker 优化模块。引擎提供 2D 预制体、\texttt{frameLoop} 与输入封装；Chromium 内核浏览器支持 WebGL2 与 Web Worker。SyDRA 等研究表明，理解引擎子系统边界有助于控制演化成本\cite{ullmann2025sydra}；Cantrell 等验证了在商业引擎上叠加领域逻辑（人群/怪物运动）的可行性\cite{cantrell2018unity}。
 
-配表经 \texttt{tools/sync-config-to-bin.ps1} 发布至 \texttt{bin/config/}，\texttt{ConfigBootstrap.ensureGameConfigLoaded()} 在启动时双通道加载（\texttt{fetch} 与 \texttt{Laya.loader}），并通过 \texttt{isGameConfigReady} 检查行数。单元验证脚本覆盖 ECS、公式与属性修饰器，可在不启动完整 UI 的情况下验证核心契约。技术风险主要包括：同屏千级实体时的帧率、Worker 与主线程逻辑一致性、UI2 拖拽命中——均已通过性能实验与手工用例部分缓解。综上，在毕业设计周期内完成可运行原型并撰写配套论文，技术路线可行。
+\textbf{已具备能力}：\texttt{ConfigBootstrap.ensureGameConfigLoaded} 双通道加载配表；\texttt{isGameConfigReady} 作为战斗入口闸门；单元脚本覆盖 ECS 核心、公式解析与属性修饰器。\\
+\textbf{主要风险}：同屏千怪帧率、Worker 与主线程逻辑一致性、UI2 拖拽命中——已通过第~\ref{chap:test}~章五波实验与 T-F-05/06 等用例部分缓解。\\
+\textbf{结论}：在毕业设计周期内交付可运行原型并完成配套论文，技术路线可行。
 
 \subsection{经济与社会可行性}
 
-作为毕业设计原型，主要成本为开发与测试人力。游戏为奇幻战斗题材，须控制暴力表现并提示合理游戏时长；跑图中的休息节点提供节奏缓冲。
+作为教学原型，主要成本为开发与测试人力，无服务器与支付链路。游戏为奇幻战斗题材，须控制暴力表现、提示合理游戏时长；跑图休息节点提供节奏缓冲。未采集用户敏感信息，符合单机演示定位。
+
+\section{用户角色与运行环境}
+
+\subsection{用户角色}
+
+系统仅设\textbf{玩家}单一角色：浏览主菜单、选关或跑图、局内移动与构筑、死亡后重启。无管理员后台；未来若扩展存档，不改变“玩家”唯一角色定义。
+
+\subsection{运行环境}
+
+\begin{table}[htbp]
+  \centering
+  \caption{运行环境建议配置}
+  \label{tab:run-env}
+  \begin{tabular}{ll}
+    \toprule
+    \textbf{类别} & \textbf{要求} \\
+    \midrule
+    处理器 & 四核 2.0\,GHz 及以上 \\
+    内存 & 8\,GB 及以上 \\
+    显卡 & 支持 WebGL2 \\
+    浏览器 & Chrome / Edge 最新稳定版（答辩演示以 IDE 内置 Chromium 为准） \\
+    开发环境 & LayaAir IDE 3.x、Node.js（工具脚本）、TypeScript \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
 \section{功能性需求}
 
-主要功能需求如表~\ref{tab:func-req} 所示。
+表~\ref{tab:func-req} 汇总主要功能模块；详细条目见第~\ref{sec:func-detail}~节。
 
 \begin{table}[htbp]
   \centering
   \caption{主要功能性需求一览}
   \label{tab:func-req}
-  \begin{tabular}{p{3.2cm}p{9.5cm}}
+  \begin{tabular}{p{3.0cm}p{9.7cm}}
     \toprule
     \textbf{模块} & \textbf{需求描述} \\
     \midrule
-    ECS 核心 & 创建/销毁实体；按类型存取组件；系统分组更新 \\
+    ECS 核心 & 创建/销毁实体；按类型存取组件；分组更新 \\
     玩法实体 & 玩家/怪物标签；移动、视图同步；hp/maxHp 与 modifier \\
-    技能战斗 & 多 effect 技能；索敌；冷却；子弹表驱动伤害与穿透 \\
-    怪物系统 & 波次刷怪；追逐；接触伤害；离屏回收 \\
+    技能战斗 & 多 effect 技能；自动施法；子弹表驱动伤害与穿透/分裂/连锁 \\
+    怪物系统 & 波次刷怪；追逐与分离；接触伤害；离屏回收 \\
     进度系统 & 经验、升级、随机奖励 \\
-    元游戏 & 开始/选关；进入战斗；生存计时胜利 \\
-    跑图 & 三大关 DAG；节点类型；种子可复现 \\
-    技能装配 UI & Tab 暂停；三装备栏；拖拽装配 \\
-    配置 & JSON 表注册加载；缺失时默认值与日志 \\
+    元游戏 & 开始/选关；\texttt{onEnterCombat}；生存计时胜利 \\
+    跑图 & 三幕 DAG；节点类型；种子可复现；Boss 可达 \\
+    技能装配 UI & Tab 暂停；三装备栏；长按拖拽装配 \\
+    配置 & JSON 注册加载；缺失时 \texttt{DEFAULT\_*} 与去重日志 \\
     \bottomrule
   \end{tabular}
 \end{table}
 
 \subsection{用例：局内战斗}
 
-\textbf{参与者：}玩家。\textbf{前置条件：}配表已加载，\texttt{SimpleEcsDemo.init()} 完成。\textbf{主成功场景：}（1）输入移动；（2）自动施法；（3）子弹碰撞、穿透/分裂/连锁；（4）击杀获经验并升级；（5）Tab 打开技能面板暂停并装配。\textbf{扩展：}玩家死亡显示重启面板。
+\textbf{参与者}：玩家。\textbf{前置条件}：\texttt{isGameConfigReady()==true}，\texttt{SimpleEcsDemo.init()} 完成。\textbf{主成功场景}：（1）输入移动；（2）\texttt{PlayerAutoCastSystem} 自动施法；（3）子弹碰撞并应用穿透/分裂/连锁；（4）击杀获经验并升级；（5）Tab 打开技能面板，\texttt{GameSession.paused=true}，装配后恢复。\textbf{扩展}：\texttt{hp}$\leq$0 时显示重启面板。对应第~\ref{sec:scenarios}~节场景一、二。
 
 \subsection{用例：元游戏进入战斗}
 
-用户在 \texttt{MetaFlowController} 选择关卡或跑图节点，触发 \texttt{onEnterCombat}，显示战斗场景、初始化 Demo、启动生存计时（Boss 关使用更长胜利时间）。
+用户在跑图或选关界面确认节点，\texttt{MetaFlowController} 触发 \texttt{onEnterCombat(payload)}；\texttt{Main} 显示战斗容器、\texttt{demo.init()}，\texttt{CombatSurvivalTimer} 启动；Boss 节点载荷可携带更长胜利时间。
+
+\section{功能需求详细说明}
+\label{sec:func-detail}
+
+\subsection{ECS 核心}
+
+须提供实体创建/销毁 API，销毁时移除全部组件；同类型组件不可重复挂载；系统按 \texttt{input/logic/render} 分组与优先级确定性调度；支持按组件类型遍历及命名筛选器查询\cite{gregory2018game}。
+
+\subsection{战斗与技能}
+
+玩家须具备 hp/maxHp 与可溯源 modifier。技能由配表定义冷却与 effect 列表；至少三个装备栏独立冷却。效果类型覆盖 \texttt{bullet}、\texttt{modifier\_*}、\texttt{direct\_damage}；子弹带阵营，仅对敌对阵营生效；连锁半径有界，避免无界遍历\cite{helbing2000panic}。
+
+\subsection{怪物、元游戏与 UI}
+
+怪物在玩家周围环带生成并保持最小间距；追逐、接触伤害、离屏回收；击杀给予经验（含等级加成项）。跑图每局三幕 DAG，仅沿已解锁邻接边前进；\texttt{validateActReachBoss} 保证可达。全屏界面经 \texttt{UIStackManager}；Tab 暂停战斗；拖拽区分技能/效果槽；血条与升级面板实时反馈\cite{heijstek2011empirical}。
 
 \section{非功能性需求}
 
-\textbf{性能：}目标 60 FPS；同屏怪物受常量与波次控制；配合对象池与 Worker。\textbf{可维护性：}模块边界清晰；静态配置集中于 \texttt{defines}。\textbf{兼容性：}优先 Chromium；Worker 不可用时主线程回退\cite{cantrell2018unity}。
+\textbf{性能}：目标稳定 60 FPS；同屏规模由 \texttt{MONSTER\_COUNT} 与波次控制；对象池与 Worker 按第~\ref{sec:perf-design}~节启用。\\
+\textbf{可维护性}：模块边界与第~\ref{chap:architecture}~章一致；静态常量集中于 \texttt{defines}。\\
+\textbf{可靠性}：Worker/配表/跑图失败时回退路径见第~\ref{sec:reliability}~节。\\
+\textbf{兼容性}：优先 Chromium；Worker 不可用时 \texttt{computeSync} 主线程回退\cite{cantrell2018unity}。
+
+\begin{table}[htbp]
+  \centering
+  \caption{非功能需求量化指标（验收参考）}
+  \label{tab:nfr-metrics}
+  \begin{tabular}{lll}
+    \toprule
+    \textbf{指标} & \textbf{目标值} & \textbf{测量方法} \\
+    \midrule
+    战斗帧率（常规波次） & 均值 $\geq 55$ FPS & \texttt{TestLevelFpsTracker} \\
+    千怪消融 P95 & 池化后显著低于无池 & 表~\ref{tab:perf} \\
+    配表就绪 & \texttt{Data.Skill} 非空 & \texttt{isGameConfigReady} \\
+    Worker 行为 & 与主线程无逻辑漂移 & 轨迹对比（见第~\ref{chap:test}~章） \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{数据、接口与约束}
+
+\textbf{逻辑数据实体}：运行时 ECS 组件；配表行（\texttt{Character}、\texttt{Skill}、\texttt{SkillEffect}、\texttt{Bullet}）；\texttt{RunMapState} 图结构；\texttt{GameSession}、\texttt{SkillLoadoutState}。
+
+\textbf{关键接口}：（1）\texttt{ensureGameConfigLoaded(): Promise<boolean>}；（2）\texttt{onEnterCombat(payload?)}；（3）\texttt{ControlInputSource}；（4）\texttt{UIStackManager.push/pop}；（5）\texttt{CombatWorkerComputeRequest/Response} 字段版本兼容。
+
+\textbf{约束与假设}：浏览器启用 JavaScript 与 WebGL；开发阶段已执行 \texttt{sync-config-to-bin.ps1}；单机本地运行；2D 俯视角；同屏数百实体级，非 MMO 规模。
 
 \section{需求优先级}
 
 \begin{table}[htbp]
   \centering
   \caption{需求优先级（MoSCoW）}
+  \label{tab:moscow}
   \begin{tabular}{cl}
     \toprule
     \textbf{级别} & \textbf{需求} \\
     \midrule
-    Must & ECS 战斗、子弹碰撞、移动、刷怪、配表 \\
-    Must & 主菜单进战斗、生存胜利计时 \\
-    Should & 跑图、技能装配、升级奖励、对象池与 Worker \\
+    Must & ECS 战斗、子弹碰撞、移动、刷怪、配表、主菜单进战斗、生存胜利 \\
+    Should & 跑图 DAG、技能装配、升级奖励、对象池与 Worker \\
     Could & 法杖三槽完整 UI、全量 Effect 独立特效 \\
     Won't & 联机、账号、支付（本期） \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-\input{chapter03-extended}
-\input{chapter03-requirements-detail}
+\section{需求与测试映射}
+
+表~\ref{tab:req-test-map} 给出需求与验证手段的对应关系，便于第~\ref{chap:test}~章追溯\cite{petty2010vv}。
+
+\begin{table}[htbp]
+  \centering
+  \caption{需求与测试映射（节选）}
+  \label{tab:req-test-map}
+  \begin{tabular}{p{2.8cm}p{5.5cm}p{4.7cm}}
+    \toprule
+    \textbf{需求} & \textbf{验证方式} & \textbf{编号/脚本} \\
+    \midrule
+    ECS 实体销毁清理组件 & 单元验证 & \texttt{ecsCorePhase1.verify.ts} \\
+    Tab 暂停与装配同步 & 手工用例 & T-F-05、T-F-06 \\
+    Boss 可达 & 生成断言 & \texttt{validateActReachBoss} \\
+    公式安全解析 & 单元验证 & \texttt{formulaParser.verify.ts} \\
+    对象池降 P95 & 性能消融 & 表~\ref{tab:perf} 第 4--5 波 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
 \section{本章小结}
 
-本章论证了可行性，列出功能与非功能需求及典型用例，下一章给出总体设计。
+本章论证了技术与社会可行性，明确了用户环境、功能/非功能需求、接口约束及 MoSCoW 优先级，并建立需求—测试映射。下一章在此基础上给出分层架构、ECS/MVC/Worker 具体设计与可靠性策略。

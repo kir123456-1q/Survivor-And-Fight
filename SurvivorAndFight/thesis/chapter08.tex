@@ -3,27 +3,35 @@
 
 \section{工作总结}
 
-本文完成了 \textbf{Survivor And Fight} 在 LayaAir 3.x 与 TypeScript 上的 Roguelite 生存战斗游戏之分析、设计与实现。主要工作包括：轻量 ECS 玩法内核；配表驱动技能与子弹组合效果；对象池与 Web Worker 性能优化；元游戏、DAG 跑图与 MVC 界面；测试验证及社会影响讨论。
+本文围绕 \textbf{Survivor And Fight}，在 LayaAir 3.x 与 TypeScript 上完成了 Roguelite 生存战斗游戏的分析、设计、实现与测试。工作可归纳为以下方面，并与各章对应：
 
-研究过程中参考了游戏引擎架构理解方法 SyDRA\cite{ullmann2025sydra}、经典引擎架构论述\cite{gregory2018game}，以及 Unity 物理人群疏散建模实践\cite{cantrell2018unity}，将模块化、物理仿真与验证思想迁移到 H5 教学原型中。系统可演示完整游戏循环，达到毕业设计预期。
+\begin{enumerate}[label=(\arabic*)]
+  \item \textbf{需求与选型}（第~\ref{chap:intro}--\ref{chap:related}~章）：梳理国内外引擎架构、ECS、人群仿真与 H5 性能研究；明确 LayaAir + 轻量 ECS + MVC UI + 配表驱动的技术路线。
+  \item \textbf{总体设计}（第~\ref{chap:architecture}~章）：提出分层架构与设计原则；从 ECS Gameplay、MVC UI、Worker/对象池三方面说明系统结构；给出端到端时序、可靠性、容错与基于组合的可扩展性策略。
+  \item \textbf{实现}（第~\ref{chap:modules}~章）：以 \texttt{SimpleEcsDemo} 为组合根，实现技能效果链、子弹碰撞、怪物 AI、元游戏跑图、Tab 装配与主循环；典型场景与源码索引便于评阅对照。
+  \item \textbf{性能与测试}（第~\ref{chap:performance}--\ref{chap:test}~章）：对象池显著降低千怪场景 P95 帧时间；动态图集提升重度弹幕波次平均 FPS；功能用例与单元脚本验证核心契约。
+\end{enumerate}
+
+研究过程中参考 SyDRA 架构理解方法\cite{ullmann2025sydra}、Gregory 引擎分层论述\cite{gregory2018game}及 Unity 人群疏散实践\cite{cantrell2018unity}，将模块化、重计算分离与 V\&V 思想迁移到 H5 教学原型。系统可演示「菜单 $\rightarrow$ 跑图/选关 $\rightarrow$ 战斗 $\rightarrow$ 升级/装配 $\rightarrow$ 死亡重启」完整闭环，达到毕业设计预期。
 
 \section{不足与展望}
 
 \begin{enumerate}[label=\arabic*.]
-  \item 法杖三槽完整 UI 与链式求值界面待完善；
-  \item ECS 可迁移至 archetype 存储以提升同屏规模\cite{ullmann2023coupling}；
-  \item 碰撞可引入空间哈希等 broad phase；
-  \item 补充端到端自动化测试\cite{petty2010vv}；
-  \item 局外存档与元进度；
-  \item 美术特效与音效完善。
+  \item \textbf{内容与表现}：法杖三槽完整 UI、部分 Effect 独立特效与音效仍待完善；
+  \item \textbf{架构演进}：ECS 可迁移至 Archetype/Chunk 存储以提升同屏规模\cite{ullmann2023coupling}；碰撞可引入空间哈希等 broad phase；
+  \item \textbf{测试自动化}：补充 Worker「池+Worker、已预热」同窗消融及端到端 UI 测试\cite{petty2010vv}；
+  \item \textbf{产品化}：局外存档、元进度与设置项（帧率上限、特效降级）；
+  \item \textbf{发布}：完善美术资源与适龄提示后的静态托管部署。
 \end{enumerate}
 
 \section{社会、健康与文化影响}
 
-本游戏为虚构战斗题材，应标注适龄提示并避免过度暴力表现。长时间游玩需注意视觉疲劳；Tab 暂停提供局内休息点。教学原型不采集用户敏感信息。
+本游戏为虚构战斗题材，采用抽象怪物与血条表现，应避免血腥写实。作为教学原型，未内置付费、社交诱导或敏感数据采集。若对外发布，须遵守网络游戏管理与未成年人保护规定，标注适龄提示与合理游戏时长；长时间游玩需注意视觉疲劳，Tab 暂停与跑图休息节点提供局内节奏缓冲\cite{petty2010vv}。
 
-\input{chapter08-extended}
+\section{绿色节能与兼容性}
+
+对象池、逻辑暂停与 Worker 卸载降低平均 CPU 占用，有利于终端续航与散热\cite{gregory2018game}。Worker 与配表双通道回退提升浏览器兼容性；2D 渲染对 GPU 要求低于大型 3D 作品。未来可在设置中提供帧率上限与同屏怪数限制，进一步支撑低功耗模式。
 
 \section{本章小结}
 
-本章总结全文并展望后续工作。本项目展示了在 H5 环境下结合 ECS、数据驱动与引擎性能手段构建 Roguelite 原型的可行路径。
+Survivor And Fight 展示了在 H5 环境下，以\textbf{轻量 ECS + 数据驱动 + 可降级性能手段}构建 Roguelite 原型的可行路径。论文叙述与仓库源码、测试数据相互对应；后续可在 Worker 定量验证、自动化测试与内容表现上继续完善，使原型从「可答辩演示」迈向「可发布小游戏」。

@@ -1,29 +1,66 @@
 \chapter{性能优化与工程实践}
 \label{chap:performance}
 
+本章在第~\ref{sec:perf-design}~节设计基础上，说明 Survivor And Fight 已落地的性能优化手段、实验方法与工程实践，并与第~\ref{chap:test}~章实测数据对照。优化遵循\textbf{先测量、再启用}：对象池与 Worker 均为可开关、可回退模块，避免过早引入难以调试的并发。
+
 \section{性能目标与瓶颈}
 
-H5 生存战斗的热点包括：大量实体更新与碰撞、预制体实例化引发 GC、主线程过载。Cantrell 等在 Unity 中实现物理人群模型时，同样关注计算开销与验证方法\cite{cantrell2018unity}；Bott 等使用游戏引擎工具链实现物理驱动人群移动\cite{bott2014unreal}。本项目在 2D H5 环境下采用对象池、Worker 卸载与逻辑暂停等手段应对类似瓶颈。
+\textbf{目标}：在 1920$\times$1080 预览、Chromium 内核下，常规战斗波次均值接近 60 FPS；千怪压力场景下帧时间尖峰可控（P95 可观测改善）。\\
+\textbf{瓶颈}：H5 生存战斗的热点包括——（1）大量实体追逐、分离与子弹碰撞；（2）预制体反复 \texttt{instantiate/destroy} 引发 GC；（3）主线程 Scripting 与渲染争用预算\cite{gregory2018game,cantrell2018unity}。Cantrell 等的人群仿真与 Bott 等的引擎工具链实践表明，将重计算与交互渲染分离是常见对策\cite{cantrell2018unity,bott2014unreal}；本项目在 2D H5 上采用池化、Worker 与逻辑暂停等手段应对同类问题。
 
 \section{对象池}
 
-\texttt{BulletPool}、\texttt{MonsterPool} 按 \texttt{prefabPath} 分桶复用节点，复用前重置状态。将“每帧大量 instantiate/destroy”转为“峰值后复用”，降低 GC 停顿，与引擎资源管理最佳实践一致\cite{gregory2018game}。
+\texttt{BulletPool}、\texttt{MonsterPool} 按 \texttt{prefabPath} 分桶维护空闲队列：\texttt{acquire} 优先复用并重置节点状态，不足时再 \texttt{Laya.Prefab.instantiate}；\texttt{put} 在子弹命中耗尽或 \texttt{MonsterRecycleSystem} 离屏回收时调用。
+
+\textbf{机制收益}：将分配模式从“每帧脉冲式新建/销毁”转为“峰值后平稳复用”，抑制 GC 停顿，改善 P95 帧时间——第~\ref{chap:test}~章第 4--5 波同窗消融中，开启池后 P95 由 76.50\,ms 降至 48.60\,ms（约降 36.5\%），而平均 FPS 变化有限，说明瓶颈在尖峰而非均值吞吐。
 
 \section{Web Worker 卸载}
 
-\texttt{MonsterChaseSystem} 的追逐、分离、摆动为纯数值计算，可由 \texttt{CombatDataBridge} 提交 Worker 执行 \texttt{processCombatFrame}，主线程与 Worker 共享同一逻辑文件以保证一致性。实体数不足或 Worker 不可用时回退主线程。子弹碰撞因依赖 Laya 节点仍留主线程，与 McKenzie 等将游戏技术用于仿真但保留引擎交互层的思路类似\cite{mckenzie2008crowd}。
+\texttt{MonsterChaseSystem} 的追逐、分离、摆动为纯数值计算。\texttt{CombatDataPrepareSystem} 在实体数 $\geq$ \texttt{COMBAT\_WORKER\_MIN\_ENTITY\_COUNT} 时打包快照，\texttt{CombatDataBridge} 提交 Worker 执行 \texttt{processCombatFrame}；主线程与 Worker \textbf{共享} \texttt{combatWorkerLogic.ts}，\texttt{prepareFrame} 失败时 \texttt{computeSync} 回退。
 
-\section{其它优化}
+\textbf{边界}：子弹碰撞、连锁与分裂依赖 Laya 节点与阵营判定，保留主线程（见第~\ref{sec:ecs-impl}~节）。本次五波实验未包含“池+Worker、已预热”的第六段同窗对照；第 5 波相对第 4 波仅开池关 Worker，可确证对象池价值，Worker 净收益待补充同窗实验（见第~\ref{chap:test}~章）。
 
-\textbf{碰撞：} 使用距离平方比较。\textbf{暂停：} Tab 打开面板时 \texttt{GameSession.paused} 早退战斗系统。\textbf{配置：} 常量集中于 \texttt{defines}，配表一次加载。\textbf{未来：} 可探索 archetype 存储与空间划分 broad phase\cite{ullmann2025sydra}。
+\section{渲染与逻辑侧其它优化}
+
+\textbf{碰撞微优化}：\texttt{BulletHitTest} 使用距离平方，避免每帧大量开方。\\
+\textbf{逻辑暂停}：\texttt{GameSession.paused} 使战斗 System 在 Tab 装配、死亡与胜利时早退，零成本减少无效 tick。\\
+\textbf{动态图集}：接入 \texttt{AtlasConfig.atlascfg} 与 \texttt{TextureAtlasService} 后，千怪千弹波次平均 FPS 由 13.32 升至 15.10（约 $+13.4\%$），见表~\ref{tab:test-level-fps-compare}。\\
+\textbf{配置}：策划参数一次加载；工程常量集中于 \texttt{defines}，避免热路径读盘。
+
+\section{帧预算与内存}
+
+以 60 FPS 为例，单帧预算约 16.67\,ms。经验分配：输入与 UI 1--2\,ms；ECS 逻辑（含子弹）6--8\,ms；Worker 通信 $\leq$1\,ms（异步）；余量留给引擎渲染\cite{gregory2018game}。超出预算时优先启用池化/Worker 或降低同屏上限，而非在业务层强行降分辨率。
+
+JavaScript 引擎对短生命周期对象敏感；未池化时大量 \texttt{instantiate/destroy} 易触发 GC 尖峰。对象池将分配“脉冲”抚平，与 Chrome Performance 中 Scripting/GC 时间轴的改善方向一致。项目以 \texttt{TestLevelFpsTracker} 与可选 Performance 面板辅助观测，\texttt{missingConfigLogged} 等去重日志避免调试刷屏。
+
+\section{性能实验设计}
+
+\subsection{实验目的与变量}
+
+验证对象池、动态图集及 Worker 对 FPS 与 P95 帧时间的影响\cite{gregory2018game,mckenzie2008crowd}。
+
+\textbf{自变量}：（A）池化开/关；（B）Worker 开/关（实体数达标时）；（C）同屏怪物规模。\\
+\textbf{因变量}：平均 FPS、P95 帧时间（消融段）。\\
+\textbf{控制变量}：浏览器、分辨率、Level3 五波脚本、关闭后台占用。
+
+\subsection{实验步骤}
+
+\begin{enumerate}[label=\arabic*.]
+  \item 发布或 IDE 预览，打开 DevTools Performance（可选）；
+  \item 进入 Level3：5 波 $\times$ 10\,s，第 1--3 波规模 10/100/1000，第 4--5 波千怪消融；
+  \item \texttt{TestLevelFpsTracker} 记录均值；第 4--5 波记录 P95；
+  \item 对比表~\ref{tab:test-five-waves}、表~\ref{tab:perf} 并文字解读，避免只贴表不分析。
+\end{enumerate}
+
+\subsection{优化自检清单}
+
+合并性能相关变更前建议自检：热路径是否大量 \texttt{new}；销毁前是否 \texttt{pool.put}；碰撞是否用平方距离；\texttt{paused} 是否阻止无关 System；Worker payload 是否纯数值；配表是否启动时一次加载。
 
 \section{绿色计算与兼容性}
 
-降低平均 CPU 占用有利于终端节能。Worker 回退与双通道配表加载提升兼容性。浏览器或引擎升级后须回归 Worker 脚本路径与发布目录。
-
-\input{chapter06-extended}
-\input{chapter06-benchmark-guide}
+\textbf{节能}：降低平均 CPU 占用有利于终端续航——池化减少分配器压力，暂停减少空转，合理 \texttt{MONSTER\_COUNT} 避免无意义满屏。\\
+\textbf{兼容性}：Worker 不可用时自动 \texttt{computeSync}；配表 \texttt{fetch}/\texttt{Laya.loader} 双通道；不支持 Worker 的浏览器仍可运行主流程。浏览器或引擎升级后须回归 Worker 脚本路径与 \texttt{bin/config} 发布目录。
 
 \section{本章小结}
 
-本章阐述了对象池、Worker、碰撞微优化与配置管理等性能手段，测试见下一章。
+本章阐述了对象池、Web Worker、碰撞/暂停/图集等优化手段及帧预算思路，并给出实验设计与自检清单。实测表明：对象池主要改善 P95 帧时间；动态图集在千怪弹幕场景提升平均 FPS；Worker 同窗定量结论留待补充实验。下一章给出完整测试用例、环境与数据解读。

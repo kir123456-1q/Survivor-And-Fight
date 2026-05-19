@@ -1,21 +1,32 @@
 \chapter{系统测试与验证}
 \label{chap:test}
 
+本章对 Survivor And Fight 开展单元验证、功能回归与性能实验，验证第~\ref{chap:requirement}~章需求与第~\ref{chap:architecture}~章设计是否落地。测试策略遵循 Petty 等对仿真与交互系统 V\&V 的要求\cite{petty2010vv,oberkampf2010vv}：核心契约用脚本验证，玩法闭环用手工用例，性能用可复现关卡与日志统计。
+
 \section{测试策略}
 
-测试分为单元验证、集成测试与系统手工测试。仿真与游戏系统须经过验证确认模型可信度\cite{petty2010vv,oberkampf2010vv}，本项目采用脚本验证、用例表与性能对比相结合。
+\textbf{单元验证}：ECS 核心、公式解析、属性修饰器——变更相关模块后须重跑对应 \texttt{*.verify.ts}。\\
+\textbf{集成/系统测试}：跑图可达性、Tab 装配同步、Worker 轨迹一致性——手工或脚本断言。\\
+\textbf{性能测试}：Level3 五波脚本 + \texttt{TestLevelFpsTracker}，对比表~\ref{tab:test-five-waves}、\ref{tab:perf}。\\
+\textbf{回归清单}：修改 \texttt{FormulaParser}、\texttt{ComponentStore}、\texttt{AttributeSystem}、配表、\texttt{CombatDataBridge} 后，按附录需求—测试矩阵或表~\ref{tab:req-test-map} 回归主路径。
 
 \section{单元验证}
 
-\begin{itemize}
-  \item \texttt{ecsCorePhase1.verify.ts}：实体与组件、系统顺序；
-  \item \texttt{formulaParser.verify.ts}：公式边界；
-  \item \texttt{attributeModifier.verify.ts}：modifier 叠加与移除。
-\end{itemize}
+\subsection{ECS 核心}
+
+\texttt{ecsCorePhase1.verify.ts} 覆盖：实体 ID 唯一；组件增删与 \texttt{getComponent}；销毁后不可访问；多 System 按分组与 priority 顺序执行\cite{petty2010vv}。
+
+\subsection{公式解析器}
+
+\texttt{formulaParser.verify.ts} 覆盖：四则运算、括号、属性别名；非法字符与边界公式（以实现为准的安全返回/抛错）。配表伤害依赖解析器，任何变更须 rerun。
+
+\subsection{属性修饰器}
+
+\texttt{attributeModifier.verify.ts} 覆盖：多 modifier 叠加；按 \texttt{sourceId} 批量移除；\texttt{getModifierContributions} 可追溯。升级奖励与 Buff 均依赖该机制\cite{briand2001maintainability}。
 
 \section{功能测试}
 
-表~\ref{tab:test-func} 列出代表性用例（手工执行）。
+表~\ref{tab:test-func} 为代表性手工用例，覆盖战斗、元游戏、跑图、装配与重启主路径。
 
 \begin{longtable}{p{2.2cm}p{4.5cm}p{6.3cm}}
   \caption{功能测试用例摘要} \label{tab:test-func} \\
@@ -27,24 +38,30 @@
   \textbf{编号} & \textbf{步骤} & \textbf{预期结果} \\
   \midrule
   \endhead
-  T-F-01 & 启动并等待加载 & 技能表加载成功 \\
+  T-F-01 & 启动并等待加载 & \texttt{isGameConfigReady}，技能表非空 \\
   T-F-02 & 进入战斗移动 & 角色与相机正常 \\
   T-F-03 & 怪物接近 & 追逐、扣血、血条更新 \\
-  T-F-04 & 观察自动攻击 & 子弹命中，穿透/分裂/连锁 \\
-  T-F-05 & Tab 打开技能面板 & 暂停，可拖拽装配 \\
-  T-F-06 & 关闭面板 & 战斗恢复，新技能生效 \\
+  T-F-04 & 观察自动攻击 & 子弹命中；穿透/分裂/连锁 \\
+  T-F-05 & Tab 打开技能面板 & \texttt{paused=true}，可拖拽装配 \\
+  T-F-06 & 关闭面板 & 战斗恢复，下一冷却周期新技能生效 \\
   T-F-07 & 升级 & 奖励面板与应用 \\
-  T-F-08 & 玩家死亡 & 重启面板 \\
-  T-F-09 & 元游戏进战斗 & 计时启动 \\
-  T-F-10 & Boss 节点 & Boss 胜利时长 \\
+  T-F-08 & 玩家死亡 & 重启面板，\texttt{restarting} 无重入 \\
+  T-F-09 & 元游戏进战斗 & 生存计时启动 \\
+  T-F-10 & Boss 节点 & Boss 胜利时长参数生效 \\
   \bottomrule
 \end{longtable}
+
+\subsection{集成测试补充}
+
+\textbf{跑图可达性}：对 \texttt{RunMapGenerator.generate} 多次随机种子断言 \texttt{validateActReachBoss}；失败应走 \texttt{generateFallback}。\\
+\textbf{装配同步}：互换装备栏技能后，下一冷却周期伤害/图标与装配一致，否则 \texttt{SkillLoadoutSyncSystem} 存在缺陷。\\
+\textbf{Worker 一致性}：Worker 开/关各运行一段时间，怪物轨迹允许一帧延迟，但无逻辑漂移\cite{mckenzie2008crowd}。
 
 \section{性能测试}
 
 \subsection{测试环境}
 
-表~\ref{tab:test-env} 记录五波性能实验与功能抽测的统一环境（2026-05-18，单次运行）。
+表~\ref{tab:test-env} 为五波实验与功能抽测的统一环境（2026-05-18，单次运行）。
 
 \begin{table}[htbp]
   \centering
@@ -60,19 +77,19 @@
     引擎与语言 & LayaAir 3.x，TypeScript \\
     测试关卡 & 选关 Level3：5 波 $\times$ 10\,s，双方无敌 \\
     统计工具 & \texttt{TestLevelFpsTracker}（控制台日志） \\
-  \bottomrule
+    \bottomrule
   \end{tabular}
 \end{table}
 
-在 Chromium、1920$\times$1080 预览环境下开展性能验证。选关 \textbf{Level3} 测试关卡共 \textbf{5 波}、每波 10\,s：第 1--3 波同屏怪物 10/100/1000，装备三把测试法杖（单发 10/100/1000 枚子弹），默认开启对象池与 Web Worker；第 4--5 波与第 3 波同为 1000 怪、同法杖，依次消融为「无池无 Worker / 仅池（关 Worker）」，由 \texttt{TestLevelFpsTracker} 统计平均 FPS 与 P95 帧时间。Cantrell 等通过对比真实疏散事件验证模型\cite{cantrell2018unity}，本项目侧重帧率、同屏规模与优化手段的关系。
+选关 \textbf{Level3} 共 5 波：第 1--3 波怪物 10/100/1000，装备三把测试法杖；第 4--5 波均为 1000 怪，依次为「无池无 Worker / 仅池（关 Worker）」，用于同窗消融。第 3 波含首次千怪冷启动，\textbf{不纳入}与第 4--5 波的公平对比。
 
-\subsection{动态图集对比（历史两轮，前三波）}
+\subsection{动态图集对比（前三波）}
 
-项目曾分别在接入 \texttt{AtlasConfig.atlascfg} 自动图集与 \texttt{TextureAtlasService} 前后，各完成一轮「仅前三波」采样（表~\ref{tab:test-level-fps-atlas}、\ref{tab:test-level-fps-compare}）。该组数据用于说明纹理合批在千怪千弹下的收益，与下文五波全流程实验相互独立。
+表~\ref{tab:test-level-fps-atlas}、\ref{tab:test-level-fps-compare} 为接入动态图集前后的历史两轮采样（仅前三波）。第 3 波（1000 怪）FPS 由 13.32 升至 15.10（约 $+13.4\%$），说明重度弹幕下纹理合批有效。
 
 \begin{table}[htbp]
   \centering
-  \caption{测试关卡分波 FPS（接入动态图集，前三波历史实测）}
+  \caption{测试关卡分波 FPS（接入动态图集，前三波）}
   \label{tab:test-level-fps-atlas}
   \begin{tabular}{ccccc}
     \toprule
@@ -104,11 +121,9 @@
   \end{tabular}
 \end{table}
 
-\noindent 同屏规模增大时 FPS 单调下降；第 3 波（1000 怪）接入图集后平均 FPS 由 13.32 升至 15.10（约 $+13.4\%$），说明在重度弹幕场景下纹理合批对 H5 2D 渲染具有一定收益。
+\subsection{五波完整帧率}
 
-\subsection{五波完整帧率（实测，2026-05-18）}
-
-同次运行、已接入自动图集与 DrawCall 合批，完整五波日志如表~\ref{tab:test-five-waves}。前五波总采样 1733 帧、约 50.3\,s，整场平均 FPS 约 34.48。
+表~\ref{tab:test-five-waves} 为同次运行、已接入图集与 DrawCall 合批的完整五波数据。整场 1733 帧、约 50.3\,s，平均 FPS 约 34.48。
 
 \begin{table}[htbp]
   \centering
@@ -129,11 +144,7 @@
   \end{tabular}
 \end{table}
 
-\noindent 第 1--3 波未统计 P95；第 4--5 波为同压力消融段（运行时已预热）。
-
 \subsection{对象池消融（第 4--5 波）}
-
-在相同 1000 怪、10\,s 条件下，表~\ref{tab:perf} 给出可同窗对照的两种配置。第 3 波虽为「池+Worker 全开」，但属首次进入千怪规模的爬升段，含冷启动成本，\textbf{不纳入}与第 4--5 波的公平消融，仅作规模曲线上界参考。
 
 \begin{table}[htbp]
   \centering
@@ -153,16 +164,16 @@
 
 \paragraph{结果解读}
 \begin{enumerate}
-  \item \textbf{规模曲线（第 1--3 波）。} 怪物 10$\rightarrow$100$\rightarrow$1000 时，平均 FPS 由 58.62 降至 15.14，呈单调下降，符合同屏实体与弹幕数量上升带来的计算与渲染压力。
-  \item \textbf{平均 FPS：池化对均值影响有限。} 第 4 波与第 5 波均值接近（26.16 对 25.98），说明预热后瓶颈主要在每帧子弹碰撞与绘制，而非怪物节点反复 \texttt{instantiate/destroy}。
-  \item \textbf{P95：对象池显著平滑帧时间。} 开启池后 P95 由 76.50\,ms 降至 48.60\,ms（约降 36.5\%），表明对象池的主要收益在于抑制 GC/实例化尖峰、改善帧时间稳定性，而非提高平均吞吐。
-  \item \textbf{第 3 波低于第 4 波基线的原因。} 第 3 波为首次 1000 怪，叠加资源预热、弹幕首次创建与 Worker 初始化等一次性开销；第 4 波起环境已热，故基线配置反获更高均值。论文消融结论以第 4--5 波为准。
-  \item \textbf{Web Worker。} 本次五波实验未包含「池+Worker、且已预热」的第六段对照；第 5 波相对第 4 波仅开启对象池并关闭 Worker，均值几乎不变而 P95 明显改善，说明在本测试场景下\textbf{可确证对象池价值}；Worker 在千弹占主导时是否净收益为正，需另设「第 4 波基线 vs 池+Worker 同窗」实验或结合 Performance 面板 Scripting 耗时补证。
+  \item \textbf{规模曲线（第 1--3 波）。} 怪物 10$\rightarrow$100$\rightarrow$1000 时 FPS 由 58.62 降至 15.14，符合实体与弹幕压力上升规律。
+  \item \textbf{平均 FPS：池化对均值影响有限。} 第 4、5 波均值接近（26.16 对 25.98），预热后瓶颈主要在子弹碰撞与绘制。
+  \item \textbf{P95：对象池显著平滑帧时间。} P95 由 76.50\,ms 降至 48.60\,ms（约降 36.5\%），印证第~\ref{chap:performance}~章关于 GC/实例化尖峰的论述。
+  \item \textbf{第 3 波低于第 4 波基线。} 第 3 波含资源预热与首次千怪开销；消融结论以第 4--5 波为准。
+  \item \textbf{Web Worker。} 本次未设「池+Worker、已预热」同窗段；Worker 定量收益列为后续工作。
 \end{enumerate}
 
 \section{系统运行截图}
 
-终稿插图置于 \texttt{thesis/figures/}，编译时若 PNG 已就位则自动嵌入，否则显示占位框。图~\ref{fig:ui-start}--\ref{fig:ui-restart} 覆盖元游戏与局内闭环；可选增加 Performance 时间轴截图以辅助说明对象池对帧时间尖峰的影响。
+插图位于 \texttt{thesis/figures/}，编译时若 PNG 存在则自动嵌入。图~\ref{fig:ui-start}--\ref{fig:ui-restart} 覆盖元游戏与局内闭环。
 
 \newcommand{\thesisfig}[4]{%
   \begin{figure}[htbp]
@@ -176,24 +187,20 @@
   \end{figure}%
 }
 
-\thesisfig{figures/fig-01-start.png}{图1：主菜单（待插入）}{游戏开始界面（StartPanel）}{fig:ui-start}
-\thesisfig{figures/fig-02-runmap.png}{图2：跑图（待插入）}{三大关 DAG 跑图界面（RunMapPanel）}{fig:ui-runmap}
-\thesisfig{figures/fig-03-combat.png}{图3：战斗（待插入）}{局内战斗场面（同屏多怪与弹幕）}{fig:ui-combat}
-\thesisfig{figures/fig-04-skill.png}{图4：技能装配（待插入）}{Tab 暂停下的技能/Effect 装配面板}{fig:ui-skill}
-\thesisfig{figures/fig-05-reward.png}{图5：升级奖励（待插入）}{生存胜利后的三选一奖励面板}{fig:ui-reward}
-\thesisfig{figures/fig-06-restart.png}{图6：死亡重启（待插入）}{玩家死亡后的重启面板}{fig:ui-restart}
-
-\section{跑图与 Worker 一致性}
-
-对 \texttt{RunMapGenerator} 多次随机种子断言 Boss 可达；对比 Worker 开/关下怪物轨迹（允许一帧延迟），确保逻辑未漂移。
+\thesisfig{figures/fig-01-start.png}{主菜单}{游戏开始界面（StartPanel）}{fig:ui-start}
+\thesisfig{figures/fig-02-runmap.png}{跑图界面}{三大关 DAG 跑图（RunMapPanel）}{fig:ui-runmap}
+\thesisfig{figures/fig-03-combat.png}{战斗场面}{局内战斗（同屏多怪与弹幕）}{fig:ui-combat}
+\thesisfig{figures/fig-04-skill.png}{技能装配}{Tab 暂停下的技能/Effect 装配面板}{fig:ui-skill}
+\thesisfig{figures/fig-05-reward.png}{升级奖励}{生存胜利后的三选一奖励面板}{fig:ui-reward}
+\thesisfig{figures/fig-06-restart.png}{死亡重启}{玩家死亡后的重启面板}{fig:ui-restart}
 
 \section{测试结论}
 
-功能覆盖战斗、元游戏、跑图、技能装配与升级闭环；单元脚本通过表明核心契约稳定。性能方面：动态图集在前三轮历史对比中提升千怪波 FPS（表~\ref{tab:test-level-fps-compare}）；五波实测（表~\ref{tab:test-five-waves}）表明对象池在同窗消融下主要降低 P95 帧时间（表~\ref{tab:perf}）。Web Worker 的定量收益尚未在「预热后同窗」条件下完成，列为后续工作。
-
-\input{chapter07-extended}
-\input{chapter07-test-detail}
+\textbf{功能}：Must 级需求经 T-F-01--10 与单元脚本覆盖；Should 级跑图、装配、升级、池化/Worker 已验证；Could 级法杖完整 UI 与部分 Effect 独立特效未实现，与第~\ref{chap:conclusion}~章一致。\\
+\textbf{性能}：动态图集提升千怪波 FPS 约 13.4\%；五波实验整场均值约 34.48；对象池在同窗消融下将 P95 降低约 36.5\%。\\
+\textbf{遗留}：配置未同步至 \texttt{bin/} 时图标可能空白（已用脚本与 \texttt{isGameConfigReady} 缓解）；Worker 预热后同窗消融待补。\\
+\textbf{已知缺陷}：部分 Effect 仅逻辑生效、无独立 VFX，已在答辩范围中如实标注。
 
 \section{本章小结}
 
-本章给出测试策略、用例、环境配置与五波性能实验；对象池消融已基于第 4--5 波填入实测数据。将 \texttt{thesis/figures/} 下六张 PNG 就位后即可生成带插图的终稿 PDF；Worker 同窗消融与 Performance 截图仍为可选补充项。
+本章给出测试策略、单元验证、功能用例、环境与五波性能数据及解读；对象池价值已由第 4--5 波实测支持。截图就位后即可生成带插图的 PDF；Worker 同窗消融可作为后续实验补充。

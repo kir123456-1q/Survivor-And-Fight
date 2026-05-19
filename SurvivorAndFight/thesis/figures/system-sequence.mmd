@@ -1,0 +1,63 @@
+%% Survivor And Fight — 系统主要交互时序（Mermaid）
+%% 可在 VS Code（Mermaid 插件）、GitHub 或 mermaid.live 中渲染
+
+sequenceDiagram
+    autonumber
+  participant Main as Main.ts
+  participant Config as ConfigBootstrap
+  participant Meta as MetaFlowController
+  participant Stack as UIStackManager
+  participant Demo as SimpleEcsDemo
+  participant World as EcsWorld
+  participant Bridge as CombatDataBridge
+  participant Worker as combat.worker
+  participant UI as SkillSelectPanel
+
+  rect rgb(240,248,255)
+    Note over Main,Config: 应用启动
+    Main->>Config: ensureGameConfigLoaded()
+    alt 元菜单开启
+      Main->>Stack: push(StartPanel)
+    else 直进战斗
+      Main->>Demo: init()
+    end
+  end
+
+  rect rgb(255,248,240)
+    Note over Meta,Demo: 进入战斗
+    Stack->>Meta: 选关/跑图确认
+    Meta->>Main: onEnterCombat(payload)
+    Main->>Demo: init(), 显示 Area2D
+    Demo->>World: 注册 Systems, spawnPlayer
+  end
+
+  rect rgb(240,255,240)
+    Note over Main,Worker: 战斗帧循环（未 paused）
+    loop 每帧 frameLoop
+      Main->>World: update(deltaTime)
+      World->>Bridge: prepareFrame(snapshot)
+      alt Worker 可用且实体数达标
+        Bridge->>Worker: postMessage(snapshot)
+        Worker-->>Bridge: velocities
+      else 回退
+        Bridge->>Bridge: computeSync()
+      end
+      World->>World: MonsterChase, Bullet, ViewSync...
+    end
+  end
+
+  rect rgb(255,240,255)
+    Note over UI,Demo: Tab 技能装配
+    UI->>Demo: GameSession.paused = true
+    UI->>UI: SkillDragService 更新 Loadout
+    UI->>Demo: SkillLoadoutSyncSystem 写回 Skill
+    UI->>Demo: paused = false
+  end
+
+  rect rgb(255,245,245)
+    Note over Demo,Stack: 死亡与重启
+    World->>Demo: PlayerDeathSystem, paused=true
+    Demo->>Stack: RestartPanel
+    Stack->>Demo: restartRequested
+    Demo->>Demo: tryRestartFromSession (restarting)
+  end
