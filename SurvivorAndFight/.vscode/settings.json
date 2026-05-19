@@ -5,5 +5,54 @@
         "library/": true,
         "temp/": true,
         "local/": true
-    }
+    },
+    "latex-workshop.latex.rootFile": "thesis/main.tex",
+    "latex-workshop.latex.outDir": "thesis",
+    "latex-workshop.latex.tools": [
+        {
+            "name": "xelatex",
+            "command": "xelatex",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOC%"
+            ]
+        },
+        {
+            "name": "bibtex",
+            "command": "bibtex",
+            "args": ["%DOCFILE%"]
+        }
+    ],
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "XeLaTeX + BibTeX",
+            "tools": ["xelatex", "bibtex", "xelatex", "xelatex"]
+        }
+    ],
+    "latex-workshop.latex.recipe.default": "XeLaTeX + BibTeX",
+    "latex-workshop.latex.clean.fileTypes": [
+        "*.aux",
+        "*.bbl",
+        "*.blg",
+        "*.idx",
+        "*.ind",
+        "*.lof",
+        "*.lot",
+        "*.out",
+        "*.toc",
+        "*.acn",
+        "*.acr",
+        "*.alg",
+        "*.glg",
+        "*.glo",
+        "*.gls",
+        "*.fls",
+        "*.log",
+        "*.fdb_latexmk",
+        "*.snm",
+        "*.nav",
+        "*.synctex.gz"
+    ]
 }
