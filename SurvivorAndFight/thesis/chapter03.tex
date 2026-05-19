@@ -7,21 +7,21 @@
 
 \subsection{技术可行性}
 
-项目选用 LayaAir 3.x 与 TypeScript，已实现轻量 ECS、配表战斗、元菜单、DAG 跑图、技能装配 UI 及对象池/Worker 优化模块。引擎提供 2D 预制体、\texttt{frameLoop} 与输入封装；Chromium 内核浏览器支持 WebGL2 与 Web Worker。SyDRA 等研究表明，理解引擎子系统边界有助于控制演化成本\cite{ullmann2025sydra}；Cantrell 等验证了在商业引擎上叠加领域逻辑（人群/怪物运动）的可行性\cite{cantrell2018unity}。
+代码侧已有 LayaAir 3.x + TypeScript 工程：轻量 ECS、配表战斗、元菜单、DAG 跑图、技能装配 UI，以及对象池和 Worker。引擎带 2D 预制体和 \texttt{frameLoop}；答辩用 Chromium 支持 WebGL2 与 Worker。文献里 SyDRA 讨论子系统边界\cite{ullmann2025sydra}；Cantrell 等说明在商业引擎上叠领域逻辑可行\cite{cantrell2018unity}。
 
-\textbf{已具备能力}：\texttt{ConfigBootstrap.ensureGameConfigLoaded} 双通道加载配表；\texttt{isGameConfigReady} 作为战斗入口闸门；单元脚本覆盖 ECS 核心、公式解析与属性修饰器。\\
-\textbf{主要风险}：同屏千怪帧率、Worker 与主线程逻辑一致性、UI2 拖拽命中——已通过第~\ref{chap:test}~章五波实验与 T-F-05/06 等用例部分缓解。\\
-\textbf{结论}：在毕业设计周期内交付可运行原型并完成配套论文，技术路线可行。
+\textbf{已具备}：\texttt{ConfigBootstrap.ensureGameConfigLoaded} 用 \texttt{fetch} 和 \texttt{Laya.loader} 双路读表；\texttt{isGameConfigReady} 挡住未就绪就进战斗；ECS、公式、修饰器有 \texttt{verify.ts}。\\
+\textbf{风险}：千怪帧率、Worker 与主线程是否算同一套、UI2 拖拽命中——五波实验和 T-F-05/06 已部分覆盖。\\
+\textbf{结论}：课设周期内能交原型和论文，路线可行。
 
 \subsection{经济与社会可行性}
 
-作为教学原型，主要成本为开发与测试人力，无服务器与支付链路。游戏为奇幻战斗题材，须控制暴力表现、提示合理游戏时长；跑图休息节点提供节奏缓冲。未采集用户敏感信息，符合单机演示定位。
+作为教学原型，主要成本为开发与测试人力，无服务器与支付。游戏为奇幻战斗题材，须控制暴力表现并提示合理游戏时长；跑图休息节点提供节奏缓冲。不采集用户敏感信息，符合单机演示定位。
 
 \section{用户角色与运行环境}
 
 \subsection{用户角色}
 
-系统仅设\textbf{玩家}单一角色：浏览主菜单、选关或跑图、局内移动与构筑、死亡后重启。无管理员后台；未来若扩展存档，不改变“玩家”唯一角色定义。
+系统仅设\textbf{玩家}单一角色：浏览主菜单、选关或跑图、局内移动与构筑、死亡后重启。无管理员后台；未来若扩展存档，仍保持“玩家”为唯一角色。
 
 \subsection{运行环境}
 
@@ -73,7 +73,7 @@
 
 \subsection{用例：元游戏进入战斗}
 
-用户在跑图或选关界面确认节点，\texttt{MetaFlowController} 触发 \texttt{onEnterCombat(payload)}；\texttt{Main} 显示战斗容器、\texttt{demo.init()}，\texttt{CombatSurvivalTimer} 启动；Boss 节点载荷可携带更长胜利时间。
+用户在跑图或选关界面确认节点，\texttt{MetaFlowController} 触发 \texttt{onEnterCombat(payload)}；\texttt{Main} 显示战斗容器并 \texttt{demo.init()}，\texttt{CombatSurvivalTimer} 启动；Boss 节点载荷可携带更长胜利时间。
 
 \section{功能需求详细说明}
 \label{sec:func-detail}
@@ -88,13 +88,13 @@
 
 \subsection{怪物、元游戏与 UI}
 
-怪物在玩家周围环带生成并保持最小间距；追逐、接触伤害、离屏回收；击杀给予经验（含等级加成项）。跑图每局三幕 DAG，仅沿已解锁邻接边前进；\texttt{validateActReachBoss} 保证可达。全屏界面经 \texttt{UIStackManager}；Tab 暂停战斗；拖拽区分技能/效果槽；血条与升级面板实时反馈\cite{heijstek2011empirical}。
+怪物在玩家周围环带生成并保持最小间距；须实现追逐、接触伤害、离屏回收；击杀给予经验（含等级加成）。跑图每局三幕 DAG，仅沿已解锁邻接边前进；\texttt{validateActReachBoss} 保证可达。全屏界面经 \texttt{UIStackManager}；Tab 暂停战斗；拖拽区分技能/效果槽；血条与升级面板实时反馈\cite{heijstek2011empirical}。
 
 \section{非功能性需求}
 
 \textbf{性能}：目标稳定 60 FPS；同屏规模由 \texttt{MONSTER\_COUNT} 与波次控制；对象池与 Worker 按第~\ref{sec:perf-design}~节启用。\\
 \textbf{可维护性}：模块边界与第~\ref{chap:architecture}~章一致；静态常量集中于 \texttt{defines}。\\
-\textbf{可靠性}：Worker/配表/跑图失败时回退路径见第~\ref{sec:reliability}~节。\\
+\textbf{可靠性}：Worker/配表/跑图失败时的回退路径见第~\ref{sec:reliability}~节。\\
 \textbf{兼容性}：优先 Chromium；Worker 不可用时 \texttt{computeSync} 主线程回退\cite{cantrell2018unity}。
 
 \begin{table}[htbp]
@@ -141,7 +141,7 @@
 
 \section{需求与测试映射}
 
-表~\ref{tab:req-test-map} 给出需求与验证手段的对应关系，便于第~\ref{chap:test}~章追溯\cite{petty2010vv}。
+表~\ref{tab:req-test-map} 列出需求与验证手段的对应关系，供第~\ref{chap:test}~章追溯\cite{petty2010vv}。
 
 \begin{table}[htbp]
   \centering
@@ -162,4 +162,4 @@
 
 \section{本章小结}
 
-本章论证了技术与社会可行性，明确了用户环境、功能/非功能需求、接口约束及 MoSCoW 优先级，并建立需求—测试映射。下一章在此基础上给出分层架构、ECS/MVC/Worker 具体设计与可靠性策略。
+本章写完可行性和需求清单，并挂上 MoSCoW 与测试映射。下一章展开分层设计和 Worker、可靠性细节。

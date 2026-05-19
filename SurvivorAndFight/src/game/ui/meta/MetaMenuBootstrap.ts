@@ -48,4 +48,16 @@ export class MetaMenuBootstrap {
             }
         }
     }
+
+    /** 显示场景内嵌 StartPanel（无元菜单时的战败回退）。 */
+    static showSceneEmbeddedStartPanel(): void {
+        const stage = Laya.stage as any;
+        if (!stage?.numChildren) return;
+        for (let i = 0; i < stage.numChildren; i++) {
+            const child = stage.getChildAt(i);
+            if (String(child?.name ?? '') === 'StartPanel') {
+                child.visible = true;
+            }
+        }
+    }
 }

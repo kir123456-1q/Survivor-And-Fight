@@ -1,27 +1,27 @@
 ﻿
 \section{项目背景}
 
-\textbf{Survivor And Fight} 是一款面向浏览器平台的 2D 俯视角 Roguelite 生存战斗游戏原型，采用 LayaAir 3.x 与 TypeScript 开发。项目目标是在可运行的工程基础上，形成覆盖\textbf{主菜单与选关}、\textbf{爬塔式 DAG 跑图}、\textbf{局内自动战斗}、\textbf{升级奖励}与\textbf{Tab 技能装配}的完整玩法闭环，并验证轻量实体组件系统（ECS）、JSON 配表驱动技能、对象池与 Web Worker 等架构与性能手段在 H5 环境下的可行性。
+\textbf{Survivor And Fight} 是浏览器上的 2D 俯视角 Roguelite 原型，技术栈为 LayaAir 3.x 与 TypeScript。目标是在可编译工程里跑通主菜单、选关、DAG 跑图、局内战斗、升级奖励和 Tab 装配，并验证轻量 ECS、JSON 技能表、对象池和 Worker 是否能在 H5 落地。
 
-从产业背景看，国产 H5 游戏与小游戏平台对“即点即玩”、低安装成本的作品需求持续增长。Survivor-like 品类以极简操作与高密度敌人见长，Roguelite 元游戏以单局随机与路线选择提升重玩价值；二者叠加可在有限美术与关卡人力下快速迭代内容，适合作为本科毕业设计周期内的可交付原型。相较商业大作，本项目的价值不在于内容体量，而在于\textbf{可扩展的客户端架构}与\textbf{可复现的性能数据}，为后续玩法、技能与关卡扩展预留接口。
+国产 H5 与小游戏渠道偏好低安装成本。Survivor-like 操作浅、怪多；Roguelite 用随机和路线拉高重玩。在有限人力下，这种组合适合毕业设计周期。本文不比商业作品内容量，而是留下可扩展架构和可复现的性能记录。
 
-从技术背景看，H5 实时战斗面临 JavaScript 单线程、GC 抖动与渲染预算三重约束。同屏数百怪物与大量弹幕时，若仍采用每帧 \texttt{instantiate/destroy} 预制体、在主线程完成全部追逐与碰撞，帧时间易出现尖峰。因此项目在技术选型上强调：逻辑与表现分离（ECS + Laya 节点）、参数外置（配表 + \texttt{defines}）、可降级优化（对象池、逻辑暂停、Worker 回退）。游戏引擎子系统耦合与演化问题在文献中已有系统讨论\cite{ullmann2025sydra,gregory2018game,baabad2020degradation}；人群与多代理体运动仿真研究则为怪物追逐、分离力与密集碰撞简化提供了理论参照\cite{cantrell2018unity,helbing2000panic,reynolds1987flocks}。
+实时战斗里，单线程和 GC 是硬约束。若每帧大量 \texttt{instantiate/destroy}，又在主线程算完全部追逐和碰撞，帧时间会尖刺。项目因此把逻辑放在 ECS、参数放在配表和 \texttt{defines}，并准备池化、暂停和 Worker 回退。引擎耦合与人群运动文献为怪物 AI 简化提供了参考\cite{ullmann2025sydra,gregory2018game,baabad2020degradation,cantrell2018unity,helbing2000panic,reynolds1987flocks}。
 
-工程上，仓库已具备可编译的 LayaAir 工程、\texttt{docs/config/} 下技能/子弹/角色等 JSON 配表及部分 2D 美术资源。论文工作聚焦于对上述实现的\textbf{需求归纳、架构阐释、模块说明、测试验证与性能分析}，使“可玩的 Demo”上升为可评阅、可答辩的完整毕业设计成果。
+仓库含 Laya 工程、\texttt{docs/config/} 配表和部分 2D 资源。论文部分是对代码的需求整理、架构说明、模块描述、测试与性能记录，把 Demo 写成可评阅的毕设材料。
 
 \section{主要创新点与特色}
 
-本项目仍具有以下\textbf{工程特色}：
+本项目工程侧特点如下：
 \begin{enumerate}[label=(\arabic*)]
-  \item \textbf{轻量 ECS 与引擎解耦}：在 LayaAir 上实现可扩展的实体—组件—系统内核，玩法逻辑集中于 \texttt{EcsWorld} 调度，\texttt{ViewComponent} 仅负责节点绑定与同步，避免业务代码与引擎 API 深度缠绕。
-  \item \textbf{配表驱动的技能效果链}：技能拆为 \texttt{Skill} 与多行 \texttt{SkillEffect}，支持穿透、分裂、连锁等修饰器与子弹效果按序组合；策划可在不改核心代码的前提下调整冷却、伤害与效果段，当前配表含 70 余条效果配置，支撑构筑深度演示。
-  \item \textbf{元游戏与局内战斗联动}：三大关 DAG 跑图生成、节点类型（战斗/Boss/休息等）与 \texttt{MetaFlowController} 入口载荷联动，Boss 关可携带更长生存胜利时间等参数，体现 Roguelite 路线决策与实时战斗的结合。
-  \item \textbf{同屏规模下的性能手段}：\texttt{BulletPool}、\texttt{MonsterPool} 抑制实例化尖峰；实体数达标时战斗快照经 Web Worker 计算追逐与分离，主线程保留子弹碰撞与渲染；实测表明对象池可显著降低 P95 帧时间，动态图集在千怪波次下提升平均 FPS。
-  \item \textbf{可验证的 UI 与战斗协同}：全屏界面经 \texttt{UIStackManager} 路由；Tab 打开技能装配时 \texttt{GameSession.paused} 暂停战斗逻辑，\texttt{SkillLoadoutSyncSystem} 保证面板状态与自动施法一致，形成可手工回归的完整交互闭环。
+  \item \textbf{轻量 ECS}：\texttt{EcsWorld} 管玩法 tick，\texttt{ViewComponent} 只绑 Laya 节点，业务少直接调引擎 API。
+  \item \textbf{配表技能链}：\texttt{Skill} 配多行 \texttt{SkillEffect}，修饰器排在子弹前，支持穿透、分裂、连锁；配表现有 70 余条效果行。
+  \item \textbf{元流程联动}：三幕 DAG 经 \texttt{MetaFlowController} 进战斗，Boss 节点可带更长生存时间等载荷。
+  \item \textbf{性能措施}：\texttt{BulletPool}/\texttt{MonsterPool} 减分配；达标时用 Worker 算追逐分离，碰撞仍主线程；池化改善 P95，图集抬高千怪波 FPS。
+  \item \textbf{UI 与战斗协同}：\texttt{UIStackManager} 管全屏路由；Tab 装配时 \texttt{GameSession.paused} 冻逻辑，\texttt{SkillLoadoutSyncSystem} 写回施法状态。
 \end{enumerate}
 
-上述特色均可在运行原型与第~\ref{chap:test}~章测试数据中直接验证；与第~\ref{chap:architecture}~章分层设计、第~\ref{chap:modules}~章实现章节一一对应。
+以上条目可在原型和第~\ref{chap:test}~章数据里核对，并对应第~\ref{chap:architecture}~章、第~\ref{chap:modules}~章。
 
 \section{伦理与合规说明}
 
-游戏涉及虚拟战斗与生命值减少，不涉及真实暴力。项目未采集用户个人敏感信息。若部署至公网，须遵守网络游戏管理与未成年人保护相关规定，在说明中标注适龄提示与游戏时长建议\cite{petty2010vv}。论文第~\ref{chap:conclusion}~章对社会影响作了补充讨论，满足学院模板建议项。
+内容为虚构战斗，无真实暴力。不采集个人敏感信息。若对外发布，需遵守网游与未成年人相关规定，并提示适龄与时长\cite{petty2010vv}。社会影响在第~\ref{chap:conclusion}~章另有说明。

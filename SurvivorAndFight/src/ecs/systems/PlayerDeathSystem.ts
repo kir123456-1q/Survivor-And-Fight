@@ -32,6 +32,7 @@ export class PlayerDeathSystem implements System {
         if (playerAttr.base.hp <= 0) {
             playerAttr.base.hp = 0;
             session.paused = true;
+            session.combatFailed = true;
         }
     }
 }

@@ -39,6 +39,8 @@ export class Main extends Laya.Script {
     private readonly combatSurvivalTimer = new CombatSurvivalTimer();
     private combatSurvivalDurationSec = COMBAT_SURVIVE_VICTORY_SEC;
     private pendingBossVictory = false;
+    private combatFailed = false;
+    private defeatExitInProgress = false;
     private enteringCombat = false;
     /** 2D 相机跟随：平滑系数 0~1，越大跟得越紧；0 表示不跟随。 */
     private cameraFollowSmooth = 0.12;
@@ -51,6 +53,8 @@ export class Main extends Laya.Script {
         this.controlInput = new ControlInputAdapter(this.input);
         this.demo = new SimpleEcsDemo(container, null, this.controlInput);
         this.demo.setOnTabPauseChange((paused) => this.handleTabPauseChange(paused));
+        this.demo.setOnCombatFailed(() => this.handleCombatFailed());
+        this.demo.setOnDefeatExitRequested(() => this.onCombatDefeated());
 
         Laya.timer.frameLoop(1, this, this.onFrameLoop);
         this.loadConfigAndInitDemo();
@@ -97,6 +101,8 @@ export class Main extends Laya.Script {
 
                     if (this.demo) {
                         MetaRunSession.combatDemo = this.demo;
+                        this.combatFailed = false;
+                        this.demo.resetSessionForCombatStart();
                         await this.demo.init();
                         this.demo.setSessionPaused(false);
                     }
@@ -131,7 +137,7 @@ export class Main extends Laya.Script {
     }
 
     private handleTabPauseChange(paused: boolean): void {
-        if (!this.combatSurvivalTimer.isRunning()) return;
+        if (this.combatFailed || !this.combatSurvivalTimer.isRunning()) return;
         if (paused) {
             this.combatSurvivalTimer.pause();
         } else {
@@ -139,8 +145,16 @@ export class Main extends Laya.Script {
         }
     }
 
+    /** 玩家阵亡：立即停止生存倒计时，本局判定失败。 */
+    private handleCombatFailed(): void {
+        if (this.combatFailed) return;
+        this.combatFailed = true;
+        this.stopCombatSurvivalTimer();
+    }
+
     /** 生存胜利：暂停战斗并弹出三选一奖励。 */
     private async onCombatSurvived(): Promise<void> {
+        if (this.combatFailed) return;
         this.stopCombatSurvivalTimer();
         this.demo?.setSessionPaused(true);
 
@@ -152,6 +166,38 @@ export class Main extends Laya.Script {
             void this.afterCombatReward(picked);
         };
         await this.metaUiStack.push(REWARD_PANEL_ROUTE_ID, { context, applyInCombat: true });
+    }
+
+    /** 战败：点击复活面板后返回开始界面。 */
+    private async onCombatDefeated(): Promise<void> {
+        if (this.defeatExitInProgress) return;
+        this.defeatExitInProgress = true;
+        try {
+            this.combatFailed = true;
+            this.stopCombatSurvivalTimer();
+            await this.demo?.clearDefeatSession();
+            MetaRunSession.resetTestSession();
+            MetaRunSession.resetRunRewards();
+            MetaRunSession.runMapState = null;
+            MetaRunSession.resumeRunMap = null;
+            MetaRunSession.combatDemo = null;
+            this.demo?.resetCombatEntry();
+            onCombatLeave();
+
+            const container = this.owner as any;
+            if (container) container.visible = false;
+
+            if (META_MENU_ENABLED && this.metaUiStack) {
+                await this.metaUiStack.clearAll();
+                MetaMenuBootstrap.hideSceneEmbeddedStartPanel();
+                await this.metaUiStack.push(START_PANEL_ROUTE_ID);
+            } else {
+                MetaMenuBootstrap.showSceneEmbeddedStartPanel();
+            }
+        } finally {
+            this.combatFailed = false;
+            this.defeatExitInProgress = false;
+        }
     }
 
     /** 测试三关全部清场后返回选关界面。 */

@@ -26,7 +26,7 @@
 
 \section{功能测试}
 
-表~\ref{tab:test-func} 为代表性手工用例，覆盖战斗、元游戏、跑图、装配与重启主路径。
+表~\ref{tab:test-func} 列出主要手工用例，走通战斗、元游戏、跑图、装配和重启。
 
 \begin{longtable}{p{2.2cm}p{4.5cm}p{6.3cm}}
   \caption{功能测试用例摘要} \label{tab:test-func} \\
@@ -55,7 +55,7 @@
 
 \textbf{跑图可达性}：对 \texttt{RunMapGenerator.generate} 多次随机种子断言 \texttt{validateActReachBoss}；失败应走 \texttt{generateFallback}。\\
 \textbf{装配同步}：互换装备栏技能后，下一冷却周期伤害/图标与装配一致，否则 \texttt{SkillLoadoutSyncSystem} 存在缺陷。\\
-\textbf{Worker 一致性}：Worker 开/关各运行一段时间，怪物轨迹允许一帧延迟，但无逻辑漂移\cite{mckenzie2008crowd}。
+\textbf{Worker 一致性}：Worker 开、关各跑一段，怪物轨迹可差一帧，但算法不能两套\cite{mckenzie2008crowd}。
 
 \section{性能测试}
 
@@ -85,7 +85,7 @@
 
 \subsection{动态图集对比（前三波）}
 
-表~\ref{tab:test-level-fps-atlas}、\ref{tab:test-level-fps-compare} 为接入动态图集前后的历史两轮采样（仅前三波）。第 3 波（1000 怪）FPS 由 13.32 升至 15.10（约 $+13.4\%$），说明重度弹幕下纹理合批有效。
+表~\ref{tab:test-level-fps-atlas}、\ref{tab:test-level-fps-compare} 记录接图集前后两轮采样，只看前三波。第 3 波 1000 怪：FPS 从 13.32 到 15.10（约 $+13.4\%$），弹幕多时合批有用。
 
 \begin{table}[htbp]
   \centering
@@ -123,7 +123,7 @@
 
 \subsection{五波完整帧率}
 
-表~\ref{tab:test-five-waves} 为同次运行、已接入图集与 DrawCall 合批的完整五波数据。整场 1733 帧、约 50.3\,s，平均 FPS 约 34.48。
+表~\ref{tab:test-five-waves} 是同一次跑完的五波，已开图集和 DrawCall 合批。共 1733 帧、约 50.3\,s，整场平均 FPS 约 34.48。
 
 \begin{table}[htbp]
   \centering
@@ -166,41 +166,29 @@
 \begin{enumerate}
   \item \textbf{规模曲线（第 1--3 波）。} 怪物 10$\rightarrow$100$\rightarrow$1000 时 FPS 由 58.62 降至 15.14，符合实体与弹幕压力上升规律。
   \item \textbf{平均 FPS：池化对均值影响有限。} 第 4、5 波均值接近（26.16 对 25.98），预热后瓶颈主要在子弹碰撞与绘制。
-  \item \textbf{P95：对象池显著平滑帧时间。} P95 由 76.50\,ms 降至 48.60\,ms（约降 36.5\%），印证第~\ref{chap:performance}~章关于 GC/实例化尖峰的论述。
+  \item \textbf{P95。} 开池后 P95 从 76.50\,ms 到 48.60\,ms（约降 36.5\%），和第~\ref{chap:performance}~章对 GC/实例化的判断一致。
   \item \textbf{第 3 波低于第 4 波基线。} 第 3 波含资源预热与首次千怪开销；消融结论以第 4--5 波为准。
   \item \textbf{Web Worker。} 本次未设「池+Worker、已预热」同窗段；Worker 定量收益列为后续工作。
 \end{enumerate}
 
 \section{系统运行截图}
 
-插图位于 \texttt{thesis/figures/}，编译时若 PNG 存在则自动嵌入。图~\ref{fig:ui-start}--\ref{fig:ui-restart} 覆盖元游戏与局内闭环。
+截图源文件置于 \texttt{thesis/Png/}，编译前由 \texttt{build.ps1} 同步至 \texttt{thesis/figures/}。图~\ref{fig:ui-start}--\ref{fig:ui-restart} 覆盖元游戏与局内闭环；可选增加 Performance 时间轴截图以说明对象池对 P95 帧时间的影响。
 
-\newcommand{\thesisfig}[4]{%
-  \begin{figure}[htbp]
-    \centering
-    \IfFileExists{#1}{%
-      \includegraphics[width=0.88\textwidth]{#1}%
-    }{%
-      \fbox{\parbox{0.88\textwidth}{\centering\vspace{1.8cm}\small #2\\\texttt{#1}\vspace{1.8cm}}}%
-    }%
-    \caption{#3}\label{#4}%
-  \end{figure}%
-}
-
-\thesisfig{figures/fig-01-start.png}{主菜单}{游戏开始界面（StartPanel）}{fig:ui-start}
-\thesisfig{figures/fig-02-runmap.png}{跑图界面}{三大关 DAG 跑图（RunMapPanel）}{fig:ui-runmap}
-\thesisfig{figures/fig-03-combat.png}{战斗场面}{局内战斗（同屏多怪与弹幕）}{fig:ui-combat}
-\thesisfig{figures/fig-04-skill.png}{技能装配}{Tab 暂停下的技能/Effect 装配面板}{fig:ui-skill}
-\thesisfig{figures/fig-05-reward.png}{升级奖励}{生存胜利后的三选一奖励面板}{fig:ui-reward}
-\thesisfig{figures/fig-06-restart.png}{死亡重启}{玩家死亡后的重启面板}{fig:ui-restart}
+\thesisfig{fig-01-start.png}{游戏开始界面（StartPanel）}{fig:ui-start}
+\thesisfig{fig-02-runmap.png}{三大关 DAG 跑图界面（RunMapPanel）}{fig:ui-runmap}
+\thesisfig{fig-03-combat.png}{局内战斗场面（同屏多怪与弹幕）}{fig:ui-combat}
+\thesisfig{fig-04-skill.png}{Tab 暂停下的技能/Effect 装配面板}{fig:ui-skill}
+\thesisfig{fig-05-reward.png}{生存胜利后的三选一奖励面板}{fig:ui-reward}
+\thesisfig{fig-06-restart.png}{玩家死亡后的重启面板}{fig:ui-restart}
 
 \section{测试结论}
 
-\textbf{功能}：Must 级需求经 T-F-01--10 与单元脚本覆盖；Should 级跑图、装配、升级、池化/Worker 已验证；Could 级法杖完整 UI 与部分 Effect 独立特效未实现，与第~\ref{chap:conclusion}~章一致。\\
-\textbf{性能}：动态图集提升千怪波 FPS 约 13.4\%；五波实验整场均值约 34.48；对象池在同窗消融下将 P95 降低约 36.5\%。\\
+\textbf{功能}：Must 用 T-F-01--10 和 \texttt{verify.ts} 覆盖；Should 的跑图、装配、升级、池/Worker 也测过；Could 的法杖三槽 UI 和部分 Effect 特效没做完，和第~\ref{chap:conclusion}~章一致。\\
+\textbf{性能}：图集让千怪波 FPS 高约 13.4\%；五波整场均值约 34.48；同窗消融里池把 P95 拉低约 36.5\%。\\
 \textbf{遗留}：配置未同步至 \texttt{bin/} 时图标可能空白（已用脚本与 \texttt{isGameConfigReady} 缓解）；Worker 预热后同窗消融待补。\\
 \textbf{已知缺陷}：部分 Effect 仅逻辑生效、无独立 VFX，已在答辩范围中如实标注。
 
 \section{本章小结}
 
-本章给出测试策略、单元验证、功能用例、环境与五波性能数据及解读；对象池价值已由第 4--5 波实测支持。截图就位后即可生成带插图的 PDF；Worker 同窗消融可作为后续实验补充。
+本章给出测试策略、单元验证、功能用例、环境与五波性能数据及解读；对象池价值已由第 4--5 波实测支持。图~\ref{fig:ui-start}--\ref{fig:ui-restart} 为系统运行截图；Worker 同窗消融可作为后续实验补充。

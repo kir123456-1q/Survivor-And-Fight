@@ -10,7 +10,7 @@ import { RESTART_PANEL_ROUTE_ID } from '../../game/ui/restart/RestartPanelContro
 /**
  * ECS-owned restart panel lifecycle via MVC UI stack:
  * - show/hide through UIStackManager
- * - restart click writes restartRequested in GameSession
+ * - 复活/重开点击写入 restartRequested，由 Main 处理为返回开始界面（不再原地复活）
  */
 export class RestartPanelSystem implements System {
     readonly group = 'render' as const;

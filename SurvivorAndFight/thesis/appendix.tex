@@ -20,7 +20,7 @@
 \chapter{核心配表字段示例（节选）}
 \label{app:config}
 
-\textbf{Character 表}：\texttt{id}、\texttt{prefabPath}、\texttt{bodyPrefabPath}、\texttt{hp}、\texttt{maxHp}、\texttt{roleType}。玩家与怪物共用表结构，通过 \texttt{roleType} 区分预制体与默认数值。
+\textbf{Character 表}字段含 \texttt{id}、\texttt{prefabPath}、\texttt{bodyPrefabPath}、\texttt{hp}、\texttt{maxHp}、\texttt{roleType}。玩家和怪物同表，靠 \texttt{roleType} 选预制体和默认值。
 
 \textbf{Bullet 表}：\texttt{id}、\texttt{prefabPath}、\texttt{duration}、\texttt{speed}、\texttt{damage}、\texttt{penetration}。子弹系统按 id 查表生成运动参数与伤害。
 
@@ -28,7 +28,7 @@
 
 \textbf{SkillEffect 表}：\texttt{id}、\texttt{effect}、\texttt{damage}、\texttt{params}、\texttt{iconPath}。\texttt{effect} 取值包括 \texttt{bullet}、\texttt{modifier\_split}、\texttt{modifier\_chain}、\texttt{modifier\_pierce}、\texttt{direct\_damage}。
 
-完整 JSON 见项目 \texttt{docs/config/} 目录；运行前须执行 \texttt{tools/sync-config-to-bin.ps1} 同步至 \texttt{bin/config/}。
+完整 JSON 在 \texttt{docs/config/}。运行前执行 \texttt{tools/sync-config-to-bin.ps1}，把表拷到 \texttt{bin/config/}。
 
 \chapter{需求与测试用例映射（节选）}
 \label{app:req-test}

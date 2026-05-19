@@ -3,8 +3,8 @@
   \thispagestyle{empty}
   % 校徽单独一行（左上）
   \noindent
-  \IfFileExists{figures/cover-logo.png}{%
-    \includegraphics[height=2.0cm]{figures/cover-logo.png}%
+  \IfFileExists{cover-logo.png}{%
+    \includegraphics[height=2.0cm]{cover-logo.png}%
   }{%
     \IfFileExists{../docs/thesis-docx-extract/media/cover-logo.png}{%
       \includegraphics[height=2.0cm]{../docs/thesis-docx-extract/media/cover-logo.png}%
@@ -22,8 +22,8 @@
   \begin{minipage}{\textwidth}
     \setstretch{1.2}
     \justifying
-    {\heiti\zihao{-2}\bfseries 基于 LayaAir 与 ECS 的 Roguelite 生存战斗游戏\par}
-    {\heiti\zihao{-2}\bfseries 设计与实现\par}
+    {\heiti\zihao{-2}\bfseries 基于ECS架构的类吸血鬼幸存者游戏\par}
+    {\heiti\zihao{-2}\bfseries 开发及优化（校外）\par}
   \end{minipage}
   \vspace{2.5cm}
   % 专业、班级：仿宋三号，1 倍行距
@@ -73,17 +73,17 @@
 \upcabstracttitle
 \songti\zihao{-4}
 \setlength{\parindent}{2em}
-随着 HTML5 与 WebGL 技术的发展，浏览器端已能承载中等复杂度的实时动作游戏。Roguelite 品类强调单局随机性、元进度与构筑深度，对架构可扩展性与运行时性能要求较高。本文以毕业设计 Survivor And Fight 为对象，在 LayaAir 3.x 与 TypeScript 上设计并实现 2D 俯视角生存战斗游戏。系统采用轻量实体组件系统解耦位置、属性、技能与操控，配表驱动发射、穿透、分裂与连锁等战斗效果；通过对象池降低实例化开销，并在高实体规模时以 Web Worker 异步重算战斗快照。
+HTML5 与 WebGL 成熟后，浏览器已能运行中等规模的实时动作游戏。类吸血鬼幸存者玩法依赖单局随机、构筑与同屏实体压力，适合用 ECS 组织逻辑并控制帧率。本文题目为《\thesistitle》，以 \textbf{Survivor And Fight} 工程为例，基于 LayaAir 3.x 与 TypeScript 完成 2D 俯视角原型：轻量 ECS 拆分坐标、属性、技能与输入；JSON 配表配置伤害与子弹；对象池减少预制体反复创建，实体过多时把追逐等数值计算放到 Web Worker。
 
-元游戏层提供开始界面、选关与三幕跑图及局内升级装配。全文从需求、架构、实现与测试验证展开。压力测试表明系统运行稳定，同屏千怪时对象池使 P95 帧时间由约 76.5\,ms 降至 48.6\,ms，动态图集提升平均帧率约 13.4\%；Web Worker 同窗定量消融留作后续工作。
+元流程含主菜单、选关、三幕 DAG 跑图及 Tab 技能装配。论文按需求、设计、实现、测试组织。千怪压力场景下，对象池把 P95 帧时间从约 76.5\,ms 压到 48.6\,ms；动态图集使该场景平均 FPS 提高约 13.4\%。Worker 在预热后的同窗消融尚未完成，列为后续实验。
 
-\upckeywords{LayaAir；实体组件系统；Roguelite；数据驱动；Web Worker；对象池；生存战斗}
+\upckeywords{实体组件系统；类吸血鬼幸存者；LayaAir；数据驱动；Web Worker；对象池}
 
 % 英文摘要（不入目录）
 \clearpage
 \upcabstracten
 \zihao{-4}
 \setlength{\parindent}{2em}
-With the maturity of HTML5 and WebGL, browsers can host real-time action games of moderate complexity. This thesis presents the design and implementation of Survivor And Fight, a 2D top-down survival combat game built on LayaAir 3.x and TypeScript. A lightweight ECS drives gameplay; combat is configuration-driven with object pooling and optional Web Worker offloading. A meta layer provides menus, level selection, and a three-act DAG run map. Testing shows stable operation; object pooling reduces P95 frame time under 1000 on-screen monsters, and texture atlasing improves average FPS on the heaviest wave. Quantitative ablation of Worker offloading under warmed-up conditions is left for future work.
+HTML5 and WebGL now support moderately complex real-time games in the browser. This thesis covers the development and optimization of a vampire-survivor-like game built on an ECS architecture (off-campus project). The Survivor And Fight prototype on LayaAir 3.x and TypeScript uses a lightweight ECS; bullets and modifiers are loaded from JSON tables; object pooling cuts allocation churn, and a Web Worker recomputes chase logic when entity counts are high. Menus, level pickers, and a three-act DAG map form the meta loop. Under a 1000-monster stress case, pooling lowered P95 frame time from about 76.5\,ms to 48.6\,ms; dynamic atlasing raised average FPS on the heaviest wave by roughly 13.4\%. A warmed-up, same-session Worker ablation is planned as follow-up work.
 
-\upckeywordsen{LayaAir, ECS, Roguelite, data-driven, Web Worker, object pooling, survivor-like combat}
+\upckeywordsen{ECS, vampire-survivor-like, LayaAir, data-driven, Web Worker, object pooling}

@@ -3,37 +3,37 @@
 
 \section{研究背景与意义}
 
-移动互联网与浏览器平台的普及，使“打开即玩”的 H5 游戏成为独立游戏与教学实践的重要载体。相较于原生客户端，H5 游戏在分发成本、跨平台兼容与快速迭代方面具有优势：玩家无需安装包即可通过链接进入，开发者可利用 Web 技术栈统一维护逻辑与资源。与此同时，JavaScript 单线程事件循环、垃圾回收（GC）抖动以及浏览器渲染管线约束，也对实时战斗类游戏的架构设计提出了更高要求——任何一帧内逻辑、物理近似、碰撞与 UI 事件若叠加超限，都会直接表现为卡顿或掉帧。
+手机与浏览器普及，使 H5 游戏在独立作品和课设中都很常见。相对安装包，链接即玩、跨端发布、逻辑与资源共用一套 Web 栈，迭代成本通常更低。但 JS 只有一条主线程，GC 与绘制也要抢时间；战斗类若一帧里堆太多移动、碰撞和 UI，玩家会直接感到掉帧。
 
-Roguelite 品类以自动攻击、大量敌人、局内升级构筑为核心循环，对\textbf{数据驱动能力}、\textbf{同屏实体规模}与\textbf{元游戏流程编排}提出了系统化工程需求。与传统回合制 Roguelike 相比，Roguelite 更强调单局内的 Build 组合与节奏压缩，适合在毕业设计周期内交付“可玩闭环”；与纯 Arcade 射击相比，其随机奖励与路线选择又要求架构能够支撑频繁调参与内容扩展。Survivor-like 子类进一步将操作简化为走位与构筑决策，使技术难点集中在\textbf{高密度实体模拟}与\textbf{技能效果组合}，而非复杂输入映射。
+Roguelite 的典型节奏是自动开火、怪潮、局内升级。它要数据能外置改、同屏实体够多、菜单到跑图这条元流程跑得通。比 Roguelike 更偏单局 Build，比街机射击更偏随机路线，因而程序上更要留扩展口。Survivor-like 只保留走位和构筑，难点在密集实体和技能组合，不在复杂按键。
 
-\textbf{Survivor And Fight} 项目目标是在 LayaAir 3.x 上实现 2D 俯视角生存战斗游戏原型，覆盖主菜单、选关、爬塔式跑图、局内战斗、升级奖励与技能装配等完整闭环，并探索 ECS 架构、配表驱动技能、对象池与 Web Worker 等性能手段。游戏引擎是商业游戏开发的基础工具，其架构复杂、子系统耦合度高，开发者常面临可维护性与演化性问题\cite{ullmann2025sydra,gregory2018game,baabad2020degradation}。Ullmann 等提出的 SyDRA 方法表明，通过恢复子系统依赖关系可辅助架构理解与变更影响分析\cite{ullmann2025sydra}；Gregory 对现代引擎渲染、资源、场景图与脚本分层的论述，为本文“表现层—逻辑层—基础设施层”划分提供了参照\cite{gregory2018game}。
+\textbf{Survivor And Fight} 用 LayaAir 3.x 做 2D 俯视角原型，串起主菜单、选关、爬塔跑图、局内战斗、升级和 Tab 装配，并试验 ECS、配表技能、对象池和 Worker。商业引擎子系统多、耦合紧，后期改动贵，已有文献从依赖恢复和分层划分讨论过这一问题\cite{ullmann2025sydra,gregory2018game,baabad2020degradation}。SyDRA 侧重子系统依赖可视化\cite{ullmann2025sydra}；Gregory 的引擎分层论述为本文划分表现、逻辑与基础设施提供参照\cite{gregory2018game}。
 
-在 Unity 等引擎上，物理模拟已用于人群疏散等场景验证\cite{cantrell2018unity,bott2014unreal}，说明将重计算与交互渲染分离、采用模块化设计的价值。Cantrell 等在 Unity 中实现基于物理压力的人群疏散模型，Petty 等强调仿真系统须经 V\&V（验证与确认）\cite{petty2010vv}；本项目虽非物理引擎级仿真，但怪物追逐、分离力与密集碰撞同样属于“多代理体局部相互作用”问题，可借鉴其\textbf{分阶段验证}与\textbf{性能—真实性折中}思路。本课题在 H5 环境下实践类似思想，具有工程与教学双重意义：工程上形成可运行原型与性能数据；教学上贯通需求、设计、实现、测试的完整软件生命周期。
+Unity 上做过物理驱动的人群疏散\cite{cantrell2018unity,bott2014unreal}，说明重算和画面最好分开。Petty 等要求仿真走 V\&V 流程\cite{petty2010vv}。本文不做刚体引擎，但怪物追逐、分离和挤碰仍是多体局部作用，可借用分步验证和“够用即可”的性能取舍。在 H5 里做通原型并留下测试数据，对工程和教学都有用。
 
 \section{国内外研究现状}
 
 \subsection{游戏引擎架构}
 
-游戏引擎研究长期关注子系统划分、依赖关系与演化可维护性。Gregory 从工业实践角度归纳了渲染、资源管理、场景图、动画与脚本等子系统的职责边界，指出商业引擎的价值在于将 tick 调度与资源生命周期统一管理\cite{gregory2018game}。Munro 对 Quake 系列引擎的模块分析、Agrahari 对 Unreal 内部结构的梳理，为理解“引擎层—游戏层”分界提供了历史参照\cite{munro2009quake,agrahari2021unreal}。Goslin 介绍的 Panda3D 体现了脚本语言与 C++ 渲染核心协同的典型模式\cite{goslin2004panda}。
+引擎研究常谈子系统边界、依赖和长期维护。Gregory 按工业经验划分渲染、资源、场景图、动画和脚本，商业产品往往统一 tick 与资源生命周期\cite{gregory2018game}。Quake、Unreal 的拆解帮助区分引擎层与游戏层\cite{munro2009quake,agrahari2021unreal}。Panda3D 则代表脚本层叠在 C++ 核心上的老路子\cite{goslin2004panda}。
 
-近年来，面向\textbf{架构理解与变更影响分析}的研究增多。Ullmann 等提出 SyDRA 方法，通过恢复多款开源引擎的子系统依赖图，辅助开发者完成理解任务与影响分析\cite{ullmann2025sydra}；其后续工作进一步可视化引擎子系统耦合模式，指出过度耦合与目录嵌套是演化中的常见退化现象\cite{ullmann2023coupling}。Baabad 等则从软件退化角度讨论大型引擎代码库的维护成本\cite{baabad2020degradation}。在 H5 与跨平台方向，研究重点除传统子系统外，还包括\textbf{主线程预算}、\textbf{资源异步加载}与\textbf{浏览器沙箱约束}；一体化 H5 引擎（如 LayaAir、Cocos Creator）在 2D 预制体与 TypeScript 工作流上降低了教学与原型成本，但“逻辑—表现”是否解耦仍取决于应用层架构，而非引擎品牌本身\cite{gregory2018game,ullmann2023coupling}。
+近几年更关注“改一处会影响哪里”。SyDRA 从开源引擎恢复依赖图\cite{ullmann2025sydra}；后续工作把耦合画出来，指出目录嵌套和过度耦合是退化来源\cite{ullmann2023coupling}。Baabad 等讨论大型引擎代码库的维护负担\cite{baabad2020degradation}。H5 还要单独算主线程预算、异步加载和沙箱限制。LayaAir、Cocos Creator 降低了 2D 预制体和 TypeScript 的门槛，但逻辑是否和画面拆开，仍看项目怎么写\cite{gregory2018game,ullmann2023coupling}。
 
 \subsection{实体组件系统与玩法架构}
 
-实体组件系统（ECS）将游戏对象表示为实体标识、纯数据组件与无状态系统，强调\textbf{组合优于继承}，便于按类型批量处理与增量扩展\cite{gregory2018game}。Unity DOTS 路线结合 Job System 与 Burst，面向大规模数据导向并行；独立游戏与工具链社区亦广泛讨论 ECS 在 Unity/Unreal 插件及自研引擎中的落地方式。教学与中小型项目多采用 Map 存储组件、单线程顺序调度的轻量实现，在可读性与性能之间折中，避免引入完整 DOTS 的学习与调试成本。
+ECS 把对象拆成实体 ID、数据组件和无状态系统，用组合代替深继承，方便按类型批处理\cite{gregory2018game}。Unity DOTS 走数据导向并行；小团队更常用 Map 存组件、单线程 tick 的轻量版，省掉 DOTS 的学习和排错成本。
 
-在玩法架构方面，Survivor-like 强调波次刷怪、自动输出与局内升级构筑；Roguelite 则在单局随机之外引入元进度与路线选择。Slay the Spire 式\textbf{有向无环图（DAG）跑图}被证明能有效支撑玩家路线规划\cite{gregory2018game}。数据驱动技能表在 RPG 与动作游戏中已是主流：将冷却、伤害与效果段外置为表，由运行时解释执行，便于策划并行调参；相关研究亦关注公式解析的安全边界，避免不可信配置触发任意代码执行\cite{gregory2018game,petty2010vv}。
+Survivor-like 靠波次和自动攻击；Roguelite 再加元进度和路线。Slay the Spire 式 DAG 跑图用来规划节点\cite{gregory2018game}。技能表外置冷却和效果段已是常见做法；研究也提醒公式解析要设白名单，别让配表变成脚本注入入口\cite{gregory2018game,petty2010vv}。
 
 \subsection{物理模拟、人群与性能}
 
-大量代理体运动与密集交互是生存战斗类游戏的典型瓶颈。Reynolds 的 Boids 模型、Thalmann 与 Pelechano 的人群仿真工作为局部规则驱动的群体运动提供了经典范式\cite{reynolds1987flocks,thalmann2007crowd,pelechano2008virtual}。Cantrell 等在 Unity 上实现基于物理压力的人群疏散模型，并完成 V\&V\cite{cantrell2018unity}；Bott 等在 Unreal 中采用物理驱动的人群移动工具链\cite{bott2014unreal}；Helbing 等关于恐慌人群的模型则提示密集场景须关注分离力与局部稳定性\cite{helbing2000panic}。McKenzie 等将人群行为建模与游戏技术结合用于仿真教学\cite{mckenzie2008crowd}。
+成百上千个代理同时运动，是生存战斗的性能热点。Boids 和经典人群模型给出局部规则思路\cite{reynolds1987flocks,thalmann2007crowd,pelechano2008virtual}。Cantrell 等在 Unity 做压力疏散并做 V\&V\cite{cantrell2018unity}；Bott 等在 Unreal 用物理工具链\cite{bott2014unreal}；Helbing 的恐慌模型强调分离力\cite{helbing2000panic}。McKenzie 等把人群建模放进游戏教学\cite{mckenzie2008crowd}。
 
-H5 客户端性能研究多聚焦主线程敏感性与 GC 抖动。常见工程手段包括：对象池抑制反复实例化、纹理合批与图集、逻辑暂停，以及将纯数值计算迁移至 Web Worker\cite{gregory2018game,mckenzie2008crowd}。Worker 通信成本与 DOM/引擎 API 不可达性决定了“哪些逻辑可卸载、哪些须保留在主线程”的架构划分，是近年来浏览器游戏性能优化文献与工程经验中的共识方向。
+H5 优化多盯 GC 和主线程。对象池、图集合批、暂停逻辑、Worker 迁数值算是常见组合拳\cite{gregory2018game,mckenzie2008crowd}。Worker 不能碰 DOM 和大部分引擎 API，所以只有纯计算适合下放，碰撞和绘制仍得留在主线程。
 
 \input{chapter01-extended}
 \input{chapter01-background-extra}
 
 \section{本章小结}
 
-本章阐述了课题背景、国内外相关研究与工程特色，为后续需求、设计与实现章节奠定理论基础。
+本章交代背景、相关研究和本项目的工程特点，供后文需求与设计引用。

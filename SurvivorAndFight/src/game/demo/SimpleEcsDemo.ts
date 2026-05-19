@@ -102,6 +102,9 @@ export class SimpleEcsDemo {
     private readonly mainHudSystem: MainHudSystem;
     private readonly skillSelectController = new SkillSelectPanelController();
     private onTabPauseChange: ((paused: boolean) => void) | null = null;
+    private onCombatFailed: (() => void) | null = null;
+    private onDefeatExitRequested: (() => void | Promise<void>) | null = null;
+    private combatFailedNotified = false;
     private playerEntity = -1;
     private readonly container: any;
     private readonly filters: FilterRegistry;
@@ -184,6 +187,38 @@ export class SimpleEcsDemo {
 
     setOnTabPauseChange(handler: ((paused: boolean) => void) | null): void {
         this.onTabPauseChange = handler;
+    }
+
+    setOnCombatFailed(handler: (() => void) | null): void {
+        this.onCombatFailed = handler;
+    }
+
+    setOnDefeatExitRequested(handler: (() => void | Promise<void>) | null): void {
+        this.onDefeatExitRequested = handler;
+    }
+
+    /** 进入战斗前重置会话状态（失败标记、复活面板等）。 */
+    resetSessionForCombatStart(): void {
+        const session = this.world.getComponent(this.sessionEntity, GameSession);
+        if (session) {
+            session.paused = false;
+            session.combatFailed = false;
+            session.restartRequested = false;
+            session.restartPanelVisible = false;
+        }
+        this.combatFailedNotified = false;
+    }
+
+    /** 战败退出：关闭复活面板并清会话标记。 */
+    async clearDefeatSession(): Promise<void> {
+        const session = this.world.getComponent(this.sessionEntity, GameSession);
+        if (session) {
+            session.paused = false;
+            session.combatFailed = false;
+            session.restartRequested = false;
+        }
+        await this.uiStack.clearAll();
+        if (session) session.restartPanelVisible = false;
     }
 
     /**
@@ -470,8 +505,9 @@ export class SimpleEcsDemo {
             testLevelFpsTracker.tick(deltaTime, this.isPaused());
         }
         this.world.update(deltaTime);
+        this.notifyCombatFailedIfNeeded();
         if (!this.restarting) {
-            void this.tryRestartFromSession();
+            void this.tryDefeatExitFromSession();
         }
     }
 
@@ -490,6 +526,14 @@ export class SimpleEcsDemo {
     /** 再次进入战斗前重置（例如测试关结束后进入普通关卡）。 */
     resetCombatEntry(): void {
         this.initDone = false;
+        this.combatFailedNotified = false;
+    }
+
+    private notifyCombatFailedIfNeeded(): void {
+        const session = this.world.getComponent(this.sessionEntity, GameSession);
+        if (!session?.combatFailed || this.combatFailedNotified) return;
+        this.combatFailedNotified = true;
+        this.onCombatFailed?.();
     }
 
     destroy(): void {
@@ -643,27 +687,13 @@ export class SimpleEcsDemo {
         console.warn(message, detail);
     }
 
-    private async tryRestartFromSession(): Promise<void> {
+    private async tryDefeatExitFromSession(): Promise<void> {
         const session = this.world.getComponent(this.sessionEntity, GameSession);
         if (!session || !session.restartRequested) return;
         this.restarting = true;
         try {
             session.restartRequested = false;
-            this.clearAllGameplayEntities();
-            session.paused = false;
-            this.monsterWaveSpawnSystem.reset();
-            this.playerEntity = -1;
-            if (MetaRunSession.testMode) {
-                MetaRunSession.testWaveIndex = 0;
-                MetaRunSession.testWaveAwaitingClear = false;
-                this.monsterWaveSpawnSystem.setWaveSpawnEnabled(false);
-                await this.spawnPlayer(true);
-                await this.spawnTestWave(0);
-            } else {
-                this.monsterWaveSpawnSystem.setWaveSpawnEnabled(true);
-                await this.spawnPlayer(false);
-                await this.spawnMonsters(MONSTER_COUNT);
-            }
+            await this.onDefeatExitRequested?.();
         } finally {
             this.restarting = false;
         }

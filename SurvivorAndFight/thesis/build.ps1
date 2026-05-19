@@ -4,6 +4,16 @@
 $ErrorActionPreference = "Stop"
 Set-Location $PSScriptRoot
 
+# 将 Png/ 下截图同步到 figures/（与 chapter07 中 \thesisfig 文件名一致）
+$pngSrc = Join-Path $PSScriptRoot "Png"
+$figDst = Join-Path $PSScriptRoot "figures"
+if (Test-Path $pngSrc) {
+    Get-ChildItem -Path $pngSrc -Filter "fig-*.png" | ForEach-Object {
+        Copy-Item -Path $_.FullName -Destination (Join-Path $figDst $_.Name) -Force
+    }
+    Write-Host "==> 已同步 Png/fig-*.png -> figures/" -ForegroundColor DarkGray
+}
+
 function Invoke-TeX($cmd) {
     & $cmd
     if ($LASTEXITCODE -ne 0) { throw "命令失败 (exit $LASTEXITCODE): $cmd" }

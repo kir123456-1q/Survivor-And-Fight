@@ -9,15 +9,15 @@
   \item \textbf{数据与逻辑分离}：组件仅存数据，系统执逻辑；可调参数尽量外置 JSON 配表，工程常量集中于 \texttt{src/defines/}\cite{gregory2018game}。
   \item \textbf{单一职责}：\texttt{BulletSystem} 负责子弹运动与碰撞；\texttt{EffectExecutor} 负责配表效果解释；\texttt{MetaFlowController} 仅协调元游戏流程，不直接改写 ECS 组件\cite{briand2001maintainability}。
   \item \textbf{可验证}：核心模块提供公式解析、ECS 核心、属性修饰器等单元验证脚本，变更后可快速回归\cite{petty2010vv}。
-  \item \textbf{渐进复杂度}：第 1 期采用轻量 ECS 与单线程调度；对象池与 Web Worker 仅在实体规模达标时启用。
-  \item \textbf{低耦合}：UI 经 Controller 与 SyncSystem 读写 ECS；战斗 Worker 与主线程共享 \texttt{combatWorkerLogic.ts}，避免双份逻辑漂移\cite{ullmann2023coupling}。
-  \item \textbf{可降级}：配表缺失、Worker 不可用、跑图生成失败时均有明确回退路径（见第~\ref{sec:reliability}~节与第~\ref{sec:fault-tolerance}~节）。
+  \item \textbf{渐进复杂度}：先做轻量 ECS 和单线程 tick；池化和 Worker 只在怪够多时再开。
+  \item \textbf{低耦合}：UI 经 Controller、SyncSystem 读写 ECS；Worker 与主线程共用一份 \texttt{combatWorkerLogic.ts}\cite{ullmann2023coupling}。
+  \item \textbf{可降级}：表没加载、Worker 起不来、地图生成失败时，都有回退（第~\ref{sec:reliability}~节、第~\ref{sec:fault-tolerance}~节）。
 \end{enumerate}
 
 \section{系统具体设计}
 \label{sec:system-design}
 
-Survivor And Fight 在逻辑上划分为\textbf{表现层}、\textbf{UI 控制层}、\textbf{游戏逻辑层}、\textbf{领域服务层}与\textbf{基础设施层}，如图~\ref{fig:layers} 所示。\texttt{Main.ts} 作为应用入口，在 \texttt{Laya.timer.frameLoop} 中驱动 \texttt{EcsWorld.update}，再由引擎完成渲染与 UI 事件分发。元游戏（菜单、选关、跑图）与局内战斗共用同一 TypeScript 工程，通过容器显隐与 \texttt{MetaFlowController} 回调切换，避免维护两套入口。
+逻辑上分五层：表现、UI 控制、游戏逻辑、领域服务、基础设施，见图~\ref{fig:layers}。\texttt{Main.ts} 在 \texttt{Laya.timer.frameLoop} 里调 \texttt{EcsWorld.update}，随后引擎画画面、发 UI 事件。菜单、选关、跑图和战斗在同一工程里，靠容器显隐和 \texttt{MetaFlowController} 切换，不必维护两套入口。
 
 \begin{figure}[htbp]
   \centering
@@ -40,7 +40,7 @@ Survivor And Fight 在逻辑上划分为\textbf{表现层}、\textbf{UI 控制�
 \subsection{基于 ECS 的 Gameplay 实现}
 \label{sec:ecs-design}
 
-\textbf{实体—组件—系统}是局内玩法的核心范式。\texttt{EntityId} 为数值标识；\texttt{ComponentStore} 按组件类型使用 \texttt{Map<EntityId, Component>} 存储；\texttt{EcsWorld} 按 \texttt{input/logic/render} 分组顺序调用已注册系统。玩法数据与逻辑严格分离：\texttt{Position}、\texttt{Velocity}、\texttt{Attribute}、\texttt{Skill}、\texttt{SkillLoadoutState} 等仅存字段；\texttt{MovementSystem}、\texttt{SkillSystem}、\texttt{BulletSystem} 等无状态遍历实体并修改组件。
+局内玩法走 ECS。\texttt{EntityId} 是数字；\texttt{ComponentStore} 用 \texttt{Map} 按类型存组件；\texttt{EcsWorld} 按 \texttt{input/logic/render} 分组调 System。\texttt{Position}、\texttt{Velocity}、\texttt{Attribute}、\texttt{Skill} 等只放数据；\texttt{MovementSystem}、\texttt{BulletSystem} 等遍历实体改字段，本身不记状态。
 
 \textbf{标签与筛选}：玩家与怪物共享位移、属性、技能等组件，仅通过 \texttt{PlayerTag}/\texttt{MonsterTag} 区分。\texttt{FilterRegistry} 提供 \texttt{Players}、\texttt{Monsters} 等命名筛选器，避免各 System 重复编写交集查询。该设计体现\textbf{组合优于继承}：新增怪物行为时扩展组件字段或新增 System，而非维护 \texttt{MonsterBase} 类树。
 
@@ -53,14 +53,14 @@ Survivor And Fight 在逻辑上划分为\textbf{表现层}、\textbf{UI 控制�
 
 元游戏与局内 UI 采用 \textbf{MVC 变体}\cite{heijstek2011empirical}：
 \begin{itemize}
-  \item \textbf{Model}：ECS 组件（hp、装配状态）或独立模型（\texttt{RunMapPanelModel}、\texttt{RunMapState}）；
-  \item \textbf{View}：Laya 预制体与 UI2 节点绑定，负责布局与显示；
-  \item \textbf{Controller}：继承 \texttt{UiControllerBase}，处理生命周期、输入与路由，\textbf{禁止}直接操作战斗场景中的实体节点。
+  \item \textbf{Model}：hp、装配来自 ECS；跑图用 \texttt{RunMapPanelModel}、\texttt{RunMapState}；
+  \item \textbf{View}：预制体、UI2 节点负责布局；
+  \item \textbf{Controller}：\texttt{UiControllerBase} 子类管生命周期和路由，\textbf{不得}直接改战斗实体。
 \end{itemize}
 
-\textbf{全屏导航}：\texttt{UIStackManager} 维护路由栈，\texttt{push(routeId)} 入栈并显示对应 Controller，\texttt{pop()} 恢复上一层，保证任意时刻仅一个全屏界面占据焦点。开始、选关、跑图等界面经 \texttt{MetaMenuBootstrap} 注册路由。
+全屏页走 \texttt{UIStackManager}：\texttt{push} 显示、\texttt{pop} 返回，始终只有一个全屏页在前台。\texttt{MetaMenuBootstrap} 注册开始、选关、跑图路由。
 
-\textbf{局内交互}：\texttt{SkillSelectPanelController} 监听 Tab，打开时将 \texttt{GameSession.paused} 置真，战斗 System 早退而 UI 仍接收指针事件。\texttt{SkillDragService} 长按拖拽，\texttt{SkillSlotHitTest} 统一命中判定；关闭面板时 \texttt{SkillLoadoutSyncSystem} 原子写回 \texttt{Skill} 与 \texttt{PlayerAutoCastSystem}。\texttt{RunMapPanelView} 根据 DAG 状态渲染节点与连线，可达性规则由 Model 校验而非 View 硬编码。
+局内 Tab 由 \texttt{SkillSelectPanelController} 监听：打开时 \texttt{GameSession.paused=true}，战斗 System 不 tick，UI 仍能吃点击。拖拽走 \texttt{SkillDragService}，落点用 \texttt{SkillSlotHitTest}；关面板时 \texttt{SkillLoadoutSyncSystem} 一次性写回 \texttt{Skill} 和 \texttt{PlayerAutoCastSystem}。跑图连线由 \texttt{RunMapPanelView} 画，能不能走由 Model 判，View 不写规则。
 
 核心约束：\textbf{界面不拥有玩法真相}——玩法状态以 ECS 与配表为准，UI 仅经 Controller/SyncSystem 读写。
 
@@ -71,17 +71,17 @@ Survivor And Fight 在逻辑上划分为\textbf{表现层}、\textbf{UI 控制�
 
 \textbf{Web Worker}：当场上实体数 $\geq$ \texttt{COMBAT\_WORKER\_MIN\_ENTITY\_COUNT} 时，\texttt{CombatDataPrepareSystem} 将快照经 \texttt{CombatDataBridge} 发送至 Worker；\texttt{combatWorkerLogic.ts} 在主线程与 Worker 间共享，计算追逐、分离与摆动。\texttt{CombatDataBridge.prepareFrame} 优先消费异步结果，失败或未就绪时调用 \texttt{computeSync} 回退。子弹碰撞、连锁与分裂仍保留主线程，因依赖引擎节点与即时命中判定。
 
-\textbf{逻辑暂停}：除 Worker/池化外，\texttt{GameSession.paused} 在技能面板、死亡与胜利结算时切断战斗 tick，属于零成本“冻结”手段，与 Cantrell 等强调的“重计算与交互渲染分离”思路一致\cite{cantrell2018unity}。
+\textbf{逻辑暂停}：\texttt{GameSession.paused} 在技能面板、死亡、胜利时让战斗 System 直接 return，不额外分配资源，思路与 Cantrell 等把重算和画面拆开一致\cite{cantrell2018unity}。
 
 \section{系统交互与时序}
 \label{sec:sequence}
 
-图~\ref{fig:system-sequence-mermaid} 与图~\ref{fig:system-sequence} 给出从应用启动到局内战斗、元游戏切换与重启的\textbf{端到端交互时序}。图源为 \texttt{figures/system-sequence.mmd}，经 Mermaid CLI 导出为 PNG 嵌入 PDF；下图为文字版摘要，便于无图环境阅读。
+图~\ref{fig:system-sequence-mermaid}、图~\ref{fig:system-sequence} 描述从启动、进战斗、切元游戏到重启的调用顺序。序列图由 \texttt{system-sequence.mmd} 导出 PNG；下文方框是文字版，方便没图时阅读。
 
 \begin{figure}[htbp]
   \centering
-  \IfFileExists{figures/system-sequence.png}{%
-    \includegraphics[width=0.95\textwidth]{figures/system-sequence.png}%
+  \IfFileExists{system-sequence.png}{%
+    \includegraphics[width=0.95\textwidth]{system-sequence.png}%
   }{}
   \caption{系统主要交互时序（Mermaid 序列图）}
   \label{fig:system-sequence-mermaid}
@@ -114,7 +114,7 @@ Survivor And Fight 在逻辑上划分为\textbf{表现层}、\textbf{UI 控制�
 \section{可靠性设计}
 \label{sec:reliability}
 
-可靠性设计目标是在配表异常、Worker 不可用或地图生成失败时，\textbf{仍可进入可玩或可调试状态}，而非直接崩溃。实现要点如下。
+配表坏了、Worker 起不来、地图生成失败时，系统应尽量还能玩或至少能调试，而不是白屏退出。做法如下。
 
 \textbf{（1）配表加载与就绪判据}。\texttt{ConfigBootstrap.ensureGameConfigLoaded} 遍历 \texttt{configBases()}，依次尝试 \texttt{fetch} 与 \texttt{Laya.loader} 双通道加载 \texttt{tables.registry.json} 及各表；\texttt{isGameConfigReady()} 要求 \texttt{configLoaded} 且 \texttt{Data.Skill} 非空，作为“可否进入战斗”的全局闸门。\texttt{Main.onStart} 与 \texttt{SimpleEcsDemo.spawnPlayer} 均在生成实体前等待或复查该状态。
 
@@ -151,7 +151,7 @@ Survivor And Fight 在逻辑上划分为\textbf{表现层}、\textbf{UI 控制�
   \end{tabular}
 \end{table}
 
-\textbf{暂停语义统一}：\texttt{GameSession.paused} 同时服务死亡暂停与 Tab 装配暂停；\texttt{RestartPanelSystem} 通过 \texttt{isPlayerDead()} 区分是否弹出重启面板，避免技能面板误触重启流程。
+死亡和 Tab 装配共用 \texttt{GameSession.paused} 冻战斗逻辑。\texttt{RestartPanelSystem} 用 \texttt{isPlayerDead()} 决定弹不弹重启，免得装配面板误进重启。
 
 \section{可扩展性设计}
 \label{sec:extensibility}

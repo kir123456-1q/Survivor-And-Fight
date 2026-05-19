@@ -1,0 +1,32 @@
+\addvspace {10.0pt}
+\addvspace {10.0pt}
+\contentsline {table}{\numberline {2-1}{\ignorespaces 主流 H5/跨平台方案与本项目选型对比}}{6}{table.caption.4}%
+\contentsline {table}{\numberline {2-2}{\ignorespaces Unity DOTS 与项目轻量 ECS 对比}}{8}{table.caption.5}%
+\contentsline {table}{\numberline {2-3}{\ignorespaces UI 架构选型要点汇总}}{11}{table.caption.6}%
+\addvspace {10.0pt}
+\contentsline {table}{\numberline {3-1}{\ignorespaces 运行环境建议配置}}{13}{table.caption.7}%
+\contentsline {table}{\numberline {3-2}{\ignorespaces 主要功能性需求一览}}{13}{table.caption.8}%
+\contentsline {table}{\numberline {3-3}{\ignorespaces 非功能需求量化指标（验收参考）}}{15}{table.caption.9}%
+\contentsline {table}{\numberline {3-4}{\ignorespaces 需求优先级（MoSCoW）}}{15}{table.caption.10}%
+\contentsline {table}{\numberline {3-5}{\ignorespaces 需求与测试映射（节选）}}{16}{table.caption.11}%
+\addvspace {10.0pt}
+\contentsline {table}{\numberline {4-1}{\ignorespaces 容错与降级策略}}{22}{table.caption.15}%
+\addvspace {10.0pt}
+\contentsline {table}{\numberline {5-1}{\ignorespaces 效果类型与执行器映射}}{23}{table.caption.16}%
+\contentsline {table}{\numberline {5-2}{\ignorespaces 核心源码文件索引}}{26}{table.5.2}%
+\contentsline {table}{\numberline {5-3}{\ignorespaces 功能模块与论文章节对照}}{27}{table.caption.17}%
+\addvspace {10.0pt}
+\addvspace {10.0pt}
+\contentsline {table}{\numberline {7-1}{\ignorespaces 功能测试用例摘要}}{32}{table.7.1}%
+\contentsline {table}{\numberline {7-2}{\ignorespaces 测试环境配置}}{33}{table.caption.18}%
+\contentsline {table}{\numberline {7-3}{\ignorespaces 测试关卡分波 FPS（接入动态图集，前三波）}}{33}{table.caption.19}%
+\contentsline {table}{\numberline {7-4}{\ignorespaces 动态图集接入前后 FPS 对比（前三波）}}{33}{table.caption.20}%
+\contentsline {table}{\numberline {7-5}{\ignorespaces Level3 五波测试帧率（单次运行）}}{34}{table.caption.21}%
+\contentsline {table}{\numberline {7-6}{\ignorespaces 性能对比实验（对象池消融，1000 怪 / 10\,s）}}{34}{table.caption.22}%
+\addvspace {10.0pt}
+\addvspace {10.0pt}
+\addvspace {10.0pt}
+\addvspace {10.0pt}
+\contentsline {table}{\numberline {C-1}{\ignorespaces 需求—测试映射（节选）}}{45}{table.C.1}%
+\addvspace {10.0pt}
+\contentsline {table}{\numberline {D-1}{\ignorespaces 缺陷记录表}}{46}{table.caption.32}%
