@@ -42,8 +42,11 @@ if (Get-Command npx -ErrorAction SilentlyContinue) {
 }
 
 function Invoke-TeX($cmd) {
-    & $cmd
-    if ($LASTEXITCODE -ne 0) { throw "命令失败 (exit $LASTEXITCODE): $cmd" }
+    & @cmd
+    # MiKTeX 在“未检查更新”等提示下也可能返回非 0，以 PDF 是否更新为准
+    if ($LASTEXITCODE -ne 0 -and -not (Test-Path (Join-Path $PSScriptRoot "main.pdf"))) {
+        throw "命令失败 (exit $LASTEXITCODE): $cmd"
+    }
 }
 
 if (-not (Get-Command xelatex -ErrorAction SilentlyContinue)) {

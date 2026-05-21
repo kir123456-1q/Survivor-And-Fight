@@ -116,7 +116,7 @@
 \contentsline {section}{\numberline {8.5}本章小结}{40}{section.8.5}%
 \contentsline {chapter}{致谢}{41}{chapter*.30}%
 \contentsline {chapter}{附录}{44}{chapter*.32}%
-\contentsline {chapter}{\numberline {附录 A\hspace {.3em}}名词术语及缩略词}{45}{chapter.A}%
-\contentsline {chapter}{\numberline {附录 B\hspace {.3em}}核心配表字段示例（节选）}{46}{chapter.B}%
-\contentsline {chapter}{\numberline {附录 C\hspace {.3em}}需求与测试用例映射（节选）}{47}{chapter.C}%
-\contentsline {chapter}{\numberline {附录 D\hspace {.3em}}缺陷记录（项目实测）}{48}{chapter.D}%
+\contentsline {chapter}{\numberline {附录 A\hspace {.3em}}名词术语及缩略词}{45}{appendix.A}%
+\contentsline {chapter}{\numberline {附录 B\hspace {.3em}}核心配表字段示例（节选）}{46}{appendix.B}%
+\contentsline {chapter}{\numberline {附录 C\hspace {.3em}}需求与测试用例映射（节选）}{47}{appendix.C}%
+\contentsline {chapter}{\numberline {附录 D\hspace {.3em}}缺陷记录（项目实测）}{48}{appendix.D}%

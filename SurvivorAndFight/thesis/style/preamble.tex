@@ -1,0 +1,66 @@
+% 论文导言区（基于 walkman-z/upc-thesis-2020，按本项目裁剪）
+
+\usepackage{amsmath}
+\usepackage{amsfonts,amssymb}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{graphicx}
+\graphicspath{{figures/}{figure/}}
+\usepackage{enumitem}
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage{ragged2e}
+
+\setlist{noitemsep}
+
+% 论文插图（路径相对 graphicspath）
+\newcommand{\thesisfig}[3]{%
+  \begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.88\textwidth]{#1}%
+    \caption{#2}\label{#3}%
+  \end{figure}%
+}
+
+\IfFileExists{build-info.tex}{\input{build-info}}{%
+  \newcommand{\thesisGitCommit}{---}%
+  \newcommand{\thesisGitCommitDate}{---}%
+}
+
+% 华文中宋：优先使用 thesis/fonts/STZhongsong.ttf（运行 install-fonts.ps1 安装）
+\IfFileExists{fonts/STZhongsong.ttf}{%
+  \setCJKfamilyfont{hwzs}[Path=fonts/,Extension=.ttf]{STZhongsong}%
+  \renewcommand{\huawenzhongsong}{\CJKfamily{hwzs}}%
+}
+
+% 双面打印分页（来自官方模板 preamble）
+\ifx \twoSidePrint \undefined
+  \def \ClearPageStyle{\clearpage}
+\else
+  \def \ClearPageStyle{%
+    \clearpage
+    \thispagestyle{empty}
+    \quad
+    \clearpage
+  }
+\fi
+\newcounter{startpage}
+\newcounter{endpage}
+\setcounter{startpage}{1}
+\setcounter{endpage}{1}
+\newenvironment{PrintMode}{%
+  \clearpage
+  \setcounter{startpage}{\value{page}}%
+}{%
+  \clearpage
+  \setcounter{endpage}{\value{page}}%
+  \addtocounter{endpage}{\value{startpage}}%
+  \ifodd \value{endpage}%
+    \ClearPageStyle
+    \ifx \twoSidePrint \undefined
+    \else
+      \addtocounter{page}{-1}%
+    \fi
+  \fi
+}
+\newcommand{\PrintModeInsert}[1]{\begin{PrintMode}#1\end{PrintMode}}
