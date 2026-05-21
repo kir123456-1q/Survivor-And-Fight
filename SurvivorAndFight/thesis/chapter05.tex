@@ -60,6 +60,17 @@
 
 依赖关系保持单向：UI $\rightarrow$ ECS；Systems $\rightarrow$ 配表；禁止 System 直接操作 UI 节点。
 
+\begin{figure}[htbp]
+  \centering
+  \IfFileExists{figures/skill-tab-sequence.png}{%
+    \includegraphics[width=0.92\textwidth]{skill-tab-sequence.png}%
+  }{%
+    \fbox{\parbox{0.9\textwidth}{\centering\vspace{1cm}\small \texttt{skill-tab-sequence.mmd} 经 \texttt{build.ps1} 导出\vspace{1cm}}}%
+  }
+  \caption{Tab 技能装配交互时序（Mermaid）}
+  \label{fig:skill-tab-seq}
+\end{figure}
+
 \section{Web Worker 和对象池的优化实现}
 \label{sec:worker-pool-impl}
 

@@ -10,23 +10,23 @@
 \contentsline {table}{\numberline {3-4}{\ignorespaces 需求优先级（MoSCoW）}}{14}{table.caption.10}%
 \contentsline {table}{\numberline {3-5}{\ignorespaces 需求与测试映射（节选）}}{14}{table.caption.11}%
 \addvspace {10.0pt}
-\contentsline {table}{\numberline {4-1}{\ignorespaces 容错与降级策略}}{19}{table.caption.15}%
+\contentsline {table}{\numberline {4-1}{\ignorespaces 容错与降级策略}}{20}{table.caption.14}%
 \addvspace {10.0pt}
-\contentsline {table}{\numberline {5-1}{\ignorespaces 效果类型与执行器映射}}{21}{table.caption.16}%
-\contentsline {table}{\numberline {5-2}{\ignorespaces 核心源码文件索引}}{24}{table.5.2}%
-\contentsline {table}{\numberline {5-3}{\ignorespaces 功能模块与论文章节对照}}{25}{table.caption.17}%
-\addvspace {10.0pt}
-\addvspace {10.0pt}
-\contentsline {table}{\numberline {7-1}{\ignorespaces 功能测试用例摘要}}{30}{table.7.1}%
-\contentsline {table}{\numberline {7-2}{\ignorespaces 测试环境配置}}{31}{table.caption.18}%
-\contentsline {table}{\numberline {7-3}{\ignorespaces 测试关卡分波 FPS（接入动态图集，前三波）}}{31}{table.caption.19}%
-\contentsline {table}{\numberline {7-4}{\ignorespaces 动态图集接入前后 FPS 对比（前三波）}}{31}{table.caption.20}%
-\contentsline {table}{\numberline {7-5}{\ignorespaces Level3 五波测试帧率（单次运行）}}{32}{table.caption.21}%
-\contentsline {table}{\numberline {7-6}{\ignorespaces 性能对比实验（对象池消融，1000 怪 / 10\,s）}}{32}{table.caption.22}%
+\contentsline {table}{\numberline {5-1}{\ignorespaces 效果类型与执行器映射}}{22}{table.caption.15}%
+\contentsline {table}{\numberline {5-2}{\ignorespaces 核心源码文件索引}}{26}{table.5.2}%
+\contentsline {table}{\numberline {5-3}{\ignorespaces 功能模块与论文章节对照}}{26}{table.caption.17}%
 \addvspace {10.0pt}
 \addvspace {10.0pt}
+\contentsline {table}{\numberline {7-1}{\ignorespaces 功能测试用例摘要}}{32}{table.7.1}%
+\contentsline {table}{\numberline {7-2}{\ignorespaces 测试环境配置}}{33}{table.caption.18}%
+\contentsline {table}{\numberline {7-3}{\ignorespaces 测试关卡分波 FPS（接入动态图集，前三波）}}{33}{table.caption.19}%
+\contentsline {table}{\numberline {7-4}{\ignorespaces 动态图集接入前后 FPS 对比（前三波）}}{33}{table.caption.20}%
+\contentsline {table}{\numberline {7-5}{\ignorespaces Level3 五波测试帧率（单次运行）}}{34}{table.caption.21}%
+\contentsline {table}{\numberline {7-6}{\ignorespaces 性能对比实验（对象池消融，1000 怪 / 10\,s）}}{34}{table.caption.22}%
 \addvspace {10.0pt}
 \addvspace {10.0pt}
-\contentsline {table}{\numberline {C-1}{\ignorespaces 需求—测试映射（节选）}}{45}{table.C.1}%
 \addvspace {10.0pt}
-\contentsline {table}{\numberline {D-1}{\ignorespaces 缺陷记录表}}{46}{table.caption.33}%
+\addvspace {10.0pt}
+\contentsline {table}{\numberline {C-1}{\ignorespaces 需求—测试映射（节选）}}{47}{table.C.1}%
+\addvspace {10.0pt}
+\contentsline {table}{\numberline {D-1}{\ignorespaces 缺陷记录表}}{48}{table.caption.33}%

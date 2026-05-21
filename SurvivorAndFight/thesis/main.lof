@@ -2,18 +2,18 @@
 \addvspace {10.0pt}
 \addvspace {10.0pt}
 \addvspace {10.0pt}
-\contentsline {figure}{\numberline {4-1}{\ignorespaces 系统分层架构}}{16}{figure.caption.12}%
-\contentsline {figure}{\numberline {4-2}{\ignorespaces 系统主要交互时序（Mermaid 序列图）}}{17}{figure.caption.13}%
-\contentsline {figure}{\numberline {4-3}{\ignorespaces 系统主要交互时序（文字摘要）}}{18}{figure.caption.14}%
+\contentsline {figure}{\numberline {4-1}{\ignorespaces 系统分层架构（Mermaid 导出）}}{16}{figure.caption.12}%
+\contentsline {figure}{\numberline {4-2}{\ignorespaces 系统主要交互时序}}{18}{figure.caption.13}%
+\addvspace {10.0pt}
+\contentsline {figure}{\numberline {5-1}{\ignorespaces Tab 技能装配交互时序（Mermaid）}}{24}{figure.caption.16}%
 \addvspace {10.0pt}
 \addvspace {10.0pt}
-\addvspace {10.0pt}
-\contentsline {figure}{\numberline {7-1}{\ignorespaces 游戏开始界面（StartPanel）}}{33}{figure.caption.24}%
-\contentsline {figure}{\numberline {7-2}{\ignorespaces 三大关 DAG 跑图界面（RunMapPanel）}}{33}{figure.caption.25}%
-\contentsline {figure}{\numberline {7-3}{\ignorespaces 局内战斗场面（同屏多怪与弹幕）}}{34}{figure.caption.26}%
-\contentsline {figure}{\numberline {7-4}{\ignorespaces Tab 暂停下的技能/Effect 装配面板}}{34}{figure.caption.27}%
-\contentsline {figure}{\numberline {7-5}{\ignorespaces 生存胜利后的三选一奖励面板}}{35}{figure.caption.28}%
-\contentsline {figure}{\numberline {7-6}{\ignorespaces 玩家死亡后的重启面板}}{35}{figure.caption.29}%
+\contentsline {figure}{\numberline {7-1}{\ignorespaces 游戏开始界面（StartPanel）}}{35}{figure.caption.24}%
+\contentsline {figure}{\numberline {7-2}{\ignorespaces 三大关 DAG 跑图界面（RunMapPanel）}}{35}{figure.caption.25}%
+\contentsline {figure}{\numberline {7-3}{\ignorespaces 局内战斗场面（同屏多怪与弹幕）}}{36}{figure.caption.26}%
+\contentsline {figure}{\numberline {7-4}{\ignorespaces Tab 暂停下的技能/Effect 装配面板}}{36}{figure.caption.27}%
+\contentsline {figure}{\numberline {7-5}{\ignorespaces 生存胜利后的三选一奖励面板}}{37}{figure.caption.28}%
+\contentsline {figure}{\numberline {7-6}{\ignorespaces 玩家死亡后的重启面板}}{37}{figure.caption.29}%
 \addvspace {10.0pt}
 \addvspace {10.0pt}
 \addvspace {10.0pt}

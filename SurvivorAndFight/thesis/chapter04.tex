@@ -21,19 +21,12 @@
 
 \begin{figure}[htbp]
   \centering
-  \fbox{\parbox{0.92\textwidth}{
-    \centering
-    \textbf{表现层}：Laya 预制体、UI2 节点、血条、相机跟随\\
-    $\downarrow$\\
-    \textbf{UI 控制层}：\texttt{UIStackManager}、各 Panel Controller、\texttt{SkillLoadoutSyncSystem}\\
-    $\downarrow$\\
-    \textbf{游戏逻辑层}：ECS Systems（移动、技能、子弹、怪物、经验、升级等）\\
-    $\downarrow$\\
-    \textbf{领域服务层}：\texttt{ConfigBootstrap}、\texttt{FormulaParser}、\texttt{CombatDataBridge}、\texttt{RunMapGenerator}\\
-    $\downarrow$\\
-    \textbf{基础设施层}：\texttt{EcsWorld}、\texttt{ComponentStore}、\texttt{defines}、对象池、Worker 协议
-  }}
-  \caption{系统分层架构}
+  \IfFileExists{figures/system-layers.png}{%
+    \includegraphics[width=0.88\textwidth]{system-layers.png}%
+  }{%
+    \fbox{\parbox{0.92\textwidth}{\centering\vspace{1.2cm}\small 请运行 \texttt{build.ps1} 生成 \texttt{system-layers.png}\vspace{1.2cm}}}%
+  }
+  \caption{系统分层架构（Mermaid 导出）}
   \label{fig:layers}
 \end{figure}
 
@@ -76,38 +69,16 @@
 \section{系统交互与时序}
 \label{sec:sequence}
 
-图~\ref{fig:system-sequence-mermaid}、图~\ref{fig:system-sequence} 描述从启动、进战斗、切元游戏到重启的调用顺序。序列图由 \texttt{system-sequence.mmd} 导出 PNG；下文方框是文字版，方便没图时阅读。
+图~\ref{fig:system-sequence} 描述从启动、进战斗、切元游戏到重启的调用顺序，由 \texttt{figures/system-sequence.mmd} 经 \texttt{build.ps1} 导出为 PNG。
 
 \begin{figure}[htbp]
   \centering
-  \IfFileExists{system-sequence.png}{%
+  \IfFileExists{figures/system-sequence.png}{%
     \includegraphics[width=0.95\textwidth]{system-sequence.png}%
-  }{}
-  \caption{系统主要交互时序（Mermaid 序列图）}
-  \label{fig:system-sequence-mermaid}
-\end{figure}
-
-\begin{figure}[htbp]
-  \centering
-  \small
-  \fbox{\parbox{0.95\textwidth}{
-    \textbf{（1）应用启动}\quad Main $\rightarrow$ ConfigBootstrap：\texttt{ensureGameConfigLoaded}\\
-    $\rightarrow$ MetaMenuBootstrap：\texttt{UIStackManager.push(Start)} \quad 或 \quad SimpleEcsDemo.init\\
-    \textbf{（2）进入战斗}\quad RunMapPanel/SelectLevel $\rightarrow$ MetaFlowController.\texttt{onEnterCombat}\\
-    $\rightarrow$ Main：显示 Area2D，\texttt{demo.init()}，启动生存计时\\
-    \textbf{（3）战斗帧循环}\quad frameLoop $\rightarrow$ EcsWorld.update（若未 paused）\\
-    $\rightarrow$ CombatDataPrepareSystem $\rightarrow$ CombatDataBridge（Worker/同步）\\
-    $\rightarrow$ MonsterChaseSystem $\rightarrow$ BulletSystem $\rightarrow$ ViewSyncSystem\\
-    \textbf{（4）施法链}\quad PlayerAutoCastSystem $\rightarrow$ CastPlan $\rightarrow$ EffectExecutor\\
-    $\rightarrow$ BulletSystem.spawn $\rightarrow$ AttributeSystem（伤害）\\
-    \textbf{（5）升级}\quad MonsterDeath $\rightarrow$ ExperienceSystem $\rightarrow$ UpgradeRewardSystem\\
-    $\rightarrow$ RewardPanel $\rightarrow$ RewardApplyService $\rightarrow$ AttributeSystem\\
-    \textbf{（6）Tab 装配}\quad SkillSelectPanelController：\texttt{paused=true}\\
-    $\rightarrow$ SkillDragService $\rightarrow$ SkillLoadoutSyncSystem $\rightarrow$ \texttt{paused=false}\\
-    \textbf{（7）死亡重启}\quad PlayerDeathSystem：\texttt{paused=true} $\rightarrow$ RestartPanelSystem\\
-    $\rightarrow$ SimpleEcsDemo.\texttt{tryRestartFromSession}（\texttt{restarting} 防重入）
-  }}
-  \caption{系统主要交互时序（文字摘要）}
+  }{%
+    \fbox{\parbox{0.92\textwidth}{\centering\vspace{1.2cm}\small 请运行 \texttt{build.ps1} 生成 \texttt{system-sequence.png}\vspace{1.2cm}}}%
+  }
+  \caption{系统主要交互时序}
   \label{fig:system-sequence}
 \end{figure}
 

@@ -22,8 +22,7 @@
   \begin{minipage}{\textwidth}
     \setstretch{1.2}
     \justifying
-    {\heiti\zihao{-2}\bfseries 基于ECS架构的类吸血鬼幸存者游戏\par}
-    {\heiti\zihao{-2}\bfseries 开发及优化（校外）\par}
+    {\heiti\zihao{-2}\bfseries \thesistitle\par}
   \end{minipage}
   \vspace{2.5cm}
   % 专业、班级：仿宋三号，1 倍行距
@@ -50,9 +49,9 @@
 本人所提交的学位论文《\thesistitle》，是在导师的指导下，独立进行研究工作所取得的原创性成果。除文中已经注明引用的内容外，本论文不包含任何其他个人或集体已经发表或撰写过的研究成果。对本文的研究做出重要贡献的个人和集体，均已在文中标明。本声明的法律后果由本人承担。
 
 \vspace{1.5em}
-\noindent 论文作者（签名）：\underline{\hspace{3.5cm}}\quad 指导教师确认（签名）：\underline{\hspace{3.5cm}}
+\noindent 论文作者（签名）：\underline{\hspace{3.8cm}}\quad 指导教师确认（签名）：\underline{\hspace{3.8cm}}
 
-\noindent 年\quad 月\quad 日\hspace{4.5cm}年\quad 月\quad 日
+\noindent 日期：\underline{\hspace{3.8cm}}\hspace{2.2cm}日期：\underline{\hspace{3.8cm}}
 
 \vspace{2.5em}
 {\heiti\zihao{3}\bfseries 学位论文版权使用授权书\par}
@@ -63,9 +62,9 @@
 \noindent 保密的学位论文在\underline{\hspace{2cm}}年解密后适用本授权书。
 
 \vspace{1.5em}
-\noindent 论文作者（签名）：\underline{\hspace{3.5cm}}\quad 指导教师（签名）：\underline{\hspace{3.5cm}}
+\noindent 论文作者（签名）：\underline{\hspace{3.8cm}}\quad 指导教师（签名）：\underline{\hspace{3.8cm}}
 
-\noindent 年\quad 月\quad 日\hspace{4.5cm}年\quad 月\quad 日
+\noindent 日期：\underline{\hspace{3.8cm}}\hspace{2.2cm}日期：\underline{\hspace{3.8cm}}
 
 % 中文摘要（不入目录）
 \clearpage
@@ -73,17 +72,19 @@
 \upcabstracttitle
 \songti\zihao{-4}
 \setlength{\parindent}{2em}
-HTML5 与 WebGL 成熟后，浏览器已能运行中等规模的实时动作游戏。类吸血鬼幸存者玩法依赖单局随机、构筑与同屏实体压力，适合用 ECS 组织逻辑并控制帧率。本文题目为《\thesistitle》，以 \textbf{Survivor And Fight} 工程为例，基于 LayaAir 3.x 与 TypeScript 完成 2D 俯视角原型：轻量 ECS 拆分坐标、属性、技能与输入；JSON 配表配置伤害与子弹；对象池减少预制体反复创建，实体过多时把追逐等数值计算放到 Web Worker。
+随着 HTML5 与 WebGL 技术的普及，浏览器端实时动作游戏在架构解耦与同屏性能方面面临新的挑战。类吸血鬼幸存者玩法融合 Roguelite 单局构筑与元游戏流程，要求客户端在数据驱动、模块划分与可验证性上具备清晰边界。本文以 Survivor And Fight 毕业设计为研究对象，基于 LayaAir 3.x 与 TypeScript，对 2D 俯视角生存战斗游戏开展从需求分析、总体设计、系统实现到测试验证的完整研究。
 
-元流程含主菜单、选关、三幕 DAG 跑图及 Tab 技能装配。论文按需求、设计、实现、测试组织。千怪压力场景下，对象池把 P95 帧时间从约 76.5\,ms 压到 48.6\,ms；动态图集使该场景平均 FPS 提高约 13.4\%。Worker 在预热后的同窗消融尚未完成，列为后续实验。
+论文主体共分八章：绪论与相关技术奠定选题依据与技术路线；需求分析明确功能、非功能需求及验收映射；总体设计提出五层架构，并从 ECS Gameplay、MVC 界面、对象池与 Web Worker 三方面给出方案；实现与性能章节分别论述核心模块、主循环及优化实践；测试章节通过单元脚本、功能用例与压力实验进行验证；结论章节归纳成果与不足。原型可稳定支撑菜单、跑图、战斗与技能装配等闭环流程，对象池与动态图集可改善高同屏负载下的运行表现。
 
-\upckeywords{实体组件系统；类吸血鬼幸存者；LayaAir；数据驱动；Web Worker；对象池}
+\upckeywords{实体组件系统；类吸血鬼幸存者；系统设计与实现；LayaAir；数据驱动}
 
 % 英文摘要（不入目录）
 \clearpage
 \upcabstracten
 \zihao{-4}
 \setlength{\parindent}{2em}
-HTML5 and WebGL now support moderately complex real-time games in the browser. This thesis covers the development and optimization of a vampire-survivor-like game built on an ECS architecture (off-campus project). The Survivor And Fight prototype on LayaAir 3.x and TypeScript uses a lightweight ECS; bullets and modifiers are loaded from JSON tables; object pooling cuts allocation churn, and a Web Worker recomputes chase logic when entity counts are high. Menus, level pickers, and a three-act DAG map form the meta loop. Under a 1000-monster stress case, pooling lowered P95 frame time from about 76.5\,ms to 48.6\,ms; dynamic atlasing raised average FPS on the heaviest wave by roughly 13.4\%. A warmed-up, same-session Worker ablation is planned as follow-up work.
+With the adoption of HTML5 and WebGL, browser-based action games must balance architectural decoupling and runtime performance under large entity counts. Vampire-survivor-like gameplay combined with Roguelite meta progression calls for data-driven content, modular organization, and verifiable engineering practices. This thesis studies the off-campus project \textbf{Survivor And Fight}: a 2D top-down survival combat prototype on LayaAir 3.x and TypeScript, covering requirements analysis, overall design, implementation, and testing.
 
-\upckeywordsen{ECS, vampire-survivor-like, LayaAir, data-driven, Web Worker, object pooling}
+The thesis is organized in eight chapters. The introduction and related work establish motivation and technology choices; requirements analysis defines functional and non-functional criteria; overall design presents a layered architecture with ECS gameplay, MVC-based UI, object pooling, and Web Worker offloading; implementation and performance chapters describe core modules, the main loop, and optimization practice; testing covers unit scripts, functional cases, and stress experiments; the conclusion summarizes contributions and limitations. The prototype supports a full loop of menus, run-map navigation, combat, and skill loadout. Experiments show that pooling and dynamic atlasing improve stability under high on-screen load.
+
+\upckeywordsen{ECS, vampire-survivor-like, system design, LayaAir, data-driven}

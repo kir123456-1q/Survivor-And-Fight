@@ -1,2 +1,5 @@
 # 可选：用于 read-docx-thesis-template.py 的增强解析
 python-docx>=1.1.0
+# pdf-to-docx.py
+pdf2docx>=0.5.8
+# tex-to-docx.py：需系统安装 Pandoc 3.x（winget install JohnMacFarlane.Pandoc）

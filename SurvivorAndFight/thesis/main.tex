@@ -16,6 +16,10 @@
 \hypersetup{colorlinks=false,hidelinks}
 
 \input{upc-thesis-format}
+\IfFileExists{build-info.tex}{\input{build-info}}{%
+  \newcommand{\thesisGitCommit}{---}%
+  \newcommand{\thesisGitCommitDate}{---}%
+}
 
 \providecommand{\backmatter}{}
 

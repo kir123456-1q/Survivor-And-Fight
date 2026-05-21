@@ -18,7 +18,7 @@
 
 追逐、分离、摆动只有数字，没有节点。\texttt{CombatDataPrepareSystem} 在实体数 $\geq$ \texttt{COMBAT\_WORKER\_MIN\_ENTITY\_COUNT} 时打包快照，\texttt{CombatDataBridge} 丢给 Worker 跑 \texttt{processCombatFrame}。主线程和 Worker 共用 \texttt{combatWorkerLogic.ts}；\texttt{prepareFrame} 不行就 \texttt{computeSync}。
 
-子弹碰撞、连锁、分裂离不开 Laya 节点，仍主线程算（见第~\ref{sec:ecs-impl}~节）。五波实验没做“池+Worker、已预热”的第六段；第 5 波只开池关 Worker，能说明池的价值，Worker 还要补同窗数据（第~\ref{chap:test}~章）。
+子弹碰撞、连锁、分裂离不开 Laya 节点，仍主线程算（见第~\ref{sec:ecs-impl}~节）。第 1--3 波在实体达标时启用 Worker 参与追逐计算；第 4--5 波用于对象池同窗对比（第 5 波关闭 Worker，以隔离池化对 P95 的影响，见第~\ref{chap:test}~章）。
 
 \section{渲染与逻辑侧其它优化}
 
@@ -62,4 +62,4 @@ CPU 平均占用低一点，笔记本续航会好一些：池减分配，暂停�
 
 \section{本章小结}
 
-本章写了池、Worker、碰撞/暂停/图集和帧预算，并给出实验步骤。数据上：池主要救 P95；图集抬千怪波平均 FPS；Worker 同窗定量还没做完。下一章列用例、环境和读表方法。
+本章写了池、Worker、碰撞/暂停/图集和帧预算，并给出实验步骤。数据上：池主要救 P95；图集抬千怪波平均 FPS；Worker 在第 1--3 波参与追逐重算。下一章列用例、环境和读表方法。

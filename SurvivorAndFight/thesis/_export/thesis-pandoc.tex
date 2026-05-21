@@ -1,0 +1,1195 @@
+% 由 tools/tex-to-docx.py 生成，仅供 Pandoc 解析
+\documentclass[UTF8,a4paper]{ctexart}
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\hypersetup{colorlinks=false,hidelinks}
+
+\newcommand{\thesisfig}[3]{%
+  \begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.88\textwidth]{#1}%
+    \caption{#2}\label{#3}%
+  \end{figure}%
+}
+
+\newcommand{\thesistitle}{基于ECS架构的类吸血鬼幸存者游戏开发及优化（校外）}
+\newcommand{\thesisauthor}{刘瀚文}
+\newcommand{\thesisstudentid}{2207020509}
+\newcommand{\thesismajor}{计算机科学与技术专业}
+\newcommand{\thesisclass}{软件工程2205班}
+\newcommand{\thesisadvisor}{董玉坤}
+\newcommand{\thesisdate}{2026年6月}
+
+\newcommand{\upcabstracttitle}{\section*{摘\quad 要}}
+\newcommand{\upckeywords}[1]{\par\noindent\textbf{关键词：}#1\par}
+\newcommand{\upcabstracten}{\section*{Abstract}}
+\newcommand{\upckeywordsen}[1]{\par\noindent\textbf{Keywords:} #1\par}
+\newcommand{\upcbibliography}{}
+\newcommand{\backmatter}{}
+
+\begin{document}
+\section*{封面信息}
+
+题目：\thesistitle\\
+学生：\thesisauthor \quad 学号：\thesisstudentid\\
+专业：\thesismajor \quad 班级：\thesisclass\\
+指导教师：\thesisadvisor \quad 日期：\thesisdate
+
+\textit{（声明页请在学院 Word 模板中保留；此处仅导出摘要供编辑。）}
+
+% 封面
+
+
+% 原创性声明与版权授权
+
+
+
+
+{学位论文原创性声明
+}
+
+
+
+
+本人所提交的学位论文《\thesistitle》，是在导师的指导下，独立进行研究工作所取得的原创性成果。除文中已经注明引用的内容外，本论文不包含任何其他个人或集体已经发表或撰写过的研究成果。对本文的研究做出重要贡献的个人和集体，均已在文中标明。本声明的法律后果由本人承担。
+
+
+
+ 论文作者（签名）：\underline{\hspace{3.8cm}}  指导教师确认（签名）：\underline{\hspace{3.8cm}}
+
+ 日期：\underline{\hspace{3.8cm}}\hspace{2.2cm}日期：\underline{\hspace{3.8cm}}
+
+
+
+{学位论文版权使用授权书
+}
+
+
+本学位论文作者完全了解中国石油大学（华东）有权保留并向国家有关部门或机构送交学位论文的复印件和磁盘，允许论文被查阅和借阅。本人授权中国石油大学（华东）可以将学位论文的全部或部分内容编入有关数据库进行检索，可以采用影印、缩印或其它复制手段保存、汇编学位论文。
+
+
+
+ 保密的学位论文在\underline{\hspace{2cm}}年解密后适用本授权书。
+
+
+
+ 论文作者（签名）：\underline{\hspace{3.8cm}}  指导教师（签名）：\underline{\hspace{3.8cm}}
+
+ 日期：\underline{\hspace{3.8cm}}\hspace{2.2cm}日期：\underline{\hspace{3.8cm}}
+
+% 中文摘要（不入目录）
+
+
+\upcabstracttitle
+
+
+随着 HTML5 与 WebGL 技术的普及，浏览器端实时动作游戏在架构解耦与同屏性能方面面临新的挑战。类吸血鬼幸存者玩法融合 Roguelite 单局构筑与元游戏流程，要求客户端在数据驱动、模块划分与可验证性上具备清晰边界。本文以 Survivor And Fight 毕业设计为研究对象，基于 LayaAir 3.x 与 TypeScript，对 2D 俯视角生存战斗游戏开展从需求分析、总体设计、系统实现到测试验证的完整研究。
+
+论文主体共分八章：绪论与相关技术奠定选题依据与技术路线；需求分析明确功能、非功能需求及验收映射；总体设计提出五层架构，并从 ECS Gameplay、MVC 界面、对象池与 Web Worker 三方面给出方案；实现与性能章节分别论述核心模块、主循环及优化实践；测试章节通过单元脚本、功能用例与压力实验进行验证；结论章节归纳成果与不足。原型可稳定支撑菜单、跑图、战斗与技能装配等闭环流程，对象池与动态图集可改善高同屏负载下的运行表现。
+
+\upckeywords{实体组件系统；类吸血鬼幸存者；系统设计与实现；LayaAir；数据驱动}
+
+% 英文摘要（不入目录）
+
+
+\upcabstracten
+
+
+With the adoption of HTML5 and WebGL, browser-based action games must balance architectural decoupling and runtime performance under large entity counts. Vampire-survivor-like gameplay combined with Roguelite meta progression calls for data-driven content, modular organization, and verifiable engineering practices. This thesis studies the off-campus project \textbf{Survivor And Fight}: a 2D top-down survival combat prototype on LayaAir 3.x and TypeScript, covering requirements analysis, overall design, implementation, and testing.
+
+The thesis is organized in eight chapters. The introduction and related work establish motivation and technology choices; requirements analysis defines functional and non-functional criteria; overall design presents a layered architecture with ECS gameplay, MVC-based UI, object pooling, and Web Worker offloading; implementation and performance chapters describe core modules, the main loop, and optimization practice; testing covers unit scripts, functional cases, and stress experiments; the conclusion summarizes contributions and limitations. The prototype supports a full loop of menus, run-map navigation, combat, and skill loadout. Experiments show that pooling and dynamic atlasing improve stability under high on-screen load.
+
+\upckeywordsen{ECS, vampire-survivor-like, system design, LayaAir, data-driven}
+
+% --- 正文（章节目录请在 Word 中生成）---
+
+\chapter{绪论}
+\label{chap:intro}
+
+\section{研究背景与意义}
+
+手机与浏览器普及，使 H5 游戏在独立作品和课设中都很常见。相对安装包，链接即玩、跨端发布、逻辑与资源共用一套 Web 栈，迭代成本通常更低。但 JS 只有一条主线程，GC 与绘制也要抢时间；战斗类若一帧里堆太多移动、碰撞和 UI，玩家会直接感到掉帧。
+
+Roguelite 的典型节奏是自动开火、怪潮、局内升级。它要数据能外置改、同屏实体够多、菜单到跑图这条元流程跑得通。比 Roguelike 更偏单局 Build，比街机射击更偏随机路线，因而程序上更要留扩展口。Survivor-like 只保留走位和构筑，难点在密集实体和技能组合，不在复杂按键。
+
+\textbf{Survivor And Fight} 用 LayaAir 3.x 做 2D 俯视角原型，串起主菜单、选关、爬塔跑图、局内战斗、升级和 Tab 装配，并试验 ECS、配表技能、对象池和 Worker。商业引擎子系统多、耦合紧，后期改动贵，已有文献从依赖恢复和分层划分讨论过这一问题\cite{ullmann2025sydra,gregory2018game,baabad2020degradation}。SyDRA 侧重子系统依赖可视化\cite{ullmann2025sydra}；Gregory 的引擎分层论述为本文划分表现、逻辑与基础设施提供参照\cite{gregory2018game}。
+
+Unity 上做过物理驱动的人群疏散\cite{cantrell2018unity,bott2014unreal}，说明重算和画面最好分开。Petty 等要求仿真走 V\&V 流程\cite{petty2010vv}。本文不做刚体引擎，但怪物追逐、分离和挤碰仍是多体局部作用，可借用分步验证和“够用即可”的性能取舍。在 H5 里做通原型并留下测试数据，对工程和教学都有用。
+
+\section{国内外研究现状}
+
+\subsection{游戏引擎架构}
+
+引擎研究常谈子系统边界、依赖和长期维护。Gregory 按工业经验划分渲染、资源、场景图、动画和脚本，商业产品往往统一 tick 与资源生命周期\cite{gregory2018game}。Quake、Unreal 的拆解帮助区分引擎层与游戏层\cite{munro2009quake,agrahari2021unreal}。Panda3D 则代表脚本层叠在 C++ 核心上的老路子\cite{goslin2004panda}。
+
+近几年更关注“改一处会影响哪里”。SyDRA 从开源引擎恢复依赖图\cite{ullmann2025sydra}；后续工作把耦合画出来，指出目录嵌套和过度耦合是退化来源\cite{ullmann2023coupling}。Baabad 等讨论大型引擎代码库的维护负担\cite{baabad2020degradation}。H5 还要单独算主线程预算、异步加载和沙箱限制。LayaAir、Cocos Creator 降低了 2D 预制体和 TypeScript 的门槛，但逻辑是否和画面拆开，仍看项目怎么写\cite{gregory2018game,ullmann2023coupling}。
+
+\subsection{实体组件系统与玩法架构}
+
+ECS 把对象拆成实体 ID、数据组件和无状态系统，用组合代替深继承，方便按类型批处理\cite{gregory2018game}。Unity DOTS 走数据导向并行；小团队更常用 Map 存组件、单线程 tick 的轻量版，省掉 DOTS 的学习和排错成本。
+
+Survivor-like 靠波次和自动攻击；Roguelite 再加元进度和路线。Slay the Spire 式 DAG 跑图用来规划节点\cite{gregory2018game}。技能表外置冷却和效果段已是常见做法；研究也提醒公式解析要设白名单，别让配表变成脚本注入入口\cite{gregory2018game,petty2010vv}。
+
+\subsection{物理模拟、人群与性能}
+
+成百上千个代理同时运动，是生存战斗的性能热点。Boids 和经典人群模型给出局部规则思路\cite{reynolds1987flocks,thalmann2007crowd,pelechano2008virtual}。Cantrell 等在 Unity 做压力疏散并做 V\&V\cite{cantrell2018unity}；Bott 等在 Unreal 用物理工具链\cite{bott2014unreal}；Helbing 的恐慌模型强调分离力\cite{helbing2000panic}。McKenzie 等把人群建模放进游戏教学\cite{mckenzie2008crowd}。
+
+H5 优化多盯 GC 和主线程。对象池、图集合批、暂停逻辑、Worker 迁数值算是常见组合拳\cite{gregory2018game,mckenzie2008crowd}。Worker 不能碰 DOM 和大部分引擎 API，所以只有纯计算适合下放，碰撞和绘制仍得留在主线程。
+
+﻿
+\section{项目背景}
+
+\textbf{Survivor And Fight} 是浏览器上的 2D 俯视角 Roguelite 原型，技术栈为 LayaAir 3.x 与 TypeScript。目标是在可编译工程里跑通主菜单、选关、DAG 跑图、局内战斗、升级奖励和 Tab 装配，并验证轻量 ECS、JSON 技能表、对象池和 Worker 是否能在 H5 落地。
+
+国产 H5 与小游戏渠道偏好低安装成本。Survivor-like 操作浅、怪多；Roguelite 用随机和路线拉高重玩。在有限人力下，这种组合适合毕业设计周期。本文不比商业作品内容量，而是留下可扩展架构和可复现的性能记录。
+
+实时战斗里，单线程和 GC 是硬约束。若每帧大量 \texttt{instantiate/destroy}，又在主线程算完全部追逐和碰撞，帧时间会尖刺。项目因此把逻辑放在 ECS、参数放在配表和 \texttt{defines}，并准备池化、暂停和 Worker 回退。引擎耦合与人群运动文献为怪物 AI 简化提供了参考\cite{ullmann2025sydra,gregory2018game,baabad2020degradation,cantrell2018unity,helbing2000panic,reynolds1987flocks}。
+
+仓库含 Laya 工程、\texttt{docs/config/} 配表和部分 2D 资源。论文部分是对代码的需求整理、架构说明、模块描述、测试与性能记录，把 Demo 写成可评阅的毕设材料。
+
+\section{主要创新点与特色}
+
+本项目工程侧特点如下：
+\begin{enumerate}[label=(\arabic*)]
+  \item \textbf{轻量 ECS}：\texttt{EcsWorld} 管玩法 tick，\texttt{ViewComponent} 只绑 Laya 节点，业务少直接调引擎 API。
+  \item \textbf{配表技能链}：\texttt{Skill} 配多行 \texttt{SkillEffect}，修饰器排在子弹前，支持穿透、分裂、连锁；配表现有 70 余条效果行。
+  \item \textbf{元流程联动}：三幕 DAG 经 \texttt{MetaFlowController} 进战斗，Boss 节点可带更长生存时间等载荷。
+  \item \textbf{性能措施}：\texttt{BulletPool}/\texttt{MonsterPool} 减分配；达标时用 Worker 算追逐分离，碰撞仍主线程；池化改善 P95，图集抬高千怪波 FPS。
+  \item \textbf{UI 与战斗协同}：\texttt{UIStackManager} 管全屏路由；Tab 装配时 \texttt{GameSession.paused} 冻逻辑，\texttt{SkillLoadoutSyncSystem} 写回施法状态。
+\end{enumerate}
+
+以上条目可在原型和第 \ref{chap:test} 章数据里核对，并对应第 \ref{chap:architecture} 章、第 \ref{chap:modules} 章。
+
+\section{伦理与合规说明}
+
+内容为虚构战斗，无真实暴力。不采集个人敏感信息。若对外发布，需遵守网游与未成年人相关规定，并提示适龄与时长\cite{petty2010vv}。社会影响在第 \ref{chap:conclusion} 章另有说明。
+
+﻿
+\section{相关游戏与竞品简要分析}
+
+\textbf{吸血鬼幸存者}：极简操作加自动攻击和怪海，证明品类成立\cite{gregory2018game}。本项目借其节奏和升级感，但用 ECS 和 JSON 表把逻辑摊开，方便写进论文。
+
+\textbf{杀戮尖塔}：节点地图加路线风险\cite{gregory2018game}。本文跑图也用 DAG，战斗却是实时俯视，瓶颈在帧率和碰撞。
+
+\textbf{Noita}：模块拼法术带来深度\cite{gregory2018game}。本文 effect 链只吸收“组合”思路，不做像素物理。
+
+\textbf{其他 H5 生存作}：不少仍用预制体加 OOP。本文用 ECS、配表和 Worker，强调可维护和可测，不拼内容量。
+
+\section{术语与缩写预备说明}
+
+英文缩写首次出现给中文释义，见附录 \ref{app:terms}。类名与 API 保留英文，便于对照源码。
+
+
+\section{本章小结}
+
+本章交代背景、相关研究和本项目的工程特点，供后文需求与设计引用。
+
+\chapter{相关技术与理论基础}
+\label{chap:related}
+
+本章从\textbf{引擎与语言}、\textbf{玩法与逻辑架构}、\textbf{界面架构}三条线说明 Survivor And Fight 的技术选型及依据，为第 \ref{chap:requirement} 章需求与第 \ref{chap:architecture} 章设计提供共同语境。各节在文献与业界实践基础上给出毕业设计规模下的取舍，并与后文 \texttt{SimpleEcsDemo}、\texttt{UIStackManager} 等模块对应，避免孤立罗列概念。
+
+\section{引擎语言选择}
+\label{sec:engine-lang}
+
+\subsection{H5 游戏引擎选型}
+
+浏览器 2D 游戏通常二选一：Phaser、PixiJS 这类渲染库，或 Cocos、Laya 这类带 IDE 的引擎。库轻，但场景、预制体、UI 和打包往往要自己拼；引擎把帧循环和输入包好了，更适合课设周期内做出能点的 Demo\cite{goslin2004panda,gregory2018game}。
+
+本项目选用 \textbf{LayaAir 3.x}，理由如下：（1）课程与实验室已有 Laya 工程经验，环境搭建成本低；（2）3.x 对 TypeScript 支持与本项目语言一致；（3）2D 预制体、\texttt{Area2D} 与 UI2（\texttt{GBox}、\texttt{GButton} 等）可满足元菜单、跑图与战斗 HUD；（4）内置预览与发布至 \texttt{bin/} 便于性能测试与答辩演示。Gregory 指出商业引擎将渲染、资源、场景更新与脚本生命周期统一管理\cite{gregory2018game}；LayaAir 在 H5 场景下承担类似运行时平台的角色。
+
+相对 Unity、Unreal 等原生引擎，H5 分发成本更低，但受浏览器单线程与 GC 约束更明显。Ullmann 等对引擎子系统耦合的研究表明，无论引擎种类，划分“引擎层—游戏逻辑层”都有利于维护\cite{ullmann2023coupling}。因此 Laya 节点仅作\textbf{表现层}，核心玩法放在自研轻量 ECS 中更新，而非全部写入 \texttt{Laya.Script} 回调。
+
+\begin{table}[htbp]
+  
+  \caption{主流 H5/跨平台方案与本项目选型对比}
+  \label{tab:engine-compare}
+  \begin{tabular}{p{2.8cm}p{4.2cm}p{4.2cm}p{2.8cm}}
+    \toprule
+    \textbf{方案} & \textbf{优势} & \textbf{劣势} & \textbf{本项目} \\
+    \midrule
+    Phaser/PixiJS & 轻量、社区活跃 & 工作流需自建 & 未采用 \\
+    Cocos Creator & 生态成熟、工具链完整 & 与现有课设栈不一致 & 未采用 \\
+    LayaAir 3.x & IDE 一体、TS 原生、2D/UI2 完备 & 文档与社区小于头部引擎 & \textbf{采用} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{TypeScript 与工程常量管理}
+
+脚本语言选用 \textbf{TypeScript}，在 JavaScript 上提供静态类型与模块化，实体、组件、系统增多时接口更稳定。Briand 等关于面向对象设计可维护性的实验表明，清晰模块边界与一致命名有助于降低理解成本\cite{briand2001maintainability}。可调战斗常量、UI 阈值、路径正则等\textbf{静态配置}集中在 \texttt{src/defines/}，经 \texttt{index.ts} 统一导出，避免业务文件顶部散落魔法数；策划数值外置 JSON 配表（见第 \ref{sec:gameplay-arch} 节），区分“工程常量”与“策划参数”。
+
+\subsection{主循环、预制体与引擎使用约束}
+
+主循环由 \texttt{Laya.timer.frameLoop} 驱动：每帧先 \texttt{EcsWorld.update(deltaTime)}，再由引擎渲染并分发 UI 事件，符合 Gregory 所述逻辑 tick 与绘制分离的常见做法\cite{gregory2018game,unitymanual2016}。入口 \texttt{Main.ts} 挂在 \texttt{Area2D} 子节点而非 3D 根节点，避免纯 2D Demo 进入 3D 渲染管线。
+
+使用 Laya API 须统一 \texttt{Laya.} 前缀（如 \texttt{Laya.Sprite}、\texttt{Laya.Handler.create}）。角色与子弹经 \texttt{Laya.Prefab.instantiate} 生成。\textbf{可加载资源}（材质、贴图、预制体）须放在 \texttt{assets/}，不可放在 \texttt{src/}，否则预览路径解析失败。2D 位移须用 \texttt{transform.position = new Laya.Vector3(...)} 或 \texttt{translate}，不可对 \texttt{position} getter 返回的副本调用 \texttt{setValue}，否则逻辑坐标已变而画面不动——该问题在相机跟随与怪物追逐调试中多次出现，本文记录以供规避。
+
+\section{项目玩法架构选择}
+\label{sec:gameplay-arch}
+
+\subsection{Survivor-like 品类与核心循环}
+
+一局里玩家主要在躲、自动打、捡经验、升技能，怪会越刷越密。射击技巧让位给走位和构筑\cite{gregory2018game}。程序上要扛住三件事：移动时碰撞和结算不能飘；几分钟内多次升级，奖励得立刻写进属性或栏位；调数值尽量改表，别动战斗内核。
+
+\texttt{SimpleEcsDemo} 默认创建玩家并由 \texttt{PlayerAutoCastSystem} 自动施法，\texttt{ControlSystem} 处理走位，以降低操作门槛、突出构筑。经验由 \texttt{ExperienceSystem} 处理；击杀奖励与等级加成通过 \texttt{defines} 中 \texttt{MONSTER\_EXP\_REWARD\_BASE}、\texttt{MONSTER\_EXP\_REWARD\_LEVEL\_BONUS} 等常量调节，属于可配置节奏而非硬编码。
+
+\subsection{轻量实体组件系统（ECS）}
+
+\textbf{实体组件系统（ECS）}将对象拆为实体标识（Entity）、纯数据组件（Component）与无状态系统（System）。新增怪物行为时往往只需增 System 或扩展组件字段，无需维护大继承树；按类型批量处理也更方便\cite{gregory2018game}。
+
+Unity DOTS 采用 ECS + Job System + Burst，面向数万实体并行\cite{gregory2018game}。毕业设计周期与团队规模有限，完整 DOTS 等价物学习与 Laya 节点绑定成本过高。本项目采用\textbf{教学向轻量 ECS}：\texttt{EntityId} 为数值；\texttt{ComponentStore} 按组件类型用 \texttt{Map} 存储；\texttt{EcsWorld.update} 单线程顺序调用已注册系统，按 \texttt{input/logic/physics/render} 分组排序。第 1 期目标是结构清晰、支撑数百同屏实体，不追求极致数据导向布局。
+
+\begin{table}[htbp]
+  
+  \caption{Unity DOTS 与项目轻量 ECS 对比}
+  \label{tab:dots-compare}
+  \begin{tabular}{p{3.2cm}p{4.5cm}p{4.5cm}}
+    \toprule
+    \textbf{维度} & \textbf{Unity DOTS} & \textbf{本项目 ECS} \\
+    \midrule
+    并行模型 & Job System 多线程 & 单线程；追逐等片段可选 Web Worker \\
+    内存布局 & Archetype / Chunk & 按组件类型的 Map \\
+    与引擎绑定 & Entities Graphics & \texttt{ViewComponent} 绑定 Laya 节点 \\
+    适用规模 & 数万实体级 & 数百实体级 \\
+    迭代与调试成本 & 高 & 中低 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+玩法层组件含 \texttt{PlayerTag}/\texttt{MonsterTag}、\texttt{Position}/\texttt{Velocity}、\texttt{Attribute}（含可溯源 modifier）、\texttt{Skill}、\texttt{SkillLoadoutState} 等；系统含 \texttt{MovementSystem}、\texttt{AttributeSystem}、\texttt{SkillSystem}、\texttt{BulletSystem}、\texttt{MonsterChaseSystem} 等。\texttt{FilterRegistry} 提供 \texttt{Players}、\texttt{Monsters} 等命名筛选，避免各 System 重复写交集查询。怪物与玩家共享位移、属性、技能等组件，仅标签不同，体现\textbf{组合优于继承}。
+
+\subsection{数据驱动与 JSON 配表}
+
+Roguelite 与动作游戏普遍\textbf{数据驱动}：冷却、伤害、子弹参数、效果链外置为表，运行时加载\cite{gregory2018game}。常见做法包括：（1）运行时加载 JSON 并反射填充数据类；（2）构建期生成 TypeScript 常量；（3）注册表声明表结构、运行时按路径加载。本项目用第（3）种：\texttt{tables.registry.json} 声明表名与文件，\texttt{ConfigBootstrap.ensureGameConfigLoaded()} 启动时加载，\texttt{initData} 将行挂到 \texttt{Data.Character}、\texttt{Data.Skill} 等命名空间。
+
+一条技能对应一张 \texttt{Skill} 表和多行 \texttt{SkillEffect}。每行声明子弹、穿透/分裂/连锁修饰或直伤；\texttt{EffectExecutor} 从上到下执行，修饰行必须写在 \texttt{bullet} 前面。伤害写成 \texttt{"atk*1.5+10"} 这类字符串，由 \texttt{FormulaParser} 在白名单里算，禁用 \texttt{eval}。\texttt{Targeting} 负责自动索敌和简单指向。
+
+JSON 方便版本管理和 diff，但错配往往集成时才暴露。启动用 \texttt{isGameConfigReady} 拦一道，公式和修饰器另有 \texttt{*.verify.ts} 脚本。
+
+\subsection{Roguelite 跑图与关卡结构}
+
+元游戏采用\textbf{Slay the Spire 式 DAG 跑图}：每局三个 Act，每 Act 为多层有向无环图，节点含休息、普通战斗、Boss、宝藏等\cite{gregory2018game}。地图生成一般含分层、节点抽样、连边约束与可达性校验；\texttt{RunMapGenerator} 实现固定行数网格、末行 Boss、中间随机分叉，\texttt{validateActReachBoss} 保证 Boss 可达。失败时回退保底图，避免进度卡死。
+
+\texttt{SeededRng} 使相同种子可复现地图，便于答辩录像与回归。\texttt{MetaFlowController} 在用户确认节点后触发 \texttt{onEnterCombat}，将节点载荷（如 Boss 关更长生存时间）传入战斗场景，元游戏与局内逻辑松耦合。
+
+\subsection{战斗性能与密集实体仿真}
+
+Survivor-like 后期同屏怪物与弹幕增多，H5 热点包括：每帧大量碰撞、预制体反复实例化触发 GC、主线程追逐与分离计算。常见对策有对象池、纹理合批、逻辑暂停、纯数值计算迁至 Web Worker\cite{gregory2018game,mckenzie2008crowd}。
+
+\texttt{BulletPool}、\texttt{MonsterPool} 按预制体路径分桶复用节点；\texttt{BulletHitTest} 用距离平方减少开方；\texttt{GameSession.paused} 在技能面板打开时让战斗 System 早退。实体数达阈值时，\texttt{CombatDataPrepareSystem} 将坐标等快照经 \texttt{CombatDataBridge} 提交 Worker，在共享的 \texttt{combatWorkerLogic.ts} 中计算追逐、分离与摆动，主线程再写回速度；\textbf{子弹碰撞}依赖 Laya 节点与阵营判定，仍留主线程。Cantrell 等在 Unity 做物理人群疏散时同样强调重计算与交互渲染分离\cite{cantrell2018unity}；Helbing 等关于恐慌人群的研究提示密集场景须关注分离力与稳定性\cite{helbing2000panic}，与 \texttt{MonsterChaseSystem} 中分离项设计一致。
+
+上述选型在可扩展与可测之间折中：ECS 与配表支撑内容迭代，池化与 Worker 支撑同屏规模，跑图 DAG 支撑元游戏节奏。
+
+\section{UI 架构选择}
+\label{sec:ui-arch}
+
+\subsection{MVC 分层与全屏界面栈}
+
+游戏 UI 常见模式有 MVC、MVP、MVVM 等\cite{heijstek2011empirical}。Heijstek 等比较架构描述的图文形式，指出结构化图示有助于理解系统边界；本项目采用\textbf{MVC 变体}：
+
+\begin{itemize}
+  \item \textbf{Model}：hp、装配状态等来自 ECS，跑图另有 \texttt{RunMapPanelModel}、\texttt{RunMapState}；
+  \item \textbf{View}：预制体和 UI2 节点只管摆位和显示；
+  \item \textbf{Controller}：\texttt{UiControllerBase} 子类管生命周期和路由，不碰战斗场景里的实体节点。
+\end{itemize}
+
+开始、选关、跑图都是全屏页。若多个面板一起 \texttt{visible}，容易挡操作、事件乱窜。\texttt{UIStackManager} 用栈管路由：\texttt{push} 压入并显示，\texttt{pop} 回到上一层，同一时刻只有一个全屏页拿焦点\cite{gregory2018game}。
+
+\subsection{战斗内 UI：HUD、暂停与技能装配}
+
+局内 UI 含主 HUD（血条、经验）、升级奖励面板、死亡重启面板与 \textbf{Tab 技能装配面板}。\texttt{SkillSelectPanelController} 监听 Tab：打开时 \texttt{GameSession.paused} 为真，战斗 System 在 \texttt{update} 入口早退，怪物与子弹逻辑冻结，UI 仍接收指针事件——即\textbf{输入层与战斗逻辑层分离}，避免面板打开仍被攻击。
+
+技能装配用长按拖拽：\texttt{SkillDragService} 按下超过阈值后创建顶层代理图标，规避 \texttt{GBox} 裁剪导致的命中错误；\texttt{SkillSlotHitTest} 统一坐标系判断落点属于装备栏或效果槽。关闭面板时，\texttt{SkillLoadoutSyncSystem} 将 \texttt{SkillLoadoutState} 原子写回 \texttt{Skill} 与 \texttt{PlayerAutoCastSystem}，避免半状态仍施放旧技能。图标由配表 \texttt{iconPath} 与 \texttt{SkillIconBinder} 加载，资源目录约定文件名与 id 对应。
+
+跑图界面 \texttt{RunMapPanelView} 按 DAG 状态渲染节点与连线，\texttt{MapNodeIconUtil}、\texttt{LineLayoutUtil} 负责布局；玩家只能选与当前节点相邻且已解锁的边，规则由模型层校验，不在 View 硬编码。
+
+\subsection{UI 架构选型的综合评价}
+
+UI 架构选型归纳见表 \ref{tab:ui-arch-summary}。\textbf{界面不持有玩法真相}，玩法状态以 ECS 与配表为准，UI 经 Controller 与 SyncSystem 读写；全屏流程用栈管理，局内装配用暂停位切断战斗 tick。该划分降低循环依赖，也使第 \ref{chap:test} 章功能测试（Tab 暂停、装配同步、跑图可达）有明确验收口径。
+
+\begin{table}[htbp]
+  
+  \caption{UI 架构选型要点汇总}
+  \label{tab:ui-arch-summary}
+  \begin{tabular}{p{3.0cm}p{4.0cm}p{5.5cm}}
+    \toprule
+    \textbf{问题} & \textbf{选型} & \textbf{理由} \\
+    \midrule
+    全屏导航 & \texttt{UIStackManager} 路由栈 & 避免多面板同显 \\
+    局内构筑 & Tab + 拖拽 + SyncSystem & 暂停战斗、原子同步 \\
+    数据绑定 & 预制体 View + Controller & 便于美术替换与动画 \\
+    与战斗边界 & 禁止 System 操作 UI 节点 & 单向依赖、利于测试 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{本章小结}
+
+本章从引擎语言、玩法架构、UI 架构三方面说明 LayaAir + TypeScript、轻量 ECS + 配表 + Roguelite 跑图、MVC + UI 栈的技术路线及取舍，并明确不引入与周期不匹配的完整 DOTS 等方案。结论将在第 \ref{chap:requirement} 章转为可验证需求，在第 \ref{chap:architecture} 章落实为 ECS/MVC/Worker 设计，在第 \ref{chap:modules}--\ref{chap:test} 章经实现与测试验证\cite{ullmann2025sydra,gregory2018game,cantrell2018unity,heijstek2011empirical}。
+
+\chapter{系统需求分析}
+\label{chap:requirement}
+
+本章在第 \ref{chap:related} 章技术选型基础上，给出 Survivor And Fight 的可行性论证、功能与非功能需求及验收口径，为第 \ref{chap:architecture} 章总体设计与第 \ref{chap:test} 章测试提供依据。需求描述以\textbf{可验证}为原则：每条 Must 级需求均可在代码或测试用例中找到对应实现或断言。
+
+\section{可行性分析}
+
+\subsection{技术可行性}
+
+代码侧已有 LayaAir 3.x + TypeScript 工程：轻量 ECS、配表战斗、元菜单、DAG 跑图、技能装配 UI，以及对象池和 Worker。引擎带 2D 预制体和 \texttt{frameLoop}；答辩用 Chromium 支持 WebGL2 与 Worker。文献里 SyDRA 讨论子系统边界\cite{ullmann2025sydra}；Cantrell 等说明在商业引擎上叠领域逻辑可行\cite{cantrell2018unity}。
+
+\textbf{已具备}：\texttt{ConfigBootstrap.ensureGameConfigLoaded} 用 \texttt{fetch} 和 \texttt{Laya.loader} 双路读表；\texttt{isGameConfigReady} 挡住未就绪就进战斗；ECS、公式、修饰器有 \texttt{verify.ts}。\\
+\textbf{风险}：千怪帧率、Worker 与主线程是否算同一套、UI2 拖拽命中——五波实验和 T-F-05/06 已部分覆盖。\\
+\textbf{结论}：课设周期内能交原型和论文，路线可行。
+
+\subsection{经济与社会可行性}
+
+作为教学原型，主要成本为开发与测试人力，无服务器与支付。游戏为奇幻战斗题材，须控制暴力表现并提示合理游戏时长；跑图休息节点提供节奏缓冲。不采集用户敏感信息，符合单机演示定位。
+
+\section{用户角色与运行环境}
+
+\subsection{用户角色}
+
+系统仅设\textbf{玩家}单一角色：浏览主菜单、选关或跑图、局内移动与构筑、死亡后重启。无管理员后台；未来若扩展存档，仍保持“玩家”为唯一角色。
+
+\subsection{运行环境}
+
+\begin{table}[htbp]
+  
+  \caption{运行环境建议配置}
+  \label{tab:run-env}
+  \begin{tabular}{ll}
+    \toprule
+    \textbf{类别} & \textbf{要求} \\
+    \midrule
+    处理器 & 四核 2.0\,GHz 及以上 \\
+    内存 & 8\,GB 及以上 \\
+    显卡 & 支持 WebGL2 \\
+    浏览器 & Chrome / Edge 最新稳定版（答辩演示以 IDE 内置 Chromium 为准） \\
+    开发环境 & LayaAir IDE 3.x、Node.js（工具脚本）、TypeScript \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{功能性需求}
+
+表 \ref{tab:func-req} 汇总主要功能模块；详细条目见第 \ref{sec:func-detail} 节。
+
+\begin{table}[htbp]
+  
+  \caption{主要功能性需求一览}
+  \label{tab:func-req}
+  \begin{tabular}{p{3.0cm}p{9.7cm}}
+    \toprule
+    \textbf{模块} & \textbf{需求描述} \\
+    \midrule
+    ECS 核心 & 创建/销毁实体；按类型存取组件；分组更新 \\
+    玩法实体 & 玩家/怪物标签；移动、视图同步；hp/maxHp 与 modifier \\
+    技能战斗 & 多 effect 技能；自动施法；子弹表驱动伤害与穿透/分裂/连锁 \\
+    怪物系统 & 波次刷怪；追逐与分离；接触伤害；离屏回收 \\
+    进度系统 & 经验、升级、随机奖励 \\
+    元游戏 & 开始/选关；\texttt{onEnterCombat}；生存计时胜利 \\
+    跑图 & 三幕 DAG；节点类型；种子可复现；Boss 可达 \\
+    技能装配 UI & Tab 暂停；三装备栏；长按拖拽装配 \\
+    配置 & JSON 注册加载；缺失时 \texttt{DEFAULT\_*} 与去重日志 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{用例：局内战斗}
+
+\textbf{参与者}：玩家。\textbf{前置条件}：\texttt{isGameConfigReady()==true}，\texttt{SimpleEcsDemo.init()} 完成。\textbf{主成功场景}：（1）输入移动；（2）\texttt{PlayerAutoCastSystem} 自动施法；（3）子弹碰撞并应用穿透/分裂/连锁；（4）击杀获经验并升级；（5）Tab 打开技能面板，\texttt{GameSession.paused=true}，装配后恢复。\textbf{扩展}：\texttt{hp}$\leq$0 时显示重启面板。对应第 \ref{sec:scenarios} 节场景一、二。
+
+\subsection{用例：元游戏进入战斗}
+
+用户在跑图或选关界面确认节点，\texttt{MetaFlowController} 触发 \texttt{onEnterCombat(payload)}；\texttt{Main} 显示战斗容器并 \texttt{demo.init()}，\texttt{CombatSurvivalTimer} 启动；Boss 节点载荷可携带更长胜利时间。
+
+\section{功能需求详细说明}
+\label{sec:func-detail}
+
+\subsection{ECS 核心}
+
+须提供实体创建/销毁 API，销毁时移除全部组件；同类型组件不可重复挂载；系统按 \texttt{input/logic/render} 分组与优先级确定性调度；支持按组件类型遍历及命名筛选器查询\cite{gregory2018game}。
+
+\subsection{战斗与技能}
+
+玩家须具备 hp/maxHp 与可溯源 modifier。技能由配表定义冷却与 effect 列表；至少三个装备栏独立冷却。效果类型覆盖 \texttt{bullet}、\texttt{modifier\_*}、\texttt{direct\_damage}；子弹带阵营，仅对敌对阵营生效；连锁半径有界，避免无界遍历\cite{helbing2000panic}。
+
+\subsection{怪物、元游戏与 UI}
+
+怪物在玩家周围环带生成并保持最小间距；须实现追逐、接触伤害、离屏回收；击杀给予经验（含等级加成）。跑图每局三幕 DAG，仅沿已解锁邻接边前进；\texttt{validateActReachBoss} 保证可达。全屏界面经 \texttt{UIStackManager}；Tab 暂停战斗；拖拽区分技能/效果槽；血条与升级面板实时反馈\cite{heijstek2011empirical}。
+
+\section{非功能性需求}
+
+\textbf{性能}：目标稳定 60 FPS；同屏规模由 \texttt{MONSTER\_COUNT} 与波次控制；对象池与 Worker 按第 \ref{sec:perf-design} 节启用。\\
+\textbf{可维护性}：模块边界与第 \ref{chap:architecture} 章一致；静态常量集中于 \texttt{defines}。\\
+\textbf{可靠性}：Worker/配表/跑图失败时的回退路径见第 \ref{sec:reliability} 节。\\
+\textbf{兼容性}：优先 Chromium；Worker 不可用时 \texttt{computeSync} 主线程回退\cite{cantrell2018unity}。
+
+\begin{table}[htbp]
+  
+  \caption{非功能需求量化指标（验收参考）}
+  \label{tab:nfr-metrics}
+  \begin{tabular}{lll}
+    \toprule
+    \textbf{指标} & \textbf{目标值} & \textbf{测量方法} \\
+    \midrule
+    战斗帧率（常规波次） & 均值 $\geq 55$ FPS & \texttt{TestLevelFpsTracker} \\
+    千怪消融 P95 & 池化后显著低于无池 & 表 \ref{tab:perf} \\
+    配表就绪 & \texttt{Data.Skill} 非空 & \texttt{isGameConfigReady} \\
+    Worker 行为 & 与主线程无逻辑漂移 & 轨迹对比（见第 \ref{chap:test} 章） \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{数据、接口与约束}
+
+\textbf{逻辑数据实体}：运行时 ECS 组件；配表行（\texttt{Character}、\texttt{Skill}、\texttt{SkillEffect}、\texttt{Bullet}）；\texttt{RunMapState} 图结构；\texttt{GameSession}、\texttt{SkillLoadoutState}。
+
+\textbf{关键接口}：（1）\texttt{ensureGameConfigLoaded(): Promise<boolean>}；（2）\texttt{onEnterCombat(payload?)}；（3）\texttt{ControlInputSource}；（4）\texttt{UIStackManager.push/pop}；（5）\texttt{CombatWorkerComputeRequest/Response} 字段版本兼容。
+
+\textbf{约束与假设}：浏览器启用 JavaScript 与 WebGL；开发阶段已执行 \texttt{sync-config-to-bin.ps1}；单机本地运行；2D 俯视角；同屏数百实体级，非 MMO 规模。
+
+\section{需求优先级}
+
+\begin{table}[htbp]
+  
+  \caption{需求优先级（MoSCoW）}
+  \label{tab:moscow}
+  \begin{tabular}{cl}
+    \toprule
+    \textbf{级别} & \textbf{需求} \\
+    \midrule
+    Must & ECS 战斗、子弹碰撞、移动、刷怪、配表、主菜单进战斗、生存胜利 \\
+    Should & 跑图 DAG、技能装配、升级奖励、对象池与 Worker \\
+    Could & 法杖三槽完整 UI、全量 Effect 独立特效 \\
+    Won't & 联机、账号、支付（本期） \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{需求与测试映射}
+
+表 \ref{tab:req-test-map} 列出需求与验证手段的对应关系，供第 \ref{chap:test} 章追溯\cite{petty2010vv}。
+
+\begin{table}[htbp]
+  
+  \caption{需求与测试映射（节选）}
+  \label{tab:req-test-map}
+  \begin{tabular}{p{2.8cm}p{5.5cm}p{4.7cm}}
+    \toprule
+    \textbf{需求} & \textbf{验证方式} & \textbf{编号/脚本} \\
+    \midrule
+    ECS 实体销毁清理组件 & 单元验证 & \texttt{ecsCorePhase1.verify.ts} \\
+    Tab 暂停与装配同步 & 手工用例 & T-F-05、T-F-06 \\
+    Boss 可达 & 生成断言 & \texttt{validateActReachBoss} \\
+    公式安全解析 & 单元验证 & \texttt{formulaParser.verify.ts} \\
+    对象池降 P95 & 性能消融 & 表 \ref{tab:perf} 第 4--5 波 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{本章小结}
+
+本章写完可行性和需求清单，并挂上 MoSCoW 与测试映射。下一章展开分层设计和 Worker、可靠性细节。
+
+\chapter{系统总体设计}
+\label{chap:architecture}
+
+\section{设计原则}
+
+系统总体设计遵循以下原则，并在后续模块实现中反复体现：
+
+\begin{enumerate}[label=(\arabic*)]
+  \item \textbf{数据与逻辑分离}：组件仅存数据，系统执逻辑；可调参数尽量外置 JSON 配表，工程常量集中于 \texttt{src/defines/}\cite{gregory2018game}。
+  \item \textbf{单一职责}：\texttt{BulletSystem} 负责子弹运动与碰撞；\texttt{EffectExecutor} 负责配表效果解释；\texttt{MetaFlowController} 仅协调元游戏流程，不直接改写 ECS 组件\cite{briand2001maintainability}。
+  \item \textbf{可验证}：核心模块提供公式解析、ECS 核心、属性修饰器等单元验证脚本，变更后可快速回归\cite{petty2010vv}。
+  \item \textbf{渐进复杂度}：先做轻量 ECS 和单线程 tick；池化和 Worker 只在怪够多时再开。
+  \item \textbf{低耦合}：UI 经 Controller、SyncSystem 读写 ECS；Worker 与主线程共用一份 \texttt{combatWorkerLogic.ts}\cite{ullmann2023coupling}。
+  \item \textbf{可降级}：表没加载、Worker 起不来、地图生成失败时，都有回退（第 \ref{sec:reliability} 节、第 \ref{sec:fault-tolerance} 节）。
+\end{enumerate}
+
+\section{系统具体设计}
+\label{sec:system-design}
+
+逻辑上分五层：表现、UI 控制、游戏逻辑、领域服务、基础设施，见图 \ref{fig:layers}。\texttt{Main.ts} 在 \texttt{Laya.timer.frameLoop} 里调 \texttt{EcsWorld.update}，随后引擎画画面、发 UI 事件。菜单、选关、跑图和战斗在同一工程里，靠容器显隐和 \texttt{MetaFlowController} 切换，不必维护两套入口。
+
+\begin{figure}[htbp]
+  
+  \includegraphics[width=0.88\textwidth]{system-layers.png}
+  \caption{系统分层架构（Mermaid 导出）}
+  \label{fig:layers}
+\end{figure}
+
+\subsection{基于 ECS 的 Gameplay 实现}
+\label{sec:ecs-design}
+
+局内玩法走 ECS。\texttt{EntityId} 是数字；\texttt{ComponentStore} 用 \texttt{Map} 按类型存组件；\texttt{EcsWorld} 按 \texttt{input/logic/render} 分组调 System。\texttt{Position}、\texttt{Velocity}、\texttt{Attribute}、\texttt{Skill} 等只放数据；\texttt{MovementSystem}、\texttt{BulletSystem} 等遍历实体改字段，本身不记状态。
+
+\textbf{标签与筛选}：玩家与怪物共享位移、属性、技能等组件，仅通过 \texttt{PlayerTag}/\texttt{MonsterTag} 区分。\texttt{FilterRegistry} 提供 \texttt{Players}、\texttt{Monsters} 等命名筛选器，避免各 System 重复编写交集查询。该设计体现\textbf{组合优于继承}：新增怪物行为时扩展组件字段或新增 System，而非维护 \texttt{MonsterBase} 类树。
+
+\textbf{战斗数据流}：每帧 \texttt{CombatDataPrepareSystem} 采集坐标等快照 $\rightarrow$ 可选 \texttt{CombatDataBridge} 提交 Worker 执行 \texttt{processCombatFrame} $\rightarrow$ 主线程 \texttt{MonsterChaseSystem} 应用追逐/分离结果 $\rightarrow$ \texttt{BulletSystem} 在主线程完成碰撞（依赖 Laya 节点与阵营判定）。\texttt{GameSession.paused} 在死亡、技能 Tab 或胜利时冻结逻辑 System 的 \texttt{update} 入口。
+
+\textbf{配表驱动}：\texttt{Skill} 与多行 \texttt{SkillEffect} 描述冷却与效果链；\texttt{EffectExecutor} 按序解释 \texttt{bullet}、\texttt{modifier\_*}、\texttt{direct\_damage}。修饰器须位于后续 \texttt{bullet} 之前，形成链式组合语义。伤害字符串由 \texttt{FormulaParser} 在白名单运算下解析，禁止 \texttt{eval}。
+
+\subsection{基于 MVC 的 UI 结构实现}
+\label{sec:mvc-design}
+
+元游戏与局内 UI 采用 \textbf{MVC 变体}\cite{heijstek2011empirical}：
+\begin{itemize}
+  \item \textbf{Model}：hp、装配来自 ECS；跑图用 \texttt{RunMapPanelModel}、\texttt{RunMapState}；
+  \item \textbf{View}：预制体、UI2 节点负责布局；
+  \item \textbf{Controller}：\texttt{UiControllerBase} 子类管生命周期和路由，\textbf{不得}直接改战斗实体。
+\end{itemize}
+
+全屏页走 \texttt{UIStackManager}：\texttt{push} 显示、\texttt{pop} 返回，始终只有一个全屏页在前台。\texttt{MetaMenuBootstrap} 注册开始、选关、跑图路由。
+
+局内 Tab 由 \texttt{SkillSelectPanelController} 监听：打开时 \texttt{GameSession.paused=true}，战斗 System 不 tick，UI 仍能吃点击。拖拽走 \texttt{SkillDragService}，落点用 \texttt{SkillSlotHitTest}；关面板时 \texttt{SkillLoadoutSyncSystem} 一次性写回 \texttt{Skill} 和 \texttt{PlayerAutoCastSystem}。跑图连线由 \texttt{RunMapPanelView} 画，能不能走由 Model 判，View 不写规则。
+
+核心约束：\textbf{界面不拥有玩法真相}——玩法状态以 ECS 与配表为准，UI 仅经 Controller/SyncSystem 读写。
+
+\subsection{基于 Web Worker 和对象池的优化实现}
+\label{sec:perf-design}
+
+\textbf{对象池}：\texttt{BulletPool}、\texttt{MonsterPool} 按预制体路径分桶复用 Laya 节点，抑制 \texttt{instantiate/destroy} 触发的 GC 尖峰。\texttt{MonsterRecycleSystem} 在怪物远离玩家超过阈值后回收实体，维持活跃集合规模。
+
+\textbf{Web Worker}：当场上实体数 $\geq$ \texttt{COMBAT\_WORKER\_MIN\_ENTITY\_COUNT} 时，\texttt{CombatDataPrepareSystem} 将快照经 \texttt{CombatDataBridge} 发送至 Worker；\texttt{combatWorkerLogic.ts} 在主线程与 Worker 间共享，计算追逐、分离与摆动。\texttt{CombatDataBridge.prepareFrame} 优先消费异步结果，失败或未就绪时调用 \texttt{computeSync} 回退。子弹碰撞、连锁与分裂仍保留主线程，因依赖引擎节点与即时命中判定。
+
+\textbf{逻辑暂停}：\texttt{GameSession.paused} 在技能面板、死亡、胜利时让战斗 System 直接 return，不额外分配资源，思路与 Cantrell 等把重算和画面拆开一致\cite{cantrell2018unity}。
+
+\section{系统交互与时序}
+\label{sec:sequence}
+
+图 \ref{fig:system-sequence} 描述从启动、进战斗、切元游戏到重启的调用顺序，由 \texttt{figures/system-sequence.mmd} 经 \texttt{build.ps1} 导出为 PNG。
+
+\begin{figure}[htbp]
+  
+  \includegraphics[width=0.95\textwidth]{system-sequence.png}
+  \caption{系统主要交互时序}
+  \label{fig:system-sequence}
+\end{figure}
+
+\section{可靠性设计}
+\label{sec:reliability}
+
+配表坏了、Worker 起不来、地图生成失败时，系统应尽量还能玩或至少能调试，而不是白屏退出。做法如下。
+
+\textbf{（1）配表加载与就绪判据}。\texttt{ConfigBootstrap.ensureGameConfigLoaded} 遍历 \texttt{configBases()}，依次尝试 \texttt{fetch} 与 \texttt{Laya.loader} 双通道加载 \texttt{tables.registry.json} 及各表；\texttt{isGameConfigReady()} 要求 \texttt{configLoaded} 且 \texttt{Data.Skill} 非空，作为“可否进入战斗”的全局闸门。\texttt{Main.onStart} 与 \texttt{SimpleEcsDemo.spawnPlayer} 均在生成实体前等待或复查该状态。
+
+\textbf{（2）运行时缺表降级}。\texttt{SimpleEcsDemo} 维护 \texttt{missingConfigLogged: Set<string>}，通过 \texttt{logMissingConfigOnce} 对每个缺失键仅告警一次，避免刷屏。\texttt{defines} 中 \texttt{DEFAULT\_PLAYER\_HP}、\texttt{DEFAULT\_PLAYER\_PREFAB}、\texttt{DEFAULT\_PLAYER\_AUTO\_SKILL\_ID} 等在查表失败时回退；升级奖池表为空时返回内联默认条目，保证演示不中断。
+
+\textbf{（3）Worker 双路径}。\texttt{CombatDataBridge.initWorker} 失败、\texttt{onerror} 或 \texttt{postMessage} 异常时将 \texttt{workerUsable=false}；\texttt{prepareFrame} 无可用异步结果时调用 \texttt{computeSync}，与 Worker 共用 \texttt{processCombatFrame}。\texttt{MonsterChaseSystem} 无 Worker 结果时走本地追逐+分离；\texttt{BulletSystem} 在存在连锁弹等 Worker 未覆盖场景时回退完整主线程逻辑。实体数低于 \texttt{COMBAT\_WORKER\_MIN\_ENTITY\_COUNT} 时不提交 Worker，减少通信开销。
+
+\textbf{（4）跑图生成保底}。\texttt{RunMapGenerator.generate} 在最多 \texttt{RUN\_MAP\_GENERATION\_MAX\_RETRIES} 次随机尝试后，若 \texttt{validateActReachBoss} 仍失败，则调用 \texttt{generateFallback} 生成三幕各「休息$\rightarrow$战斗$\rightarrow$Boss」线性图，保证 Boss 可达、进度不卡死。
+
+\textbf{（5）重启防重入}。\texttt{RestartPanelSystem} 将 \texttt{session.restartRequested} 置真；\texttt{SimpleEcsDemo.tryRestartFromSession} 在 \texttt{restarting=true} 期间异步清场与重生，\texttt{update} 中避免重复触发，\texttt{finally} 复位标志，防止监听器与实体重复注册。
+
+\textbf{（6）预制体加载失败}。实例化失败时 \texttt{createPlaceholderNode()} 生成占位碰撞体，便于在无美术资源环境下继续调试逻辑。
+
+\section{容错与降级策略}
+\label{sec:fault-tolerance}
+
+表 \ref{tab:fault-tolerance} 汇总主要故障模式与系统响应，与第 \ref{sec:reliability} 节实现一一对应。
+
+\begin{table}[htbp]
+  
+  \caption{容错与降级策略}
+  \label{tab:fault-tolerance}
+  \begin{tabular}{p{3.2cm}p{4.0cm}p{5.8cm}}
+    \toprule
+    \textbf{故障模式} & \textbf{检测方式} & \textbf{降级行为} \\
+    \midrule
+    配表 JSON 404 或空表 & \texttt{isGameConfigReady()==false} & 控制台错误提示；玩家/技能使用 \texttt{DEFAULT\_*}；自动施法可能退化 \\
+    Worker 初始化/通信失败 & \texttt{workerUsable=false} & \texttt{computeSync} 主线程重算追逐 \\
+    实体数低于 Worker 阈值 & 快照计数 & 不投递 Worker，全主线程 \\
+    跑图随机生成不可达 & \texttt{validateActReachBoss} & \texttt{generateFallback} 线性保底图 \\
+    预制体路径无效 & \texttt{instantiate} 异常 & 占位节点 + 日志 \\
+    UI 路由加载失败 & Controller 构造异常 & 跳过该路由并日志，不阻断战斗容器 \\
+  \bottomrule
+  \end{tabular}
+\end{table}
+
+死亡和 Tab 装配共用 \texttt{GameSession.paused} 冻战斗逻辑。\texttt{RestartPanelSystem} 用 \texttt{isPlayerDead()} 决定弹不弹重启，免得装配面板误进重启。
+
+\section{可扩展性设计}
+\label{sec:extensibility}
+
+本系统的可扩展性建立在 ECS 的\textbf{组合优于继承}原则之上，而非为每种怪物或技能派生子类。
+
+\textbf{实体扩展}：新玩法维度优先\textbf{新增组件类型}（如未来的 \texttt{BuffComponent}、\texttt{ShieldComponent}），再在独立 System 中读写；已有 \texttt{MonsterTag} 实体自动参与 \texttt{FilterRegistry.Monsters}，无需修改 \texttt{EcsWorld} 内核。
+
+\textbf{行为扩展}：新行为对应新 System 或扩展现有 System 的分支；例如新增“光环”只需注册 \texttt{AuraSystem} 并在 \texttt{SimpleEcsDemo} 构造函数中 \texttt{addSystem}，不必改动 \texttt{MovementSystem}。
+
+\textbf{技能扩展}：新 \texttt{effect} 类型在 \texttt{EffectExecutor} 增加分支；修饰器仍通过“写上下文 $\rightarrow$ 后续 bullet 消费”扩展，策划在 \texttt{SkillEffect} 表调序即可组合。新子弹形态仅需配表 \texttt{Bullet} 行与预制体路径。
+
+\textbf{内容扩展}：新跑图节点类型扩展 \texttt{RunNodeType} 与 \texttt{RunMapGenerator} 权重表；新全屏界面在 \texttt{UIStackManager} 注册路由与 Controller，不修改战斗 ECS。
+
+\textbf{与继承方案对比}：若采用 \texttt{Player extends Character extends Actor}，每增加一种“会分裂的精英怪”都需新建子类并重写 \texttt{update}，导致 Laya 节点与逻辑深度耦合。当前方案下，精英怪仅是 \texttt{MonsterTag} + 额外组件（如更高 \texttt{Attribute} 或专用 \texttt{MonsterDef.waveWeight}），行为差异由 \texttt{MonsterAutoCastSystem} 等组合完成，符合 Gregory 与 ECS 文献对“数据导向、增量扩展”的论述\cite{gregory2018game}。
+
+\section{本章小结}
+
+本章给出设计原则、分层架构，并从 ECS Gameplay、MVC UI、Worker/对象池三方面说明系统具体设计；进一步给出端到端时序、可靠性机制、容错表与基于组合的可扩展性策略，为第 \ref{chap:modules} 章实现细节提供结构框架。
+
+\chapter{核心模块详细设计与实现}
+\label{chap:modules}
+
+本章按第 \ref{chap:architecture} 章总体设计，结合 \texttt{src/} 源码说明核心模块实现。\texttt{SimpleEcsDemo} 为组合根（Composition Root），集中注册系统、池与 UI 控制器，是阅读仓库的首选入口。
+
+\section{ECS 架构 GamePlay 实现}
+\label{sec:ecs-impl}
+
+\subsection{世界、组件与筛选器}
+
+\texttt{EntityManager} 使用自增 ID 与空闲列表复用实体。\texttt{ComponentStore} 按类型维护 \texttt{Map<EntityId, Component>}。\texttt{EcsWorld.update} 按 \texttt{input/logic/render} 分组顺序调用系统\cite{gregory2018game}。\texttt{FilterRegistry} 在构造时 \texttt{registerNamedFilters}，提供 \texttt{Players}、\texttt{Monsters} 等命名筛选。
+
+\subsection{属性、移动与自动施法}
+
+\texttt{AttributeSystem} 支持按来源增删 modifier，供 Buff 与升级奖励使用。\texttt{MovementSystem}、\texttt{ControlSystem} 处理位移与输入。\texttt{PlayerAutoCastSystem} 对三装备栏维护独立冷却与 \texttt{pendingCasts}；\texttt{MonsterAutoCastSystem} 驱动怪物施法。
+
+\subsection{技能与效果执行链}
+
+\texttt{PlayerAutoCastSystem} 决定施放后，流程为：（1）从 \texttt{SkillLoadoutState} 读取技能 id 并检查 \texttt{Skill.cooldownRemain}；（2）\texttt{CastPlan} 按配表顺序解析 effect 行；（3）\texttt{EffectExecutor} 分发：\texttt{modifier\_*} 写入分裂/连锁/穿透上下文，供\textbf{下一条} \texttt{bullet} 消费；（4）\texttt{bullet} 调用 \texttt{BulletSystem.spawnBulletWithOptions}；（5）\texttt{direct\_damage} 经 \texttt{FormulaParser} 扣血。
+
+\begin{table}[htbp]
+  
+  \caption{效果类型与执行器映射}
+  \label{tab:effect-map}
+  \begin{tabular}{ll}
+    \toprule
+    \texttt{effect} 字段 & 行为 \\
+    \midrule
+    \texttt{bullet} & \texttt{BulletSystem.spawnBulletWithOptions} \\
+    \texttt{modifier\_split} & 设置分裂数量 \\
+    \texttt{modifier\_chain} & 设置连锁与半径 \\
+    \texttt{modifier\_pierce} & 增加穿透 \\
+    \texttt{direct\_damage} & 公式直伤 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{子弹碰撞与怪物 AI}
+
+\texttt{BulletSystem} 从 \texttt{BulletPool} 取节点，用 \texttt{hitRadiusSq} 做圆碰撞；命中后扣血、递减穿透，并按配置处理连锁与分裂\cite{helbing2000panic}。\texttt{MonsterChaseSystem} 计算追逐方向，叠加分离力与随机摆动；有 Worker 结果时 \texttt{applyWorkerVelocities}，否则本地计算。\texttt{MonsterWaveSpawnSystem} 在环带刷怪；\texttt{MonsterRecycleSystem} 与 \texttt{MonsterPool} 回收离屏单位。\texttt{MonsterContactDamageSystem} 处理接触伤害。
+
+\subsection{经验、升级与元游戏数据}
+
+\texttt{ExperienceSystem} 在击杀时增加经验并判断升级。\texttt{UpgradeRewardSystem} 打开奖励面板；\texttt{RewardPoolService} 按权重抽取条目，\texttt{RewardApplyService} 写回属性或技能。\texttt{RunMapGenerator} 生成三幕 DAG，失败时 \texttt{generateFallback}。\texttt{MetaFlowController} 协调 \texttt{onEnterCombat} 并将节点载荷传入战斗场景。
+
+\section{MVC 架构 UI 实现}
+\label{sec:mvc-impl}
+
+\subsection{UI 栈与元游戏界面}
+
+\texttt{MetaMenuBootstrap} 向 \texttt{UIStackManager} 注册 \texttt{StartPanel}、\texttt{SelectLevelPanel}、\texttt{RunMapPanel} 等路由。用户确认节点后触发 \texttt{onEnterCombat}，\texttt{Main} 隐藏菜单容器、显示战斗 \texttt{Area2D} 并 \texttt{demo.init()}。\texttt{RunMapPanelView} 使用 \texttt{MapNodeIconUtil}、\texttt{LineLayoutUtil} 渲染 DAG；仅允许选择已解锁邻接边。
+
+\subsection{战斗 HUD 与技能装配}
+
+\texttt{MainHudSystem}、\texttt{BloodBarSyncSystem} 将 ECS 中 hp 映射至 ProgressBar。\texttt{SkillSelectPanelController} 绑定 \texttt{MainUIPanel.lh}，Tab 切换时设置 \texttt{GameSession.paused}。\texttt{SkillDragService} 在超过 \texttt{LONG\_PRESS\_MS} 后使用顶层代理图标拖拽；\texttt{SkillSlotHitTest} 判断装备栏/效果槽落点。\texttt{SkillLoadoutSyncSystem} 关闭面板时原子写回 \texttt{Skill} 与 \texttt{PlayerAutoCastSystem}，并调用 \texttt{getCombatEffectIds} 刷新可战斗 effect 集合。
+
+\subsection{输入与重启面板}
+
+\texttt{InputService} 封装键盘/指针；\texttt{ControlInputAdapter} 转为 \texttt{ControlSystem} 可读方向。Tab 打开面板时战斗 Control 不更新，UI 仍可接收事件\cite{heijstek2011empirical}。\texttt{PlayerDeathSystem} 在 \texttt{hp}\,$\leq$\,0 时置 \texttt{paused}；\texttt{RestartPanelSystem} 经 UI 栈显示重启面板；\texttt{tryRestartFromSession} 在 \texttt{restarting} 保护下清场重生。
+
+依赖关系保持单向：UI $\rightarrow$ ECS；Systems $\rightarrow$ 配表；禁止 System 直接操作 UI 节点。
+
+\begin{figure}[htbp]
+  
+  \includegraphics[width=0.92\textwidth]{skill-tab-sequence.png}
+  \caption{Tab 技能装配交互时序（Mermaid）}
+  \label{fig:skill-tab-seq}
+\end{figure}
+
+\section{Web Worker 和对象池的优化实现}
+\label{sec:worker-pool-impl}
+
+\texttt{BulletPool}、\texttt{MonsterPool} 按预制体路径分桶，\texttt{acquire} 优先复用空闲节点，不足时再 \texttt{instantiate}。\texttt{BulletHitTest} 使用距离平方减少开方。
+
+\texttt{CombatDataPrepareSystem} 在 \texttt{isPaused()} 为假时打包怪物坐标等快照，调用 \texttt{CombatDataBridge.prepareFrame}。桥接层在 Worker 就绪且实体数达标时 \texttt{postMessage}，否则 \texttt{computeSync}；\texttt{MonsterChaseSystem} 与 \texttt{BulletSystem} 按是否有 Worker 结果及是否存在连锁弹，选择应用速度或走完整主线程碰撞。性能消融可通过 \texttt{MetaRunSession.testUseCombatWorker} 与 \texttt{testDefine} 预设控制（见第 \ref{chap:performance} 章）。
+
+\section{游戏主循环设计}
+\label{sec:main-loop}
+
+\subsection{入口与配置时序}
+
+\texttt{Main.onStart} 创建 \texttt{InputService}、\texttt{ControlInputAdapter}、\texttt{SimpleEcsDemo}，注册 \texttt{frameLoop}，并 \texttt{await ensureGameConfigLoaded()}。配表优先于实体生成，避免 \texttt{Data.Character.GetByID} 为空。若 \texttt{META\_MENU\_ENABLED} 为真则 \texttt{startMetaMenu}，否则直接 \texttt{demo.init()}。
+
+\subsection{SimpleEcsDemo 构造与 init}
+
+构造函数内：创建 \texttt{FilterRegistry}；注册 \texttt{AttributeSystem}、\texttt{ExperienceSystem}、\texttt{BulletSystem}（注入池与桥接）、\texttt{CombatDataPrepareSystem}、\texttt{SkillSystem}、\texttt{MonsterWaveSpawnSystem}、\texttt{UpgradeRewardSystem}、\texttt{MainHudSystem}、\texttt{SkillSelectPanelController} 等。\texttt{init()} 在配表就绪后按 \texttt{Character} 行加载玩家预制体，挂载 \texttt{PlayerTag}、\texttt{Position}、\texttt{Attribute}、\texttt{Skill}、\texttt{SkillLoadoutState}、\texttt{ViewComponent} 等；怪物由波次系统动态生成。
+
+\subsection{帧循环与暂停}
+
+每帧：若 \texttt{restarting} 则跳过重启检测；否则 \texttt{tryRestartFromSession}；若 \texttt{isPaused()} 则战斗 System 早退；否则 \texttt{world.update(deltaTime)}。生存计时与 Tab 暂停在 \texttt{Main} 层联动，ECS 层以 \texttt{GameSession.paused} 为唯一逻辑冻结开关。
+
+\section{典型场景实现剖析}
+\label{sec:scenarios}
+
+\subsection{场景一：玩家首次进入战斗}
+
+\textbf{步骤 1}：\texttt{Main.onStart} $\rightarrow$ \texttt{ensureGameConfigLoaded}。\textbf{步骤 2}：元菜单 \texttt{UIStackManager.push(Start)}，战斗容器暂隐藏。\textbf{步骤 3}：选关/跑图 $\rightarrow$ \texttt{onEnterCombat} $\rightarrow$ \texttt{demo.init()}，\texttt{CombatSurvivalTimer} 启动。\textbf{步骤 4}：首帧 \texttt{ControlSystem}、\texttt{PlayerAutoCastSystem}、\texttt{MonsterWaveSpawnSystem} 协同运行。对应测试 T-F-01、T-F-09。
+
+\subsection{场景二：Tab 打开技能面板并更换装备}
+
+Tab $\rightarrow$ \texttt{paused=true} $\rightarrow$ 长按拖拽 $\rightarrow$ \texttt{SkillLoadoutSyncSystem} 写回 $\rightarrow$ \texttt{paused=false}，下一冷却周期生效新技能。对应 T-F-05、T-F-06。
+
+\subsection{场景三：怪物密集时的 Worker 卸载}
+
+实体数 $\geq$ 阈值时 \texttt{CombatDataPrepareSystem} 提交 Worker；主线程仍处理子弹碰撞。关闭 Worker 或降低上限后 P95 帧时间上升（见第 \ref{chap:test} 章），说明优化有效且边界清晰。
+
+\section{关键代码文件索引}
+\label{sec:file-index}
+
+\begin{longtable}{p{3.5cm}p{9cm}}
+  \caption{核心源码文件索引} \label{tab:file-index} \\
+  \toprule
+  \textbf{模块} & \textbf{路径} \\
+  \midrule
+  \endfirsthead
+  \toprule
+  \textbf{模块} & \textbf{路径} \\
+  \midrule
+  \endhead
+  入口 & \texttt{src/Main.ts} \\
+  ECS 世界 & \texttt{src/ecs/core/World.ts} \\
+  组件存储 & \texttt{src/ecs/core/ComponentStore.ts} \\
+  战斗 Demo & \texttt{src/game/demo/SimpleEcsDemo.ts} \\
+  子弹 & \texttt{src/game/bullet/BulletSystem.ts} \\
+  子弹池 & \texttt{src/game/bullet/BulletPool.ts} \\
+  效果执行 & \texttt{src/game/skill/EffectExecutor.ts} \\
+  Worker 桥接 & \texttt{src/game/combat/CombatDataBridge.ts} \\
+  Worker 逻辑 & \texttt{src/game/combat/combatWorkerLogic.ts} \\
+  跑图生成 & \texttt{src/game/run/RunMapGenerator.ts} \\
+  元流程 & \texttt{src/game/meta/MetaFlowController.ts} \\
+  UI 栈 & \texttt{src/game/ui/mvc/UIStackManager.ts} \\
+  技能面板 & \texttt{src/game/ui/skillselect/SkillSelectPanelController.ts} \\
+  配表引导 & \texttt{src/config/ConfigBootstrap.ts} \\
+  静态常量 & \texttt{src/defines/*.ts} \\
+  \bottomrule
+\end{longtable}
+
+\section{功能模块与论文章节对照}
+\label{sec:module-map}
+
+\begin{table}[htbp]
+  
+  \caption{功能模块与论文章节对照}
+  \label{tab:module-chapter-map}
+  \begin{tabular}{p{4.0cm}p{8.5cm}}
+    \toprule
+    \textbf{功能模块} & \textbf{论文章节} \\
+    \midrule
+    ECS Gameplay（实体、技能、子弹、怪物） & 第 \ref{chap:modules} 章第 \ref{sec:ecs-impl} 节；第 \ref{chap:architecture} 章第 \ref{sec:ecs-design} 节 \\
+    MVC UI（栈、跑图、技能装配） & 第 \ref{chap:modules} 章第 \ref{sec:mvc-impl} 节；第 \ref{chap:architecture} 章第 \ref{sec:mvc-design} 节 \\
+    Web Worker 与对象池 & 第 \ref{chap:modules} 章第 \ref{sec:worker-pool-impl} 节；第 \ref{chap:performance} 章 \\
+    主循环与入口 & 第 \ref{chap:modules} 章第 \ref{sec:main-loop} 节 \\
+    可靠性、容错与可扩展性 & 第 \ref{chap:architecture} 章第 \ref{sec:reliability}--\ref{sec:extensibility} 节 \\
+    测试与性能实验 & 第 \ref{chap:test} 章 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{本章小结}
+
+本章按 ECS Gameplay、MVC UI、Worker/对象池、主循环四条主线说明了实现细节，并以三个典型场景串联配置—流程—战斗的贯通路径。实现中显式采用\textbf{组合根}（\texttt{SimpleEcsDemo}）、\textbf{对象池}、\textbf{桥接}（\texttt{CombatDataBridge}）、\textbf{策略}（Targeting）、\textbf{状态}（\texttt{GameSession.paused}）等模式，未引入过度抽象。
+
+主要难点与对策包括：（1）配表未同步至 \texttt{bin/config} 导致 404——以 \texttt{sync-config-to-bin.ps1} 与 \texttt{isGameConfigReady} 应对；（2）UI2 拖拽命中——顶层代理与 \texttt{SkillSlotHitTest}；（3）Effect 链顺序——文档与样例配表约束；（4）Worker 与主线程逻辑一致——共享 \texttt{combatWorkerLogic.ts} 与 \texttt{computeSync} 回退。表 \ref{tab:file-index}、表 \ref{tab:module-chapter-map} 便于评阅对照源码。下一章专述性能优化与实测数据。
+
+\chapter{性能优化与工程实践}
+\label{chap:performance}
+
+本章对照第 \ref{sec:perf-design} 节设计，写清已落地的优化、实验步骤和工程习惯，并与第 \ref{chap:test} 章数据对齐。原则是先量后开：池和 Worker 都能关，方便对照和排错。
+
+\section{性能目标与瓶颈}
+
+\textbf{目标}：1920$\times$1080、IDE 内置 Chromium 预览下，普通波次平均帧率贴近 60 FPS；千怪时 P95 帧时间能压下去。\\
+\textbf{瓶颈}：追逐和子弹碰撞占 CPU；预制体反复创建触发 GC；主线程还要跑脚本和绘制\cite{gregory2018game,cantrell2018unity}。人群仿真文献也主张把重算和画面分开\cite{cantrell2018unity,bott2014unreal}，本项目用池化、Worker 和 \texttt{paused} 做同类处理。
+
+\section{对象池}
+
+\texttt{BulletPool}、\texttt{MonsterPool} 按 \texttt{prefabPath} 分桶。\texttt{acquire} 先取空闲节点并重置，不够再 \texttt{instantiate}；\texttt{put} 在子弹打完或 \texttt{MonsterRecycleSystem} 回收时调用。
+
+池化把“每帧猛建猛删”变成“高峰过后反复用”，GC 尖刺减轻，P95 更好看。第 \ref{chap:test} 章第 4--5 波同窗对比：开池后 P95 从 76.50\,ms 到 48.60\,ms（约降 36.5\%），平均 FPS 几乎不变，说明卡的是尖峰不是均值。
+
+\section{Web Worker 卸载}
+
+追逐、分离、摆动只有数字，没有节点。\texttt{CombatDataPrepareSystem} 在实体数 $\geq$ \texttt{COMBAT\_WORKER\_MIN\_ENTITY\_COUNT} 时打包快照，\texttt{CombatDataBridge} 丢给 Worker 跑 \texttt{processCombatFrame}。主线程和 Worker 共用 \texttt{combatWorkerLogic.ts}；\texttt{prepareFrame} 不行就 \texttt{computeSync}。
+
+子弹碰撞、连锁、分裂离不开 Laya 节点，仍主线程算（见第 \ref{sec:ecs-impl} 节）。第 1--3 波在实体达标时启用 Worker 参与追逐计算；第 4--5 波用于对象池同窗对比（第 5 波关闭 Worker，以隔离池化对 P95 的影响，见第 \ref{chap:test} 章）。
+
+\section{渲染与逻辑侧其它优化}
+
+\textbf{碰撞}：\texttt{BulletHitTest} 用距离平方，少做开方。\\
+\textbf{暂停}：\texttt{GameSession.paused} 时战斗 System 直接 return，Tab、死亡、胜利都算。\\
+\textbf{图集}：接上 \texttt{AtlasConfig.atlascfg} 和 \texttt{TextureAtlasService} 后，千怪千弹波 FPS 从 13.32 到 15.10（约 $+13.4\%$），见表 \ref{tab:test-level-fps-compare}。\\
+\textbf{配置}：策划表启动读一次；工程常量放 \texttt{defines}，热路径不碰磁盘。
+
+\section{帧预算与内存}
+
+60 FPS 时一帧大约 16.67\,ms。粗分：输入和 UI 1--2\,ms，ECS（含子弹）6--8\,ms，Worker 通信 1\,ms 以内，其余给渲染\cite{gregory2018game}。超了先开池或 Worker，再降同屏上限，别在业务里硬砍分辨率。
+
+短生命周期对象多会诱发 GC。池化把分配摊平，Performance 面板里 Scripting/GC 段往往跟着好看些。观测靠 \texttt{TestLevelFpsTracker}；\texttt{missingConfigLogged} 对缺表键只打一次日志。
+
+\section{性能实验设计}
+
+\subsection{实验目的与变量}
+
+看池、图集、Worker 对 FPS 和 P95 的影响\cite{gregory2018game,mckenzie2008crowd}。
+
+\textbf{自变量}：池开/关；Worker 开/关（怪够多时）；同屏怪数。\\
+\textbf{因变量}：平均 FPS、P95（消融段）。\\
+\textbf{控制}：同一浏览器、1920$\times$1080、Level3 五波脚本、关后台大程序。
+
+\subsection{实验步骤}
+
+\begin{enumerate}[label=\arabic*.]
+  \item IDE 预览或发布，可选开 Performance；
+  \item Level3：5 波各 10\,s，怪数 10/100/1000，第 4--5 波千怪消融；
+  \item \texttt{TestLevelFpsTracker} 记均值，第 4--5 波记 P95；
+  \item 对照表 \ref{tab:test-five-waves}、表 \ref{tab:perf} 并写几句解读。
+\end{enumerate}
+
+\subsection{优化自检清单}
+
+合代码前自查：热路径有没有狂 \texttt{new}；销毁前有没有 \texttt{pool.put}；碰撞是不是平方距离；\texttt{paused} 能不能挡住无关 System；Worker 载荷是不是纯数；配表是不是只加载一次。
+
+\section{绿色计算与兼容性}
+
+CPU 平均占用低一点，笔记本续航会好一些：池减分配，暂停减空转，\texttt{MONSTER\_COUNT} 别无脑拉满。Worker 挂了走 \texttt{computeSync}；配表 \texttt{fetch} 和 \texttt{Laya.loader} 双路；没 Worker 的浏览器也能跑主流程。换浏览器或引擎版本后，要回归 Worker 脚本路径和 \texttt{bin/config}。
+
+\section{本章小结}
+
+本章写了池、Worker、碰撞/暂停/图集和帧预算，并给出实验步骤。数据上：池主要救 P95；图集抬千怪波平均 FPS；Worker 在第 1--3 波参与追逐重算。下一章列用例、环境和读表方法。
+
+\chapter{系统测试与验证}
+\label{chap:test}
+
+本章对 Survivor And Fight 开展单元验证、功能回归与性能实验，验证第 \ref{chap:requirement} 章需求与第 \ref{chap:architecture} 章设计是否落地。测试策略遵循 Petty 等对仿真与交互系统 V\&V 的要求\cite{petty2010vv,oberkampf2010vv}：核心契约用脚本验证，玩法闭环用手工用例，性能用可复现关卡与日志统计。
+
+\section{测试策略}
+
+\textbf{单元验证}：ECS 核心、公式解析、属性修饰器——变更相关模块后须重跑对应 \texttt{*.verify.ts}。\\
+\textbf{集成/系统测试}：跑图可达性、Tab 装配同步、Worker 轨迹一致性——手工或脚本断言。\\
+\textbf{性能测试}：Level3 五波脚本 + \texttt{TestLevelFpsTracker}，对比表 \ref{tab:test-five-waves}、\ref{tab:perf}。\\
+\textbf{回归清单}：修改 \texttt{FormulaParser}、\texttt{ComponentStore}、\texttt{AttributeSystem}、配表、\texttt{CombatDataBridge} 后，按附录需求—测试矩阵或表 \ref{tab:req-test-map} 回归主路径。
+
+\section{单元验证}
+
+\subsection{ECS 核心}
+
+\texttt{ecsCorePhase1.verify.ts} 覆盖：实体 ID 唯一；组件增删与 \texttt{getComponent}；销毁后不可访问；多 System 按分组与 priority 顺序执行\cite{petty2010vv}。
+
+\subsection{公式解析器}
+
+\texttt{formulaParser.verify.ts} 覆盖：四则运算、括号、属性别名；非法字符与边界公式（以实现为准的安全返回/抛错）。配表伤害依赖解析器，任何变更须 rerun。
+
+\subsection{属性修饰器}
+
+\texttt{attributeModifier.verify.ts} 覆盖：多 modifier 叠加；按 \texttt{sourceId} 批量移除；\texttt{getModifierContributions} 可追溯。升级奖励与 Buff 均依赖该机制\cite{briand2001maintainability}。
+
+\section{功能测试}
+
+表 \ref{tab:test-func} 列出主要手工用例，走通战斗、元游戏、跑图、装配和重启。
+
+\begin{longtable}{p{2.2cm}p{4.5cm}p{6.3cm}}
+  \caption{功能测试用例摘要} \label{tab:test-func} \\
+  \toprule
+  \textbf{编号} & \textbf{步骤} & \textbf{预期结果} \\
+  \midrule
+  \endfirsthead
+  \toprule
+  \textbf{编号} & \textbf{步骤} & \textbf{预期结果} \\
+  \midrule
+  \endhead
+  T-F-01 & 启动并等待加载 & \texttt{isGameConfigReady}，技能表非空 \\
+  T-F-02 & 进入战斗移动 & 角色与相机正常 \\
+  T-F-03 & 怪物接近 & 追逐、扣血、血条更新 \\
+  T-F-04 & 观察自动攻击 & 子弹命中；穿透/分裂/连锁 \\
+  T-F-05 & Tab 打开技能面板 & \texttt{paused=true}，可拖拽装配 \\
+  T-F-06 & 关闭面板 & 战斗恢复，下一冷却周期新技能生效 \\
+  T-F-07 & 升级 & 奖励面板与应用 \\
+  T-F-08 & 玩家死亡 & 重启面板，\texttt{restarting} 无重入 \\
+  T-F-09 & 元游戏进战斗 & 生存计时启动 \\
+  T-F-10 & Boss 节点 & Boss 胜利时长参数生效 \\
+  \bottomrule
+\end{longtable}
+
+\subsection{集成测试补充}
+
+\textbf{跑图可达性}：对 \texttt{RunMapGenerator.generate} 多次随机种子断言 \texttt{validateActReachBoss}；失败应走 \texttt{generateFallback}。\\
+\textbf{装配同步}：互换装备栏技能后，下一冷却周期伤害/图标与装配一致，否则 \texttt{SkillLoadoutSyncSystem} 存在缺陷。\\
+\textbf{Worker 一致性}：Worker 开、关各跑一段，怪物轨迹可差一帧，但算法不能两套\cite{mckenzie2008crowd}。
+
+\section{性能测试}
+
+\subsection{测试环境}
+
+表 \ref{tab:test-env} 为五波实验与功能抽测的统一环境（2026-05-18，单次运行）。
+
+\begin{table}[htbp]
+  
+  \caption{测试环境配置}
+  \label{tab:test-env}
+  \begin{tabular}{ll}
+    \toprule
+    \textbf{项目} & \textbf{配置} \\
+    \midrule
+    操作系统 & Windows 10/11（64 位） \\
+    运行方式 & LayaAir IDE 内置浏览器预览（Chromium 内核） \\
+    视口 / 设计分辨率 & 1920$\times$1080 预览；设计稿 1334$\times$750，\texttt{showall} 缩放 \\
+    引擎与语言 & LayaAir 3.x，TypeScript \\
+    测试关卡 & 选关 Level3：5 波 $\times$ 10\,s，双方无敌 \\
+    统计工具 & \texttt{TestLevelFpsTracker}（控制台日志） \\
+    工程版本 & Git \texttt{\thesisGitCommit}（\texttt{\thesisGitCommitDate}，\texttt{build.ps1} 生成） \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+选关 \textbf{Level3} 共 5 波：第 1--3 波怪物 10/100/1000，装备三把测试法杖；第 4--5 波均为 1000 怪，依次为「无池无 Worker / 仅池（关 Worker）」，用于同窗消融。第 3 波含首次千怪冷启动，\textbf{不纳入}与第 4--5 波的公平对比。
+
+\subsection{动态图集对比（前三波）}
+
+表 \ref{tab:test-level-fps-atlas}、\ref{tab:test-level-fps-compare} 记录接图集前后两轮采样，只看前三波。第 3 波 1000 怪：FPS 从 13.32 到 15.10（约 $+13.4\%$），弹幕多时合批有用。
+
+\begin{table}[htbp]
+  
+  \caption{测试关卡分波 FPS（接入动态图集，前三波）}
+  \label{tab:test-level-fps-atlas}
+  \begin{tabular}{ccccc}
+    \toprule
+    \textbf{波次} & \textbf{同屏怪物} & \textbf{单发子弹} & \textbf{平均 FPS} & \textbf{采样帧数} \\
+    \midrule
+    1/3 & 10 & 10 & 56.74 & 569 \\
+    2/3 & 100 & 100 & 40.72 & 408 \\
+    3/3 & 1000 & 1000 & 15.10 & 152 \\
+    \midrule
+    \textbf{前三波汇总} & \multicolumn{2}{c}{—} & \textbf{37.48} & 1129 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+  
+  \caption{动态图集接入前后 FPS 对比（前三波）}
+  \label{tab:test-level-fps-compare}
+  \begin{tabular}{cccc}
+    \toprule
+    \textbf{波次（怪物数）} & \textbf{对照 FPS} & \textbf{动态图集 FPS} & \textbf{变化} \\
+    \midrule
+    1（10） & 58.68 & 56.74 & $-1.94$ \\
+    2（100） & 46.30 & 40.72 & $-5.58$ \\
+    3（1000） & 13.32 & 15.10 & $+1.78$ \\
+    \midrule
+    前三波汇总 & 39.46 & 37.48 & $-1.98$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{五波完整帧率}
+
+表 \ref{tab:test-five-waves} 是同一次跑完的五波，已开图集和 DrawCall 合批。共 1733 帧、约 50.3\,s，整场平均 FPS 约 34.48。
+
+\begin{table}[htbp]
+  
+  \caption{Level3 五波测试帧率（单次运行）}
+  \label{tab:test-five-waves}
+  \begin{tabular}{cccccc}
+    \toprule
+    \textbf{波次} & \textbf{怪物数} & \textbf{池} & \textbf{Worker} & \textbf{平均 FPS} & \textbf{P95 (ms)} \\
+    \midrule
+    1 & 10 & 开 & 开 & 58.62 & — \\
+    2 & 100 & 开 & 开 & 46.84 & — \\
+    3 & 1000 & 开 & 开 & 15.14 & — \\
+    4 & 1000 & 关 & 关 & 26.16 & 76.50 \\
+    5 & 1000 & 开 & 关 & 25.98 & 48.60 \\
+    \midrule
+    \textbf{前五波汇总} & — & — & — & \textbf{34.48} & — \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{对象池消融（第 4--5 波）}
+
+\begin{table}[htbp]
+  
+  \caption{性能对比实验（对象池消融，1000 怪 / 10\,s）}
+  \label{tab:perf}
+  \begin{tabular}{lccc}
+    \toprule
+    \textbf{配置} & \textbf{平均 FPS} & \textbf{P95 (ms)} & \textbf{对应波次} \\
+    \midrule
+    基线（无池、无 Worker） & 26.16 & 76.50 & 第 4 波 \\
+    仅对象池（关 Worker） & 25.98 & 48.60 & 第 5 波 \\
+    \midrule
+    \multicolumn{4}{l}{\footnotesize 参考：第 3 波（池+Worker 全开，首次千怪）平均 FPS 15.14，不宜与上表直接对比。} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+
+agraph{结果解读}
+\begin{enumerate}
+  \item \textbf{规模曲线（第 1--3 波）。} 怪物 10$\rightarrow$100$\rightarrow$1000 时 FPS 由 58.62 降至 15.14，符合实体与弹幕压力上升规律。
+  \item \textbf{平均 FPS：池化对均值影响有限。} 第 4、5 波均值接近（26.16 对 25.98），预热后瓶颈主要在子弹碰撞与绘制。
+  \item \textbf{P95。} 开池后 P95 从 76.50\,ms 到 48.60\,ms（约降 36.5\%），和第 \ref{chap:performance} 章对 GC/实例化的判断一致。
+  \item \textbf{第 3 波低于第 4 波基线。} 第 3 波含资源预热与首次千怪开销；对象池消融结论以第 4--5 波为准。
+\end{enumerate}
+
+\section{系统运行截图}
+
+截图源文件置于 \texttt{thesis/Png/}，编译前由 \texttt{build.ps1} 同步至 \texttt{thesis/figures/}。图 \ref{fig:ui-start}--\ref{fig:ui-restart} 覆盖元游戏与局内闭环。
+
+\thesisfig{fig-01-start.png}{游戏开始界面（StartPanel）}{fig:ui-start}
+\thesisfig{fig-02-runmap.png}{三大关 DAG 跑图界面（RunMapPanel）}{fig:ui-runmap}
+\thesisfig{fig-03-combat.png}{局内战斗场面（同屏多怪与弹幕）}{fig:ui-combat}
+\thesisfig{fig-04-skill.png}{Tab 暂停下的技能/Effect 装配面板}{fig:ui-skill}
+\thesisfig{fig-05-reward.png}{生存胜利后的三选一奖励面板}{fig:ui-reward}
+\thesisfig{fig-06-restart.png}{玩家死亡后的重启面板}{fig:ui-restart}
+
+\section{测试结论}
+
+\textbf{功能}：Must 用 T-F-01--10 和 \texttt{verify.ts} 覆盖；Should 的跑图、装配、升级、池/Worker 也测过；Could 的法杖三槽 UI 和部分 Effect 特效没做完，和第 \ref{chap:conclusion} 章一致。\\
+\textbf{性能}：图集让千怪波 FPS 高约 13.4\%；五波整场均值约 34.48；同窗消融里池把 P95 拉低约 36.5\%。\\
+\textbf{遗留}：配置未同步至 \texttt{bin/} 时图标可能空白（已用脚本与 \texttt{isGameConfigReady} 缓解）。\\
+\textbf{已知缺陷}：部分 Effect 仅逻辑生效、无独立 VFX，已在答辩范围中如实标注。
+
+\section{本章小结}
+
+本章给出测试策略、单元验证、功能用例、环境与五波性能数据及解读；对象池价值已由第 4--5 波实测支持。图 \ref{fig:ui-start}--\ref{fig:ui-restart} 为系统运行截图。
+
+\chapter{总结与展望}
+\label{chap:conclusion}
+
+\section{工作总结}
+
+本文围绕 \textbf{Survivor And Fight}，在 LayaAir 3.x 与 TypeScript 上完成 Roguelite 生存战斗的分析、设计、实现与测试，对应关系如下：
+
+\begin{enumerate}[label=(\arabic*)]
+  \item \textbf{需求与选型}（第 \ref{chap:intro}--\ref{chap:related} 章）：梳理引擎架构、ECS、人群仿真与 H5 性能文献；确定 LayaAir、轻量 ECS、MVC UI、配表战斗的路线。
+  \item \textbf{总体设计}（第 \ref{chap:architecture} 章）：给出分层结构、ECS/MVC/Worker 方案，以及时序、可靠性、容错和扩展方式。
+  \item \textbf{实现}（第 \ref{chap:modules} 章）：以 \texttt{SimpleEcsDemo} 为根，实现技能链、子弹、怪物 AI、跑图、Tab 装配和主循环。
+  \item \textbf{性能与测试}（第 \ref{chap:performance}--\ref{chap:test} 章）：千怪场景池化明显压低 P95；图集抬高重度弹幕波 FPS；用例和脚本验证核心契约。
+\end{enumerate}
+
+写作中参考 SyDRA\cite{ullmann2025sydra}、Gregory 分层\cite{gregory2018game} 和 Unity 人群实践\cite{cantrell2018unity}，把模块化、重算分离和 V\&V 用到 H5 课设原型上。系统能演示菜单 $\rightarrow$ 跑图/选关 $\rightarrow$ 战斗 $\rightarrow$ 升级装配 $\rightarrow$ 死亡重启，达到毕设预期。
+
+\section{不足与展望}
+
+\begin{enumerate}[label=\arabic*.]
+  \item \textbf{内容与表现}：法杖三槽 UI、部分 Effect 特效和音效仍缺；
+  \item \textbf{架构}：ECS 可改 Archetype/Chunk 提同屏上限\cite{ullmann2023coupling}；碰撞可加空间哈希；
+  \item \textbf{测试}：补充端到端 UI 自动化与更长回归周期\cite{petty2010vv}；
+  \item \textbf{产品化}：局外存档、元进度、帧率与同屏怪上限设置；
+  \item \textbf{发布}：补美术与适龄说明后静态托管。
+\end{enumerate}
+
+\section{社会、健康与文化影响}
+
+战斗内容为虚构，怪物和血条偏抽象，避免写实血腥。原型无付费、无诱导分享、不采敏感数据。若上网发布，需遵守网游和未成年人保护规定，标适龄和时长；长时间玩注意眼疲劳，Tab 暂停和跑图休息节点用来调节节奏\cite{petty2010vv}。
+
+\section{绿色节能与兼容性}
+
+池化、暂停和 Worker 降低平均 CPU，对续航和发热有帮助\cite{gregory2018game}。配表双通道和 Worker 回退提高浏览器兼容性；2D 对 GPU 压力小于大型 3D。后续可在设置里加帧率上限和同屏怪上限，做低功耗档。
+
+\section{本章小结}
+
+Survivor And Fight 说明在 H5 上用轻量 ECS、配表和可关断的性能手段做 Roguelite 原型是可行的。论文叙述与仓库、测试表一致；后续可加强自动化测试和表现层，从答辩 Demo 往可发布小游戏再走一步。
+
+% --- 致谢与附录 ---
+\chapter*{致  谢}
+
+
+论文收尾之际，感谢指导教师在选题、架构和写作上的指点。
+
+感谢计算机学院各位任课教师四年来的培养；感谢同学在项目调试与试玩中提供的帮助；感谢家人在毕业设计期间的理解与支持。
+
+由于本人水平有限，文中疏漏之处恳请各位老师批评指正。
+
+\chapter{名词术语及缩略词}
+\label{app:terms}
+
+\begin{longtable}{ll}
+  \toprule
+  \textbf{术语/缩略语} & \textbf{含义} \\
+  \midrule
+  ECS & Entity Component System，实体组件系统 \\
+  Roguelite & 轻 Roguelike，含元进度与单局随机 \\
+  DAG & Directed Acyclic Graph，有向无环图 \\
+  H5 & HTML5 网页游戏 \\
+  UI2 & LayaAir 新一代 UI 组件（GBox/GButton 等） \\
+  Worker & Web Worker，浏览器后台线程 \\
+  MoSCoW & Must/Should/Could/Won't 需求优先级方法 \\
+  V\&V & Verification and Validation，验证与确认 \\
+  P95 & 第 95 百分位帧时间，反映卡顿尖峰 \\
+  \bottomrule
+\end{longtable}
+
+\chapter{核心配表字段示例（节选）}
+\label{app:config}
+
+\textbf{Character 表}字段含 \texttt{id}、\texttt{prefabPath}、\texttt{bodyPrefabPath}、\texttt{hp}、\texttt{maxHp}、\texttt{roleType}。玩家和怪物同表，靠 \texttt{roleType} 选预制体和默认值。
+
+\textbf{Bullet 表}：\texttt{id}、\texttt{prefabPath}、\texttt{duration}、\texttt{speed}、\texttt{damage}、\texttt{penetration}。子弹系统按 id 查表生成运动参数与伤害。
+
+\textbf{Skill 表}：\texttt{id}、\texttt{cooldown}、\texttt{effectSlotCount}、图标路径等。一个技能可关联多行 \texttt{SkillEffect}。
+
+\textbf{SkillEffect 表}：\texttt{id}、\texttt{effect}、\texttt{damage}、\texttt{params}、\texttt{iconPath}。\texttt{effect} 取值包括 \texttt{bullet}、\texttt{modifier\_split}、\texttt{modifier\_chain}、\texttt{modifier\_pierce}、\texttt{direct\_damage}。
+
+完整 JSON 在 \texttt{docs/config/}。运行前执行 \texttt{tools/sync-config-to-bin.ps1}，把表拷到 \texttt{bin/config/}。
+
+\chapter{需求与测试用例映射（节选）}
+\label{app:req-test}
+
+表 \ref{tab:req-test-matrix} 给出需求标识与测试用例、验证方式的对应关系，便于答辩时说明“需求—测试”可追溯性。
+
+\begin{longtable}{p{2.2cm}p{4.2cm}p{6.8cm}}
+  \caption{需求—测试映射（节选）} \label{tab:req-test-matrix} \\
+  \toprule
+  \textbf{需求 ID} & \textbf{需求摘要} & \textbf{验证方式} \\
+  \midrule
+  \endfirsthead
+  \toprule
+  \textbf{需求 ID} & \textbf{需求摘要} & \textbf{验证方式} \\
+  \midrule
+  \endhead
+  R-ECS-01 & 实体销毁时清理全部组件 & \texttt{ecsCorePhase1.verify.ts} \\
+  R-ECS-02 & 系统按分组与优先级顺序执行 & \texttt{ecsCorePhase1.verify.ts} \\
+  R-SKILL-01 & 三装备栏独立冷却与自动施法 & T-F-04，观察多技能轮替 \\
+  R-SKILL-02 & Tab 打开面板暂停战斗 & T-F-05，\texttt{GameSession.paused} \\
+  R-SKILL-03 & 拖拽装配写回战斗实体 & T-F-06，装配同步用例 \\
+  R-BULLET-01 & 穿透/分裂/连锁按配表生效 & T-F-04，高密度战斗观察 \\
+  R-MON-01 & 波次刷怪与追逐分离 & T-F-03，Worker 一致性对比 \\
+  R-META-01 & 主菜单进入战斗与计时 & T-F-09 \\
+  R-MAP-01 & 跑图 DAG Boss 可达 & 100 次随机种子断言 \\
+  R-PERF-01 & 对象池降低帧时间尖峰 & 表 \ref{tab:perf}，第 4--5 波 \\
+  R-PERF-02 & 动态图集提升千怪 FPS & 表 \ref{tab:test-level-fps-compare} \\
+  R-UI-01 & 升级奖励三选一 & T-F-07 \\
+  R-UI-02 & 死亡重启面板 & T-F-08 \\
+  \bottomrule
+\end{longtable}
+
+\chapter{缺陷记录（项目实测）}
+\label{app:bugs}
+
+\begin{table}[htbp]
+  
+  \caption{缺陷记录表}
+  \begin{tabular}{clll}
+    \toprule
+    ID & 描述 & 严重性 & 状态 \\
+    \midrule
+    B-01 & 配表未同步至 \texttt{bin/config} 导致技能图标空白 & 中 & 已修复（同步脚本） \\
+    B-02 & Worker 脚本路径错误时回退主线程 & 低 & 已修复 \\
+    B-03 & 部分 Effect 仅 UI 展示无独立 VFX & 低 & 已知，论文已说明 \\
+    B-04 & 法杖三槽运行时与专用 UI 未实现 & 中 & 规划项，第 \ref{chap:conclusion} 章 \\
+    B-05 & 千怪首次波次 FPS 低于预热后基线 & 低 & 已分析，见第 \ref{chap:test} 章 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+
+\end{document}

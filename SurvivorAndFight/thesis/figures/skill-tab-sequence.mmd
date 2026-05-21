@@ -1,0 +1,18 @@
+%% Tab 技能装配时序（Mermaid）
+sequenceDiagram
+  participant User as 玩家
+  participant UI as SkillSelectPanelController
+  participant Session as GameSession
+  participant Drag as SkillDragService
+  participant Sync as SkillLoadoutSyncSystem
+  participant Cast as PlayerAutoCastSystem
+
+  User->>UI: 按 Tab
+  UI->>Session: paused = true
+  Note over Session: 战斗 System 早退
+  User->>Drag: 长按拖拽技能/Effect
+  Drag->>Drag: 更新 SkillLoadoutState
+  User->>UI: 关闭面板 / 再按 Tab
+  UI->>Sync: 写回 Skill 组件
+  Sync->>Cast: 刷新 pendingCasts / effectIds
+  UI->>Session: paused = false
