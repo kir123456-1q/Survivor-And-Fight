@@ -1,0 +1,15 @@
+%% 第4章：容错降级流程
+flowchart TD
+  Start([运行中]) --> Q1{配表就绪?}
+  Q1 -->|否| D1[DEFAULT_* 常量回退]
+  Q1 -->|是| Q2{Worker 可用?}
+  Q2 -->|否| D2[computeSync 主线程]
+  Q2 -->|是| Q3{跑图可达?}
+  Q3 -->|否| D3[generateFallback 线性图]
+  Q3 -->|是| Q4{预制体有效?}
+  Q4 -->|否| D4[createPlaceholderNode]
+  Q4 -->|是| OK[正常执行]
+  D1 --> OK
+  D2 --> OK
+  D3 --> OK
+  D4 --> OK

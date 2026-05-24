@@ -1,0 +1,22 @@
+%% 第4章：配表逻辑 ER
+erDiagram
+  Character ||--o{ Skill : equips
+  Skill ||--|{ SkillEffect : has
+  SkillEffect }o--|| Bullet : may_spawn
+  Character {
+    string id
+    string prefabPath
+    number hp
+  }
+  Skill {
+    string id
+    number cooldown
+  }
+  SkillEffect {
+    string effectType
+    string formula
+  }
+  Bullet {
+    string prefabPath
+    number speed
+  }

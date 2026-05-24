@@ -1,0 +1,20 @@
+%% 第2章：Roguelite 三幕 DAG 跑图示意（横向并排，避免竖长条）
+flowchart LR
+  subgraph act1["Act 1"]
+    direction TB
+    A1[休息] --> B1[战斗]
+    B1 --> C1[Boss]
+  end
+  subgraph act2["Act 2"]
+    direction TB
+    A2[休息] --> B2[战斗]
+    B2 --> C2[Boss]
+  end
+  subgraph act3["Act 3"]
+    direction TB
+    A3[休息] --> B3[战斗]
+    B3 --> C3[Boss]
+  end
+  C1 --> A2
+  C2 --> A3
+  C3 --> END[MetaFlowController\n进入战斗]

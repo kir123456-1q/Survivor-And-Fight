@@ -1,0 +1,11 @@
+%% 第4章：ECS 战斗数据流
+flowchart LR
+  A[CombatDataPrepareSystem<br/>采集快照] --> B{实体数 ≥ 阈值?}
+  B -->|是| C[CombatDataBridge<br/>postMessage]
+  C --> W[combat.worker<br/>processCombatFrame]
+  W --> D[追逐 / 分离速度]
+  B -->|否| E[computeSync 主线程]
+  E --> D
+  D --> F[MonsterChaseSystem]
+  F --> G[BulletSystem 碰撞]
+  G --> H[ViewSyncSystem 同步节点]

@@ -1,0 +1,10 @@
+%% 第2章：ECS 实体与 Laya 节点绑定
+flowchart TB
+  E[EntityId] --> C1[Position / Velocity / Attribute]
+  E --> C2[Skill / PlayerTag 或 MonsterTag]
+  E --> VC[ViewComponent]
+  VC --> N[Laya 预制体节点]
+  SYS[EcsWorld Systems] --> C1
+  SYS --> C2
+  VS[ViewSyncSystem] --> VC
+  VS --> N

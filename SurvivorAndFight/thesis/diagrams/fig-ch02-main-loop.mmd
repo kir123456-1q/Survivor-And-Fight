@@ -1,0 +1,12 @@
+%% 第2章：Laya 主循环与 ECS
+sequenceDiagram
+  participant Timer as Laya.timer.frameLoop
+  participant Main as Main.ts
+  participant World as EcsWorld
+  participant Laya as Laya 渲染
+  loop 每帧
+    Timer->>Main: deltaTime
+    Main->>World: update(dt)
+    Note over World: input → logic → render 分组 Systems
+    Main->>Laya: 引擎绘制 / UI 事件
+  end

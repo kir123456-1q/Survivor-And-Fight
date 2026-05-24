@@ -1,0 +1,328 @@
+﻿{
+    "margins_draft":  {
+                          "top_cm":  2.499,
+                          "left_cm":  2.499,
+                          "bottom_cm":  2.499,
+                          "right_cm":  2.499
+                      },
+    "margins_template":  {
+                             "top_cm":  2.501,
+                             "left_cm":  2.501,
+                             "bottom_cm":  2.501,
+                             "right_cm":  2.501
+                         },
+    "page_draft":  {
+                       "width_cm":  20.998,
+                       "height_cm":  29.697
+                   },
+    "page_template":  {
+                          "width_cm":  20.998,
+                          "height_cm":  29.697
+                      },
+    "sect_count_draft":  20,
+    "sect_count_template":  9,
+    "hf_files":  {
+                     "draft_headers":  5,
+                     "draft_footers":  10,
+                     "template_headers":  9,
+                     "template_footers":  1
+                 },
+    "style_compare":  [
+                          {
+                              "styleId":  "1",
+                              "draft":  {
+                                            "id":  "1",
+                                            "name":  "Normal",
+                                            "size_pt":  null,
+                                            "font_eastAsia":  null,
+                                            "align":  null,
+                                            "line":  null,
+                                            "lineRule":  null,
+                                            "firstLineChars":  null,
+                                            "bold":  false
+                                        },
+                              "template":  {
+                                               "id":  "1",
+                                               "name":  "Normal",
+                                               "size_pt":  null,
+                                               "font_eastAsia":  null,
+                                               "align":  null,
+                                               "line":  null,
+                                               "lineRule":  null,
+                                               "firstLineChars":  null,
+                                               "bold":  false
+                                           },
+                              "match":  true
+                          },
+                          {
+                              "styleId":  "2",
+                              "draft":  {
+                                            "id":  "2",
+                                            "name":  "heading 1",
+                                            "size_pt":  null,
+                                            "font_eastAsia":  null,
+                                            "align":  null,
+                                            "line":  null,
+                                            "lineRule":  null,
+                                            "firstLineChars":  null,
+                                            "bold":  false
+                                        },
+                              "template":  {
+                                               "id":  "2",
+                                               "name":  "heading 1",
+                                               "size_pt":  null,
+                                               "font_eastAsia":  null,
+                                               "align":  null,
+                                               "line":  null,
+                                               "lineRule":  null,
+                                               "firstLineChars":  null,
+                                               "bold":  false
+                                           },
+                              "match":  true
+                          },
+                          {
+                              "styleId":  "3",
+                              "draft":  {
+                                            "id":  "3",
+                                            "name":  "heading 2",
+                                            "size_pt":  null,
+                                            "font_eastAsia":  null,
+                                            "align":  null,
+                                            "line":  null,
+                                            "lineRule":  null,
+                                            "firstLineChars":  null,
+                                            "bold":  false
+                                        },
+                              "template":  {
+                                               "id":  "3",
+                                               "name":  "heading 2",
+                                               "size_pt":  null,
+                                               "font_eastAsia":  null,
+                                               "align":  null,
+                                               "line":  null,
+                                               "lineRule":  null,
+                                               "firstLineChars":  null,
+                                               "bold":  false
+                                           },
+                              "match":  true
+                          },
+                          {
+                              "styleId":  "4",
+                              "draft":  {
+                                            "id":  "4",
+                                            "name":  "heading 3",
+                                            "size_pt":  null,
+                                            "font_eastAsia":  null,
+                                            "align":  null,
+                                            "line":  null,
+                                            "lineRule":  null,
+                                            "firstLineChars":  null,
+                                            "bold":  false
+                                        },
+                              "template":  {
+                                               "id":  "4",
+                                               "name":  "heading 3",
+                                               "size_pt":  null,
+                                               "font_eastAsia":  null,
+                                               "align":  null,
+                                               "line":  null,
+                                               "lineRule":  null,
+                                               "firstLineChars":  null,
+                                               "bold":  false
+                                           },
+                              "match":  true
+                          },
+                          {
+                              "styleId":  "12",
+                              "draft":  {
+                                            "id":  "12",
+                                            "name":  "Table Grid",
+                                            "size_pt":  null,
+                                            "font_eastAsia":  null,
+                                            "align":  null,
+                                            "line":  null,
+                                            "lineRule":  null,
+                                            "firstLineChars":  null,
+                                            "bold":  false
+                                        },
+                              "template":  {
+                                               "id":  "12",
+                                               "name":  "header",
+                                               "size_pt":  null,
+                                               "font_eastAsia":  null,
+                                               "align":  null,
+                                               "line":  null,
+                                               "lineRule":  null,
+                                               "firstLineChars":  null,
+                                               "bold":  false
+                                           },
+                              "match":  true
+                          }
+                      ],
+    "draft_hf_texts":  [
+                           {
+                               "file":  "header3.xml",
+                               "type":  "header",
+                               "text":  "涓浗鐭虫补澶у锛堝崕涓滐級鏈姣曚笟璁捐(璁烘枃)"
+                           },
+                           {
+                               "file":  "header4.xml",
+                               "type":  "header",
+                               "text":  "绗?绔?缁"
+                           },
+                           {
+                               "file":  "header5.xml",
+                               "type":  "header",
+                               "text":  "涓浗鐭虫补澶у锛堝崕涓滐級鏈姣曚笟璁捐(璁烘枃)"
+                           },
+                           {
+                               "file":  "footer1.xml",
+                               "type":  "footer",
+                               "text":  "1010"
+                           },
+                           {
+                               "file":  "footer10.xml",
+                               "type":  "footer",
+                               "text":  "4848"
+                           },
+                           {
+                               "file":  "footer2.xml",
+                               "type":  "footer",
+                               "text":  "55"
+                           },
+                           {
+                               "file":  "footer3.xml",
+                               "type":  "footer",
+                               "text":  "2323"
+                           },
+                           {
+                               "file":  "footer4.xml",
+                               "type":  "footer",
+                               "text":  "3939"
+                           },
+                           {
+                               "file":  "footer5.xml",
+                               "type":  "footer",
+                               "text":  "4141"
+                           },
+                           {
+                               "file":  "footer6.xml",
+                               "type":  "footer",
+                               "text":  "4242"
+                           },
+                           {
+                               "file":  "footer7.xml",
+                               "type":  "footer",
+                               "text":  "4444"
+                           },
+                           {
+                               "file":  "footer8.xml",
+                               "type":  "footer",
+                               "text":  "4545"
+                           },
+                           {
+                               "file":  "footer9.xml",
+                               "type":  "footer",
+                               "text":  "4747"
+                           }
+                       ],
+    "template_hf_texts":  [
+                              {
+                                  "file":  "header2.xml",
+                                  "type":  "header",
+                                  "text":  "涓浗鐭虫补澶у锛堝崕涓滐級鏈姣曚笟璁捐(璁烘枃)"
+                              },
+                              {
+                                  "file":  "header3.xml",
+                                  "type":  "header",
+                                  "text":  "绗?/w:t\u003e1绔?搴忚█"
+                              },
+                              {
+                                  "file":  "header4.xml",
+                                  "type":  "header",
+                                  "text":  "绗?/w:t\u003e2绔?鐩稿叧鐮旂┒宸ヤ綔"
+                              },
+                              {
+                                  "file":  "header5.xml",
+                                  "type":  "header",
+                                  "text":  "绗?/w:t\u003e3绔?鎼滅储寮曟搸Quark妯″潡"
+                              },
+                              {
+                                  "file":  "header6.xml",
+                                  "type":  "header",
+                                  "text":  "绗?绔?SEWM涓枃Web淇℃伅妫€绱㈣瘎娴?/w:t\u003e"
+                              },
+                              {
+                                  "file":  "header7.xml",
+                                  "type":  "header",
+                                  "text":  "绗?/w:t\u003e5绔?缃戦〉鍒嗗潡鐨勫垎甯冨紡搴旂敤"
+                              },
+                              {
+                                  "file":  "header8.xml",
+                                  "type":  "header",
+                                  "text":  "绗?绔?鎬荤粨涓庡睍鏈?/w:t\u003e"
+                              },
+                              {
+                                  "file":  "header9.xml",
+                                  "type":  "header",
+                                  "text":  "涓浗鐭虫补澶у锛堝崕涓滐級鏈姣曚笟璁捐(璁烘枃)"
+                              },
+                              {
+                                  "file":  "footer1.xml",
+                                  "type":  "footer",
+                                  "text":  "3"
+                              }
+                          ],
+    "draft_para_style_top":  [
+                                 {
+                                     "styleId":  "17",
+                                     "styleName":  "bn",
+                                     "count":  441
+                                 },
+                                 {
+                                     "styleId":  "10",
+                                     "styleName":  "toc 2",
+                                     "count":  56
+                                 },
+                                 {
+                                     "styleId":  "3",
+                                     "styleName":  "heading 2",
+                                     "count":  56
+                                 },
+                                 {
+                                     "styleId":  "4",
+                                     "styleName":  "heading 3",
+                                     "count":  51
+                                 },
+                                 {
+                                     "styleId":  "6",
+                                     "styleName":  "toc 3",
+                                     "count":  51
+                                 },
+                                 {
+                                     "styleId":  "16",
+                                     "styleName":  "bt",
+                                     "count":  18
+                                 },
+                                 {
+                                     "styleId":  "2",
+                                     "styleName":  "heading 1",
+                                     "count":  15
+                                 },
+                                 {
+                                     "styleId":  "9",
+                                     "styleName":  "toc 1",
+                                     "count":  15
+                                 },
+                                 {
+                                     "styleId":  "14",
+                                     "styleName":  "tm",
+                                     "count":  9
+                                 },
+                                 {
+                                     "styleId":  "15",
+                                     "styleName":  "tp",
+                                     "count":  9
+                                 }
+                             ]
+}

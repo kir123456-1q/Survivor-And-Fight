@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.5.17)  21 MAY 2026 22:20
+This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.5.17)  24 MAY 2026 17:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -10,7 +10,8 @@ L3 programming layer <2025-12-24>
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/ctex/config\ctexbackend
 .cfg
 File: ctexbackend.cfg 2022/07/14 v2.5.10 Backend configuration file (CTEX)
-) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/l3kernel\expl3.sty
+)
+(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/l3kernel\expl3.sty
 Package: expl3 2025-12-24 L3 programming layer (loader) 
 
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-xet
@@ -24,10 +25,13 @@ Document Class: ctexrep 2022/07/14 v2.5.10 Chinese adapter for class report (CT
 EX)
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/ctex\ctexhook.sty
 Package: ctexhook 2022/07/14 v2.5.10 Document and package hooks (CTEX)
-) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/ctex\ctexpatch.sty
+)
+(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/ctex\ctexpatch.sty
 Package: ctexpatch 2022/07/14 v2.5.10 Patching commands (CTEX)
-) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/base\fix-cm.sty
+)
+(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/base\fix-cm.sty
 Package: fix-cm 2020/11/24 v1.1t fixes to LaTeX
+
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/base\ts1enc.def
 File: ts1enc.def 2001/06/05 v3.0e (jk/car/fm) Standard LaTeX file
 LaTeX Font Info:    Redeclaring font encoding TS1 on input line 47.
@@ -316,6 +320,7 @@ File: size12.clo 2025/01/22 v1.4n Standard LaTeX file (size option)
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/ctex/engine\ctex-engine
 -xetex.def
 File: ctex-engine-xetex.def 2022/07/14 v2.5.10 XeLaTeX adapter (CTEX)
+
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/xelatex/xecjk\xeCJK.sty
 Package: xeCJK 2022/08/05 v3.9.1 Typesetting CJK scripts with XeLaTeX
 
@@ -383,6 +388,7 @@ LaTeX template Info: Declaring template type 'xeCJK/punctuation' taking 0
 \g__xeCJK_fam_allocation_int=\count296
 \l__xeCJK_verb_case_int=\count297
 \l__xeCJK_verb_exspace_skip=\skip57
+
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/fontspec\fontspec.sty
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/l3packages/xparse\xpars
 e.sty
@@ -408,16 +414,18 @@ X
 \l__fontspec_tmpa_dim=\dimen177
 \l__fontspec_tmpb_dim=\dimen178
 \l__fontspec_tmpc_dim=\dimen179
-(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/base\fontenc.sty
+ (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/base\fontenc.sty
 Package: fontenc 2025/07/18 v2.1d Standard LaTeX package
-) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/fontspec\fontspec.cfg
-))) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/xelatex/xecjk\xeCJK.cfg
+)
+(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/fontspec\fontspec.cfg))
+) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/xelatex/xecjk\xeCJK.cfg
 File: xeCJK.cfg 2022/08/05 v3.9.1 Configuration file for xeCJK package
 ))
 \ccwd=\dimen180
 \l__ctex_ccglue_skip=\skip58
 )
 \l__ctex_ziju_dim=\dimen181
+
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/zhnumber\zhnumber.sty
 Package: zhnumber 2022/07/14 v3.0 Typesetting numbers with Chinese glyphs
 \l__zhnum_scale_int=\count309
@@ -437,8 +445,8 @@ rt (CTEX)
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/ctex/config\ctex-name-u
 tf8.cfg
 File: ctex-name-utf8.cfg 2022/07/14 v2.5.10 Caption with encoding UTF-8 (CTEX)
-)) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/ctex\ctex-cs4size.cl
-o
+))
+(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/ctex\ctex-cs4size.clo
 File: ctex-cs4size.clo 2022/07/14 v2.5.10 cs4size option (CTEX)
 )
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/ctex/fontset\ctex-fonts
@@ -476,15 +484,20 @@ Package fontspec Info:
 (fontspec)             - 'italic' (m/it) with NFSS spec.:
 (fontspec)             <->"KaiTi/OT:script=hani;language=dflt;"
 
-)) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/ctex/config\ctex.cfg
+))
+(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/ctex/config\ctex.cfg
 File: ctex.cfg 2022/07/14 v2.5.10 Configuration file (CTEX)
-) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.sty
+)
+(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.sty
 Package: graphicx 2024/12/31 v1.2e Enhanced LaTeX Graphics (DPC,SPQR)
+
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/graphics\keyval.sty
 Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
 \KV@toks@=\toks17
-) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphics.sty
+)
+(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphics.sty
 Package: graphics 2024/08/06 v1.4g Standard LaTeX Graphics (DPC,SPQR)
+
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/graphics\trig.sty
 Package: trig 2023/12/02 v1.11 sin cos tan (DPC)
 )
@@ -493,12 +506,14 @@ fg
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
 Package graphics Info: Driver file: xetex.def on input line 106.
+
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/graphics-def\xetex.def
 File: xetex.def 2025/11/01 v5.0p Graphics/color driver for xetex
 ))
 \Gin@req@height=\dimen182
 \Gin@req@width=\dimen183
-) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/booktabs\booktabs.sty
+)
+(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/booktabs\booktabs.sty
 Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \heavyrulewidth=\dimen184
 \lightrulewidth=\dimen185
@@ -517,7 +532,8 @@ Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \@thisruleclass=\count313
 \@lastruleclass=\count314
 \@thisrulewidth=\dimen196
-) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/tools\longtable.sty
+)
+(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/tools\longtable.sty
 Package: longtable 2025-10-13 v4.24 Multi-page Table package (DPC)
 \LTleft=\skip60
 \LTright=\skip61
@@ -535,8 +551,10 @@ Package: longtable 2025-10-13 v4.24 Multi-page Table package (DPC)
 \c@LT@tables=\count318
 \c@LT@chunks=\count319
 \LT@p@ftn=\toks18
-) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/xcolor\xcolor.sty
+)
+(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/xcolor\xcolor.sty
 Package: xcolor 2024/09/29 v3.02 LaTeX color extensions (UK)
+
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\color.cfg
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
@@ -565,6 +583,7 @@ Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/generic/pdfescape\pdfescape.s
 ty
 Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
+
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/generic/ltxcmds\ltxcmds.sty
 Package: ltxcmds 2023-12-04 v1.26 LaTeX kernel commands for general use (HO)
 )
@@ -580,10 +599,13 @@ Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
 Package pdftexcmds Info: \pdfdraftmode not found.
-)) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/hycolor\hycolor.sty
+))
+(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/hycolor\hycolor.sty
 Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
-) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\nameref.sty
+)
+(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\nameref.sty
 Package: nameref 2025-06-21 v2.57 Cross-referencing by name of section
+
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/refcount\refcount.sty
 Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 )
@@ -595,7 +617,8 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
 ))
 \c@section@level=\count320
-) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/etoolbox\etoolbox.sty
+)
+(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/etoolbox\etoolbox.sty
 Package: etoolbox 2025/10/02 v2.5m e-TeX tools for LaTeX (JAW)
 \etb@tempcnta=\count321
 )
@@ -607,13 +630,13 @@ Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO
 \@linkdim=\dimen198
 \Hy@linkcounter=\count322
 \Hy@pagecounter=\count323
-(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\pd1enc.def
+ (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\pd1enc.def
 File: pd1enc.def 2025-07-12 v7.01o Hyperref: PDFDocEncoding definition (HO)
 ) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/generic/intcalc\intcalc.sty
 Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 )
 \Hy@SavedSpaceFactor=\count324
-(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\puenc.def
+ (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\puenc.def
 File: puenc.def 2025-07-12 v7.01o Hyperref: PDF Unicode definition (HO)
 )
 Package hyperref Info: Option `unicode' set `true' on input line 4066.
@@ -625,12 +648,14 @@ Package hyperref Info: Backreferencing OFF on input line 4215.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4462.
 \c@Hy@tempcnt=\count325
+
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/url\url.sty
 \Urlmuskip=\muskip17
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
 LaTeX Info: Redefining \url on input line 4801.
 \XeTeXLinkMargin=\dimen199
+
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/generic/bitset\bitset.sty
 Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
 
@@ -654,6 +679,7 @@ Package hyperref Info: PDF/A mode OFF on input line 6108.
 \c@Hfootnote=\count329
 )
 Package hyperref Info: Driver (autodetected): hxetex.
+
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hxetex.def
 File: hxetex.def 2025-07-12 v7.01o Hyperref driver for XeTeX
 \pdfm@box=\box61
@@ -674,7 +700,8 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 84.
 )
 \Hy@SectionHShift=\skip64
-) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/fancyhdr\fancyhdr.sty
+)
+(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/fancyhdr\fancyhdr.sty
 Package: fancyhdr 2025/02/07 v5.2 Extensive control of page headers and footers
 
 \f@nch@headwidth=\skip65
@@ -692,8 +719,10 @@ Package: fancyhdr 2025/02/07 v5.2 Extensive control of page headers and footers
 \f@nch@widthC=\skip77
 \f@nch@widthR=\skip78
 \@temptokenb=\toks19
-) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption.sty
+)
+(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption.sty
 Package: caption 2023/08/05 v3.6o Customizing captions (AR)
+
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption3.sty
 Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
 \caption@tempdima=\dimen258
@@ -710,6 +739,7 @@ Package caption Info: Standard document class detected.
 \c@continuedfloat=\count335
 Package caption Info: hyperref package is loaded.
 Package caption Info: longtable package is loaded.
+
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/caption\ltcaption.sty
 Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
 )) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/enumitem\enumitem.st
@@ -724,17 +754,21 @@ Package: enumitem 2025/02/06 v3.11 Customized lists
 ) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsmath.sty
 Package: amsmath 2025/07/09 v2.17z AMS math features
 \@mathmargin=\skip80
+
 For additional information on amsmath, use the `?' option.
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amstext.sty
 Package: amstext 2024/11/17 v2.01 AMS text
+
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
 \@emptytoks=\toks21
 \ex@=\dimen267
-)) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsbsy.sty
+))
+(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 \pmbraise@=\dimen268
-) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsopn.sty
+)
+(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsopn.sty
 Package: amsopn 2022/04/08 v2.04 operator names
 )
 \inf@bad=\count338
@@ -784,7 +818,8 @@ LaTeX Info: Redefining \Relbar on input line 970.
 \mathdisplay@stack=\toks25
 LaTeX Info: Redefining \[ on input line 2950.
 LaTeX Info: Redefining \] on input line 2951.
-) (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/ragged2e\ragged2e.sty
+)
+(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/ragged2e\ragged2e.sty
 Package: ragged2e 2023/06/22 v3.6 ragged2e Package
 \CenteringLeftskip=\skip83
 \RaggedLeftLeftskip=\skip84
@@ -802,9 +837,11 @@ Package: ragged2e 2023/06/22 v3.6 ragged2e Package
 \JustifyingParindent=\skip96
 )
 Package hyperref Info: Option `colorlinks' set `false' on input line 16.
-(upc-thesis-format.tex (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/
-geometry\geometry.sty
+
+(upc-thesis-format.tex
+(C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.sty
 Package: geometry 2026/03/07 v6.0 Page Geometry
+
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/generic/iftex\ifvtex.sty
 Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 )
@@ -820,6 +857,7 @@ Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 \Gm@layouthoffset=\dimen282
 \Gm@layoutvoffset=\dimen283
 \Gm@dimlist=\toks26
+
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.cfg))
 (C:\Users\18114\AppData\Local\Programs\MiKTeX\tex/latex/setspace\setspace.sty
 Package: setspace 2022/12/04 v6.7b set line spacing
@@ -931,12 +969,13 @@ LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
 (Font)                  OT1/cmtt/m/n --> TU/lmtt/b/n on input line 34.
 Package hyperref Info: Link coloring OFF on input line 34.
-(main.out) (main.out)
+ (main.out) (main.out)
 \@outlinefile=\write3
 \openout3 = `main.out'.
 
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
+
 *geometry* driver: auto-detecting
 *geometry* detected driver: xetex
 *geometry* verbose mode - [ preamble ] result:
@@ -999,6 +1038,7 @@ Package fontspec Info:
 (fontspec)              
 (fontspec)             - 'normal' (m/n) with NFSS spec.:
 (fontspec)             <->"SimHei/OT:script=hani;language=dflt;"
+
 
 
 LaTeX Font Warning: Font shape `TU/SimHei(0)/b/n' undefined
@@ -1072,7 +1112,7 @@ Package fontspec Info:
 (fontspec)             - 'normal' (m/n) with NFSS spec.:
 (fontspec)             <->"SimSun/OT:script=hani;language=dflt;"
 
-[1
+ [1
 
 ]
 
@@ -1101,7 +1141,7 @@ Package fontspec Info:
 (fontspec)             - 'normal' (m/n) with NFSS spec.:
 (fontspec)             <->"KaiTi/OT:script=hani;language=dflt;"
 
-[2
+ [2
 
 ]) [3
 
@@ -1112,31 +1152,65 @@ LaTeX Font Warning: Font shape `TU/SimSun(1)/b/n' undefined
 
 [4
 
-] [5] [6] [7])
+] [5] [6])
 \tf@toc=\write4
 \openout4 = `main.toc'.
 
-[8] (main.lof)
+ [7] (main.lof)
 \tf@lof=\write5
 \openout5 = `main.lof'.
 
-[9
+ [8
 
 
 ] (main.lot)
 \tf@lot=\write6
 \openout6 = `main.lot'.
 
-[10
+ [9
 
 
 ] (chapter01.tex
 第1章
+
+Overfull \hbox (70.08504pt too wide) in paragraph at lines 20--21
+\TU/SimSun(1)/m/n/12.045 方 式 的 分 析，|  则 展 示 了 现 代 大 型 引 擎 在 功 能 划 分 上 的 典 型 形 态
+$[]$。|
+ []
+
 [1
 
 
-] (chapter01-extended.tex [2]) (chapter01-background-extra.tex [3])) (chapter02
-.tex [4]
+]
+Overfull \hbox (57.7369pt too wide) in paragraph at lines 22--23
+\TU/SimSun(1)/m/n/12.045 能 够 提 升 开 发 者 对 耦 合 关 系 的 理 解 效 率$[]$。|
+ []
+
+
+Overfull \hbox (149.48933pt too wide) in paragraph at lines 32--33
+\TU/lmr/m/n/12.045 mann \TU/SimSun(1)/m/n/12.045 等 对 人 群 仿 真 的 系 统 论 述 则 概 括 了 
+由 个 体 行 为 到 群 体 涌 现 的 常 见 建 模 路 径$[]$。|
+ []
+
+
+Overfull \hbox (149.49904pt too wide) in paragraph at lines 32--33
+\TU/lmr/m/n/12.045 bing \TU/SimSun(1)/m/n/12.045 的 恐 慌 模 型 进 一 步 表 明，|  分 离 力 对
+ 密 集 场 景 下 的 运 动 稳 定 性 具 有 关 键 影 响$[]$。|
+ []
+
+[2]
+Overfull \hbox (19.62285pt too wide) in paragraph at lines 42--43
+\TU/SimSun(1)/m/n/12.045 与 交 互 系 统 的 可 信 度 应 通 过 可 重 复 的 验 证 流 程 加 以 支 撑$[]$，|
+ []
+
+[3]
+Overfull \hbox (50.72925pt too wide) in paragraph at lines 50--51
+[]\TU/lmr/bx/n/12.045 UI \TU/SimSun(1)/m/n/12.045 与 战 斗 协 同：|  以 \TU/lmtt/m/n/1
+2.045 UIStackManager \TU/SimSun(1)/m/n/12.045 管 理 全 屏 路 由，| \TU/lmr/m/n/12.045 
+Tab \TU/SimSun(1)/m/n/12.045 装 配 时 通 过 \TU/lmtt/m/n/12.045 GameSession.paused
+ []
+
+) (chapter02.tex [4] [5]
 第2章
 
 Underfull \hbox (badness 1424) in paragraph at lines 27--27
@@ -1148,7 +1222,7 @@ Overfull \hbox (5.32083pt too wide) in paragraph at lines 21--30
  [][] 
  []
 
-[5
+[6
 
 ]
 Overfull \hbox (8.63759pt too wide) in paragraph at lines 40--41
@@ -1172,7 +1246,7 @@ n/12.045 中 \TU/lmtt/m/n/12.045 MONSTER_EXP_REWARD_BASE\TU/SimSun(0)/m/n/12.045
 、| \TU/lmtt/m/n/12.045 MONSTER_EXP_REWARD_LEVEL_BONUS
  []
 
-[6]
+[7]
 Underfull \hbox (badness 10000) in paragraph at lines 67--68
 []\TU/lmtt/m/n/12.045 ViewComponent \TU/SimSun(0)/m/n/12.045 绑 定
  []
@@ -1195,20 +1269,60 @@ BulletSystem\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 MonsterChaseSystem
  []
 
 
-Overfull \hbox (22.90448pt too wide) in paragraph at lines 78--79
-\TU/lmtt/m/n/12.045 tables.registry.json \TU/SimSun(0)/m/n/12.045 声 明 表 名 与 文 件
-，| \TU/lmtt/m/n/12.045 ConfigBootstrap.ensureGameConfigLoaded()
+Overfull \hbox (39.70161pt too wide) in paragraph at lines 78--79
+\TU/SimSun(0)/m/n/12.045 种：| \TU/lmtt/m/n/12.045 tables.registry.json \TU/SimSu
+n(0)/m/n/12.045 声 明 表 名 与 文 件，| \TU/lmtt/m/n/12.045 ConfigBootstrap.ensureGameC
+onfigLoaded()
  []
 
-[7]
+[8]
 Overfull \hbox (7.38745pt too wide) in paragraph at lines 82--83
 []\TU/lmr/m/n/12.045 JSON \TU/SimSun(0)/m/n/12.045 方 便 版 本 管 理 和 \TU/lmr/m/n/12
 .045 diff\TU/SimSun(0)/m/n/12.045 ，|  但 错 配 往 往 集 成 时 才 暴 露。|  启 动 用 \TU/lmtt/m
 /n/12.045 isGameConfigReady
  []
 
-[8]) (chapter03.tex [9] [10]
+
+Overfull \hbox (100.8907pt too wide) in paragraph at lines 94--95
+\TU/lmr/m/n/12.045 Helbing \TU/SimSun(0)/m/n/12.045 等 关 于 恐 慌 人 群 的 研 究 提 示 密 集
+ 场 景 须 关 注 分 离 力 与 稳 定 性$[]$，|
+ []
+
+
+Overfull \hbox (12.109pt too wide) in paragraph at lines 103--104
+[]\TU/SimSun(0)/m/n/12.045 游 戏 \TU/lmr/m/n/12.045 UI \TU/SimSun(0)/m/n/12.045 常
+ 见 模 式 有 \TU/lmr/m/n/12.045 MVC\TU/SimSun(0)/m/n/12.045 、| \TU/lmr/m/n/12.045 M
+VP\TU/SimSun(0)/m/n/12.045 、| \TU/lmr/m/n/12.045 MVVM \TU/SimSun(0)/m/n/12.045 
+等$[]$。|
+ []
+
+[9] [10]) (chapter03.tex
+Overfull \hbox (615.88203pt too wide) in paragraph at lines 143--1
+\TU/lmr/m/n/12.045 ECS/MVC/Worker \TU/SimSun(0)/m/n/12.045 设 计，|  在 第 []\TU/lmr
+/m/n/12.045 5[]–[]7[] \TU/SimSun(0)/m/n/12.045 章 经 实 现 与 测 试 验 证$[]$。|
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 143--1
+
+ []
+
+[11]
 第3章
+
+Overfull \hbox (207.26248pt too wide) in paragraph at lines 10--11
+\TU/lmr/m/n/12.045 Chromium \TU/SimSun(0)/m/n/12.045 支 持 \TU/lmr/m/n/12.045 Web
+GL2 \TU/SimSun(0)/m/n/12.045 与 \TU/lmr/m/n/12.045 Worker\TU/SimSun(0)/m/n/12.04
+5 。|  文 献 里 \TU/lmr/m/n/12.045 SyDRA \TU/SimSun(0)/m/n/12.045 讨 论 子 系 统 边 界$[]$
+；|
+ []
+
+
+Overfull \hbox (18.65314pt too wide) in paragraph at lines 10--11
+\TU/lmr/m/n/12.045 Cantrell \TU/SimSun(0)/m/n/12.045 等 说 明 在 商 业 引 擎 上 叠 领 域 逻 
+辑 可 行$[]$。| 
+ []
+
 
 Overfull \hbox (2.33545pt too wide) in paragraph at lines 12--15
 \TU/SimSun(0)/m/n/12.045 双 路 读 表；| \TU/lmtt/m/n/12.045 isGameConfigReady \TU/Si
@@ -1217,7 +1331,7 @@ mSun(0)/m/n/12.045 挡 住 未 就 绪 就 进 战 斗；| \TU/lmr/m/n/12.045 EC
  。| 
  []
 
-[11
+[12
 
 ]
 Overfull \hbox (36.15689pt too wide) in paragraph at lines 76--77
@@ -1226,7 +1340,20 @@ taFlowController \TU/SimSun(0)/m/n/12.045 触 发 \TU/lmtt/m/n/12.045 onEnterCom
 (payload)\TU/SimSun(0)/m/n/12.045 ；|
  []
 
-[12] [13]
+[13]
+Overfull \hbox (25.69728pt too wide) in paragraph at lines 87--88
+\TU/SimSun(0)/m/n/12.045 阵 营，|  仅 对 敌 对 阵 营 生 效；|  连 锁 半 径 有 界，|  避 免 无 界 遍 历$[
+]$。| 
+ []
+
+
+Overfull \hbox (130.88905pt too wide) in paragraph at lines 95--99
+\TU/SimSun(0)/m/n/12.045 兼 容 性：|  优 先 \TU/lmr/m/n/12.045 Chromium\TU/SimSun(0)/
+m/n/12.045 ；| \TU/lmr/m/n/12.045 Worker \TU/SimSun(0)/m/n/12.045 不 可 用 时 \TU/lm
+tt/m/n/12.045 computeSync \TU/SimSun(0)/m/n/12.045 主 线 程 回 退$[]$。| 
+ []
+
+[14]
 Overfull \hbox (102.92183pt too wide) in paragraph at lines 120--121
 []\TU/SimSun(0)/m/n/12.045 关 键 接 口： （\TU/lmr/m/n/12.045 1\TU/SimSun(0)/m/n/12.0
 45 ）| \TU/lmtt/m/n/12.045 ensureGameConfigLoaded(): Promise<boolean>\TU/SimSun(
@@ -1261,23 +1388,32 @@ Overfull \hbox (8.94514pt too wide) in paragraph at lines 157--158
 []\TU/lmtt/m/n/12.045 formulaParser.verify.ts| 
  []
 
-) (chapter04.tex [14]
+) (chapter04.tex [15]
 第4章
+
+Overfull \hbox (118.48727pt too wide) in paragraph at lines 10--11
+\TU/SimSun(0)/m/n/12.045 解 释；| \TU/lmtt/m/n/12.045 MetaFlowController \TU/SimSu
+n(0)/m/n/12.045 仅 协 调 元 游 戏 流 程，|  不 直 接 改 写 \TU/lmr/m/n/12.045 ECS \TU/SimSun(
+0)/m/n/12.045 组 件$[]$。| 
+ []
+
+
+Overfull \hbox (7.03542pt too wide) in paragraph at lines 13--14
+\TU/lmtt/m/n/12.045 combatWorkerLogic.ts$[]$\TU/SimSun(0)/m/n/12.045 。| 
+ []
+
 File: figures/system-layers.png Graphic file (type bmp)
 <figures/system-layers.png>
+[16
 
-LaTeX Warning: Float too large for page by 1443.21297pt on input line 31.
-
-
+]
 Overfull \hbox (19.28157pt too wide) in paragraph at lines 38--39
 []\TU/SimSun(0)/m/n/12.045 标 签 与 筛 选：|  玩 家 与 怪 物 共 享 位 移、|  属 性、|  技 能 等 组 件，|
   仅 通 过 \TU/lmtt/m/n/12.045 PlayerTag\TU/lmr/m/n/12.045 /\TU/lmtt/m/n/12.045 Mo
 nsterTag
  []
 
-[15
 
-] [16]
 Overfull \hbox (47.6019pt too wide) in paragraph at lines 40--41
 []\TU/SimSun(0)/m/n/12.045 战 斗 数 据 流：|  每 帧 \TU/lmtt/m/n/12.045 CombatDataPrepa
 reSystem \TU/SimSun(0)/m/n/12.045 采 集 坐 标 等 快 照 $\OMS/cmsy/m/n/12.045 !$ \TU/Si
@@ -1300,14 +1436,21 @@ U/SimSun(0)/m/n/12.045 ，|  落 点 用 \TU/lmtt/m/n/12.045 SkillSlotHitTest\TU
 (0)/m/n/12.045 ；|
  []
 
-
+[17]
 Overfull \hbox (96.19676pt too wide) in paragraph at lines 65--66
 []\TU/lmr/bx/n/12.045 Web Worker\TU/SimSun(0)/m/n/12.045 ：|  当 场 上 实 体 数 $\OMS/
 cmsy/m/n/12.045 ^^U$ \TU/lmtt/m/n/12.045 COMBAT_WORKER_MIN_ENTITY_COUNT \TU/Sim
 Sun(0)/m/n/12.045 时，| \TU/lmtt/m/n/12.045 CombatDataPrepareSystem
  []
 
-[17]
+
+Overfull \hbox (123.20494pt too wide) in paragraph at lines 67--68
+\TU/lmr/m/n/12.045 return\TU/SimSun(0)/m/n/12.045 ，|  不 额 外 分 配 资 源，|  思 路 与 \T
+U/lmr/m/n/12.045 Cantrell \TU/SimSun(0)/m/n/12.045 等 把 重 算 和 画 面 拆 开 一 致$[]$。| 
+
+ []
+
+
 Overfull \hbox (55.12912pt too wide) in paragraph at lines 72--73
 []\TU/SimSun(0)/m/n/12.045 图 []\TU/lmr/m/n/12.045 4-2[] \TU/SimSun(0)/m/n/12.04
 5 描 述 从 启 动、|  进 战 斗、|  切 元 游 戏 到 重 启 的 调 用 顺 序，|  由 \TU/lmtt/m/n/12.045 figure
@@ -1316,7 +1459,7 @@ s/system-sequence.mmd
 
 File: figures/system-sequence.png Graphic file (type bmp)
 <figures/system-sequence.png>
-[18]
+
 Overfull \hbox (1.2757pt too wide) in paragraph at lines 90--91
 \TU/lmtt/m/n/12.045 configBases()\TU/SimSun(0)/m/n/12.045 ，|  依 次 尝 试 \TU/lmtt/
 m/n/12.045 fetch \TU/SimSun(0)/m/n/12.045 与 \TU/lmtt/m/n/12.045 Laya.loader \TU
@@ -1347,7 +1490,7 @@ CombatDataBridge.initWorker \TU/SimSun(0)/m/n/12.045 失 败、| \TU/lmtt/m/n/12
 onerror \TU/SimSun(0)/m/n/12.045 或 \TU/lmtt/m/n/12.045 postMessage
  []
 
-
+[18] [19]
 Overfull \hbox (56.57993pt too wide) in paragraph at lines 96--97
 []|\TU/SimSun(0)/m/n/12.045 （\TU/lmr/bx/n/12.045 4\TU/SimSun(0)/m/n/12.045 ）|  
 跑 图 生 成 保 底。| \TU/lmtt/m/n/12.045 RunMapGenerator.generate \TU/SimSun(0)/m/n/12
@@ -1379,7 +1522,7 @@ Overfull \hbox (10.25247pt too wide) in paragraph at lines 118--118
 []\TU/lmtt/m/n/12.045 validateActReachBoss| 
  []
 
-[19]
+
 Overfull \hbox (38.48413pt too wide) in paragraph at lines 132--133
 []\TU/SimSun(0)/m/n/12.045 实 体 扩 展：|  新 玩 法 维 度 优 先 新 增 组 件 类 型  |（如 未 来 的 \TU/
 lmtt/m/n/12.045 BuffComponent\TU/SimSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 Sh
@@ -1393,7 +1536,7 @@ Overfull \hbox (2.58183pt too wide) in paragraph at lines 132--133
  动 参 与 \TU/lmtt/m/n/12.045 FilterRegistry.Monsters\TU/SimSun(0)/m/n/12.045 ，|
  []
 
-) (chapter05.tex [20] [21]
+[20]) (chapter05.tex [21]
 第5章
 
 Overfull \hbox (32.97404pt too wide) in paragraph at lines 15--16
@@ -1406,6 +1549,12 @@ U/lmr/m/n/12.045 modifier\TU/SimSun(0)/m/n/12.045 ，|  供 \TU/lmr/m/n/12.045 B
 [22
 
 ]
+Overfull \hbox (33.13675pt too wide) in paragraph at lines 40--41
+\TU/SimSun(0)/m/n/12.045 减 穿 透，|  并 按 配 置 处 理 连 锁 与 分 裂$[]$。| \TU/lmtt/m/n/12.0
+45 MonsterChaseSystem
+ []
+
+
 Overfull \hbox (10.25641pt too wide) in paragraph at lines 44--45
 \TU/SimSun(0)/m/n/12.045 能。| \TU/lmtt/m/n/12.045 RunMapGenerator \TU/SimSun(0)/
 m/n/12.045 生 成 三 幕 \TU/lmr/m/n/12.045 DAG\TU/SimSun(0)/m/n/12.045 ，|  失 败 时 \TU
@@ -1439,12 +1588,10 @@ Overfull \hbox (26.85657pt too wide) in paragraph at lines 55--56
  []
 
 
-Overfull \hbox (40.51965pt too wide) in paragraph at lines 59--60
-\TU/SimSun(0)/m/n/12.045 在 \TU/lmtt/m/n/12.045 hp$\OMS/cmsy/m/n/12.045 ^^T$\TU/
-lmr/m/n/12.045 0 \TU/SimSun(0)/m/n/12.045 时 置 \TU/lmtt/m/n/12.045 paused\TU/Sim
-Sun(0)/m/n/12.045 ；| \TU/lmtt/m/n/12.045 RestartPanelSystem \TU/SimSun(0)/m/n/1
-2.045 经 \TU/lmr/m/n/12.045 UI \TU/SimSun(0)/m/n/12.045 栈 显 示 重 启 面 板；| \TU/lmtt
-/m/n/12.045 tryRestartFromSession
+Overfull \hbox (72.00374pt too wide) in paragraph at lines 59--60
+\TU/SimSun(0)/m/n/12.045 方 向。| \TU/lmr/m/n/12.045 Tab \TU/SimSun(0)/m/n/12.045 
+打 开 面 板 时 战 斗 \TU/lmr/m/n/12.045 Control \TU/SimSun(0)/m/n/12.045 不 更 新，| \TU/l
+mr/m/n/12.045 UI \TU/SimSun(0)/m/n/12.045 仍 可 接 收 事 件$[]$。|
  []
 
 [23]
@@ -1545,9 +1692,21 @@ m/n/12.045 ）|
 
 [27]
 第6章
+
+Overfull \hbox (56.90392pt too wide) in paragraph at lines 8--10
+\TU/SimSun(0)/m/n/12.045 和 画 面 分 开$[]$，|
+ []
+
 [28
 
-] [29]
+]
+Overfull \hbox (77.79883pt too wide) in paragraph at lines 40--41
+[]\TU/SimSun(0)/m/n/12.045 看 池、|  图 集、| \TU/lmr/m/n/12.045 Worker \TU/SimSun(0)
+/m/n/12.045 对 \TU/lmr/m/n/12.045 FPS \TU/SimSun(0)/m/n/12.045 和 \TU/lmr/m/n/12.
+045 P95 \TU/SimSun(0)/m/n/12.045 的 影 响$[]$。| 
+ []
+
+[29]
 Overfull \hbox (11.98326pt too wide) in paragraph at lines 61--62
 []\TU/lmr/m/n/12.045 CPU \TU/SimSun(0)/m/n/12.045 平 均 占 用 低 一 点，|  笔 记 本 续 航 会 
 好 一 些：|  池 减 分 配，|  暂 停 减 空 转，| \TU/lmtt/m/n/12.045 MONSTER_COUNT
@@ -1561,6 +1720,12 @@ Overfull \hbox (44.89224pt too wide) in paragraph at lines 8--12
 mSun(0)/m/n/12.045 、| \TU/lmtt/m/n/12.045 ComponentStore\TU/SimSun(0)/m/n/12.04
 5 、| \TU/lmtt/m/n/12.045 AttributeSystem\TU/SimSun(0)/m/n/12.045 、|  配 表、| \TU/
 lmtt/m/n/12.045 CombatDataBridge
+ []
+
+
+Overfull \hbox (84.68385pt too wide) in paragraph at lines 25--26
+\TU/lmtt/m/n/12.045 getModifierContributions \TU/SimSun(0)/m/n/12.045 可 追 溯。|  
+升 级 奖 励 与 \TU/lmr/m/n/12.045 Buff \TU/SimSun(0)/m/n/12.045 均 依 赖 该 机 制$[]$。| 
  []
 
 [31
@@ -1577,6 +1742,13 @@ Overfull \hbox (67.62718pt too wide) in paragraph at lines 56--59
 \TU/SimSun(0)/m/n/12.045 装 配 同 步：|  互 换 装 备 栏 技 能 后，|  下 一 冷 却 周 期 伤 害\TU/lmr/m
 /n/12.045 /\TU/SimSun(0)/m/n/12.045 图 标 与 装 配 一 致，|  否 则 \TU/lmtt/m/n/12.045 Sk
 illLoadoutSyncSystem
+ []
+
+
+Overfull \hbox (178.4212pt too wide) in paragraph at lines 56--59
+\TU/lmr/bx/n/12.045 Worker \TU/SimSun(0)/m/n/12.045 一 致 性：| \TU/lmr/m/n/12.045 
+Worker \TU/SimSun(0)/m/n/12.045 开、|  关 各 跑 一 段，|  怪 物 轨 迹 可 差 一 帧，|  但 算 法 不 能 
+两 套$[]$。| 
  []
 
 
@@ -1599,23 +1771,71 @@ File: figures/fig-06-restart.png Graphic file (type bmp)
 <figures/fig-06-restart.png>
 ) (chapter08.tex [34] [35] [36] [37] [38]
 第8章
+
+Overfull \hbox (3.54166pt too wide) in paragraph at lines 15--16
+[]\TU/SimSun(0)/m/n/12.045 写 作 中 参 考 \TU/lmr/m/n/12.045 SyDRA$[]$\TU/SimSun(0)/
+m/n/12.045 、| \TU/lmr/m/n/12.045 Gre-
+ []
+
+
+Overfull \hbox (118.71028pt too wide) in paragraph at lines 21--22
+[]\TU/SimSun(0)/m/n/12.045 架 构：| \TU/lmr/m/n/12.045 ECS \TU/SimSun(0)/m/n/12.04
+5 可 改 \TU/lmr/m/n/12.045 Archetype/Chunk \TU/SimSun(0)/m/n/12.045 提 同 屏 上 限$[]$
+；|
+ []
+
 [39
 
 ]) (acknowledgement.tex [40]) [41
 
-] (main.bbl [42
+] (main.bbl
+Underfull \hbox (badness 10000) in paragraph at lines 11--16
+[]
+ []
 
 
-]) [43] (appendix.tex [44
+Underfull \hbox (badness 10000) in paragraph at lines 25--29
+[]\TU/lmr/m/n/12.045 BAABAD A,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 32--38
+[]\TU/lmr/m/n/12.045 CANTRELL W A,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 61--66
+[]\TU/lmr/m/n/12.045 AGRAHARI V, CHI-
+ []
+
+[42
+
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 74--79
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 105--109
+[]\TU/lmr/m/n/12.045 MCKENZIE F D,
+ []
+
+
+Underfull \hbox (badness 2662) in paragraph at lines 126--131
+[]\TU/lmr/m/n/12.045 HEIJSTEK W, KÜHNE T,
+ []
+
+[43]) [44] (appendix.tex [45
 
 
 ]
 附录 A
-[45
+[46
 
 ]
 附录 B
-[46
+[47
 
 ]
 附录 C
@@ -1690,7 +1910,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 58--58
 []|\TU/SimSun(0)/m/n/12.045 动 态 图 集 提 升 千 怪
  []
 
-[47
+[48
 
 ]
 附录 D
@@ -1699,13 +1919,14 @@ Overfull \hbox (7.29295pt too wide) in paragraph at lines 70--81
  [][] 
  []
 
-) [48
+) [49
 
 ] (main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2022/07/14>
  ***********
+
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.22pt have occurred.
@@ -1717,15 +1938,15 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: A87C3B826CDBD00C3E76E7C3A38698BF;14622.
+(rerunfilecheck)             Checksum: A4428B90D1A31608549AC3416923D245;14343.
  ) 
 Here is how much of TeX's memory you used:
- 19326 strings out of 402987
- 442246 string characters out of 5448524
- 850304 words of memory out of 5000000
+ 19318 strings out of 402987
+ 442274 string characters out of 5448524
+ 851816 words of memory out of 5000000
  47729 multiletter control sequences out of 15000+600000
- 636947 words of font info for 117 fonts, out of 8000000 for 9000
+ 636939 words of font info for 116 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 93i,12n,121p,1191b,684s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 93i,12n,121p,1191b,680s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on main.pdf (59 pages).

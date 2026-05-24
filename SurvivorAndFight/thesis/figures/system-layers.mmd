@@ -1,31 +1,8 @@
-%% Survivor And Fight — 系统分层架构（Mermaid）
-flowchart TB
-  subgraph presentation["表现层"]
-    P1[Laya 预制体 / UI2 节点]
-    P2[血条 / 相机跟随]
-  end
-  subgraph ui["UI 控制层"]
-    U1[UIStackManager]
-    U2[Panel Controller]
-    U3[SkillLoadoutSyncSystem]
-  end
-  subgraph logic["游戏逻辑层"]
-    L1[ECS Systems]
-    L2[移动 / 技能 / 子弹 / 怪物 / 经验]
-  end
-  subgraph domain["领域服务层"]
-    D1[ConfigBootstrap]
-    D2[FormulaParser]
-    D3[CombatDataBridge]
-    D4[RunMapGenerator]
-  end
-  subgraph infra["基础设施层"]
-    I1[EcsWorld / ComponentStore]
-    I2[defines 常量]
-    I3[BulletPool / MonsterPool]
-    I4[Web Worker 协议]
-  end
-  presentation --> ui
-  ui --> logic
-  logic --> domain
-  domain --> infra
+%% Survivor And Fight — 系统分层架构（五层单节点横向，论文排版友好）
+flowchart LR
+  P["表现层<br/>Laya 预制体 / UI2<br/>血条 / 相机跟随"]
+  U["UI 控制层<br/>UIStackManager<br/>Panel Controller<br/>SkillLoadoutSyncSystem"]
+  L["游戏逻辑层<br/>ECS Systems<br/>移动 / 技能 / 子弹 / 怪物 / 经验"]
+  D["领域服务层<br/>ConfigBootstrap<br/>FormulaParser<br/>CombatDataBridge<br/>RunMapGenerator"]
+  I["基础设施层<br/>EcsWorld / ComponentStore<br/>defines 常量<br/>对象池 / Worker 协议"]
+  P --> U --> L --> D --> I

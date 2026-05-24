@@ -1,0 +1,15 @@
+%% 第4章：系统功能模块
+flowchart TB
+  ROOT[Survivor And Fight]
+  ROOT --> META[元游戏]
+  ROOT --> COMBAT[局内战斗]
+  ROOT --> PERF[性能工程]
+  META --> M1[主菜单 / 选关]
+  META --> M2[DAG 跑图 RunMapGenerator]
+  META --> M3[UIStackManager]
+  COMBAT --> C1[EcsWorld / Systems]
+  COMBAT --> C2[配表 Skill / SkillEffect]
+  COMBAT --> C3[子弹 / 怪物 / 经验]
+  PERF --> P1[BulletPool / MonsterPool]
+  PERF --> P2[CombatDataBridge + Worker]
+  PERF --> P3[动态图集 TextureAtlasService]

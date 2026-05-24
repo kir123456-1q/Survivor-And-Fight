@@ -1,0 +1,7 @@
+%% 第5章：RunMapGenerator 生成流程
+flowchart TD
+  S([generate 调用]) --> R{随机生成 + 校验<br/>validateActReachBoss}
+  R -->|成功| OK[返回三幕 DAG]
+  R -->|失败且未超重试| R
+  R -->|超过最大重试| F[generateFallback<br/>休息→战斗→Boss 线性图]
+  F --> OK

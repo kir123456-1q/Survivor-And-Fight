@@ -1,0 +1,10 @@
+%% 第5章：SkillEffect 链式执行
+flowchart LR
+  A[PlayerAutoCastSystem] --> B[CastPlan]
+  B --> C[EffectExecutor]
+  C --> D{effect 类型}
+  D -->|modifier_*| E[写上下文修饰器]
+  E --> C
+  D -->|bullet| F[BulletSystem 生成子弹]
+  D -->|direct_damage| G[AttributeSystem 结算]
+  F --> H[碰撞 / 穿透 / 分裂 / 连锁]

@@ -1,0 +1,16 @@
+%% 第6章：Worker 与主线程职责
+flowchart TB
+  subgraph main["主线程"]
+    M1[碰撞检测 BulletSystem]
+    M2[渲染 / Laya API]
+    M3[UI / GameSession.paused]
+    M4[computeSync 回退]
+  end
+  subgraph worker["Web Worker"]
+    W1[追逐向量]
+    W2[分离力计算]
+    W3[processCombatFrame]
+  end
+  Bridge[CombatDataBridge] --> W1
+  Bridge --> M4
+  W3 --> Bridge
