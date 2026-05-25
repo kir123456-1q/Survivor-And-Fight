@@ -48,9 +48,18 @@ if (Test-Path $pngSrc) {
 # -s 缩放因子；分层图用较宽画布，时序图用较高画布，避免 LaTeX 按页宽缩放后裁切或模糊
 if (Get-Command npx -ErrorAction SilentlyContinue) {
     $mermaidArgs = @{
-        "system-layers"    = @("-w", "2000", "-H", "600",  "-s", "2")
-        "system-sequence"  = @("-w", "2400", "-H", "2800", "-s", "2")
-        "skill-tab-sequence" = @("-w", "2000", "-H", "1400", "-s", "2")
+        "system-layers"         = @("-w", "2000", "-H", "600",  "-s", "2")
+        "system-sequence"       = @("-w", "2400", "-H", "2800", "-s", "2")
+        "skill-tab-sequence"    = @("-w", "2000", "-H", "1400", "-s", "2")
+        "skill-effect-flow"     = @("-w", "2000", "-H", "1800", "-s", "2")
+        "pool-lifecycle"        = @("-w", "2200", "-H", "600",  "-s", "2")
+        "worker-frame-pipeline" = @("-w", "2200", "-H", "1600", "-s", "2")
+        "config-load-sequence"  = @("-w", "2200", "-H", "1200", "-s", "2")
+        "fault-degrade-state"   = @("-w", "2800", "-H", "3200", "-s", "3")
+        "ecs-gameplay-overview" = @("-w", "2600", "-H", "2200", "-s", "2")
+        "mvc-ui-structure"      = @("-w", "2600", "-H", "2000", "-s", "2")
+        "ch04-worker-pool-design" = @("-w", "2600", "-H", "1800", "-s", "2")
+        "formula-tree-flow"     = @("-w", "2400", "-H", "2200", "-s", "2")
     }
     Get-ChildItem -Path $figDst -Filter "*.mmd" -ErrorAction SilentlyContinue | ForEach-Object {
         $out = Join-Path $figDst ($_.BaseName + ".png")

@@ -7,7 +7,7 @@
 
 ---
 
-## 图号总表（共 22 张）
+## 图号总表（共 28 张 Mermaid/导出图 + 第7章截图 6 张）
 
 | 图号 | 文件名 | 图题 |
 |------|--------|------|
@@ -21,9 +21,15 @@
 | 图4-4 | `图4-4-fig-ch04-04-config-er.png` | 配表逻辑 ER 图 |
 | 图4-5 | `图4-5-fig-ch04-05-combat-flow.png` | ECS 战斗数据流 |
 | 图4-6 | `图4-6-fig-ch04-06-fault-tolerance.png` | 容错降级流程 |
-| 图5-1 | `图5-1-fig-ch05-skill-chain.png` | SkillEffect 链式执行流程 |
+| 图4-7 | `图4-7-fig-ch04-07-fault-degrade.png` | 容错降级 mindmap（中心正常运行 + 四分支） |
+| 图4-8 | `图4-8-fig-ch04-08-ecs-gameplay.png` | 基于 ECS 的 Gameplay 实现总览 |
+| 图4-9 | `图4-9-fig-ch04-09-mvc-ui.png` | MVC UI 结构（元游戏与局内） |
+| 图4-10 | `图4-10-fig-ch04-10-worker-pool.png` | Web Worker 与对象池优化设计 |
+| 图5-1 | `图5-1-fig-ch05-skill-chain.png` | 技能效果执行链（buildSkillCastPlan） |
 | 图5-2 | `图5-2-fig-ch05-tab-sequence.png` | Tab 技能装配交互时序 |
 | 图5-3 | `图5-3-fig-ch05-runmap-gen.png` | RunMapGenerator 地图生成流程 |
+| 图5-4 | `图5-4-fig-ch05-04-config-load.png` | 配表双通道加载时序（可选） |
+| 图5-5 | `图5-5-fig-ch05-05-formula-tree.png` | 公式树解析与求值（FormulaParser） |
 | 图6-1 | `图6-1-fig-ch06-pool-lifecycle.png` | 对象池生命周期 |
 | 图6-2 | `图6-2-fig-ch06-worker.png` | Web Worker 与主线程职责划分 |
 | 图6-3 | `图6-3-fig-ch06-chart-fps-atlas.png` | 动态图集接入前后 FPS 对比（第3波） |
@@ -129,27 +135,66 @@
 
 ---
 
-### 图4-4 配表逻辑 ER 图
+### 图4-8 基于 ECS 的 Gameplay 实现总览
+
+| 项 | 内容 |
+|----|------|
+| **文件** | `thesis/Png/图4-8-fig-ch04-08-ecs-gameplay.png` |
+| **源** | `thesis/figures/ecs-gameplay-overview.mmd` |
+| **节次** | **4.2.1** 基于 ECS 的 Gameplay 实现 |
+| **插入位置** | 紧接在 4.2.1 正文（ECS + 标签筛选 + 战斗数据流 + paused + 配表）**之后**、图题与读图段之前 |
+| **锚定段落** | 「局内玩法走轻量 ECS，整体结构如图4-8 所示……」 |
+| **建议正文引用** | 对照稿已含图题「图4-8 基于 ECS 的 Gameplay 实现总览」及段末读图段。 |
+
+---
+
+### 图4-9 MVC UI 结构（元游戏与局内）
+
+| 项 | 内容 |
+|----|------|
+| **文件** | `thesis/Png/图4-9-fig-ch04-09-mvc-ui.png` |
+| **源** | `thesis/figures/mvc-ui-structure.mmd` |
+| **节次** | **4.2.2** 基于 MVC 的 UI 结构实现 |
+| **插入位置** | 紧接在 4.2.2 正文**之后** |
+| **锚定段落** | 「元游戏与局内 UI 采用 MVC 变体，职责划分如图4-9 所示……」 |
+| **建议正文引用** | 对照稿已含图题与读图段。 |
+
+---
+
+### 图4-10 Web Worker 与对象池优化设计
+
+| 项 | 内容 |
+|----|------|
+| **文件** | `thesis/Png/图4-10-fig-ch04-10-worker-pool.png` |
+| **源** | `thesis/figures/ch04-worker-pool-design.mmd` |
+| **节次** | **4.2.3** 基于 Web Worker 和对象池的优化实现 |
+| **插入位置** | 紧接在 4.2.3 正文**之后** |
+| **锚定段落** | 「对象池与 Worker 优化同属游戏逻辑层，设计关系如图4-10 所示……」 |
+| **建议正文引用** | 实现级细节见 **图6-1**、**图6-2**；对照稿已含图题与读图段。 |
+
+---
+
+### 图4-4 配表逻辑 ER 图（可选，与图4-8 互补）
 
 | 项 | 内容 |
 |----|------|
 | **文件** | `thesis/Png/图4-4-fig-ch04-04-config-er.png` |
-| **节次** | **4.2.1** 基于 ECS 的 Gameplay 实现 — **配表驱动** 段 |
-| **插入位置** | 紧接在下列段落**之后** |
-| **锚定段落** | 「**配表驱动**：`Skill` 与多行 `SkillEffect` 描述冷却与效果链；`EffectExecutor` 按序解释 `bullet`、`modifier_*`、`direct_damage`。修饰器须位于后续 `bullet` 之前，形成链式组合语义。伤害字符串由 `FormulaParser` 在白名单运算下解析，禁止 `eval`。」 |
-| **建议正文引用** | 「Character、Skill、SkillEffect 与 Bullet 等配表之间的逻辑关系如图4-4所示。」 |
+| **节次** | **4.2.1** — **配表驱动** 段（篇幅紧时可省略，正文已写「见图4-4（可选）」） |
+| **插入位置** | 配表驱动段**之后** |
+| **锚定段落** | Skill / SkillEffect / EffectExecutor / FormulaParser 段 |
+| **建议正文引用** | 「Character、Skill、SkillEffect 与 Bullet 等配表之间的逻辑关系如图4-4 所示。」 |
 
 ---
 
-### 图4-5 ECS 战斗数据流
+### 图4-5 ECS 战斗数据流（可选，与图4-8 互补）
 
 | 项 | 内容 |
 |----|------|
 | **文件** | `thesis/Png/图4-5-fig-ch04-05-combat-flow.png` |
-| **节次** | **4.2.1** — **战斗数据流** 段 |
-| **插入位置** | 紧接在下列段落**之后** |
-| **锚定段落** | 「**战斗数据流**：每帧 `CombatDataPrepareSystem` 采集坐标等快照 → 可选 `CombatDataBridge` 提交 Worker 执行 `processCombatFrame` → 主线程 `MonsterChaseSystem` 应用追逐/分离结果 → `BulletSystem` 在主线程完成碰撞（依赖 Laya 节点与阵营判定）。`GameSession.paused` 在死亡、技能 Tab 或胜利时冻结逻辑 System 的 `update` 入口。」 |
-| **建议正文引用** | 「每帧战斗数据的处理路径如图4-5所示。」 |
+| **节次** | **4.2.1** — 战斗数据流（图4-8 已含 Worker/主线程分工时可省略） |
+| **插入位置** | 战斗数据流段**之后** |
+| **锚定段落** | CombatDataPrepareSystem → CombatDataBridge → MonsterChaseSystem / BulletSystem 段 |
+| **建议正文引用** | 「每帧战斗数据的处理路径如图4-5 所示。」 |
 
 ---
 

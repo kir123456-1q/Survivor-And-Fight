@@ -1,0 +1,42 @@
+%% 图4-8 基于 ECS 的 Gameplay 实现（第4.2.1节）
+flowchart TB
+  subgraph World["EcsWorld 每帧 update"]
+    EM["EntityManager<br/>数字 EntityId"]
+    CS["ComponentStore<br/>按类型 Map 存组件"]
+    subgraph Grp["System 分组调度"]
+      direction LR
+      IN[input]
+      LG[logic]
+      RD[render]
+    end
+  end
+
+  subgraph Ent["实体组合（无继承树）"]
+    P["PlayerTag + Position<br/>Attribute + Skill …"]
+    M["MonsterTag + Position<br/>Velocity + Attribute …"]
+  end
+
+  FR["FilterRegistry<br/>Players / Monsters 命名筛选"]
+
+  subgraph Sys["logic 组示例（无状态遍历）"]
+    MV[MovementSystem]
+    MCS[MonsterChaseSystem]
+    BS[BulletSystem]
+    CDP[CombatDataPrepareSystem]
+  end
+
+  EM --> CS
+  CS --> Ent
+  FR --> Sys
+  Grp --> Sys
+
+  CDP --> BR[CombatDataBridge]
+  BR -->|实体数达标| WK[Worker processCombatFrame]
+  BR -->|否则| SYNC[computeSync]
+  WK --> MCS
+  SYNC --> MCS
+  BS --> COL["主线程碰撞<br/>Laya 节点 + 阵营"]
+
+  PAU["GameSession.paused"] -.->|Tab/死亡/胜利| LG
+
+  CFG["配表 Skill / SkillEffect<br/>EffectExecutor + FormulaParser"] -.-> Sys

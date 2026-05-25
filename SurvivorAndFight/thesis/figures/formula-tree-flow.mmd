@@ -1,0 +1,37 @@
+%% 公式树解析与求值 — 图5-5（配表直伤，对应 FormulaParser.ts）
+flowchart TB
+  subgraph 输入["配表与施法上下文"]
+    F["SkillEffect.paramsFormula<br/>例 (atk+5)*2"]
+    A["Attribute.base 键名<br/>atk / hp / maxHp …"]
+  end
+
+  subgraph 解析["parseFormula（递归下降）"]
+    V["ALLOWED_PATTERN 白名单校验"]
+    T["tokenize：number / ident / op / 括号"]
+    P1["parseAddSub：+ −"]
+    P2["parseMulDiv：* /"]
+    P3["parseUnary：一元负号"]
+    P4["parsePrimary：数字、标识符、( )"]
+    AST["FormulaNode 公式树<br/>number · ident · unary · binary"]
+  end
+
+  subgraph 求值["evaluateFormula"]
+    C["EffectExecutor 构造 context<br/>各键 AttributeSystem.getFinalValue"]
+    E["后序遍历 AST 求值<br/>除零返回 0；无 eval/Function"]
+    D["direct_damage 扣目标 hp"]
+  end
+
+  F --> V --> T --> P1
+  P1 --> P2 --> P3 --> P4 --> AST
+  A --> C
+  AST --> E
+  C --> E --> D
+
+  subgraph 示例["示例 (atk+5)*2 的 AST"]
+    direction TB
+    R["*"]
+    R --> L["+"]
+    R --> N2["2"]
+    L --> I["atk"]
+    L --> N5["5"]
+  end
