@@ -509,7 +509,7 @@ Controller：UiControllerBase 子类管生命周期和路由，不得直接改�
 ## 4.5 容错与降级策略
 如图4-6所示，流程自故障检测起，经分支选择执行对应降级，再回到可运行态，形成闭环。配表加载失败、Worker不可用、跑图生成失败、预制体缺失等情形各走独立回退支路，避免整局白屏退出。与局内状态相关的路径另作区分：死亡、技能Tab装配与战斗胜利等情形共用GameSession.paused冻结战斗tick，RestartPanelSystem仅在isPlayerDead()为真时弹出重启面板，以免装配暂停被误判为失败局。
 
-表4-1在上述流程之下，将主要故障模式、触发条件、降级表现与恢复手段收成对照表，便于答辩时与ConfigBootstrap、CombatDataBridge、RunMapGenerator等实现逐项核对。
+表4-1在上述流程之下，将主要故障模式、触发条件、降级表现与恢复手段收成对照表，便于与ConfigBootstrap、CombatDataBridge、RunMapGenerator等实现逐项核对。
 
 图4-6 降级策略示意图
 表4-1 容错与降级策略
@@ -612,7 +612,7 @@ Demo侧，SimpleEcsDemo.update在测试模式下会先testLevelFpsTracker.tick�
 ### 5.5.3 场景三：怪物密集时的Worker卸载
 实场景三用Level3千怪波说明Worker支路何时生效、何时必须回退主线程，单帧分工如图5-3所示。
 同屏怪物数和子弹数加起来达到COMBAT_WORKER_MIN_ENTITY_COUNT，且GameSession.paused为假时，CombatDataPrepareSystem会把玩家与怪物坐标打进CombatEntitySnapshot，调用CombatDataBridge.prepareFrame。若本帧latestResult已从Worker回传，MonsterChaseSystem走applyWorkerVelocities写速度，否则prepareFrame内部computeSync在主线程跑processCombatFrame，和Worker共用combatWorkerLogic.ts。帧末dispatchCompute再postMessage投递下一帧。与此同时BulletSystem仍在主线程做hitRadiusSq碰撞和连锁。若在MetaRunSession里关testUseCombatWorker，表7-5、7-6第4、5波数据会体现这条边界。
-如图5-3所示，左侧「打包快照」对应CombatDataPrepareSystem，菱形「latestResult已回传」决定本帧消费Worker还是computeSync，下方「始终主线程」支路说明子弹碰撞不进Worker；与图4-5、5.3节文字对照，可避免答辩时只讲「开了Worker」不讲边界。
+如图5-3所示，左侧「打包快照」对应CombatDataPrepareSystem，菱形「latestResult已回传」决定本帧消费Worker还是computeSync，下方「始终主线程」支路说明子弹碰撞不进Worker；
 ## 5.6 关键代码文件索引
 表5-2 核心源码文件索引
 模块
@@ -665,7 +665,7 @@ Web Worker 与对象池
 第 7 章
 ## 5.8 本章小结
 本章按四条线写实现：ECS 玩法、MVC UI、Worker/对象池、主循环。另用三个场景把配置加载、流程切换和战斗跑通。代码里用到的结构包括：SimpleEcsDemo 作组合根，对象池，CombatDataBridge 作桥，Targeting 作策略，GameSession.paused 作状态开关；没有再加一层通用框架。
-实现里遇到过四类问题。（1）配表没拷到 bin/config 会 404：用 sync-config-to-bin.ps1 同步，并用isGameConfigReady挡在未就绪前进战斗。（2）UI2拖技能槽点不中：顶层代理加 SkillSlotHitTest。（3）Effect行顺序错会算错：靠文档和样例表约定顺序。（4）Worker与主线程结果要对齐：共用combatWorkerLogic.ts，异步失败时computeSync。表 5-2、表 5-3 把模块和文件对应起来，方便评阅对照。性能测量放在下一章。
+实现里遇到过四类问题。（1）配表没拷到 bin/config 会 404：用 sync-config-to-bin.ps1 同步，并用isGameConfigReady挡在未就绪前进战斗。（2）UI2拖技能槽点不中：顶层代理加 SkillSlotHitTest。（3）Effect行顺序错会算错：靠文档和样例表约定顺序。（4）Worker与主线程结果要对齐：共用combatWorkerLogic.ts，异步失败时computeSync。表 5-2、表 5-3 把模块和文件对应起来。性能测量放在下一章。
 
 # 第六章  性能优化与工程实践
 
@@ -673,9 +673,9 @@ Web Worker 与对象池
 ## 6.1 性能目标与瓶颈
 性能目标定在1920×1080、IDE内置Chromium预览下，Level3第1、2波怪物较少时TestLevelFpsTracker统计的平均FPS尽量贴近60，第3波及千怪消融段则重点看P95帧时间（表7-5、表7-6），因为均值容易被低负载波次拉高，掩盖偶发尖峰卡顿。
 瓶颈在工程里大致能对应到三类开销：一是MonsterChaseSystem与BulletSystem的CPU，同屏实体上千时追逐、圆碰撞、连锁搜索都会上去；二是BulletPool、MonsterPool若关掉，spawn路径会频繁instantiate和destroy，浏览器GC在Performance面板里表现为Scripting/GC尖刺，表7-6第4波无池时P95到76.50 ms就是这类问题的体现；三是主线程还要跑Laya绘制和UI，千怪千弹时DrawCall和贴图采样也会吃时间。
-对策与后文图示一一挂钩：图5-3说明get/put如何把建删变成复用；图5-3说明prepareFrame如何把追逐从主线程挪到Worker又保留computeSync回退；图5-3与图4-2的paused段说明Tab装配、死亡时各System早退，避免无效tick白跑；图6-3与表7-4记录TextureAtlasService接入后千怪波FPS从约13.32提到约15.10的变化。读第6章时宜「先看图再看表」，比单列表格更有说服力。
+对策与后文图示一一挂钩：图5-3说明get/put如何把建删变成复用；图5-3说明prepareFrame如何把追逐从主线程挪到Worker又保留computeSync回退；图5-3与图4-2的paused段说明Tab装配、死亡时各System早退，避免无效tick白跑；图6-3与表7-4记录TextureAtlasService接入后千怪波FPS从约13.32提到约15.10的变化。
 ## 6.2 对象池
-对象池实现如图5-3所示。BulletSystem.spawn时先经图中「get prefabPath」判断桶内是否有节点：BulletPool.get对arr.pop()，为空则走instantiate新节点；子弹命中或超时后removeChild再put回桶。SimpleEcsDemo注入的isObjectPoolEnabled()为false时，图5-3左侧get被跳过，直连instantiate，即表7-6第4波「无池」配置。MonsterPool与MonsterRecycleSystem同理。第4、5波千怪同窗中开池后P95由76.50 ms降至48.60 ms（约36.5%），平均FPS几乎不变，说明池主要削尖峰，宜在图5-3后接表7-6解读。
+对象池实现如图5-3所示。BulletSystem.spawn时先经图中「get prefabPath」判断桶内是否有节点：BulletPool.get对arr.pop()，为空则走instantiate新节点；子弹命中或超时后removeChild再put回桶。SimpleEcsDemo注入的isObjectPoolEnabled()为false时，图5-3左侧get被跳过，直连instantiate，即表7-6第4波「无池」配置。MonsterPool与MonsterRecycleSystem同理。第4、5波千怪同窗中开池后P95由76.50 ms降至48.60 ms（约36.5%），平均FPS几乎不变，说明池主要削尖峰。
 ## 6.3 Web Worker卸载
 追Worker卸载只覆盖追逐、分离、摆动等纯数值环节，不涉及Laya节点。CombatDataPrepareSystem在isPaused()为假且场上实体数达到COMBAT_WORKER_MIN_ENTITY_COUNT时，从FilterRegistry取出怪物坐标等字段，拼成CombatEntitySnapshot后调用CombatDataBridge.prepareFrame。
 单帧内prepareFrame分两步：先消费、再投递。若本帧已有Worker回传的latestResult，MonsterChaseSystem直接把其中的速度写回各怪物Velocity；若没有，则在主线程走computeSync调用processCombatFrame，保证不阻塞可玩性。帧末在shouldUseWorker为真且无在途请求时，由dispatchCompute向Worker postMessage投递下一帧计算。initWorker失败或postMessage异常时workerUsable置为false，后续全程退化为computeSync单路径。主线程与Worker共用combatWorkerLogic.ts，避免两套追逐公式分叉。
@@ -709,7 +709,7 @@ Web Worker 与对象池
 
 本章用单元脚本、功能回归、性能实验三类手段检查第3章需求和第4章设计是否落到实处，策略参考Petty等对仿真与交互系统V&V的做法[16]。单元层验证不启动完整Laya场景，适合在改EcsWorld、FormulaParser之后快速回归；功能层用T-F系列步骤对照图4-2、图5-2的主路径；性能层用Level3五波和TestLevelFpsTracker生成表7-5、7-6，与第6章图6-1、图6-2的优化叙述交叉验证。
 ## 7.1 测试策略
-单元层覆盖ecsCorePhase1.verify.ts、formulaParser.verify.ts、attributeModifier.verify.ts，谁改动就rerun谁。集成层至少走通三条：RunMapGenerator多随机种子下validateActReachBoss，失败须generateFallback；Tab场景对照图5-2做T-F-05/06，看paused与装配写回；Worker开关前后怪物轨迹是否仍来自combatWorkerLogic.ts。性能层固定Level3五波脚本，第4、5波同窗对比池化，结合图6-1、表7-6解读P95。若动过FormulaParser（公式树）、ComponentStore、AttributeSystem、ConfigBootstrap或CombatDataBridge，答辩前按附录或表3-5把主流程再走一遍，避免只改底层却漏测Tab和千怪波。
+单元层覆盖ecsCorePhase1.verify.ts、formulaParser.verify.ts、attributeModifier.verify.ts，谁改动就rerun谁。集成层至少走通三条：RunMapGenerator多随机种子下validateActReachBoss，失败须generateFallback；Tab场景对照图5-2做T-F-05/06，看paused与装配写回；Worker开关前后怪物轨迹是否仍来自combatWorkerLogic.ts。性能层固定Level3五波脚本，第4、5波同窗对比池化，结合图6-1、表7-6解读P95。若动过FormulaParser（公式树）、ComponentStore、AttributeSystem、ConfigBootstrap或CombatDataBridge。
 ## 7.2 单元验证
 ### 7.2.1 ECS核心
 ECS单元验证在ecsCorePhase1.verify.ts，脚本搭不依赖Laya的最小EcsWorld，检查EntityId不重复、destroyEntity后getComponent读不到旧数据、组件增删与getAllOfType一致、多System按分组和priority的update顺序与注册表一致。验收项与world.destroyEntity先removeAllComponents再destroyEntity的实现及registerSystem组序对齐，动过World.ts或ComponentStore.ts后应rerun[18]。
@@ -995,7 +995,7 @@ SkillEfect  表：id、effect、damage、params、iconPath。effect 取值包括
 完整 JSON 在 docs/config/。运行前执行 tools/sync-config-to-bin.ps1，把表拷到 bin/config/。
 
 附录C 需求与测试用例映射（节选）
-表 C-1 给出需求标识与测试用例、验证方式的对应关系，便于答辩时说明“需求—测试”可追溯性。
+表 C-1 给出需求标识与测试用例、验证方式的对应关系，便于说明“需求—测试”可追溯性。
 表C-1 需求—测试映射（节选）
 需求 ID
 需求摘要
