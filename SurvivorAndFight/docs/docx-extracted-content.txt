@@ -1,0 +1,515 @@
+﻿
+
+
+
+本 科 毕 业 设 计（论文）
+
+
+题  目：基于 ECS架构的类吸血鬼幸存者游戏开
+发及优化（校外）
+
+
+
+
+
+
+
+
+2026年5月26日
+
+学位论文原创性声明
+
+本人所提交的学位论文《基于 ECS 架构的类吸血鬼幸存者游戏开发及优化（校外）》，是在导师的指导下，独立进行研究工作所取得的原创性成果。除文中已经注明引用的内容外，本论文不包含任何其他个人或集体已经发表或撰写过的研究成果。对本文的研究做出重要贡献的个人和集体，均已在文中标明。
+本声明的法律后果由本人承担。
+
+
+论文作者（签名）：                  指导教师确认（签名）：
+年   月   日                           年   月   日
+
+
+学位论文版权使用授权书
+
+本学位论文作者完全了解中国石油大学（华东）有权保留并向国家有关部门或机构送交学位论文的复印件和磁盘，允许论文被查阅和借阅。本人授权中国石油大学（华东）可以将学位论文的全部或部分内容编入有关数据库进行检索，可以采用影印、缩印或其它复制手段保存、汇编学位论文。
+保密的学位论文在_______年解密后适用本授权书。
+
+
+论文作者（签名）：                 指导教师（签名）：
+年   月   日                      年   月   日
+
+
+摘要
+HTML5 与 WebGL 普及后，浏览器端动作游戏要在架构解耦和同屏性能之间取舍。类吸血鬼幸存者玩法常叠 Roguelite 单局构筑和元游戏流程，客户端需要在数据驱动、模块划分和可测性上划清边界。本文以毕业设计项目 Survivor And Fight 为对象，使用 LayaAir 3.x 与 TypeScript 实现 2D 俯视角生存战斗原型，工作包括需求分析、总体设计、实现与测试。
+全文八章。绪论和相关技术说明选题与路线；需求章列出功能、非功能指标及验收对应关系；设计章给出五层架构，并分别写 ECS Gameplay、MVC 界面、对象池和 Web Worker；实现章与性能章写核心模块、主循环和优化做法；测试章用单元脚本、功能用例和压测验证。原型可跑通菜单、跑图、战斗和技能装配。实验表明，对象池和动态图集能缓解高同屏时的卡顿。
+
+关键词：实体组件系统；类吸血鬼幸存者；系统设计与实现；LayaAir；数据驱动
+
+
+Abstract
+HTML5 and WebGL are widely used in browser games. Action titles must keep modules separate while handling many on-screen entities. Vampire-survivor-like games with Roguelite meta loops need data-driven tables, clear module boundaries, and testable code. This thesis presents Survivor And Fight, an off-campus 2D top-down survival prototype built with LayaAir 3.x and TypeScript. The work covers requirements, design, implementation, and testing.
+The thesis has eight chapters. The introduction and related work explain the topic and stack. Requirements list functional and non-functional items and how they are verified. Design describes a five-layer structure, ECS gameplay, MVC UI, object pools, and Web Worker offloading. Implementation and performance chapters cover core modules, the main loop, and optimizations. Testing uses unit scripts, functional cases, and stress runs. The conclusion lists results and limits. The prototype runs menus, run-map flow, combat, and skill loadout in one loop. Pooling and dynamic texture atlases reduce frame drops when many entities are on screen.
+
+Keywords: ECS, vampire-survivor-like, system design, LayaAir, data-driven
+
+
+
+
+
+第1章 序言
+
+1.1研究背景与意义
+移动互联网和 Web 技术普及后，H5 游戏在独立开发和教学里用得越来越多。和安装包相比，H5 可以链接即玩、跨端发布，逻辑和资源也走 Web 栈，改版本和分发更省事。浏览器里 JavaScript 往往只有一条主线程，GC 和绘制共用每帧时间。战斗类若在单帧里堆太多位移、碰撞和界面刷新，帧率会掉，玩家能直接感觉到。
+《Vampire Survivors》（吸血鬼幸存者）代表了一类 Survivor-like 玩法：自动攻击、怪潮压力、局内构筑，也常叠 Roguelite 的元进度和随机路线。这类游戏对程序结构有硬要求——数值宜外置、便于改表；同屏怪物和弹幕数量大；菜单、选关、跑图、战斗要串成完整元流程。若仍用深继承的面向对象写法，实体一多，模块容易缠在一起，维护变难，帧率也会吃紧[1]。
+实体组件系统（Entity-Component-System，ECS）把实体、组件数据和系统逻辑分开，用组合代替继承，边界更清楚，也便于按组件类型批量更新。LayaAir 等国产 H5 引擎已覆盖 2D、TypeScript 和多端发布，适合做“引擎 + 玩法架构 + 性能”一体的毕设平台。
+本文以浏览器端 2D 俯视角 Roguelite 原型 Survivor And Fight为对象，技术栈为 LayaAir 3.x 与 TypeScript。工作包括需求分析、总体设计、实现和测试，重点验证轻量 ECS、配表技能、对象池和 Web Worker 在 H5 生存战斗里能否落地。
+1.2国内外研究现状
+Gregory 在专著里按工业案例划分渲染、资源、场景图、动画和脚本等子系统，是读商业引擎结构的常用入口[2]。Munro 等拆解 Quake 系列，便于区分引擎层与游戏层[3]。Agrahari 等分析 Unreal 的模块组织，反映大型引擎常见的功能切分[4]。Goslin 等介绍 Panda3D，属于脚本叠在 C++ 核心上的早期做法[5]。
+近几年更关注“改架构会影响哪些模块”。Ullmann 等的 SyDRA 能从开源引擎恢复子系统依赖图；对照实验表明，结构化图有助于判断耦合[6]。同一团队后续把耦合模式画出来，认为目录嵌套过深、模块绑太紧会导致架构退化[7]。
+H5 还要单独算主线程时间、异步加载和浏览器沙箱。Unity 手册对脚本生命周期、渲染管线和平台差异有说明，可用来对照浏览器端的限制[8]。市面教程多数只教功能演示，很少给出“可扩展玩法框架 + 可复现实验”的完整范例。
+ECS 用实体 ID、纯数据组件和无状态系统描述对象，按组件类型批量更新，减轻逻辑缠绕，也有利于缓存。Unity DOTS 走数据导向和并行。毕设规模下，用 Map 存组件、单线程 tick 的轻量 ECS 更好上手、也好查错。
+在玩法上，Survivor-like 靠波次和自动攻击；Roguelite 常用 DAG 地图选路；也有作品用模块化技能加深构筑。商业产品体量更大，H5 原型若仍用预制体加 OO 继承，实体一多，维护和性能都会吃紧。Briand 等的对照实验说明，OO 结构会直接影响后期改代码的成本[9]，从侧面支持用 ECS 这类组合式写法。
+性能方面，生存战斗常要处理大量单位同屏运动。Reynolds 的 Boids 用局部规则驱动群体，是经典起点[10]。Thalmann 等总结人群仿真里“个体规则 → 群体现象”的常见做法[11]。Cantrell 等在 Unity 做物理疏散模型，并走完 V&V 流程[12]。Bott 等在 UDK 上用物理工具链做人群[13]。Helbing 的恐慌模型说明，密集场景里分离力很关键[14]。McKenzie 等把人群模型接到游戏仿真里，讨论实时开销控制[15]。Web Worker 不能碰 DOM 和多数引擎 API，碰撞和渲染应留主线程；Worker 只适合搬纯数值计算。
+1.3 主要创新点与特色
+本项目工程侧特点如下：
+(1)  轻量 ECS：EcsWorld 驱动玩法 tick，ViewComponent 只绑 Laya 节点，业务尽量不直接调引擎 API。
+(2)  性能措施：对象池来减少频繁实例化；引入WebWorker进行多线程运算，降低主线程压力；采用图集降低渲染压力。
+(3)  UI 与战斗协同：`UIStackManager管理全屏页面栈；打开 Tab 装配面板时 GameSession.paused暂停战斗逻辑，SkillLoadoutSyncSystem把栏位写回施法状态。
+1.4 伦理与合规说明
+内容为虚构战斗，无真实暴力。不采集个人敏感信息。若对外发布， 需遵守网游与未成年人相关规定，并提示适龄与时长[18]。社会影响在第 8 章另有说明。
+1.5 相关游戏与竞品简要分析
+吸血鬼幸存者：极简操作加自动攻击和怪海，证明品类成立[7]。本项目借其节奏和升级感，但用 ECS 和 JSON 表把逻辑摊开，方便写进论文。
+杀戮尖塔：节点地图加路线风险[7]。本文跑图也用 DAG，战斗却是实时俯视，瓶颈在帧率和碰撞。
+Noita：模块拼法术带来深度[8]。本文 effect 链只吸收“组合”思路，不做像素物理。
+其他 H5 生存作：不少仍用预制体加 OOP。本文用 ECS、配表和 Worker，强调可维护和可测，不拼内容量。
+1.6 术语与缩写预备说明
+英文缩写首次出现给中文释义，见附录 A。类名与 API 保留英文，便于对照源码。
+1.7 本章小结
+本章交代背景、相关研究和本项目的工程特点，供后文需求与设计引用。
+
+
+第2章 相关技术与理论基础
+
+本章从引擎与语言、玩法与逻辑架构、界面架构三条线说明 Survivor And Fight的技术选型及依据，为第 3 章需求与第 4 章设计提供共同语境。各节在文献与业界实践基础上给出毕业设计规模下的取舍，并与后文 SimpleEcsDemo、UIStackManager等模块对应，避免孤立罗列概念。
+2.1引擎语言选择
+浏览器 2D 游戏通常二选一：Phaser、PixiJS 这类渲染库，或 Cocos、Laya 这类带 IDE 的引擎。库轻， 但场景、预制体、 UI 和打包往往要自己拼；引擎把帧循环和输入包好了，更适合课设周期内做出能点的 Demo[2]。
+本项目采用 LayaAir 3.x。实习期间参与过商业 H5 项目，客户端用 Laya，玩法逻辑用 ECS 拆分，与本文原型路线一致，也降低了从 Demo 到可维护工程的风险。Laya 3.x 原生 TypeScript，IDE 内可直接做 2D 预制体、Area2D 与 UI2（GBox、GButton 等），元菜单、跑图和战斗 HUD 不必另拼工具链。Gregory 指出，商业引擎把渲染、资源、场景更新与脚本生命周期统一纳入运行时管理；在 H5 场景下，LayaAir 承担的是同类平台角色，而非仅作渲染库。
+同题材若用 Unity、Unreal 做为游戏引擎，帧预算多花在原生渲染与物理上；浏览器端则受单线程和 GC 牵制，同屏实体一多，性能弱点更明显。本文因此把 Laya 节点限于表现绑定，核心 tick 放在自研 ECS，与实习项目里的分层做法一致。Ullmann 等对引擎子系统耦合的研究表明，无论引擎种类，划分“引擎层—游戏逻辑层”都有利于维护[7]。因此 Laya 节点仅作表现层，核心玩法放在自研轻量 ECS 中更新，而非全部写入 Laya.Script 回调。
+表2-1 主流 H5/跨平台方案与本项目选型对比
+客户端脚本定为 TypeScript。它在 JavaScript 运行时之上做静态类型检查，并用模块把代码切块；实体、组件、系统继续增加时，类型约束能稳住对外接口。Briand 等就面向对象设计可维护性做过对照实验：模块边界划清、命名风格统一，后续阅读与修改会省一些工夫[4]。战斗可调常量、UI 阈值、路径正则等很少改、却必须写进代码的量，收进 `src/defines/`，由 `index.ts` 统一 re-export，各业务文件不在开头堆魔法数。会频繁迭代的策划数值放进外置 JSON 配表（见第 2.2 节）。前者叫工程常量，后者叫策划参数，两类分开管。
+主循环由 Laya.timer.frameLoop 驱动：每帧先 EcsWorld.update(deltaTime)，再由引擎渲染并分发 UI 事件，符合 Gregory 所述逻辑 tick  与绘制分离的常见做法。入口 Main.ts 挂在 Area2D 子节点而非 3D 根节点，避免纯 2D Demo 进入 3D 渲染管线。
+使用 Laya API 须统一 Laya. 前缀（如 Laya.Sprite、Laya.Handler.create）。角色与子弹经 Laya.Prefab.instantiate 生成。可加载资源（材质、贴图、预制体）须放在 assets/，不可放在 src/，否则预览路径解析失败。2D 位移须用 transform.position = new Laya.Vector3() 或 translate，不可对 position getter 返回的副本调用 setValue，否则逻辑坐标已变而画面不动——该问题在相机跟随与怪物追逐调试中多次出现，本文记录以供规避。上述主循环调用关系如图2-1所示。
+
+图2-1 主循环流程图
+2.2项目玩法架构选择
+一局里玩家主要在躲、自动打、捡经验、升技能， 怪会越刷越密。射击技巧让位给走位和构筑。程序上要扛住三件事： 移动时碰撞和结算不能飘；几分钟内多次升级，奖励得立刻写进属性或栏位；调数值尽量改表，别动战斗内核。
+SimpleEcsDemo 默认创建玩家并由 PlayerAutoCastSystem 自动施法，ControlSystem处理走位，以降低操作门槛、突出构筑。经验由 ExperienceSystem 处理；击杀奖励与等级加成通过 defines 中 MONSTER_EXP_REWARD_BASE、MONSTER_EXP_REWARD_LEVEL_BONUS等常量调节，属于可配置节奏而非硬编码。
+实体组件系统（ECS）将对象拆为实体标识（Entity）、纯数据组件（Component）与无状态系统（System）。新增怪物行为时往往只需增 System 或扩展组件字段，无需维护大继承树；按类型批量处理也更方便。
+Unity DOTS 采用 ECS + Job System + Burst，面向数万实体并行[7]。毕业设计周期与团队规模有限，完整 DOTS 等价物学习与 Laya 节点绑定成本过高。本项目采用教学向轻量 ECS：EntityId 为数值；ComponentStore 按组件类型用 Map 存储； EcsWorld.update 单线程顺序调用已注册系统，按 input/logic/physics/render 分组排序。第 1 期目标是结构清晰、支撑数百同屏实体，不追求极致数据导向布局。
+表2-2 Unity DOTS 与项目轻量 ECS 对比
+
+玩法层按 ECS 拆成组件与系统两块。组件一侧：PlayerTag、MonsterTag 标记实体类型；Position、Velocity 管坐标与速度；Attribute 存基础数值，modifier 带来源字段，结算时可追溯；另有 Skill、SkillLoadoutState 管技能与栏位。系统一侧：MovementSystem 推进位移，AttributeSystem 重算有效属性，SkillSystem、BulletSystem 处理施法与子弹，MonsterChaseSystem 负责怪物追击。以上名单为文中举例，并非封闭列表。
+FilterRegistry 事先注册 Players、Monsters 等筛选名。各 System 按名取实体，不必各自拼组件交集条件。
+玩家实体与怪物实体挂同一套位移、属性、技能组件，差别只在 PlayerTag 或 MonsterTag。新行为靠增删组件或系统扩展，不拉 MonsterBase 一类继承链，符合 ECS 里组合优于继承的惯例。
+
+图2-2 ECS绑定关系图
+Roguelite 与动作游戏普遍数据驱动：冷却、伤害、子弹参数、效果链外置为表，运行时加载[7]。常见做法包括：（1）运行时加载 JSON 并反射填充数据类；（2）构建期生成 TypeScript 常量；（3）注册表声明表结构、运行时按路径加载。本项目用第（3）种：
+各张表的表名与 JSON 路径写在 tables.registry.json。启动阶段调用 ConfigBootstrap.ensureGameConfigLoaded() 拉取数据；initData 再把每一行挂进 Data.Character、Data.Skill 等命名空间，后续逻辑按命名空间读表即可。
+一条技能在 Skill 表占一行，具体效果拆到多行 SkillEffect。单行可配置子弹、穿透/分裂/连锁类修饰，或直接伤害。EffectExecutor 按表内顺序自上而下解释；若某颗子弹要带修饰，对应修饰行必须写在它的 bullet 行之前。伤害多写成 "atk*1.5+10" 这类表达式字符串，由 FormulaParser 在白名单运算符内求值，工程里不用 eval。索敌与指向交给 Targeting，支持自动选目标和简易手动指向。
+JSON 方便版本管理和 diff，但错配往往集成时才暴露。启动用 isGameConfigReady拦一道，公式和修饰器另有 *.verify.ts 脚本。
+元游戏参考 Slay the Spire，用 DAG 串起一局流程[7]。一局分三个 Act；每个 Act 是一张多层有向无环图，节点类型包括休息、普通战、Boss、宝藏等。常见生成步骤有：按层摆节点、按权重抽类型、限制连边、再做过可达性检查。本项目由 RunMapGenerator 生成固定行数网格——Boss 固定在最后一行，中间行随机分叉；validateActReachBoss 用来判断 Boss 是否可达。随机多次仍失败时，退回预设保底图，避免玩家卡在到不了 Boss 的图上。
+SeededRng 固定种子后，同一种子会生成同一张地图，答辩演示和回归测试都能复现。玩家确认节点后，MetaFlowController 调用 onEnterCombat，把节点参数（例如 Boss 关延长生存时间）传给战斗场景。元游戏流程与局内 ECS 分开维护，两边只通过约定接口交换数据。
+Survivor-like 后期同屏怪物与弹幕增多，H5 热点包括：每帧大量碰撞、预制体反复实例化触发 GC、主线程追逐与分离计算。常见对策有对象池、纹理合批、逻辑暂停、纯数值计算迁至 Web Worker[15]。
+BulletPool、MonsterPool 按预制体路径分桶，复用 Laya 节点，减少反复 instantiate/destroy。BulletHitTest 用距离平方比较远近，不必每帧开方。技能面板打开时，GameSession.paused 为真，战斗类 System 在 update 开头直接返回。场上实体数超过阈值后，CombatDataPrepareSystem 打包坐标等快照，经 CombatDataBridge 发给 Worker；追逐、分离、摆动在共用的 combatWorkerLogic.ts 里计算，主线程只把速度写回组件。子弹碰撞仍依赖 Laya 节点和阵营标记，这部分留在主线程处理。Cantrell 等在 Unity 做物理人群疏散时同样强调重计算与交互渲染分离[12]；Helbing 等关于恐慌人群的研究提示密集场景须关注分离力与稳定性，与 MonsterChaseSystem 中分离项设计一致。
+以上几项选型在「方便扩展」和「方便测试」之间折中：ECS 加 JSON 配表负责内容和数值迭代；对象池与 Worker 顶住同屏实体规模；DAG 跑图管住元游戏节奏。三者各管一块，没有互相替代。
+2.3UI架构选择
+游戏 UI 常见模式有 MVC 、MVP 、MVVM 等[8]。Heijstek 等比较架构描述的图文形式，指出结构化图示有助于理解系统边界；本项目采用 MVC 变体：
+Model：hp、装配状态等来自 ECS，跑图另有 RunMapPanelModel、RunMapState；
+View：预制体和 UI2 节点只管摆位和显示；
+Controller：UiControllerBase 子类管生命周期和路由，不碰战斗场景里的实体节点。
+开始、选关、跑图都是全屏页。若多个面板一起 visible，容易挡操作、事件乱窜。UIStackManager 用栈管路由：push 压入并显示，pop 回到上一层，同一时刻只有一个全屏页拿焦点。
+局内界面包括主 HUD（血条、经验）、升级奖励、死亡重启，以及 Tab 打开的技能装配面板。SkillSelectPanelController 监听 Tab：面板显示时 GameSession.paused 为真，战斗 System 在 update 入口 return，怪物和子弹逻辑停住；指针事件仍由 UI 接收。战斗 tick 与界面输入分开，改装配时不会继续挨打。
+技能栏位用长按拖拽调整。SkillDragService 在按下超过阈值后，在顶层挂一张代理图标，避免被 GBox 裁剪后点不中。SkillSlotHitTest 在同一套坐标系里判断落点是装备栏还是效果槽。关面板时，SkillLoadoutSyncSystem 一次性把 SkillLoadoutState 写回 Skill 和 PlayerAutoCastSystem，防止栏位只改了一半却还在放旧技能。图标路径来自配表 iconPath，由 SkillIconBinder 加载；资源文件名与技能 id 按目录约定对齐。
+跑图页 RunMapPanelView 根据 DAG 状态画节点和连线；MapNodeIconUtil、LineLayoutUtil 管图标与折线布局。玩家只能沿当前节点相邻、且已解锁的边前进；能不能点由 Model 校验，View 里不写通行规则。图界面 RunMapPanelView 按 DAG 状态渲染节点与连线，MapNodeIconUtil、 LineLayoutUtil 负责布局；玩家只能选与当前节点相邻且已解锁的边，规则由模型层校验，不在 View 硬编码。
+2.4 本章小结
+本章从引擎语言、玩法架构、UI 架构三方面说明 LayaAir + TypeScript、轻量ECS + 配表 + Roguelite 跑图、MVC + UI 栈的技术路线及取舍，将在第 4 章落实为 ECS/MVC/Worker 设计，在第 5–7 章经实现与测试验证[17]。
+表2-3 UI 架构选型要点汇总
+
+第3章系统需求分析
+
+本章在第 2 章技术选型基础上，给出 Survivor And Fight 的可行性论证、功能与非功能需求及验收口径，为第 4 章总体设计与第 7 章测试提供依据。需求描述以可验证为原则：每条 Must 级需求均可在代码或测试用例中找到对应实现或断言。
+3.1可行性分析
+代从现有工程来看，本课题已经搭起LayaAir 3.x加TypeScript的H5客户端，局内玩法走轻量ECS，数值和技能走JSON配表，菜单、DAG跑图、Tab技能装配、对象池和Web Worker也都有对应模块，不是停在纸面方案上。Laya提供2D预制体加载和frameLoop帧回调，答辩用的IDE内置Chromium同时支持WebGL2和Worker，和文献里讨论的引擎子系统边界、在商业引擎上叠领域逻辑的做法也能对上[6]。
+
+配表是否就绪由ConfigBootstrap里的isGameConfigReady()判断，它要求configLoaded为真且Data.Skill.GetAll()的长度大于0；ensureGameConfigLoaded()若发现已经就绪就直接返回true，否则把loadAllTables()包进单例loadPromise，保证全局只加载一遍。这条链路与图4-2最左侧「应用启动」一致，双通道读表细节见图5-4。loadAllTables()遍历configBases()读tables.registry.json再initData各表，skillCount大于0时置configLoaded=true。ECS、FormulaParser、属性修饰器配有verify脚本，改底层可不进场景回归。风险在千怪帧率、Worker与主线程是否共用combatWorkerLogic、UI2拖拽命中，第7章五波实验和T-F-05/06已部分覆盖，课设周期内交付原型和论文可行。
+
+本课题按教学原型交付，成本主要在开发与测试，不涉及服务器运维和支付接口。题材为奇幻战斗，正文与演示须克制暴力表现，并提示控制游戏时长；跑图里的休息节点用来调节节奏。程序不采集用户敏感信息，定位是单机演示，不做账号与联网运营。
+3.2用户角色与运行环境
+系统仅设玩家单一角色：浏览主菜单、选关或跑图、局内移动与构筑、死亡后重启。无管理员后台；未来若扩展存档，仍保持“玩家”为唯一角色。
+
+表3-1 运行环境建议配置
+本课题交付的是浏览器端单机H5原型，运行环境指玩家或答辩演示时实际打开游戏所用的软硬件条件；开发环境指作者编写、导出配表与跑单元脚本时的工具链。二者有交集但不等同：表3-1同时列出两类要求，本节对表中条目作说明，并补充表中未单独成列、却影响能否正常进战斗的约束。
+（1）硬件与显示。客户端逻辑与绘制均在用户本机完成，不依赖专用服务器。处理器、内存与显卡需满足表3-1下限，以保证WebGL2上下文能创建、千怪量级实验时主线程仍有时间预算。演示与第7章性能数据统一在1920×1080分辨率下采集，答辩以LayaAir IDE内置Chromium预览为准；若改用Chrome/Edge独立窗口，须仍为支持WebGL2的Chromium内核，否则Worker、合批与帧率数据不可与论文表格直接对比。
+（2）浏览器运行时能力。除表3-1所列浏览器外，运行时尚须：JavaScript已启用；支持WebGL2（2D预制体与战斗画面）；支持Web Worker（用于追逐重算卸载，失败时须能回退到主线程 computeSync，见第4.5节）；能通过 fetch 或引擎 Laya.loader 读取本地或同源JSON配表（tables.registry.json 及各表文件），且响应为合法JSON而非404页面。游戏为单机本地运行，不要求公网、账号服务或数据库；局内状态保存在内存与ECS组件中，刷新页面即重新开始。
+（3）开发与构建环境（表3-1「开发环境」行）。源码在LayaAir IDE 3.x中组织与预览，语言为TypeScript，与引擎脚本生命周期对接。
+（4）资源与目录约束。发布或预览前须将配表置于运行时可访问路径（工程内通过 ConfigBootstrap 的 configBases() 解析；开发阶段常把 docs/config 同步到预览目录下的 config/）。未执行配表导出时 isGameConfigReady() 可能长期为假，Main无法进入战斗，故运行环境在软件层面包含「配表文件随包可达」这一前提。预制体、UI预制与图集资源由Laya资源管线加载，不单独要求CDN，但磁盘需能容纳工程资源体积。
+（5）与非功能需求的关系。**运行环境达标是达到第3.5节指标的前提：常规波次均值帧率、千怪P95、Worker与主线程轨迹一致等，均在表3-1所述浏览器与分辨率下测量（见表3-3、第7章）。不包含的内容：多人在线、移动端适配、无WebGL的纯Canvas降级、生产环境运维监控等，均超出本课设范围。
+3.3功能性需求
+表3-2汇总主要功能模块；详细条目见第 3.4 节。
+表3-2 主要功能性需求一览
+3.3.1用例：局内战斗
+参与者：玩家。
+前置条件：isGameConfigReady()==true（配表已加载且Data.Skill非空）；SimpleEcsDemo.init()已完成（玩家实体、会话实体GameSession及主要System已注册）；战斗Area2D容器可见。
+主成功场景：
+（1）玩家通过ControlInputAdapter输入移动，ControlSystem写入Velocity，MovementSystem更新Position，相机由Main跟随，对应图4-2「战斗帧循环」中每帧tick。
+（2）PlayerAutoCastSystem按三装备栏检查Skill.cooldownRemain，通过后buildSkillCastPlan按配表顺序执行effect链，EffectExecutor生成子弹或直伤，如图5-1所示。
+（3）BulletSystem对子弹做圆碰撞，按配表应用穿透、分裂与连锁；怪物Attribute.hp减少，击杀触发ExperienceSystem加经验，达阈值时UpgradeRewardSystem弹出奖励并写回属性或技能。
+（4）玩家按Tab，SkillSelectPanelController将GameSession.paused置真，战斗System在update入口return，UI仍可响应；玩家长按拖拽改SkillLoadoutState，关面板后SkillLoadoutSyncSystem写回Skill与PlayerAutoCastSystem，paused恢复false，新effect链在下一冷却周期生效，如图5-2所示。
+（5）生存计时未结束前可重复（2）（3）；界面血条由BloodBarSyncSystem与ECS同步，见图7-3、图7-4。
+
+扩展场景：玩家hp≤0时，PlayerDeathSystem置paused与combatFailed，RestartPanelSystem在hp≤0且暂停时弹出重启面板（非Tab装配误触），见图7-6；玩家确认后走图4-2「死亡与重启」清场流程。
+
+验收关联：手工用例T-F-01、T-F-04（直伤与公式）、T-F-05/06（Tab装配）；第5.5.1节场景一（首次进战斗）、5.5.2节场景二（Tab换装配）。
+3.3.2用例：元游戏进入战斗
+参与者：玩家。
+前置条件：ensureGameConfigLoaded()已成功；元菜单路由已注册（MetaMenuBootstrap）；玩家在开始界面选择「跑图」或「选关」之一。
+主成功场景：
+（1）选关路径：玩家在SelectLevelPanel确认关卡，MetaFlowController组装onEnterCombat载荷（可含关卡参数），触发回调。
+（2）跑图路径：玩家在RunMapPanel沿三幕DAG已解锁边前进，节点类型由RunMapGenerator与RunMapState决定；确认战斗类或Boss类节点时，Model判定合法后同样触发onEnterCombat，DAG结构与保底生成如图5-3所示，界面见图7-2。
+（3）Main显示战斗Area2D、await SimpleEcsDemo.init()，注册局内System并生成玩家；CombatSurvivalTimer开始生存计时，对应图4-2「进入战斗」段与第5.5.1节场景一。
+（4）若节点为Boss或配置更长胜利时长，payload可把胜利所需时间传入战斗逻辑，计时达标后走胜利奖励流程（与局内升级奖励区分）。
+扩展场景：RunMapGenerator.generate多次失败且validateActReachBoss不通过时，系统应走generateFallback线性保底图，避免局外进度卡死（见第4.5节、图4-7跑图分支）。
+
+验收关联：T-F-09（菜单进战斗）；第5.5.1节；跑图截图图7-2、主菜单图7-1。
+
+图3-1游戏流程图
+3.4功能需求详细说明
+ECS核心在需求上要求实体从创建到销毁整条链路是闭合的，工程里EcsWorld的createEntity()会转调EntityManager发号，destroyEntity(id)则先执行components.removeAllComponents(id)，再entities.destroyEntity(id)，这样组件不会挂在已经销毁的实体上。同类型组件不能在同一实体重复挂载，否则Buff和升级奖励的来源会对不上。System通过registerSystem(system, group, priority)登记，group默认取system.group或logic，priority默认0，登记后会sortSystems()，按input、logic、physics、render的组序排，同组里再按priority从高到低调update(deltaTime)，主循环因此只要调EcsWorld这一处入口。查询上既要getAllOfType、getEntitiesWith，也要FilterRegistry在registerNamedFilters之后提供的Players、Monsters等命名集合。上述约定在ecsCorePhase1.verify.ts里有脚本覆盖，对应表3-5“实体销毁清理组件”的验收项。
+战斗与技能需求围绕玩家实体和配表驱动展开，玩家侧必须有hp、maxHp，Attribute上的modifier要带来源，升级和Buff结算时能追到是哪条effect写进去的。技能冷却和effect列表由Skill、SkillEffect表配置，PlayerAutoCastSystem给至少三个装备栏各维护一套Skill.cooldownRemain和pendingCasts。效果链在实现上与第5.1.3节一致，如图5-1所示：buildSkillCastPlan维护pendingSplit、pendingChain、pendingPierce，modifier行只改pending，bullet行才写入BulletSpawnSpec并spawnBulletWithOptions，直伤行经公式树求值（图5-5），表里modifier行须排在对应bullet行前面。子弹带阵营且连锁半径有上限[9]。
+怪物与元游戏、UI在流程上要能串起来，MonsterWaveSpawnSystem在玩家周围环带刷怪并控制间距，MonsterChaseSystem做追逐和分离，MonsterContactDamageSystem处理贴脸伤害，MonsterRecycleSystem配合MonsterPool把离屏单位收回去，击杀后ExperienceSystem按等级加成发经验。跑图每局生成三幕DAG，结构示意如图5-3所示，玩家只能沿当前节点已解锁的邻接边前进，RunMapGenerator多次随机仍过不了validateActReachBoss时会走generateFallback。全屏页走UIStackManager的push、pop，局内Tab装配时序如图5-2所示，SkillSelectPanelController把GameSession.paused置真，战斗System在update入口return，SkillDragService和SkillSlotHitTest区分装备栏与效果槽，BloodBarSyncSystem把ECS数值同步到ProgressBar[17]。
+3.5非功能性需求
+性能： 目标稳定 60 FPS；同屏规模由 MONSTER_COUNT 与波次控制；对象池与Worker 按第 4.2.3 节启用。
+可维护性：模块边界与第 4 章一致；静态常量集中于 defines。
+可靠性：Worker/配表/跑图失败时的回退路径见第 4.4 节。
+兼容性：优先 Chromium；Worker 不可用时 computeSync 主线程回退[5]。
+表3-3 非功能需求量化指标（验收参考）
+3.6数据、接口与约束
+数据层面，运行时状态放在ECS组件里，角色和技能参数放在Character、Skill、SkillEffect、Bullet等配表行里，跑图进度在RunMapState的图结构上，局内暂停和装配在GameSession、SkillLoadoutState上。接口层面，ensureGameConfigLoaded()负责读表并返回是否就绪，MetaFlowController.onEnterCombat(payload)把跑图或选关节点载荷带进战斗，ControlInputSource把输入交给ControlSystem，UIStackManager.push/pop管全屏切换，CombatWorkerComputeRequest/Response字段要保持版本兼容以免Worker解包失败。约束包括浏览器开启JavaScript和WebGL、开发阶段执行sync-config-to-bin.ps1、单机本地运行、2D俯视、同屏按数百实体级设计。
+3.7需求优先级
+表3-4 需求优先级（MoSCoW）
+3.8需求与测试映射
+表3-5列出需求与验证手段的对应关系，供第 7 章追溯[18]。
+表3-5 需求与测试映射（节选）
+3.9本章小结
+本章写完可行性和需求清单，并挂上 MoSCoW 与测试映射。下一章展开分层设计和 Worker、可靠性细节。
+第4章系统总体设计
+
+4.1设计原则
+系统总体设计按下列原则组织，后文各模块实现与之对应：
+(1)  数据与逻辑分离：组件只存字段，逻辑写在 System；常改的战斗参数放进 JSON 配表，很少改的工程常量收在 src/defines/[7]。
+(2)  单一职责：BulletSystem管子弹移动和碰撞；EffectExecutor管配表效果解释；MetaFlowController只调度元游戏流程，不直接改ECS组件。
+(3)  可验证：公式解析、ECS 核心、属性修饰器等模块配有 *.verify.ts 脚本；改代码后跑一遍即可做快速回归[18]。
+(4)  渐进复杂度：先实现轻量 ECS 和单线程 tick；对象池和 Worker 等怪物数量上来、性能吃紧后再接入。
+(5)  低耦合：UI 通过 Controller、SyncSystem 读写 ECS，不绕过 System 直接改战斗实体。
+(6)  可降级：表没加载、Worker起不来、地图生成失败时，都有回退（第4.4 节、第4.5节）。
+4.2系统具体设计
+逻系统按表现层、UI控制层、游戏逻辑层、领域服务层、基础设施层五层组织，依赖方向自左向右、上层只依赖下层，整体关系如图4-1所示。SimpleEcsDemo落在游戏逻辑层，集中注册ECS System并注入BulletPool、CombatDataBridge；UIStackManager与SkillSelectPanelController在UI控制层，经SyncSystem读写ECS而不直接改实体节点；ConfigBootstrap、RunMapGenerator在领域服务层；EcsWorld、defines、对象池与Worker协议在基础设施层。Main.ts在frameLoop里调EcsWorld.update后由引擎绘制，菜单、跑图与战斗靠容器显隐和MetaFlowController切换，不必维护两套入口。
+
+
+图4-1 系统分层架构
+如图4-1所示，表现层只负责Laya节点与HUD显示，不包含技能冷却等业务规则；游戏逻辑层bulk更新实体组件，是第6章对象池（图5-2）与Worker（图5-4）优化的作用域；领域服务层把配表、跑图生成与战斗入口隔开，便于第5.4.1节对照图5-4读启动时序。
+4.2.1基于ECS的Gameplay实现
+局内玩法走ECS 。EntityId是数字；ComponentStore用Map按类型存组件； EcsWorld按input/logic/render分组调System。Position、Velocity、Attribute、Skill等只放数据；MovementSystem、BulletSystem等遍历实体改字段，本身不记状态。
+标签与筛选：玩家与怪物共用 Position、Attribute、Skill 等组件，只靠 PlayerTag 或 MonsterTag 区分身份。FilterRegistry 预先注册 Players、Monsters 等筛选名，各 System 按名取实体，不必各自写组件交集查询。扩展新怪物行为时，优先增组件字段或增 System，不维护 MonsterBase 继承树，符合 ECS 中组合优于继承的做法。
+战斗数据流：每帧CombatDataPrepareSystem先采坐标等快照；实体够多时，经CombatDataBridge把快照送Worker跑processCombatFrame；主线程MonsterChaseSystem 再把追逐、分离结果写回速度；BulletSystem仍在主线程做碰撞，因为要读 Laya 节点和阵营。具体流程可参考图4-2。
+
+图4-2 GamePlay实现图
+
+死亡、打开技能Tab 或战斗胜利时，将GameSession.paused置真，逻辑类System 在update入口直接返回，本帧不再推进战斗。
+配表驱动：Skill一行管冷却，SkillEffect多行管效果链；EffectExecutor依次解释 bullet、modifier_*、direct_damage。要给后面的子弹加修饰，修饰行须写在该bullet 之前，顺序即组合语义。伤害表达式交给FormulaParser在白名单内计算，业务代码禁止eval。
+4.2.2基于MVC的UI结构实现
+元游戏与局内 UI 采用 MVC 变体[17]：
+Model：hp、装配来自 ECS；跑图用 RunMapPanelModel、RunMapState；
+View：预制体、UI2 节点负责布局；
+Controller：UiControllerBase 子类管生命周期和路由，不得直接改战斗实体。
+全屏页走 UIStackManager：push 显示、pop 返回，始终只有一个全屏页在前台。 MetaMenuBootstrap 注册开始、选关、跑图路由。
+局内 Tab 由 SkillSelectPanelController 监听：打开时 GameSession.paused=true，战斗 System 不 tick，UI 仍能吃点击。拖拽走 SkillDragService，落点用 SkillSlotHitTest；关面板时 SkillLoadoutSyncSystem 一次性写回 Skill 和 PlayerAutoCastSystem。
+跑图连线由 RunMapPanelView 画，能不能走由 Model 判，View 不写规则。
+
+图4-3 UI结构图
+
+核心约束：界面不拥有玩法真相——玩法状态以 ECS 与配表为准，UI 仅经 Con- troller/SyncSystem 读写。
+4.2.3基于Web Worker和对象池的优化实现
+子弹与怪物分别由 BulletPool、MonsterPool 管理。池按预制体路径分桶，节点用完后回池而不是销毁，从而减少 instantiate/destroy 带来的 GC 抖动。MonsterRecycleSystem 在怪物与玩家距离超过设定阈值时回收实体，控制场上活跃怪物数量。象池：BulletPool、MonsterPool 按预制体路径分桶复用 Laya 节点，抑制instantiate/destroy 触发的 GC 尖峰。MonsterRecycleSystem 在怪物远离玩家超过阈值后回收实体，维持活跃集合规模。
+场上实体数达到 COMBAT_WORKER_MIN_ENTITY_COUNT 后，CombatDataPrepareSystem 把一帧快照交给 CombatDataBridge，再 postMessage 到 Worker。追逐、分离、摆动写在 combatWorkerLogic.ts 里，主线程与 Worker 共用同一份逻辑文件，避免两套算法各写一遍。每帧 CombatDataBridge.prepareFrame 先取 Worker 异步结果；取不到或算失败就走 computeSync，在主线程补算同一帧。子弹碰撞、连锁、分裂仍放在主线程，因为要读 Laya 节点并做当帧命中判定，Worker 里没有这套对象。流程参考图 4-4。
+
+图4-4 性能优化图
+
+技能面板打开、玩家死亡或胜利时，GameSession.paused 置为真，各战斗 System 在 update 开头直接 return，本帧不再跑战斗逻辑，也不为此多开对象。做法上接近 Cantrell 等把重算与画面更新分开处理的做法[5]。
+4.3系统交互与时序
+从启动到重开一局，主路径上的模块会按固定顺序协作，整体关系如图4-5所示。Main.onStart()里先取Area2D当container，再new InputService、ControlInputAdapter、SimpleEcsDemo，注册frameLoop后调loadConfigAndInitDemo()；该函数首行await ensureGameConfigLoaded()，对应图中Main与ConfigBootstrap之间的第一条消息。若META_MENU_ENABLED为真，Main走startMetaMenu()，container.visible=false并由UIStackManager push开始界面，对应图中「元菜单开启」分支；否则直接demo.init()。玩家从跑图或选关确认后，MetaFlowController触发onEnterCombat，Main显示战斗Area2D并init Demo，对应图中「进入战斗」色块。此后每帧frameLoop驱动EcsWorld.update，CombatDataPrepareSystem在实体够多时经CombatDataBridge把快照postMessage给Worker，失败则computeSync，对应图中「战斗帧循环」里的alt分支。按Tab装配技能时SkillSelectPanelController把GameSession.paused置真，对应图中「Tab技能装配」色块，与第5.2.2节图5-2展开同一步骤。玩家死亡后RestartPanel与tryRestartFromSession清场重生，对应图末「死亡与重启」。
+
+图4-5 系统主要交互时序
+
+
+4.4可靠性设计
+配表坏了、Worker 起不来、地图生成失败时， 系统应尽量还能玩或至少能调试，而不是白屏退出。做法如下。
+配表加载与就绪。启动时 ConfigBootstrap.ensureGameConfigLoaded 按 configBases() 列出的路径，对 tables.registry.json 及各张表依次用 fetch 和 Laya.loader 两条路加载。isGameConfigReady() 在 configLoaded 为真且 Data.Skill 已有数据时返回真，作为能否进战斗的总开关。Main.onStart 和 SimpleEcsDemo.spawnPlayer 在刷玩家前都会等或再查一次该状态。
+运行中缺表。SimpleEcsDemo 用 missingConfigLogged（Set）记已报过的键，logMissingConfigOnce 对每个缺失键只打一次日志，避免控制台刷屏。查表失败时回退到 defines 里的 DEFAULT_PLAYER_HP、DEFAULT_PLAYER_PREFAB、DEFAULT_PLAYER_AUTO_SKILL_ID 等默认值。升级奖池表为空时，代码里给一条内联默认奖励，演示流程仍能往下走。
+（3）Worker 主备两条路。initWorker 失败、Worker onerror 或 postMessage 抛错时，把 workerUsable 设为 false。prepareFrame 拿不到异步结果就 computeSync，与 Worker 一样调 processCombatFrame。MonsterChaseSystem 没有 Worker 输出时，在本线程做追逐和分离。BulletSystem 遇到连锁弹等 Worker 未实现的类型，整段逻辑仍在主线程跑。实体数低于 COMBAT_WORKER_MIN_ENTITY_COUNT 时不往 Worker 送数据，省掉序列化和 postMessage 成本。
+（4）跑图保底。RunMapGenerator.generate 随机生成最多试 RUN_MAP_GENERATION_MAX_RETRIES 次；若 validateActReachBoss 仍判 Boss 不可达，就调 generateFallback，为三幕各生成一条「休息→战斗→Boss」的线性链，保证 Boss 能走到，局外进度不会卡死。
+（5）重启防重入。RestartPanelSystem 将 session.restartRequested 置真； SimpleEcsDemo.tryRestartFromSession 在 restarting=true 期间异步清场与重生， update 中避免重复触发，finally 复位标志，防止监听器与实体重复注册。
+（6）预制体加载失败。实例化失败时 createPlaceholderNode() 生成占位碰撞体，便于在无美术资源环境下继续调试逻辑。
+4.5容错与降级策略
+如图4-6所示，流程自故障检测起，经分支选择执行对应降级，再回到可运行态，形成闭环。配表加载失败、Worker不可用、跑图生成失败、预制体缺失等情形各走独立回退支路，避免整局白屏退出。与局内状态相关的路径另作区分：死亡、技能Tab装配与战斗胜利等情形共用GameSession.paused冻结战斗tick，RestartPanelSystem仅在isPlayerDead()为真时弹出重启面板，以免装配暂停被误判为失败局。
+
+表4-1在上述流程之下，将主要故障模式、触发条件、降级表现与恢复手段收成对照表，便于与ConfigBootstrap、CombatDataBridge、RunMapGenerator等实现逐项核对。
+
+图4-6 降级策略示意图
+表4-1 容错与降级策略
+4.6可扩展性设计
+本系统扩展新内容时，优先加组件和System，而不是为每种怪或每种技能写子类。做法符合ECS里组合优于继承的惯例。
+实体侧：新机制先加组件类型（例如以后的 BuffComponent、ShieldComponent），再写单独System读写。带MonsterTag的实体已经进FilterRegistry.Monsters，加组件即可，不用动EcsWorld内核。无需修改EcsWorld内核。
+行为侧：新逻辑对应新System，或在现有System里加分支。例如加光环：实现 AuraSystem，在SimpleEcsDemo构造函数里addSystem即可，MovementSystem可以不动。
+技能侧：新effect在EffectExecutor里加case；修饰器照旧是「先写上下文、后面的 bullet 行再读」。策划在SkillEffect表里调行顺序就能拼效果。新子弹形状只要在Bullet表加一行并指定预制体路径。
+内容侧：新节点类型改RunNodeType和RunMapGenerator的权重表；新全屏页在UIStackManager注册路由和Controller，战斗ECS不用改。
+若用Player extends Character extends Actor，每加一种会分裂的精英怪都要子类并重写update，Laya节点和逻辑会绑死。现方案里精英怪仍是MonsterTag，再加Attribute、MonsterDef.waveWeight等组件；分裂、自动施法由MonsterAutoCastSystem 等系统组合出来。这与Gregory及ECS文献里强调的数据导向、按需增量扩展一致。
+4.7本章小结
+本章先写设计原则和分层，再分三块讲具体设计：ECS玩法、MVC界面、Worker与对象池。后面补了端到端时序、可靠性措施、容错表，以及靠组件组合做扩展的做法。以上内容给第 5 章对照源码时当骨架用。
+第5章 核心模块详细设计与实现
+
+第5章写各核心模块的实现，对照第4章设计，并引用src/下源码。SimpleEcsDemo充当组合根：在这里注册 System、对象池 UI 控制器。
+5.1ECS架构GamePlay实现
+局内玩法的调度入口是EcsWorld，它把EntityManager、ComponentStore和System注册收在一个门面里，主循环里调用一次update(deltaTime)就能跑完本帧逻辑。EntityManager用自增方式发EntityId，销毁后编号进空闲列表供后续复用。ComponentStore按组件类型各维护一张Map，键是EntityId，System用getAllOfType或getEntitiesWith查询时不必扫整张实体表。SimpleEcsDemo构造函数里会先this.filters = new FilterRegistry(this.world)，再registerNamedFilters(this.filters)，并world.createEntity()后给sessionEntity挂上GameSession组件，全局暂停和重启标记都写在这个会话实体上。各System在setupSystems()里registerSystem，组序和priority由EcsWorld.sortSystems()排好。MonsterChaseSystem、BulletSystem通过filters按Players、Monsters等名字取实体，不必在每个System里重复写组件交集。销毁怪物时调world.destroyEntity(id)，内部先removeAllComponents再destroyEntity，与需求章描述一致。
+
+属性、移动和自动施法分给几个System各管一块。AttributeSystem按来源增删modifier，升级奖励和Buff通过它写回Attribute，结算时可用getModifierContributions追到来源。MovementSystem根据Velocity改Position，ControlSystem从ControlInputAdapter读方向写进Control组件，玩家本帧位移先在这里落地。PlayerAutoCastSystem为三个装备栏各维护冷却和pendingCasts，施放前检查对应Skill.cooldownRemain，栏位之间互不抢冷却。MonsterAutoCastSystem按怪物配表触发敌方技能，和玩家共用EffectExecutor、BulletSystem那条链，只是实体带MonsterTag而不是PlayerTag。
+
+玩家侧一次自动施法时，PlayerAutoCastSystem先从SkillLoadoutState读栏位技能id并检查Skill.cooldownRemain，通过后由buildSkillCastPlan按配表行顺序遍历effectIds；modifier行只累加pending变量，bullet行才把pending写入BulletSpawnSpec并调用spawnBulletWithOptions，direct_damage行把paramsFormula交给FormulaParser建树求值（细节见图5-5）。具体分支与先后关系如图5-1所示，表中effect字段与执行器的对应仍见表5-1。
+
+图5-1 技能效果执行链
+如图5-1所示，流程从PlayerAutoCastSystem检查冷却开始，进入对effect行的循环：图中modifier_split、modifier_chain、modifier_pierce三个分支只更新pendingSplit、pendingChain、pendingPierce并回到循环，不直接生成子弹，这与源码里continue不写plan.bullets一致；bullet分支把pending写入splitCount、chainCount、penetration后调用BulletSystem.spawnBulletWithOptions，对应spawn后主线程碰撞链；direct_damage分支则走FormulaParser扣血。策划若把modifier行放在bullet行之后，图中pending无法被消费，局内就会出现“有修饰无弹幕”的配置错误，因此表内行序与图5-1自上而下顺序必须一致。
+表5-1 效果类型与执行器映射
+
+子弹和怪物AI是主线程里最吃CPU的两块。BulletSystem生成子弹时先调BulletPool.get(prefabPath)，从Map里对应数组pop节点，数组空则返回null再由BulletSystem instantiate；回收时BulletPool.put会在node.parent存在时removeChild，再把节点push回桶。飞行中用BulletHitTest的hitRadiusSq做圆碰撞，命中后扣血、递减穿透，并按配表做连锁或分裂。MonsterWaveSpawnSystem在环带刷怪，MonsterChaseSystem每帧算追逐并叠分离力和摆动；若CombatDataBridge本帧有latestResult，就applyWorkerVelocities把vx、vy写回Velocity，否则在主线程用processCombatFrame同一套逻辑。离屏或过远的怪由MonsterRecycleSystem收回MonsterPool，MonsterContactDamageSystem处理贴脸伤害。
+经验和元游戏数据把局内成长和局外路线接在一起，ExperienceSystem在击杀时加经验并判断升级，UpgradeRewardSystem拉起奖励面板（界面见图7-5），RewardPoolService按权重抽条目，RewardApplyService写回Attribute或技能相关组件。RunMapGenerator生成三幕DAG，随机生成与保底回退如图5-3所示，validateActReachBoss过不了就走generateFallback。MetaFlowController在用户确认节点后触发onEnterCombat(payload)，Main显示战斗容器并await SimpleEcsDemo.init()，payload里可带Boss胜利时长等参数，对应5.5.1场景从菜单进战斗的路径。
+5.2MVC架构UI实现
+MetaMenuBootstrap 向 UIStackManager 注册 StartPanel、SelectLevelPanel、RunMapPanel 等路由。用户确认节点后触发 onEnterCombat，Main 隐藏菜单容器、显示战斗 Area2D 并 demo.init()。RunMapPanelView 使用 MapNodeIconUtil、LineLayoutUtil渲染 DAG；仅允许选择已解锁邻接边。
+
+局内HUD和技能装配是玩家最常接触的UI，MainHudSystem、BloodBarSyncSystem把hp、maxHp同步到ProgressBar。Tab打开装配面板时的消息顺序如图5-2所示，运行界面见图7-4。SkillSelectPanelController在registerTabKey()里监听TAB_KEY_CODE，keydown时调togglePanel()；setPanelVisible(true)会把session.paused设为true并回调onTabPauseChange，战斗侧isPaused()使各System在update开头return。长按超过LONG_PRESS_MS后SkillDragService顶层代理拖拽，SkillSlotHitTest区分装备栏与效果槽；关面板时SkillLoadoutSyncSystem写回Skill与PlayerAutoCastSystem，getCombatEffectIds刷新后新effect链在下一冷却周期生效。
+
+图5-2 Tab 技能装配交互时序
+
+如图5-2所示，玩家按Tab后UI先把GameSession.paused置真，图中「战斗System早退」对应第5.4.3节帧循环描述；拖拽阶段只改SkillLoadoutState，图中Drag自环表示SkillDragService在面板打开期间反复刷新栏位；关闭面板时Sync写回Skill组件并刷新PlayerAutoCastSystem，图中Cast参与下一周期施放，与图5-1顶端cooldown检查相连。图4-2中「Tab技能装配」色块是本图的缩略，两图可并置说明UI与战斗tick的切断关系。
+
+输入和战败重启在工程里分成三条线，和图4-2末尾「死亡与重启」色块、图5-2里「paused但UI仍响应」的设定是对得上的。
+
+移动输入这条线，Main.onStart会new InputService并包一层ControlInputAdapter传给SimpleEcsDemo，ControlInputAdapter.getMoveAxis()读WASD是否按下，算出归一化前的轴向量，ControlSystem在input组里把轴乘PLAYER_MOVE_SPEED写进玩家Velocity；ControlSystem构造时注入了()=>this.isPaused()，一旦GameSession.paused为真就直接return，所以Tab打开技能面板时玩家不会继续位移，但SkillSelectPanelController仍挂在document或Laya.stage上收Tab和拖拽，不会和ControlSystem抢同一条输入通道。
+
+战败这条线由PlayerDeathSystem和RestartPanelSystem配合完成。PlayerDeathSystem在logic组priority为-10，每帧看Players筛选器里玩家Attribute.base.hp，若hp≤0就把hp钳到0，并把session.paused与session.combatFailed置真，对应图4-2里战斗tick停住、Main.handleCombatFailed停生存计时。RestartPanelSystem跑在render组，它用isPlayerDead()区分「Tab装配暂停」和「真死亡」：只有paused且hp≤0才uiStack.push(RESTART_PANEL_ROUTE_ID)，避免装配面板误弹重启，界面见图7-6；玩家点重启后回调里写session.restartRequested=true，SimpleEcsDemo.update里tryDefeatExitFromSession在restarting为true时调用Main.onDefeatExitRequested，finally一定把restarting复位，避免重复清场或监听器叠两层。
+
+依赖关系仍保持单向：UI经Controller、SyncSystem读写ECS，System只读配表和组件，不在System里直接操作UI节点，和第4章MVC变体一致[17]。
+5.3Web Worker和对象池的优化实现
+第五章把第4.2.3节的池化和Worker设计落到具体类上，建议读者把本节与图5-3、图5-4对照看（两图读图段见本节末），再回头看SimpleEcsDemo构造函数里bulletPool、combatBridge的注入关系。
+
+图5-3 对象池示意图
+
+对象池侧，SimpleEcsDemo在构造时new BulletPool()和MonsterPool()，new BulletSystem时传入()=>isObjectPoolEnabled()。BulletSystem要生成子弹时先bulletPool.get(prefabPath)，get内部对Map里对应数组做pop，拿不到节点才走Laya预制体instantiate；子弹寿命结束或穿透耗尽后put回池，put会先把node从parent removeChild再push进桶，和图5-3里「spawn→飞行→回收」闭环一致。MonsterRecycleSystem判定怪物离玩家过远后同样put进MonsterPool，而不是destroy，这样千怪波高峰过后数组里会攒一批可复用节点，对应第6章表7-6里开池后P95下降、均值FPS几乎不变的现象。
+
+图5-4 WebWorker流程图
+Worker侧，CombatDataPrepareSystem在isPaused()为假时从Filters取怪物坐标，拼成CombatEntitySnapshot，再调combatBridge.prepareFrame。prepareFrame的逻辑在图5-4里画得很清楚：本帧若已有latestResult就消费Worker上一帧算好的速度，否则在主线程computeSync调processCombatFrame；帧末dispatchCompute在shouldUseWorker为真且没有pending请求时postMessage给Worker。shouldUseWorker会看entityCount+bulletCount是否达到COMBAT_WORKER_MIN_ENTITY_COUNT，消融实验里MetaRunSession.testUseCombatWorker为false时整条Worker支路被关掉，方便和第4、5波「无Worker」同窗对比。MonsterChaseSystem只负责把算出的vx、vy写回Velocity；BulletSystem的hitRadiusSq碰撞、连锁、分裂仍留在主线程，因为必须读Laya节点和阵营，图5-3最下方「始终主线程」支路与5.1.4节文字一致。主线程与Worker共用combatWorkerLogic.ts，避免两套追逐公式。
+5.4游戏主循环设计
+Main.onStart 创建 InputService、ControlInputAdapter、SimpleEcsDemo，注册 frameLoop，并 await ensureGameConfigLoaded()。配表优先于实体生成， 避免Data.Character.GetByID 为空。若 META_MENU_ENABLED 为真则 startMetaMenu，否则直接 demo.init()。
+
+SimpleEcsDemo在工程里当组合根，构造函数里this.bulletPool=new BulletPool()，this.combatBridge=new CombatDataBridge()，new BulletSystem时把bulletPool和()=>isPaused()、()=>isObjectPoolEnabled()传进去，new CombatDataPrepareSystem并把combatPrepare设回BulletSystem，再注册ExperienceSystem、SkillSystem、MonsterWaveSpawnSystem、UpgradeRewardSystem、MainHudSystem等，skillSelectController.setOnTabPauseChange把Tab暂停通知Main。init()在配表就绪后按Character玩家行加载预制体，给playerEntity挂PlayerTag、Position、Attribute、Skill、SkillLoadoutState、ViewComponent等，怪物交给MonsterWaveSpawnSystem按波次在环带生成，不在init里手写每只怪。
+
+帧循环在Main与SimpleEcsDemo之间拆成两层，和图4-2「战斗帧循环」色块、图5-2里paused切断战斗tick的说法一致。
+
+Main侧，Laya.timer.frameLoop(1, this, onFrameLoop)每帧先input.update()刷新按键状态，再demo.update(deltaTimeSeconds)，最后updateCameraFollow按玩家Position平滑移动Area2D根节点，相机跟随不写在ECS里，避免System去碰Laya容器坐标。Main还通过setOnTabPauseChange接Demo回调：Tab打开时combatSurvivalTimer.pause()，关闭时reset，这样装配技能时生存倒计时也会停，但ECS里仍只靠GameSession.paused冻战斗逻辑。
+Demo侧，SimpleEcsDemo.update在测试模式下会先testLevelFpsTracker.tick，然后无条件world.update(deltaTime)——注意paused并不是在world.update外包一层if，而是各个战斗System构造时注入isPaused，在各自update开头return，所以图5-2写「战斗System早退」时，frameLoop其实仍在跑，只是logic组里追逐、刷怪、子弹等步骤空转。update末尾若restarting为false会tryDefeatExitFromSession处理restartRequested；restarting为true时跳过，防止战败退出重入。PlayerDeathSystem、SkillSelectPanelController、胜利奖励等都会写session.paused，ECS层只认这一枚冻结位，避免UI和玩法各维护一套pause标志。
+5.5典型场景实现剖析
+场景一：玩家第一次进入流程
+玩家第一次进战斗时，流程如图4-2中「应用启动→进入战斗」两段所示：Main.onStart触发loadConfigAndInitDemo并await ensureGameConfigLoaded()，元菜单模式下UIStackManager push StartPanel且战斗Area2D不可见，界面见图7-1。玩家确认跑图或选关节点后MetaFlowController调onEnterCombat，Main显示战斗容器并await demo.init()，CombatSurvivalTimer开始计时，对应图4-2中Demo注册Systems、spawnPlayer。首帧world.update时ControlSystem、PlayerAutoCastSystem、MonsterWaveSpawnSystem并行，即图4-2「战斗帧循环」内第一次tick。功能验证对应T-F-01、T-F-09；局内战斗画面见图7-3。
+场景二：Tab打开技能面板并更换装备
+玩家进局后按Tab，SkillSelectPanelController.registerTabKey在keydown里发现keyCode等于TAB_KEY_CODE就togglePanel，setPanelVisible(true)会把SkillLoadoutState.panelOpen设为true，并从sessionEntity取GameSession把paused写成true，onTabPauseChange(true)传到Main去pause生存计时；各战斗System因isPaused()在update入口return，怪物不再追、子弹不再出新，但UI仍能收到指针事件。玩家长按超过LONG_PRESS_MS，SkillDragService在顶层挂代理图标，SkillSlotHitTest在panelRoot坐标系里判断落点是装备栏还是effect槽，SkillLoadoutState里栏位数据被改掉但尚未写回Skill组件。玩家再按Tab或关面板，setPanelVisible(false)触发SkillLoadoutSyncSystem，把loadout一次性同步到Skill和PlayerAutoCastSystem，getCombatEffectIds刷新后paused恢复false；下一周期Cast参与施放，实际伤害要等cooldownRemain走完才走图5-1的buildSkillCastPlan路径。面板实拍见图7-4。
+场景三：怪物密集时的Worker卸载
+实场景三用Level3千怪波说明Worker支路何时生效、何时必须回退主线程，单帧分工如图5-3所示。
+同屏怪物数和子弹数加起来达到COMBAT_WORKER_MIN_ENTITY_COUNT，且GameSession.paused为假时，CombatDataPrepareSystem会把玩家与怪物坐标打进CombatEntitySnapshot，调用CombatDataBridge.prepareFrame。若本帧latestResult已从Worker回传，MonsterChaseSystem走applyWorkerVelocities写速度，否则prepareFrame内部computeSync在主线程跑processCombatFrame，和Worker共用combatWorkerLogic.ts。帧末dispatchCompute再postMessage投递下一帧。与此同时BulletSystem仍在主线程做hitRadiusSq碰撞和连锁。若在MetaRunSession里关testUseCombatWorker，表7-5、7-6第4、5波数据会体现这条边界。
+如图5-3所示，左侧「打包快照」对应CombatDataPrepareSystem，菱形「latestResult已回传」决定本帧消费Worker还是computeSync，下方「始终主线程」支路说明子弹碰撞不进Worker；
+5.6关键代码文件索引
+表5-2 核心源码文件索引
+5.7功能模块与论文章节对照
+表5-3 功能模块与论文章节对照
+5.8本章小结
+本章按四条线写实现：ECS 玩法、MVC UI、Worker/对象池、主循环。另用三个场景把配置加载、流程切换和战斗跑通。代码里用到的结构包括：SimpleEcsDemo 作组合根，对象池，CombatDataBridge 作桥，Targeting 作策略，GameSession.paused 作状态开关；没有再加一层通用框架。
+实现里遇到过四类问题。（1）配表没拷到 bin/config 会 404：用 sync-config-to-bin.ps1 同步，并用isGameConfigReady挡在未就绪前进战斗。（2）UI2拖技能槽点不中：顶层代理加 SkillSlotHitTest。（3）Effect行顺序错会算错：靠文档和样例表约定顺序。（4）Worker与主线程结果要对齐：共用combatWorkerLogic.ts，异步失败时computeSync。表 5-2、表 5-3 把模块和文件对应起来。性能测量放在下一章。
+
+第6章 性能优化与工程实践
+
+本章对照第 4.2.3 节设计，写清已落地的优化、实验步骤和工程习惯，并与第 7 章数据对齐。原则是先量后开：池和 Worker 都能关，方便对照和排错。
+6.1性能目标与瓶颈
+性能目标定在1920×1080、IDE内置Chromium预览下，Level3第1、2波怪物较少时TestLevelFpsTracker统计的平均FPS尽量贴近60，第3波及千怪消融段则重点看P95帧时间（表7-5、表7-6），因为均值容易被低负载波次拉高，掩盖偶发尖峰卡顿。
+瓶颈在工程里大致能对应到三类开销：一是MonsterChaseSystem与BulletSystem的CPU，同屏实体上千时追逐、圆碰撞、连锁搜索都会上去；二是BulletPool、MonsterPool若关掉，spawn路径会频繁instantiate和destroy，浏览器GC在Performance面板里表现为Scripting/GC尖刺，表7-6第4波无池时P95到76.50 ms就是这类问题的体现；三是主线程还要跑Laya绘制和UI，千怪千弹时DrawCall和贴图采样也会吃时间。
+对策与后文图示一一挂钩：图5-3说明get/put如何把建删变成复用；图5-3说明prepareFrame如何把追逐从主线程挪到Worker又保留computeSync回退；图5-3与图4-2的paused段说明Tab装配、死亡时各System早退，避免无效tick白跑；图6-3与表7-4记录TextureAtlasService接入后千怪波FPS从约13.32提到约15.10的变化。
+6.2对象池
+对象池实现如图5-3所示。BulletSystem.spawn时先经图中「get prefabPath」判断桶内是否有节点：BulletPool.get对arr.pop()，为空则走instantiate新节点；子弹命中或超时后removeChild再put回桶。SimpleEcsDemo注入的isObjectPoolEnabled()为false时，图5-3左侧get被跳过，直连instantiate，即表7-6第4波「无池」配置。MonsterPool与MonsterRecycleSystem同理。第4、5波千怪同窗中开池后P95由76.50 ms降至48.60 ms（约36.5%），平均FPS几乎不变，说明池主要削尖峰。
+6.3Web Worker卸载
+追Worker卸载只覆盖追逐、分离、摆动等纯数值环节，不涉及Laya节点。CombatDataPrepareSystem在isPaused()为假且场上实体数达到COMBAT_WORKER_MIN_ENTITY_COUNT时，从FilterRegistry取出怪物坐标等字段，拼成CombatEntitySnapshot后调用CombatDataBridge.prepareFrame。
+单帧内prepareFrame分两步：先消费、再投递。若本帧已有Worker回传的latestResult，MonsterChaseSystem直接把其中的速度写回各怪物Velocity；若没有，则在主线程走computeSync调用processCombatFrame，保证不阻塞可玩性。帧末在shouldUseWorker为真且无在途请求时，由dispatchCompute向Worker postMessage投递下一帧计算。initWorker失败或postMessage异常时workerUsable置为false，后续全程退化为computeSync单路径。主线程与Worker共用combatWorkerLogic.ts，避免两套追逐公式分叉。
+子弹碰撞、连锁、分裂仍由BulletSystem在主线程完成，须读取节点位置与阵营，Worker侧不承载这条路径。实验上，第1–3波在实体达标时启用Worker参与追逐；第4–5波为对象池同窗对比，第5波通过MetaRunSession.testUseCombatWorker关闭Worker以隔离池化影响。解读表7-5、表7-6时勿与第3波冷启动工况混比。
+6.4渲染与逻辑侧其它优化
+除对象池与Worker外，本工程在碰撞判定、逻辑冻结、绘制合批与配置访问上还有若干针对单帧耗时的细化，与第5章实现及第7章实验数据相互印证。
+碰撞判定上，BulletHitTest以距离平方比较子弹与怪物中心距，命中分支不做Math.sqrt，千弹同屏时可减少一批浮点开方，与BulletSystem中穿透递减、连锁搜索同属主线程热点，但不进入Worker。
+逻辑冻结上，GameSession.paused为真时，注入isPaused的System（含ControlSystem、MonsterWaveSpawnSystem、BulletSystem等）在update入口直接return。技能Tab装配、PlayerDeathSystem判定阵亡、生存计时胜利弹奖励等情形共用同一枚paused，避免界面已停而刷怪、碰撞仍在推进的双开关问题；RestartPanelSystem仅以isPlayerDead()区分真死亡与装配暂停。
+渲染合批上，Main.onStart通过installTextureAtlasLifecycle挂载生命周期，战斗进出时onCombatEnter/onCombatLeave配合TextureAtlasService对战斗图标做动态合批。表7-4显示，第3波千怪千弹场景接入动态图集后平均FPS由约13.32升至约15.10（约+13.4%），说明该路径主要改善绘制侧开销，与6.2、6.3节针对逻辑线程的优化形成互补。对象池消融方面，表7-6第4、5波同窗对比显示开池后P95由76.50 ms降至48.60 ms，平均FPS几乎不变，与6.2节「削尖峰、稳均值」的结论一致。
+配置访问上，ensureGameConfigLoaded仅在启动链读表一次；MONSTER_COUNT、COMBAT_WORKER_MIN_ENTITY_COUNT等热路径常量收在src/defines，战斗tick内不再反复访问磁盘，减少与玩法无关的I/O干扰。
+6.5帧预算与内存
+60 FPS 时一帧大约 16.67 ms。粗分： 输入和 UI 1–2 ms，ECS（含子弹）6–8 ms， Worker 通信 1 ms 以内，其余给渲染[7]。超了先开池或 Worker，再降同屏上限，别在业务里硬砍分辨率。
+短生命周期对象多会诱发 GC。池化把分配摊平，Performance 面板里 Script- ing/GC 段往往跟着好看些。观测靠 TestLevelFpsTracker；missingConfigLogged对缺表键只打一次日志。
+6.6性能实验设计
+实验要求
+看池、图集、Worker 对 FPS 和 P95 的影响。
+自变量：池开/关；Worker 开/关（怪够多时）；同屏怪数。
+因变量：平均 FPS 、P95（消融段）。
+控制：同一浏览器、1920×1080 、Level3 五波脚本、关后台大程序。
+实验步骤：
+1.  IDE 预览或发布，可选开 Performance；
+2.  Level3 ：5 波各 10 s，怪数 10/100/1000，第 4–5 波千怪消融；
+3.  TestLevelFpsTracker 记均值，第 4–5 波记 P95；
+4.  对照表 7-5、表 7-6 并写几句解读。
+优化自检清单：
+合代码前自查：热路径有没有狂 new；销毁前有没有 pool.put；碰撞是不是平方距离；paused 能不能挡住无关 System；Worker 载荷是不是纯数；配表是不是只加载一次。
+6.8本章小结
+本章写了池、Worker、碰撞/暂停/图集和帧预算，并给出实验步骤。数据上： 池主要救 P95；图集抬千怪波平均 FPS ；Worker 在第 1–3 波参与追逐重算。下一章列用例、环境和读表方法。
+
+
+
+
+第7章 系统测试与验证
+
+本章用单元脚本、功能回归、性能实验三类手段检查第3章需求和第4章设计是否落到实处，策略参考Petty等对仿真与交互系统V&V的做法[16]。单元层验证不启动完整Laya场景，适合在改EcsWorld、FormulaParser之后快速回归；功能层用T-F系列步骤对照图4-2、图5-2的主路径；性能层用Level3五波和TestLevelFpsTracker生成表7-5、7-6，与第6章图6-1、图6-2的优化叙述交叉验证。
+7.1测试策略
+单元层覆盖ecsCorePhase1.verify.ts、formulaParser.verify.ts、attributeModifier.verify.ts，谁改动就rerun谁。集成层至少走通三条：RunMapGenerator多随机种子下validateActReachBoss，失败须generateFallback；Tab场景对照图5-2做T-F-05/06，看paused与装配写回；Worker开关前后怪物轨迹是否仍来自combatWorkerLogic.ts。性能层固定Level3五波脚本，第4、5波同窗对比池化，结合图6-1、表7-6解读P95。若动过FormulaParser（公式树）、ComponentStore、AttributeSystem、ConfigBootstrap或CombatDataBridge。
+7.2单元验证
+ECS单元验证：
+ECS单元验证在ecsCorePhase1.verify.ts，脚本搭不依赖Laya的最小EcsWorld，检查EntityId不重复、destroyEntity后getComponent读不到旧数据、组件增删与getAllOfType一致、多System按分组和priority的update顺序与注册表一致。验收项与world.destroyEntity先removeAllComponents再destroyEntity的实现及registerSystem组序对齐，动过World.ts或ComponentStore.ts后应rerun[18]。
+公式解析器：
+formulaParser.verify.ts 覆盖：四则运算、括号、属性别名； 非法字符与边界公式（以实现为准的安全返回/抛错）。配表伤害依赖解析器，任何变更须 rerun。
+属性修饰器：
+属性修饰器是连接升级奖励、Buff与FormulaParser上下文的关键一环，验证脚本在attributeModifier.verify.ts。
+
+局内Attribute组件的base里存hp、atk等基础值，AttributeSystem维护modifier列表，每条modifier带sourceId和数值，getFinalValue在结算时把base与叠加结果合成最终属性。UpgradeRewardSystem发奖励或后续Buff写modifier时，都经AttributeSystem增删；EffectExecutor构造direct_damage的context时，正是遍历casterAttr.base的键去取getFinalValue，所以公式树里的ident名字必须和base字段对得上，否则evaluateFormula会抛unknown identifier。
+
+attributeModifier.verify.ts会测多个modifier叠加后的final值、按sourceId批量移除是否干净、getModifierContributions能否列出每个来源的贡献。脚本若失败，局内伤害数字和BloodBarSyncSystem刷新的hp往往会一起错，和表3-5里属性修饰器验收项对应。如图5-1的direct_damage分支进入EffectExecutor，context经AttributeSystem展开后由图5-5的evaluateFormula结算。
+7.3功能测试
+表 7-1 列出主要手工用例，走通战斗、元游戏、跑图、装配和重启。
+表7-1 功能测试用例摘要
+
+跑图可达性：对 RunMapGenerator.generate 多次随机种子断言 validateActReachBoss；失败应走 generateFallback。
+装配同步：互换装备栏技能后，下一冷却周期伤害/图标与装配一致，否则 SkillLoadoutSyncSystem存在缺陷。
+Worker 一致性：Worker 开、关各跑一段，怪物轨迹可差一帧，但算法不能两套[10]。
+7.4性能测试
+7.4.1测试环境
+表 7-2 为五波实验与功能抽测的统一环境（2026-05-18，单次运行）。
+选关 Level3 共 5 波：第 1–3 波怪物 10/100/1000，装备三把测试法杖；第 4–5波均为 1000 怪，依次为「无池无 Worker / 仅池（关 Worker）」，用于同窗消融。第3 波含首次千怪冷启动，不纳入与第 4–5 波的公平对比。
+表7-2 测试环境配置
+7.4.2 测试结果
+表 7-3 、7-4 记录接图集前后两轮采样，只看前三波。第 3 波 1000 怪：FPS 从13.32 到 15.10（约 +13.4%），弹幕多时合批有用。
+表7-3 测试关卡分波 FPS（接入动态图集，前三波）
+表7-4 动态图集接入前后 FPS 对比（前三波）
+表 7-5 是同一次跑完的五波，已开图集和 DrawCall 合批。共 1733 帧、约 50.3 s，整场平均 FPS 约 34.48。
+结果解读
+1.  规模曲线（第 1–3  波）。怪物 10→ 100→ 1000 时 FPS  由 58.62  降至 15.14，符合实体与弹幕压力上升规律。
+表7-5 Level3 五波测试帧率（单次运行）
+表7-6 性能对比实验（对象池消融，1000 怪 / 10 s）
+2.  平均 FPS：池化对均值影响有限。第 4、5 波均值接近（26.16 对 25.98），预热后瓶颈主要在子弹碰撞与绘制。
+3.  P95。开池后 P95 从 76.50 ms 到 48.60 ms（约降 36.5%），和第 6 章对 GC/实例化的判断一致。
+4.  第 3 波低于第 4 波基线。第 3 波含资源预热与首次千怪开销；对象池消融结论以第 4–5 波为准。
+7.5系统运行截图
+截图源文件置于 thesis/Png/，编译前由 build.ps1 同步至 thesis/figures/。
+图 7-1–7-6 覆盖元游戏与局内闭环。
+7.6测试结论
+功能：Must  用 T-F-01–10  和 verify.ts 覆盖；Should  的跑图、装配、升级、池/Worker 也测过；Could 的法杖三槽 UI 和部分 Effect 特效没做完，和第 8 章一致。性能：图集让千怪波 FPS 高约 13.4%；五波整场均值约 34.48；同窗消融里池把 P95拉低约 36.5%。
+遗留：配置未同步至 bin/ 时图标可能空白（已用脚本与 isGameConfigReady 缓解）。已知缺陷：部分 Effect 仅逻辑生效、无独立 VFX，已在答辩范围中如实标注。
+
+图7-1 游戏开始界面（StartPanel）
+
+图7-2 三大关 DAG 跑图界面（RunMapPanel）
+
+图7-3 局内战斗场面（同屏多怪与弹幕）
+
+图7-4 Tab 暂停下的技能/Effect 装配面板
+
+图7-5 生存胜利后的三选一奖励面板
+
+图7-6 玩家死亡后的重启面板
+7.7本章小结
+本章给出测试策略、单元验证、功能用例、环境与五波性能数据及解读； 对象池价值已由第 4–5 波实测支持。图 7-1–7-6 为系统运行截图。
+
+
+第8章 总结与展望
+
+8.1工作总结
+本文围绕 Survivor And Fight，在 LayaAir 3.x 与 TypeScript 上完成 Roguelite生存战斗的分析、设计、实现与测试，对应关系如下：
+(1)  需求与选型（第 1–2 章）：梳理引擎架构、ECS、人群仿真与 H5 性能文献；确定 LayaAir、轻量 ECS 、MVC UI、配表战斗的路线。
+(2)  总体设计（第 4 章）：给出分层结构、ECS/MVC/Worker 方案，以及时序、可靠性、容错和扩展方式。
+(3)  实现（第 5 章）：以 SimpleEcsDemo 为根，实现技能链、子弹、怪物 AI、跑图、 Tab 装配和主循环。
+(4)  性能与测试（第 6–7 章）： 千怪场景池化明显压低 P95；图集抬高重度弹幕波FPS；用例和脚本验证核心契约。
+写作中参考 SyDRA[18]、Gregory 分层[7]和 Unity 人群实践[5]，把模块化、重算分离和 V&V 用到 H5 课设原型上。系统能演示菜单 → 跑图/选关 → 战斗 → 升级装配 → 死亡重启，达到毕设预期。
+8.2不足与展望
+（1）内容与表现：法杖三槽 UI、部分 Effect 的特效和音效尚未补齐。
+（2）架构：同屏实体再多时，ECS 可改为 Archetype/Chunk 存储[7]；碰撞检测可加空间哈希。
+（3）测试：需要端到端 UI 自动化和更长的定期回归[18]。
+（4）产品化：局外存档、元进度、帧率与同屏怪物上限等设置仍待做。
+（5）发布：补全美术与适龄说明后，可走静态站点托管。
+8.3社会、健康与文化影响
+战斗内容为虚构，怪物和血条偏抽象，避免写实血腥。原型无付费、无诱导分享、不采敏感数据。若上网发布， 需遵守网游和未成年人保护规定，标适龄和时长；长时间玩注意眼疲劳，Tab 暂停和跑图休息节点用来调节节奏[18]。
+8.4绿色节能与兼容性
+池化、暂停和 Worker  降低平均 CPU，对续航和发热有帮助[7]。配表双通道和Worker 回退提高浏览器兼容性；2D 对 GPU 压力小于大型 3D。后续可在设置里加帧率上限和同屏怪上限，做低功耗档。
+8.5本章小结
+Survivor  And  Fight  说明在 H5  上用轻量 ECS、配表和可关断的性能手段做Roguelite 原型是可行的。论文叙述与仓库、测试表一致；后续可加强自动化测试和表现层，从答辩 Demo 往可发布小游戏再走一步。
+
+
+致  谢
+论文收尾之际，感谢指导教师在选题、架构和写作上的指点。
+感谢计算机学院各位任课教师四年来的培养；感谢同学在项目调试与试玩中提供的帮助；感谢家人在毕业设计期间的理解与支持。
+由于本人水平有限，文中疏漏之处恳请各位老师批评指正。
+
+
+参考文献
+BAABAD A, ZULZALIL H B, HASSAN S, et al. Software architecture degradation in open source software: A systematic literature review[J]. IEEE Access, 2020, 8: 173681-173709.
+GREGORY J. Game engine architecture[M]. 3rd ed. Boca Raton: CRC Press, 2018.
+MUNRO J, BOLDYREFF C, CAPILUPPI A. Architectural studies of games engines -- the quake series[C]//Proceedings of the 2009 International IEEE Consumer Electronics Society's Games Innovations Conference. [S.l.]: IEEE, 2009: 246-255.
+AGRAHARI V, CHIMALAKONDA S. What's inside unreal engine? - A curious gaze![C]//Proceedings of the 14th Innovations in Software Engineering Conference. [S.l.]: ACM, 2021: 1-5.
+GOSLIN M, MINE M R. The Panda3D graphics engine[J]. Computer, 2004, 37(10): 112-114.
+ULLMANN G C, GUÉHÉNEUC Y G, PETRILLO F, et al. SyDRA: An approach to understand game engine architecture[J]. Entertainment Computing, 2025, 52: 100832.
+ULLMANN G C, GUÉHÉNEUC Y G, PETRILLO F, et al. Visualising game engine subsystem coupling patterns[C]//Lecture Notes in Computer Science: Vol. 14455 Entertainment Computing -- ICEC 2023. [S.l.]: Springer, 2023: 263-274.
+Unity Technologies. Unity manual[EB/OL]. (2016)[2026-05-17]. https://docs.unity3d.com/Manual/index.html.
+BRIAND L C, BUNSE C, DALY J W. A controlled experiment for evaluating quality guidelines on the maintainability of object-oriented designs[J]. IEEE Transactions on Software Engineering, 2001, 27(6): 513-530.
+REYNOLDS C W. Flocks, herds, and schools: A distributed behavioral model[C]//Proceedings of the 14th Annual Conference on Computer Graphics and Interactive Techniques. [S.l.]: ACM, 1987: 25-34.
+THALMANN D, MUSSE S R. Crowd simulation[M]. London: Springer, 2007.
+CANTRELL W A, PETTY M D, KNIGHT S L, et al. Physics-based modeling of crowd evacuation in the Unity game engine[J]. International Journal of Modeling, Simulation, and Scientific Computing, 2018, 9(4): 1850029.
+BOTT M, MUSSE S R, DE OLIVEIRA L P, et al. Implementing a physics based model of crowd movement using unreal development kit[J]. Journal of Gaming & Virtual Worlds, 2014, 6(3): 275-296.
+HELBING D, FARKAS I, VICSEK T. Simulating dynamical features of escape panic[J]. Nature, 2000, 407: 487-490.
+MCKENZIE F D, PETTY M D, KRUSZEWSKI P A, et al. Integrating crowd-behavior modeling into military simulation using game technology[J]. Simulation & Gaming, 2008, 39(1): 10-38.
+OBERKAMPF W L, ROY C J. Verification and validation in scientific computing[M]. Cambridge, UK: Cambridge University Press, 2010.
+HEIJSTEK W, KÜHNE T, CHAUDRON M R V. Experimental analysis of textual and graphical representations for software architecture design[C]//Proceedings of the 2011 International Symposium on Empirical Software Engineering and Measurement. [S.l.]: IEEE, 2011: 167-176.
+PETTY M D. Verification, validation, and accreditation[M]//Modeling and Simulation Fundamentals. [S.l.]: John Wiley & Sons, 2010: 325-372.
+
+附  录
+
+
+附录A名词术语及缩略词
+
+附录B核心配表字段示例（节选）
+Character 表字段含 id、prefabPath、bodyPrefabPath、hp、maxHp、roleType。玩家和怪物同表，靠 roleType 选预制体和默认值。
+Bullet 表：id、prefabPath、duration、speed、damage、penetration。子弹系统按 id 查表生成运动参数与伤害。
+Skill 表：id、cooldown、effectSlotCount、图标路径等。 一个技能可关联多行SkillEffect。
+SkillEfect  表：id、effect、damage、params、iconPath。effect 取值包括bullet、modifier_split、modifier_chain、modifier_pierce、direct_damage。
+完整 JSON 在 docs/config/。运行前执行 tools/sync-config-to-bin.ps1，把表拷到 bin/config/。
+
+附录C需求与测试用例映射（节选）
+表 C-1 给出需求标识与测试用例、验证方式的对应关系，便于说明“需求—测试”可追溯性。
+表C-1 需求—测试映射（节选）
+
+
+附录D缺陷记录（项目实测）
+表D-1 缺陷记录表
+
