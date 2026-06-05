@@ -1,0 +1,41 @@
+%% 图4-9 MVC UI 结构（第4.2.2节）
+flowchart TB
+  subgraph Truth["玩法真相（ECS + 配表）"]
+    ECS["Attribute / Skill / GameSession<br/>SkillLoadoutState"]
+    MAP["RunMapState / 跑图图结构"]
+  end
+
+  subgraph MVC["MVC 变体"]
+    M["Model<br/>RunMapPanelModel 等"]
+    V["View<br/>预制体 + UI2 布局"]
+    C["Controller<br/>UiControllerBase 子类"]
+  end
+
+  STK["UIStackManager<br/>push 显示 / pop 返回<br/>单栈顶全屏页"]
+
+  subgraph Meta["元游戏 UI"]
+    MB[MetaMenuBootstrap 注册路由]
+    SP[StartPanel / SelectLevel / RunMap]
+  end
+
+  subgraph CombatUI["局内 UI"]
+    TAB[SkillSelectPanelController<br/>Tab → paused=true]
+    DRG[SkillDragService + SkillSlotHitTest]
+    SYN[SkillLoadoutSyncSystem 写回]
+    HUD[MainHud / BloodBarSync]
+  end
+
+  C --> M
+  M --> ECS
+  M --> MAP
+  C --> V
+  STK --> C
+  MB --> STK
+  SP --> C
+
+  TAB --> ECS
+  DRG --> SYN
+  SYN --> ECS
+  HUD --> ECS
+
+  RV["RunMapPanelView 画线<br/>通行规则在 Model"] -.-> M

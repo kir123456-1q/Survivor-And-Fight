@@ -1,0 +1,13 @@
+%% 子弹对象池生命周期 — 建议作图 6-1
+flowchart LR
+  subgraph 主线程
+    BS[BulletSystem.spawn]
+    BH[命中或超时]
+  end
+  BS -->|get prefabPath| P{池中有空闲节点?}
+  P -->|是| R[pop 并重置 Transform]
+  P -->|否| N[instantiate 新节点]
+  R --> F[加入场景飞行]
+  N --> F
+  F --> BH
+  BH -->|put| Q[removeChild 后 push 回桶]

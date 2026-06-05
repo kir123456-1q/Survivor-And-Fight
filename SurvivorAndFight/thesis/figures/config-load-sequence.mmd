@@ -1,0 +1,24 @@
+%% 配表双通道加载 — 建议插入第 3 章 3.1.1 或第 5 章 5.4.1
+sequenceDiagram
+  participant Main as Main.loadConfigAndInitDemo
+  participant CB as ConfigBootstrap
+  participant Net as fetch
+  participant Laya as Laya.loader
+  participant Data as Data.Skill
+
+  Main->>CB: ensureGameConfigLoaded()
+  alt 已就绪
+    CB-->>Main: true
+  else 首次加载
+    loop 遍历 configBases
+      CB->>Net: loadJson(registry)
+      alt fetch 成功
+        Net-->>CB: JSON
+      else
+        CB->>Laya: load(url, JSON)
+        Laya-->>CB: JSON
+      end
+      CB->>Data: initData 各表
+    end
+    CB-->>Main: skillCount>0 则 configLoaded=true
+  end

@@ -1,0 +1,12 @@
+%% 单帧 CombatDataBridge 处理管线 — 建议作图 6-2
+flowchart TD
+  A[CombatDataPrepareSystem 打包快照] --> B[prepareFrame]
+  B --> C{latestResult 已回传?}
+  C -->|是| D[本帧采用 Worker 速度结果]
+  C -->|否| E[computeSync 主线程 processCombatFrame]
+  D --> F[MonsterChaseSystem 写回 Velocity]
+  E --> F
+  F --> G{shouldUseWorker 且未在途?}
+  G -->|是| H[postMessage 投递下一帧]
+  G -->|否| I[跳过 Worker]
+  J[BulletSystem 碰撞] --> K[始终主线程]

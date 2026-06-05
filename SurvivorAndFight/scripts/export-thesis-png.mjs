@@ -26,17 +26,35 @@ const MERMAID_OPTS = {
   "fig-ch02-runmap-dag": ["-w", "2200", "-H", "720", "-s", "2"],
   "fig-ch04-01-layers": ["-w", "2000", "-H", "600", "-s", "2"],
   "fig-ch04-02-sequence": ["-w", "2400", "-H", "2800", "-s", "2"],
+  "fig-ch04-07-fault-degrade": ["-w", "2800", "-H", "3200", "-s", "3"],
+  "fig-ch04-08-ecs-gameplay": ["-w", "2600", "-H", "2200", "-s", "2"],
+  "fig-ch04-09-mvc-ui": ["-w", "2600", "-H", "2000", "-s", "2"],
+  "fig-ch04-10-worker-pool": ["-w", "2600", "-H", "1800", "-s", "2"],
   "fig-ch05-tab-sequence": ["-w", "2000", "-H", "1400", "-s", "2"],
+  "fig-ch05-skill-chain": ["-w", "2000", "-H", "1800", "-s", "2"],
+  "fig-ch05-04-config-load": ["-w", "2200", "-H", "1200", "-s", "2"],
+  "fig-ch05-05-formula-tree": ["-w", "2400", "-H", "2200", "-s", "2"],
+  "fig-ch06-pool-lifecycle": ["-w", "2200", "-H", "600", "-s", "2"],
+  "fig-ch06-worker": ["-w", "2200", "-H", "1600", "-s", "2"],
   "fig-ch06-chart-fps-atlas": ["-w", "1200", "-H", "800", "-s", "2"],
   "fig-ch06-chart-p95-pool": ["-w", "1200", "-H", "800", "-s", "2"],
   default: ["-w", "2000", "-H", "1200", "-s", "2"],
 };
 
-/** base -> 源 .mmd（相对 thesis/） */
+/** base -> 源 .mmd（相对 thesis/）；figures/ 新图优先于 diagrams/ 旧稿 */
 const MERMAID_SOURCES = {
   "fig-ch04-01-layers": "figures/system-layers.mmd",
   "fig-ch04-02-sequence": "figures/system-sequence.mmd",
+  "fig-ch04-07-fault-degrade": "figures/fault-degrade-state.mmd",
+  "fig-ch04-08-ecs-gameplay": "figures/ecs-gameplay-overview.mmd",
+  "fig-ch04-09-mvc-ui": "figures/mvc-ui-structure.mmd",
+  "fig-ch04-10-worker-pool": "figures/ch04-worker-pool-design.mmd",
   "fig-ch05-tab-sequence": "figures/skill-tab-sequence.mmd",
+  "fig-ch05-skill-chain": "figures/skill-effect-flow.mmd",
+  "fig-ch05-04-config-load": "figures/config-load-sequence.mmd",
+  "fig-ch05-05-formula-tree": "figures/formula-tree-flow.mmd",
+  "fig-ch06-pool-lifecycle": "figures/pool-lifecycle.mmd",
+  "fig-ch06-worker": "figures/worker-frame-pipeline.mmd",
 };
 
 function runMermaid(inputMmd, outputPng, extraArgs) {
@@ -75,10 +93,14 @@ for (const [base, relMmd] of Object.entries(MERMAID_SOURCES)) {
   runMermaid(input, output, opts);
 }
 
-// 2) diagrams/*.mmd
+// 2) diagrams/*.mmd（已由 figures/ 导出的 base 跳过，避免旧稿覆盖新图）
 if (fs.existsSync(diagramsDir)) {
   for (const file of fs.readdirSync(diagramsDir).filter((f) => f.endsWith(".mmd"))) {
     const base = file.replace(/\.mmd$/, "");
+    if (base in MERMAID_SOURCES) {
+      console.log("  跳过 diagrams（figures 已导出）:", file);
+      continue;
+    }
     const input = path.join(diagramsDir, file);
     const output = outPathForBase(base);
     const opts = MERMAID_OPTS[base] || MERMAID_OPTS.default;

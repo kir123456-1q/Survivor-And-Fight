@@ -1,0 +1,16 @@
+%% 技能效果执行链（buildSkillCastPlan）— 建议作图 5-1 补充或替换文字流程图
+flowchart TD
+  A[PlayerAutoCastSystem 检查 cooldownRemain] --> B[按 SkillLoadoutState 取 effectIds]
+  B --> C{遍历每条 effect 行}
+  C -->|modifier_split| D[pendingSplit 累加]
+  C -->|modifier_chain| E[pendingChain 累加]
+  C -->|modifier_pierce| F[pendingPierce 累加]
+  C -->|bullet| G[组装 BulletSpawnSpec<br/>写入 split/chain/penetration]
+  G --> H[BulletSystem.spawnBulletWithOptions]
+  C -->|direct_damage| I[FormulaParser.evaluate]
+  I --> J[扣 Attribute.hp]
+  D --> C
+  E --> C
+  F --> C
+  H --> K[本帧碰撞与穿透递减]
+  J --> K

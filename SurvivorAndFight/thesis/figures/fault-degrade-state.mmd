@@ -1,0 +1,40 @@
+%% 图4-7 容错降级 — mindmap：中心态 + 四条分支（体现联系，纵向展开）
+mindmap
+  root((正常运行))
+    ① 配表加载
+      触发条件
+        JSON 404
+        Skill 表为空
+      降级表现
+        isGameConfigReady 为假
+        无法按表生成实体
+      恢复手段
+        DEFAULT 常量兜底
+        ensureGameConfigLoaded 重试
+    ② Worker 算力
+      触发条件
+        initWorker 失败
+        postMessage 异常
+      降级表现
+        workerUsable 为假
+        停止异步投递
+      恢复手段
+        prepareFrame 内 computeSync
+        主线程 processCombatFrame
+    ③ 跑图生成
+      触发条件
+        validateActReachBoss 失败
+      降级表现
+        当前种子 DAG 不可达 Boss
+      恢复手段
+        generateFallback 线性保底图
+    ④ 预制体资源
+      触发条件
+        预制体路径无效
+        instantiate 失败
+      降级表现
+        实体无对应模型
+        逻辑仍可继续
+      恢复手段
+        createPlaceholderNode
+        占位节点便于调试

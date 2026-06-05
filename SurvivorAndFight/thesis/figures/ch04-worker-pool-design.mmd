@@ -1,0 +1,27 @@
+%% 图4-10 Worker 与对象池优化设计（第4.2.3节）
+flowchart TB
+  subgraph Pool["对象池（抑制 instantiate/destroy）"]
+    direction LR
+    BP["BulletPool<br/>按 prefabPath 分桶"]
+    MP["MonsterPool"]
+    MR["MonsterRecycleSystem<br/>离玩家过远则回收"]
+  end
+
+  subgraph Frame["每帧战斗数据"]
+    CDP[CombatDataPrepareSystem 打包快照]
+    PRE[CombatDataBridge.prepareFrame]
+    CDP --> PRE
+    PRE -->|latestResult 有| APP[MonsterChaseSystem 写速度]
+    PRE -->|无则| CS[computeSync 主线程]
+    CS --> APP
+    PRE -->|达标且未在途| PM[postMessage 下一帧]
+    PM --> WL["combatWorkerLogic.ts<br/>主线程与 Worker 共用"]
+    WL -.-> APP
+  end
+
+  BS["BulletSystem<br/>碰撞 / 连锁 / 分裂<br/>始终主线程"]
+
+  PAU["GameSession.paused<br/>死亡 / Tab / 胜利"] -.->|update 入口 return| CDP
+  PAU -.-> BS
+
+  Pool --> BS
