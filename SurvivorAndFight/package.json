@@ -1,0 +1,22 @@
+{
+  "name": "survivorandfight",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "fix:defense-ppt": "node scripts/fix-gamma-defense-ppt.cjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "jszip": "^3.10.1",
+    "pptx-automizer": "^0.8.1",
+    "pptxgenjs": "^4.0.1"
+  }
+}

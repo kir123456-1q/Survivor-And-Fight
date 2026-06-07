@@ -56,7 +56,7 @@ if (Get-Command npx -ErrorAction SilentlyContinue) {
         "worker-frame-pipeline" = @("-w", "2200", "-H", "1600", "-s", "2")
         "config-load-sequence"  = @("-w", "2200", "-H", "1200", "-s", "2")
         "fault-degrade-state"   = @("-w", "2800", "-H", "3200", "-s", "3")
-        "ecs-gameplay-overview" = @("-w", "2600", "-H", "2200", "-s", "2")
+        "ecs-gameplay-overview" = @("-w", "2600", "-H", "2000", "-s", "2")
         "mvc-ui-structure"      = @("-w", "2600", "-H", "2000", "-s", "2")
         "ch04-worker-pool-design" = @("-w", "2600", "-H", "1800", "-s", "2")
         "formula-tree-flow"     = @("-w", "2400", "-H", "2200", "-s", "2")

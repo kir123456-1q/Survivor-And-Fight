@@ -1,0 +1,13 @@
+/* 图4-8：四象限纵向连线，留足间距避免线与字重叠 */
+.nodeLabel,
+.nodeLabel span,
+.edgeLabel,
+.edgeLabel span,
+.cluster-label,
+.cluster-label span,
+.label,
+.label span,
+p {
+  font-size: 30px !important;
+  font-family: "Microsoft YaHei", "SimHei", sans-serif !important;
+}

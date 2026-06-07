@@ -1,42 +1,41 @@
-%% 图4-8 基于 ECS 的 Gameplay 实现（第4.2.1节）
+%% 图4-2 GamePlay 实现（第4.2.1节）
 flowchart TB
-  subgraph World["EcsWorld 每帧 update"]
-    EM["EntityManager<br/>数字 EntityId"]
-    CS["ComponentStore<br/>按类型 Map 存组件"]
-    subgraph Grp["System 分组调度"]
-      direction LR
-      IN[input]
-      LG[logic]
-      RD[render]
-    end
+  subgraph Truth["ECS 数据 · 配表"]
+    CORE["EntityId · ComponentStore Map<br/>Position · Velocity · Attribute · Skill"]
+    CFG["Skill · SkillEffect · EffectExecutor<br/>FormulaParser 白名单 · 禁 eval"]
   end
 
-  subgraph Ent["实体组合（无继承树）"]
-    P["PlayerTag + Position<br/>Attribute + Skill …"]
-    M["MonsterTag + Position<br/>Velocity + Attribute …"]
+  subgraph SysLayer["System 层（无状态）"]
+    MV["MovementSystem · BulletSystem 等<br/>遍历实体 · 只改组件字段"]
   end
 
-  FR["FilterRegistry<br/>Players / Monsters 命名筛选"]
+  GRP["EcsWorld · input → logic → render"]
 
-  subgraph Sys["logic 组示例（无状态遍历）"]
-    MV[MovementSystem]
-    MCS[MonsterChaseSystem]
-    BS[BulletSystem]
-    CDP[CombatDataPrepareSystem]
+  subgraph Filter["标签与筛选"]
+    TAG["PlayerTag / MonsterTag 区分身份"]
+    FR["FilterRegistry · Players · Monsters"]
   end
 
-  EM --> CS
-  CS --> Ent
-  FR --> Sys
-  Grp --> Sys
+  subgraph Combat["战斗数据流"]
+    PRE["CombatDataPrepareSystem · 坐标快照"]
+    BR["CombatDataBridge → Worker processCombatFrame"]
+    MCS["MonsterChaseSystem · 写回 Velocity"]
+    BS["BulletSystem · 主线程 · Laya 节点 · 阵营"]
+  end
 
-  CDP --> BR[CombatDataBridge]
-  BR -->|实体数达标| WK[Worker processCombatFrame]
-  BR -->|否则| SYNC[computeSync]
-  WK --> MCS
-  SYNC --> MCS
-  BS --> COL["主线程碰撞<br/>Laya 节点 + 阵营"]
+  PAU["GameSession.paused<br/>Tab · 死亡 · 胜利 → logic 跳过"]
 
-  PAU["GameSession.paused"] -.->|Tab/死亡/胜利| LG
+  TAG --> FR
+  FR --> MV
+  FR --> PRE
+  GRP --> MV
+  GRP --> PRE
+  MV --> CORE
+  CFG --> CORE
+  PRE --> BR
+  BR --> MCS
+  MCS --> BS
+  BS --> CORE
+  PAU -.-> GRP
 
-  CFG["配表 Skill / SkillEffect<br/>EffectExecutor + FormulaParser"] -.-> Sys
+  EXT["增组件或 System · 无 MonsterBase 继承树"] -.-> CORE

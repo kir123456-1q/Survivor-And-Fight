@@ -1,0 +1,18 @@
+{
+  "theme": "base",
+  "fontSize": 30,
+  "fontFamily": "Microsoft YaHei, SimHei, sans-serif",
+  "themeVariables": {
+    "fontSize": "30px",
+    "fontFamily": "Microsoft YaHei, SimHei, sans-serif"
+  },
+  "flowchart": {
+    "htmlLabels": true,
+    "wrappingWidth": 300,
+    "nodeSpacing": 90,
+    "rankSpacing": 110,
+    "padding": 50,
+    "subGraphTitleMargin": 50,
+    "curve": "basis"
+  }
+}
