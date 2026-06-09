@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1920" />
+  <title>毕业答辩 — 基于 ECS 架构的类吸血鬼幸存者游戏开发及优化</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&family=Noto+Serif+SC:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/theme.css" />
+</head>
+<body>
+  <div class="deck">
+    <!-- 第 1 页 封面 -->
+    <section class="slide slide-cover active" data-slide="1">
+      <div class="grid-bg"></div>
+      <div class="glow"></div>
+      <div class="cover-content">
+        <div class="uni-badge">中国石油大学（华东）· 毕业设计答辩</div>
+        <h1>基于 ECS 架构的类吸血鬼幸存者<br/>游戏开发及优化</h1>
+        <p class="subtitle">Survivor And Fight — 毕业设计答辩</p>
+        <div class="meta">
+          <span>答辩人：刘瀚文　｜　学号：2207020509</span>
+          <span>指导教师：董玉坤　｜　2026 年 5 月</span>
+        </div>
+        <p class="keywords">ECS · LayaAir · 类幸存者 · 数据驱动 · 性能优化</p>
+      </div>
+    </section>
+
+    <!-- 第 2 页 目录 -->
+    <section class="slide slide-toc" data-slide="2">
+      <header class="slide-header"><h2 class="slide-title">汇报提纲</h2></header>
+      <div class="toc-grid">
+        <div class="toc-card"><div class="num">01</div><div class="label">研究背景与选题意义</div></div>
+        <div class="toc-card"><div class="num">02</div><div class="label">技术路线与系统需求</div></div>
+        <div class="toc-card"><div class="num">03</div><div class="label">总体架构与核心设计</div></div>
+        <div class="toc-card"><div class="num">04</div><div class="label">关键模块与典型场景</div></div>
+        <div class="toc-card"><div class="num">05</div><div class="label">性能优化与测试验证</div></div>
+        <div class="toc-card"><div class="num">06</div><div class="label">创新点、不足与展望</div></div>
+      </div>
+    </section>
+
+    <!-- 第 3 页 背景 -->
+    <section class="slide layout-b" data-slide="3">
+      <header class="slide-header"><h2 class="slide-title">研究背景与意义</h2></header>
+      <div class="slide-body">
+        <div class="bullet-column">
+          <div class="bullet-row"><span class="bullet-num">1</span><span class="bullet-text">H5 链接即玩跨端，但浏览器<strong>单主线程</strong>限制帧预算</span></div>
+          <div class="bullet-row"><span class="bullet-num">2</span><span class="bullet-text">Survivor-like：自动攻击、怪潮、局内构筑 + Roguelite</span></div>
+          <div class="bullet-row"><span class="bullet-num">3</span><span class="bullet-text">痛点：同屏实体多，深继承 OOP 耦合高难维护</span></div>
+          <div class="bullet-row"><span class="bullet-num">4</span><span class="bullet-text">目标：验证轻量 ECS + 配表 + 池化/Worker 可落地</span></div>
+          <div class="bullet-row"><span class="bullet-num">5</span><span class="bullet-text">交付：菜单→跑图→战斗→装配→死亡重启闭环</span></div>
+        </div>
+        <div class="mini-diagram" id="diag-oop"></div>
+      </div>
+    </section>
+
+    <!-- 第 4 页 现状 -->
+    <section class="slide layout-b" data-slide="4">
+      <header class="slide-header"><h2 class="slide-title">国内外研究现状</h2></header>
+      <div class="slide-body">
+        <div class="bullet-column">
+          <div class="bullet-row"><span class="bullet-num">1</span><span class="bullet-text">引擎分层：Gregory 思想；Ullmann 子系统耦合与架构退化</span></div>
+          <div class="bullet-row"><span class="bullet-num">2</span><span class="bullet-text">ECS：组合优于继承；课设采用<strong>轻量 Map-ECS</strong></span></div>
+          <div class="bullet-row"><span class="bullet-num">3</span><span class="bullet-text">怪物运动：追玩家 + Boids 式排斥；非完整社会力</span></div>
+          <div class="bullet-row"><span class="bullet-num">4</span><span class="bullet-text">H5 性能：Worker 卸追逐/分离重算；碰撞留主线程</span></div>
+          <div class="bullet-row"><span class="bullet-num">5</span><span class="bullet-text"><strong>结论</strong>：文献支持模块化 + 重算分离 + 可验证</span></div>
+        </div>
+        <div class="mini-diagram" id="diag-lit"></div>
+      </div>
+    </section>
+
+    <!-- 第 5 页 技术选型 -->
+    <section class="slide layout-a" data-slide="5">
+      <header class="slide-header"><h2 class="slide-title">项目概述与技术选型</h2></header>
+      <div class="slide-body">
+        <div class="diagram-zone" id="diag-loop"></div>
+        <p class="caption">技术路线总览</p>
+        <div class="bullets">
+          <div class="bullet-item">浏览器端 2D 俯视角 Roguelite 生存战斗原型</div>
+          <div class="bullet-item">引擎：LayaAir 3.x + TypeScript + UI2</div>
+          <div class="bullet-item">参考：吸血鬼幸存者 + 杀戮尖塔 DAG 跑图</div>
+          <div class="bullet-item">工程：常量 defines 模块，数值 JSON 配表</div>
+          <div class="bullet-item">约束：Laya. 前缀；资源放 assets/</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 第 6 页 需求 -->
+    <section class="slide layout-a" data-slide="6">
+      <header class="slide-header"><h2 class="slide-title">需求分析概要</h2></header>
+      <div class="slide-body">
+        <div class="diagram-zone" id="diag-usecase"></div>
+        <p class="caption">玩家用例总览</p>
+        <div class="bullets">
+          <div class="bullet-item">ECS、配表、跑图、Tab 装配、对象池、Worker 均已落地</div>
+          <div class="bullet-item">Must：移动、自动施法、碰撞、升级奖励</div>
+          <div class="bullet-item">元游戏：DAG 跑图选关；UI 全屏栈 + Tab 装配</div>
+          <div class="bullet-item">非功能：60 FPS；数百～千怪同屏</div>
+          <div class="bullet-item">验收：MoSCoW + 需求—测试映射</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 第 7 页 五层架构 -->
+    <section class="slide layout-a" data-slide="7">
+      <header class="slide-header"><h2 class="slide-title">系统总体架构（五层）</h2></header>
+      <div class="slide-body">
+        <div class="diagram-zone" id="diag-layers"></div>
+        <p class="caption">系统分层架构</p>
+        <div class="bullets">
+          <div class="bullet-item">表现层：Laya 节点与 HUD</div>
+          <div class="bullet-item">UI 层：UIStackManager、Controller</div>
+          <div class="bullet-item">逻辑层：SimpleEcsDemo + EcsWorld</div>
+          <div class="bullet-item">服务层：ConfigBootstrap、RunMapGenerator</div>
+          <div class="bullet-item">基础层：defines、对象池、Worker 协议</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 第 8 页 ECS -->
+    <section class="slide layout-a" data-slide="8">
+      <header class="slide-header"><h2 class="slide-title">ECS Gameplay 设计</h2></header>
+      <div class="slide-body">
+        <div class="diagram-zone" id="diag-ecs"></div>
+        <p class="caption">ECS 实体与组件绑定</p>
+        <div class="bullets">
+          <div class="bullet-item">EntityId + ComponentStore（Map 存储）</div>
+          <div class="bullet-item">组件：Position、Attribute、Skill 等纯数据</div>
+          <div class="bullet-item">系统：Movement、Bullet、MonsterChase 等</div>
+          <div class="bullet-item">FilterRegistry：Players / Monsters 命名筛选</div>
+          <div class="bullet-item">单线程 tick，支撑数百同屏，学习成本低</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 第 9 页 技能链 -->
+    <section class="slide layout-a" data-slide="9">
+      <header class="slide-header"><h2 class="slide-title">配表驱动与技能效果链</h2></header>
+      <div class="slide-body">
+        <div class="diagram-zone" id="diag-skill"></div>
+        <p class="caption">技能效果执行链</p>
+        <div class="bullets">
+          <div class="bullet-item">tables.registry.json → ConfigBootstrap 加载</div>
+          <div class="bullet-item">Skill 管冷却；SkillEffect 管效果链</div>
+          <div class="bullet-item">bullet / modifier_* / direct_damage</div>
+          <div class="bullet-item">modifier 行须在 bullet 行之前</div>
+          <div class="bullet-item">FormulaParser 白名单求值，禁止 eval</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 第 10 页 Tab 装配 -->
+    <section class="slide layout-a" data-slide="10">
+      <header class="slide-header"><h2 class="slide-title">MVC UI 与战斗协同</h2></header>
+      <div class="slide-body">
+        <div class="diagram-zone" id="diag-tab"></div>
+        <p class="caption">Tab 技能装配时序</p>
+        <div class="bullets">
+          <div class="bullet-item">Model 来自 ECS；View 管布局；Controller 管路由</div>
+          <div class="bullet-item">UIStackManager 全屏栈，单页持焦</div>
+          <div class="bullet-item">Tab 打开：GameSession.paused → System 早退</div>
+          <div class="bullet-item">关闭：SkillLoadoutSyncSystem 写回技能</div>
+          <div class="bullet-item">SkillDragService + SkillSlotHitTest 拖拽</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 第 11 页 性能优化 -->
+    <section class="slide layout-a" data-slide="11">
+      <header class="slide-header"><h2 class="slide-title">性能优化方案</h2></header>
+      <div class="slide-body">
+        <div class="diagram-zone" id="diag-perf"></div>
+        <p class="caption">对象池 + Worker 单帧管线</p>
+        <div class="bullets">
+          <div class="bullet-item">BulletPool / MonsterPool 按预制体分桶</div>
+          <div class="bullet-item">Worker 卸载追逐/分离/摆动重算</div>
+          <div class="bullet-item">失败回退 computeSync；碰撞留主线程</div>
+          <div class="bullet-item">paused 时战斗 System 统一早退</div>
+          <div class="bullet-item">TextureAtlasService 动态图集合批</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 第 12 页 典型场景 -->
+    <section class="slide layout-b" data-slide="12">
+      <header class="slide-header"><h2 class="slide-title">关键模块与典型场景</h2></header>
+      <div class="slide-body">
+        <div class="bullet-column">
+          <div class="bullet-row"><span class="bullet-num">1</span><span class="bullet-text">SimpleEcsDemo 组合根注册 System 与对象池</span></div>
+          <div class="bullet-row"><span class="bullet-num">2</span><span class="bullet-text">场景一：配表加载 → 元菜单 → 进战斗首帧 tick</span></div>
+          <div class="bullet-row"><span class="bullet-num">3</span><span class="bullet-text">场景二：Tab 改技能 — paused 切断 tick，Sync 写回</span></div>
+          <div class="bullet-row"><span class="bullet-num">4</span><span class="bullet-text">场景三：千怪波 — 快照投递 Worker / computeSync</span></div>
+          <div class="bullet-row"><span class="bullet-num">5</span><span class="bullet-text">降级：配表双通道、跑图 fallback、重启防重入</span></div>
+        </div>
+        <div class="mini-diagram" id="diag-combat"></div>
+      </div>
+    </section>
+
+    <!-- 第 13 页 性能数据 -->
+    <section class="slide layout-a" data-slide="13">
+      <header class="slide-header"><h2 class="slide-title">性能测试与数据解读</h2></header>
+      <div class="slide-body">
+        <div class="diagram-zone" id="diag-fps"></div>
+        <p class="caption">Level3 五波 FPS + 图集对比</p>
+        <div class="bullets">
+          <div class="bullet-item">环境：1920×1080，Level3 五波脚本</div>
+          <div class="bullet-item">10→100→1000 怪：FPS 58.62 降至 15.14</div>
+          <div class="bullet-item">图集：千怪 FPS 13.32→15.10（+13.4%）</div>
+          <div class="bullet-item">对象池：P95 76.50→48.60 ms（-36.5%）</div>
+          <div class="bullet-item">池化削尖峰；图集改善绘制</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 第 14 页 消融 -->
+    <section class="slide layout-a" data-slide="14">
+      <header class="slide-header"><h2 class="slide-title">对象池消融实验</h2></header>
+      <div class="slide-body">
+        <div class="diagram-zone" id="diag-p95"></div>
+        <p class="caption">P95 帧时间对比</p>
+        <div class="bullets">
+          <div class="bullet-item">第 4 波基线：关池关 Worker，P95 76.50 ms</div>
+          <div class="bullet-item">第 5 波仅开池：P95 48.60 ms</div>
+          <div class="bullet-item">均值 FPS 相近，池化主要降 GC 尖峰</div>
+          <div class="bullet-item">功能：T-F-01/05/06/09 全部通过</div>
+          <div class="bullet-item">单元：formulaParser / ecsCore / attributeModifier</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 第 15 页 闭环 -->
+    <section class="slide layout-a" data-slide="15">
+      <header class="slide-header"><h2 class="slide-title">系统运行闭环</h2></header>
+      <div class="slide-body">
+        <div class="diagram-zone" id="diag-meta"></div>
+        <p class="caption">元游戏完整闭环</p>
+        <div class="bullets">
+          <div class="bullet-item">元游戏：主菜单、三幕 DAG 跑图</div>
+          <div class="bullet-item">局内：多怪弹幕、Tab 装配、升级奖励</div>
+          <div class="bullet-item">闭环：菜单→跑图→战斗→装配→死亡重启</div>
+          <div class="bullet-item">Must 需求已覆盖</div>
+          <div class="bullet-item">部分 Effect 仅逻辑生效、无独立 VFX</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 第 16 页 创新点 -->
+    <section class="slide layout-b" data-slide="16">
+      <header class="slide-header"><h2 class="slide-title">主要创新点与工程特色</h2></header>
+      <div class="slide-body">
+        <div class="bullet-column">
+          <div class="bullet-row"><span class="bullet-num">1</span><span class="bullet-text">轻量 ECS：EcsWorld 驱动 tick；ViewComponent 只绑 Laya 节点</span></div>
+          <div class="bullet-row"><span class="bullet-num">2</span><span class="bullet-text">性能组合拳：对象池 + Worker + 图集 + paused，均可消融</span></div>
+          <div class="bullet-row"><span class="bullet-num">3</span><span class="bullet-text">UI 战斗协同：全屏栈 + Tab 与 paused 统一切断</span></div>
+          <div class="bullet-row"><span class="bullet-num">4</span><span class="bullet-text">数据驱动：JSON 配表 + verify 脚本 + 需求—测试追溯</span></div>
+          <div class="bullet-row"><span class="bullet-num">5</span><span class="bullet-text">可靠性：配表 / Worker / 跑图均有降级路径</span></div>
+        </div>
+        <div class="side-panel">
+          <div class="side-tagline">
+            <div class="tag-main">H5 Roguelite</div>
+            <div class="tag-accent">可维护原型</div>
+            <div class="side-ring"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 第 17 页 不足 -->
+    <section class="slide layout-b" data-slide="17">
+      <header class="slide-header"><h2 class="slide-title">不足与展望</h2></header>
+      <div class="slide-body">
+        <div class="bullet-column">
+          <div class="bullet-row"><span class="bullet-num">1</span><span class="bullet-text">内容与表现：法杖三槽 UI、部分 Effect 特效/音效未补齐</span></div>
+          <div class="bullet-row"><span class="bullet-num">2</span><span class="bullet-text">架构演进：Archetype/Chunk 存储；碰撞可加空间哈希</span></div>
+          <div class="bullet-row"><span class="bullet-num">3</span><span class="bullet-text">测试：需 E2E UI 自动化与更长定期回归</span></div>
+          <div class="bullet-row"><span class="bullet-num">4</span><span class="bullet-text">产品化：局外存档、元进度、帧率/同屏上限设置</span></div>
+          <div class="bullet-row"><span class="bullet-num">5</span><span class="bullet-text">合规：虚构战斗、不采敏感数据；上网须标适龄与时长</span></div>
+        </div>
+        <div class="side-panel">
+          <div class="side-roadmap">
+            <div class="side-roadmap-item" style="background:linear-gradient(135deg,#fff5eb,#fff);border-left:4px solid var(--orange)">短期：补齐 UI 与特效</div>
+            <div class="side-roadmap-item" style="background:linear-gradient(135deg,#eef4fc,#fff);border-left:4px solid var(--navy)">中期：ECS 存储与碰撞优化</div>
+            <div class="side-roadmap-item" style="background:linear-gradient(135deg,#eef4fc,#fff);border-left:4px solid var(--navy-light)">长期：产品化与合规发布</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 第 18 页 总结 -->
+    <section class="slide layout-b" data-slide="18">
+      <header class="slide-header"><h2 class="slide-title">工作总结</h2></header>
+      <div class="slide-body">
+        <div class="bullet-column">
+          <div class="bullet-row"><span class="bullet-num">1</span><span class="bullet-text">需求：MoSCoW + 测试映射，Must 级功能全部落地</span></div>
+          <div class="bullet-row"><span class="bullet-num">2</span><span class="bullet-text">设计：五层架构 + ECS/MVC/Worker 协同设计</span></div>
+          <div class="bullet-row"><span class="bullet-num">3</span><span class="bullet-text">实现：SimpleEcsDemo 组合根 + 三典型场景可演示</span></div>
+          <div class="bullet-row"><span class="bullet-num">4</span><span class="bullet-text">验证：五波实验 + verify 脚本 + 实测数据</span></div>
+          <div class="bullet-row"><span class="bullet-num">5</span><span class="bullet-text">论文与源码、测试数据保持一致，可追溯</span></div>
+        </div>
+        <div class="side-panel">
+          <div class="side-highlight-grid">
+            <div class="side-highlight" style="background:var(--navy)">需求 ✓</div>
+            <div class="side-highlight" style="background:var(--navy-light)">设计 ✓</div>
+            <div class="side-highlight" style="background:var(--orange)">实现 ✓</div>
+            <div class="side-highlight" style="background:#2d6a4f">验证 ✓</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 第 19 页 致谢 -->
+    <section class="slide slide-thanks" data-slide="19">
+      <h2>谢谢聆听</h2>
+      <div class="thanks-lines">
+        <p>感谢指导教师董玉坤老师在选题、架构与写作上的指点</p>
+        <p>感谢学院师长、同学与家人的支持</p>
+        <p style="margin-top:32px;color:var(--orange-soft)">请各位老师批评指正</p>
+      </div>
+    </section>
+  </div>
+
+  <div class="nav-hint">← → 翻页　F11 全屏</div>
+  <div class="progress-bar" style="width:5.26%"></div>
+
+  <script src="js/diagrams.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

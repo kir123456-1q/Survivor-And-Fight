@@ -1,0 +1,869 @@
+/* 中国石油大学答辩风 — 深蓝 + 橙强调 */
+:root {
+  --navy: #0d2b5e;
+  --navy-light: #1a4a8a;
+  --orange: #e87722;
+  --orange-soft: #f5a962;
+  --bg: #f4f7fb;
+  --bg-card: #ffffff;
+  --text: #1a2332;
+  --text-muted: #5a6b7d;
+  --border: #d4dce8;
+  --slide-w: 1920px;
+  --slide-h: 1080px;
+  --font-display: "Noto Serif SC", "Source Han Serif SC", serif;
+  --font-body: "DM Sans", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0a1628;
+  font-family: var(--font-body);
+  color: var(--text);
+}
+
+body.export-mode {
+  overflow: auto;
+  background: var(--bg);
+}
+
+body.export-mode .deck {
+  position: relative;
+  top: 0;
+  left: 0;
+  transform: none !important;
+  margin: 0;
+  box-shadow: none;
+}
+body.export-mode .slide { display: none; position: absolute; inset: 0; }
+body.export-mode .slide.active { display: flex; }
+body.export-mode .nav-hint,
+body.export-mode .progress-bar { display: none !important; }
+
+.deck {
+  width: var(--slide-w);
+  height: var(--slide-h);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: center center;
+  background: var(--bg);
+  box-shadow: 0 24px 80px rgba(0,0,0,.45);
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  flex-direction: column;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.slide.active { display: flex; }
+
+/* ── 顶栏装饰 ── */
+.slide::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--navy) 0%, var(--navy-light) 60%, var(--orange) 100%);
+  z-index: 10;
+}
+
+.slide-header {
+  padding: 48px 72px 24px;
+  flex-shrink: 0;
+}
+
+.slide-title {
+  font-family: var(--font-display);
+  font-size: 42px;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+}
+
+.slide-title::after {
+  content: "";
+  display: block;
+  width: 72px;
+  height: 4px;
+  background: var(--orange);
+  margin-top: 12px;
+  border-radius: 2px;
+}
+
+.slide-body {
+  flex: 1;
+  padding: 0 72px 48px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* ── 版式 A：主图 + 要点 ── */
+.slide.layout-a .diagram-zone {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px 32px;
+  box-shadow: 0 4px 24px rgba(13,43,94,.06);
+  margin-bottom: 20px;
+}
+
+.slide.layout-a .diagram-zone svg,
+.slide.layout-a .diagram-zone .diagram-html,
+.slide.layout-a .diagram-zone .diagram-panel {
+  width: 100%;
+  max-height: 400px;
+  height: auto;
+}
+
+.slide.layout-a .caption {
+  text-align: center;
+  font-size: 18px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.slide.layout-a .bullets {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.slide.layout-a .bullet-item {
+  background: var(--bg-card);
+  border-left: 3px solid var(--orange);
+  padding: 12px 14px;
+  border-radius: 0 8px 8px 0;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--text);
+  box-shadow: 0 2px 8px rgba(13,43,94,.04);
+}
+
+/* ── 版式 B：五环要点 ── */
+.slide.layout-b .slide-body {
+  flex-direction: row;
+  gap: 40px;
+  align-items: stretch;
+  min-height: 0;
+}
+
+.slide.layout-b .bullet-column {
+  flex: 1 1 58%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+}
+
+.slide.layout-b .bullet-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.slide.layout-b.active .bullet-row {
+  animation: fadeRight 0.45s ease both;
+}
+
+.slide.layout-b.active .bullet-row:nth-child(1) { animation-delay: 0.05s; }
+.slide.layout-b.active .bullet-row:nth-child(2) { animation-delay: 0.12s; }
+.slide.layout-b.active .bullet-row:nth-child(3) { animation-delay: 0.19s; }
+.slide.layout-b.active .bullet-row:nth-child(4) { animation-delay: 0.26s; }
+.slide.layout-b.active .bullet-row:nth-child(5) { animation-delay: 0.33s; }
+
+.slide.layout-b .bullet-num {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--navy), var(--navy-light));
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slide.layout-b .bullet-text {
+  font-size: 19px;
+  line-height: 1.55;
+  padding-top: 4px;
+}
+
+.slide.layout-b .bullet-text strong {
+  color: var(--navy);
+}
+
+.slide.layout-b .mini-diagram,
+.slide.layout-b .side-panel {
+  flex: 0 0 42%;
+  max-width: 680px;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-card);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  padding: 28px 32px;
+  box-shadow: 0 8px 32px rgba(13,43,94,.08);
+  overflow: hidden;
+}
+
+.slide.layout-b .mini-diagram svg,
+.slide.layout-b .mini-diagram .diagram-panel,
+.slide.layout-b .mini-diagram .lit-grid,
+.slide.layout-b .mini-diagram .seq-timeline {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+}
+
+.slide.layout-b .mini-diagram .diagram-panel {
+  align-content: center;
+}
+
+.slide.layout-b .mini-diagram .lit-grid {
+  align-content: space-evenly;
+}
+
+.slide.layout-b .mini-diagram .compare-col {
+  justify-content: center;
+}
+
+/* ── 封面 ── */
+.slide.slide-cover {
+  background: linear-gradient(145deg, #071428 0%, var(--navy) 45%, #123a6e 100%);
+  color: #fff;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.slide.slide-cover::before { display: none; }
+
+.slide-cover .grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black, transparent);
+}
+
+.slide-cover .glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,119,34,.25) 0%, transparent 70%);
+  top: 20%;
+  right: 10%;
+  animation: pulse 4s ease-in-out infinite;
+}
+
+.slide-cover .cover-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1400px;
+  padding: 0 80px;
+}
+
+.slide-cover .uni-badge {
+  display: inline-block;
+  font-size: 16px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--orange-soft);
+  margin-bottom: 32px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.2s forwards;
+}
+
+.slide-cover h1 {
+  font-family: var(--font-display);
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1.35;
+  margin-bottom: 24px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.4s forwards;
+}
+
+.slide-cover .subtitle {
+  font-size: 28px;
+  color: rgba(255,255,255,.85);
+  margin-bottom: 56px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.6s forwards;
+}
+
+.slide-cover .meta {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  flex-wrap: wrap;
+  font-size: 20px;
+  color: rgba(255,255,255,.75);
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.8s forwards;
+}
+
+.slide-cover .meta span { white-space: nowrap; }
+
+.slide-cover .keywords {
+  margin-top: 48px;
+  font-size: 16px;
+  color: var(--orange-soft);
+  letter-spacing: 0.15em;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 1s forwards;
+}
+
+/* ── 目录 ── */
+.slide-toc .toc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  flex: 1;
+  align-content: center;
+  padding: 0 72px 64px;
+}
+
+.toc-card {
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 32px 28px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 20px rgba(13,43,94,.06);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.slide.active .toc-card {
+  animation: fadeUp 0.5s ease forwards;
+}
+
+.toc-card:nth-child(1) { animation-delay: 0.08s; }
+.toc-card:nth-child(2) { animation-delay: 0.16s; }
+.toc-card:nth-child(3) { animation-delay: 0.24s; }
+.toc-card:nth-child(4) { animation-delay: 0.32s; }
+.toc-card:nth-child(5) { animation-delay: 0.40s; }
+.toc-card:nth-child(6) { animation-delay: 0.48s; }
+
+.toc-card .num {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--orange);
+  font-family: var(--font-display);
+  margin-bottom: 12px;
+}
+
+.toc-card .label {
+  font-size: 22px;
+  color: var(--navy);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* ── 致谢 ── */
+.slide.slide-thanks {
+  background: linear-gradient(160deg, var(--navy) 0%, #0a2040 100%);
+  color: #fff;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+}
+
+.slide.slide-thanks::before { display: none; }
+
+.slide-thanks h2 {
+  font-family: var(--font-display);
+  font-size: 72px;
+  margin-bottom: 48px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.2s forwards;
+}
+
+.slide-thanks .thanks-lines {
+  font-size: 24px;
+  line-height: 2;
+  color: rgba(255,255,255,.85);
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.5s forwards;
+}
+
+/* ── SVG 图表通用 ── */
+.diagram-html { width: 100%; height: 100%; }
+
+.d-node {
+  fill: #fff;
+  stroke: var(--navy-light);
+  stroke-width: 2;
+  filter: drop-shadow(0 2px 6px rgba(13,43,94,.12));
+}
+
+.d-node-accent { fill: url(#gradOrange); stroke: var(--orange); }
+.d-node-navy { fill: url(#gradNavy); stroke: var(--navy); }
+
+.d-text-title {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  fill: var(--navy);
+}
+
+.d-text-body {
+  font-family: var(--font-body);
+  font-size: 11px;
+  fill: var(--text-muted);
+}
+
+.d-text-white {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  fill: #fff;
+}
+
+.d-arrow {
+  fill: none;
+  stroke: var(--orange);
+  stroke-width: 2.5;
+  marker-end: url(#arrowOrange);
+}
+
+.d-arrow-navy {
+  stroke: var(--navy-light);
+  marker-end: url(#arrowNavy);
+}
+
+.slide.active .draw-path {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: drawLine 1.2s ease forwards;
+}
+
+.slide.active .pop-node {
+  opacity: 0;
+  transform-origin: center;
+  animation: popIn 0.45s ease forwards;
+}
+
+.slide.active .stagger-item {
+  animation: fadeUp 0.4s ease both;
+}
+
+/* ── 柱状图 ── */
+.chart-bars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 32px;
+  height: 320px;
+  padding: 0 40px;
+}
+
+.chart-bar-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  max-width: 140px;
+}
+
+.chart-bar {
+  width: 100%;
+  border-radius: 8px 8px 0 0;
+  background: linear-gradient(180deg, var(--navy-light), var(--navy));
+  transform-origin: bottom;
+  transform: scaleY(0);
+  min-height: 4px;
+  position: relative;
+}
+
+.slide.active .chart-bar {
+  animation: growBar 0.8s cubic-bezier(.34,1.4,.64,1) forwards;
+}
+
+.chart-bar.accent {
+  background: linear-gradient(180deg, var(--orange-soft), var(--orange));
+}
+
+.chart-bar .val {
+  position: absolute;
+  top: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--navy);
+  white-space: nowrap;
+}
+
+.chart-label {
+  font-size: 14px;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.3;
+}
+
+.chart-title {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 24px;
+}
+
+/* ── 时序图 ── */
+.seq-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+}
+
+.seq-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  align-items: center;
+  min-height: 52px;
+  opacity: 0;
+}
+
+.slide.active .seq-row {
+  animation: fadeUp 0.4s ease forwards;
+}
+
+.seq-row:nth-child(1) { animation-delay: 0.1s; }
+.seq-row:nth-child(2) { animation-delay: 0.2s; }
+.seq-row:nth-child(3) { animation-delay: 0.3s; }
+.seq-row:nth-child(4) { animation-delay: 0.4s; }
+.seq-row:nth-child(5) { animation-delay: 0.5s; }
+.seq-row:nth-child(6) { animation-delay: 0.6s; }
+.seq-row:nth-child(7) { animation-delay: 0.7s; }
+.seq-row:nth-child(8) { animation-delay: 0.8s; }
+
+.seq-actor {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+  text-align: right;
+  padding-right: 16px;
+}
+
+.seq-action {
+  background: linear-gradient(90deg, rgba(13,43,94,.08), transparent);
+  border-left: 3px solid var(--orange);
+  padding: 10px 16px;
+  font-size: 14px;
+  border-radius: 0 6px 6px 0;
+}
+
+/* ── 导航 ── */
+.nav-hint {
+  position: fixed;
+  bottom: 16px;
+  right: 24px;
+  color: rgba(255,255,255,.4);
+  font-size: 13px;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.progress-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--orange);
+  transition: width 0.3s ease;
+  z-index: 100;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeRight {
+  from { opacity: 0; transform: translateX(-24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes drawLine {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes growBar {
+  to { transform: scaleY(1); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+/* 版式 A 入场 */
+.slide.layout-a.active .diagram-zone {
+  animation: fadeUp 0.6s ease 0.15s both;
+}
+
+.slide.layout-a.active .bullet-item {
+  animation: fadeUp 0.4s ease both;
+}
+
+.slide.layout-a.active .bullet-item:nth-child(1) { animation-delay: 0.35s; }
+.slide.layout-a.active .bullet-item:nth-child(2) { animation-delay: 0.42s; }
+.slide.layout-a.active .bullet-item:nth-child(3) { animation-delay: 0.49s; }
+.slide.layout-a.active .bullet-item:nth-child(4) { animation-delay: 0.56s; }
+.slide.layout-a.active .bullet-item:nth-child(5) { animation-delay: 0.63s; }
+
+/* ── HTML 对比图 / 文献脉络 ── */
+.compare-panel {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 20px;
+  align-items: stretch;
+  width: 100%;
+}
+
+.compare-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid var(--border);
+  min-height: 280px;
+  justify-content: center;
+}
+
+.compare-col.oop { border-color: var(--navy-light); }
+.compare-col.ecs { border-color: var(--orange); }
+
+.compare-col-head {
+  padding: 12px 16px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.compare-col.oop .compare-col-head {
+  background: linear-gradient(135deg, #eef4fc, #dce8f8);
+  color: var(--navy);
+}
+
+.compare-col.ecs .compare-col-head {
+  background: linear-gradient(135deg, #fff5eb, #ffe4cc);
+  color: #c45f10;
+}
+
+.compare-step {
+  padding: 14px 16px;
+  text-align: center;
+  font-size: 14px;
+  border-top: 1px solid var(--border);
+  background: #fff;
+  position: relative;
+}
+
+.compare-col.ecs .compare-step {
+  background: linear-gradient(90deg, #fffaf5, #fff);
+}
+
+.compare-arrow-down {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 18px;
+  line-height: 1;
+  padding: 2px 0;
+}
+
+.compare-vs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--navy);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  align-self: center;
+  flex-shrink: 0;
+}
+
+.compare-link-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border);
+}
+
+.compare-link-row .link-line {
+  height: 2px;
+  background: linear-gradient(90deg, var(--navy-light), var(--orange));
+}
+
+.compare-link-row .link-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.lit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  width: 100%;
+}
+
+.lit-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  border-left: 4px solid var(--navy-light);
+}
+
+.lit-card.accent { border-left-color: var(--orange); }
+
+.lit-card .lit-tag {
+  font-size: 11px;
+  color: var(--orange);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+
+.lit-card .lit-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+
+.lit-card .lit-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+.lit-hub {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 10px;
+  background: linear-gradient(135deg, var(--navy), var(--navy-light));
+  color: #fff;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.lit-arrows {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  color: var(--orange);
+  font-size: 16px;
+  line-height: 1;
+}
+
+.side-highlight-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+}
+
+.side-highlight {
+  padding: 20px 16px;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 17px;
+  color: #fff;
+}
+
+.side-roadmap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+
+.side-roadmap-item {
+  padding: 16px 20px;
+  border-radius: 8px;
+  font-size: 17px;
+  line-height: 1.4;
+}
+
+.side-tagline {
+  text-align: center;
+  line-height: 1.5;
+}
+
+.side-tagline .tag-main {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.side-tagline .tag-accent {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--orange);
+}
+
+.side-ring {
+  width: 100px;
+  height: 100px;
+  border: 4px solid var(--orange);
+  border-radius: 50%;
+  margin: 8px auto 0;
+  opacity: 0.35;
+}
