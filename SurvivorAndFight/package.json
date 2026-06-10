@@ -10,7 +10,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "fix:defense-ppt": "node scripts/fix-gamma-defense-ppt.cjs",
     "ppt:preview": "npx --yes serve ppt-html -p 5173",
-    "ppt:export": "node scripts/export-html-slides-to-pptx.cjs"
+    "ppt:export": "node scripts/export-html-slides-to-pptx.cjs",
+    "ppt:v2:preview": "npx --yes serve ppt-html-v2 -p 5174",
+    "ppt:v2:build": "node scripts/build-defense-ppt-v2.cjs",
+    "ppt:fix-bg-text": "node scripts/apply-template-bg-and-text.cjs"
   },
   "keywords": [],
   "author": "",
