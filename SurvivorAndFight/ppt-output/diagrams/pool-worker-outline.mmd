@@ -1,0 +1,17 @@
+flowchart TD
+  subgraph 对象池
+    BS[生成子弹] --> P{池中有空闲?}
+    P -->|是| R[取出并重置]
+    P -->|否| N[新建实例]
+    R --> F[飞行]
+    N --> F
+    F --> Q[回收进池]
+  end
+  subgraph Worker单帧
+    A[打包坐标快照] --> B{Worker 结果就绪?}
+    B -->|是| C[采用 Worker 速度]
+    B -->|否| D[主线程同步补算]
+    C --> E[写回速度组件]
+    D --> E
+    K[子弹碰撞] --> L[始终主线程]
+  end

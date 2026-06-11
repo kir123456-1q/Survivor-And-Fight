@@ -1,0 +1,17 @@
+sequenceDiagram
+  participant Main as 入口
+  participant Config as 配表加载
+  participant Meta as 元游戏流程
+  participant ECS as 战斗世界
+  participant Worker as 战斗Worker
+  participant UI as 界面栈
+  Main->>Config: 启动加载配表
+  Main->>Meta: 主菜单 / 跑图选关
+  Meta->>ECS: 进入战斗初始化
+  loop 每帧
+    ECS->>Worker: 可选：提交坐标快照
+    Worker-->>ECS: 追逐速度
+    ECS->>ECS: 子弹/怪物/经验/HUD
+  end
+  UI->>ECS: Tab 暂停改技能
+  ECS->>Meta: 死亡重启回菜单
