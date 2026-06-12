@@ -1,0 +1,26 @@
+classDiagram
+  class EcsWorld
+  class EntityManager
+  class ComponentStore
+  class SystemScheduler
+  EcsWorld --> EntityManager
+  EcsWorld --> ComponentStore
+  EcsWorld --> SystemScheduler
+  class Position
+  class Velocity
+  class Attribute
+  class Skill
+  class ViewComponent
+  class GameSession
+  class MovementSystem
+  class BulletSystem
+  class MonsterChaseSystem
+  SystemScheduler --> MovementSystem
+  SystemScheduler --> BulletSystem
+  SystemScheduler --> MonsterChaseSystem
+  ComponentStore --> Position
+  ComponentStore --> Velocity
+  ComponentStore --> Attribute
+  ComponentStore --> Skill
+  ComponentStore --> ViewComponent
+  ComponentStore --> GameSession
