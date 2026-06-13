@@ -229,7 +229,7 @@ export class SimpleEcsDemo {
             await this.initTestCombat();
             return;
         }
-        if (this.initDone) return;
+        this.prepareForCombatEntry();
         this.monsterWaveSpawnSystem.setWaveSpawnEnabled(true);
         await this.spawnPlayer(false);
         await this.spawnMonsters(MONSTER_COUNT);
@@ -242,9 +242,7 @@ export class SimpleEcsDemo {
     async initTestCombat(): Promise<void> {
         testLevelFpsTracker.resetSession();
         this.monsterWaveSpawnSystem.setWaveSpawnEnabled(false);
-        this.monsterWaveSpawnSystem.reset();
-        this.clearAllGameplayEntities();
-        this.playerEntity = -1;
+        this.prepareForCombatEntry();
         MetaRunSession.testWaveIndex = 0;
         MetaRunSession.testWaveAwaitingClear = false;
         MetaRunSession.resetTestCombatOptimizations();
@@ -368,6 +366,7 @@ export class SimpleEcsDemo {
         if (node && parent) parent.addChild(node);
         this.world.addComponent(entity, ViewComponent, new ViewComponent(entity, node));
         this.world.addComponent(entity, BodyUIComponent, new BodyUIComponent(node));
+        this.skillSelectController.rebindPlayerEntity(entity);
     }
 
     getPlayerEntity(): number {
@@ -527,6 +526,23 @@ export class SimpleEcsDemo {
     resetCombatEntry(): void {
         this.initDone = false;
         this.combatFailedNotified = false;
+    }
+
+    /** 退出战斗时清理场景，避免残留玩家/怪物/子弹。 */
+    clearCombatScene(): void {
+        this.prepareForCombatEntry();
+    }
+
+    /** 进入关卡前清空旧战斗实体与运行时状态，法杖装配由 spawnPlayer 重建。 */
+    private prepareForCombatEntry(): void {
+        this.clearAllGameplayEntities();
+        this.playerEntity = -1;
+        this.monsterWaveSpawnSystem.reset();
+        this.bulletSystem.clearAll();
+        this.bulletPool.clear();
+        this.monsterPool.clear();
+        this.combatBridge.resetWorkerFrameState();
+        this.skillSelectController.rebindPlayerEntity(-1);
     }
 
     private notifyCombatFailedIfNeeded(): void {

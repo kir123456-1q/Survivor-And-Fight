@@ -23,10 +23,12 @@
       "_$id": "pkuzth06",
       "_$type": "GImage",
       "name": "img_1",
-      "x": 375,
-      "y": 118,
-      "width": 551,
-      "height": 453,
+      "x": 197,
+      "y": 30,
+      "width": 830,
+      "height": 571,
+      "anchorX": -0.050816696914700546,
+      "anchorY": -0.039735099337748346,
       "src": "res://b6531fa1-5f9f-45e1-969a-d80449c21456",
       "autoSize": false
     },
@@ -35,9 +37,9 @@
       "_$prefab": "b0c7f4b6-9a33-4cd8-897e-4888efe760fe",
       "name": "Level1Btn_1",
       "active": true,
-      "x": 454,
+      "x": 401,
       "y": 173,
-      "width": 394,
+      "width": 539,
       "height": 85,
       "visible": true,
       "_$child": [
@@ -54,6 +56,16 @@
           "_$override": "syt0gdq4",
           "src": "res://fcd22920-4507-413e-aafd-40704fef65a5",
           "alpha": 0.524
+        },
+        {
+          "_$override": "kahpmowa",
+          "text": "奖励 1",
+          "underlineColor": "#ffffff",
+          "color": "#5d5e44",
+          "valign": "middle",
+          "fontSize": 28,
+          "x": 3,
+          "y": 1
         },
         {
           "_$id": "rw1img01",
@@ -64,17 +76,8 @@
           "width": 47,
           "height": 47,
           "visible": false,
+          "src": "",
           "autoSize": false
-        },
-        {
-          "_$override": "kahpmowa",
-          "text": "奖励 1",
-          "underlineColor": "#ffffff",
-          "color": "#5d5e44",
-          "valign": "middle",
-          "fontSize": 28,
-          "x": 60,
-          "y": 3
         }
       ]
     },
@@ -83,9 +86,9 @@
       "_$prefab": "b0c7f4b6-9a33-4cd8-897e-4888efe760fe",
       "name": "Level1Btn_2",
       "active": true,
-      "x": 455,
+      "x": 407,
       "y": 292,
-      "width": 394,
+      "width": 535,
       "height": 85,
       "visible": true,
       "_$child": [
@@ -102,6 +105,16 @@
           "_$override": "syt0gdq4",
           "src": "res://fcd22920-4507-413e-aafd-40704fef65a5",
           "alpha": 0.524
+        },
+        {
+          "_$override": "kahpmowa",
+          "text": "奖励 2",
+          "underlineColor": "#ffffff",
+          "color": "#5d5e44",
+          "valign": "middle",
+          "fontSize": 28,
+          "x": 3,
+          "y": 5
         },
         {
           "_$id": "rw2img02",
@@ -112,17 +125,8 @@
           "width": 47,
           "height": 47,
           "visible": false,
+          "src": "",
           "autoSize": false
-        },
-        {
-          "_$override": "kahpmowa",
-          "text": "奖励 2",
-          "underlineColor": "#ffffff",
-          "color": "#5d5e44",
-          "valign": "middle",
-          "fontSize": 28,
-          "x": 60,
-          "y": -8
         }
       ]
     },
@@ -131,9 +135,9 @@
       "_$prefab": "b0c7f4b6-9a33-4cd8-897e-4888efe760fe",
       "name": "Level1Btn_3",
       "active": true,
-      "x": 456,
+      "x": 418,
       "y": 413,
-      "width": 394,
+      "width": 520,
       "height": 85,
       "visible": true,
       "_$child": [
@@ -152,6 +156,17 @@
           "alpha": 0.524
         },
         {
+          "_$override": "kahpmowa",
+          "text": "奖励 3",
+          "underlineColor": "#ffffff",
+          "color": "#5d5e44",
+          "valign": "middle",
+          "fontSize": 28,
+          "x": 8,
+          "y": 8,
+          "height": 71
+        },
+        {
           "_$id": "rw3img03",
           "_$type": "GImage",
           "name": "img",
@@ -160,18 +175,8 @@
           "width": 47,
           "height": 47,
           "visible": false,
+          "src": "",
           "autoSize": false
-        },
-        {
-          "_$override": "kahpmowa",
-          "text": "奖励 3",
-          "underlineColor": "#ffffff",
-          "color": "#5d5e44",
-          "valign": "middle",
-          "fontSize": 28,
-          "x": 60,
-          "y": 3,
-          "height": 76
         }
       ]
     },
@@ -179,8 +184,8 @@
       "_$id": "wfb6h8f1",
       "_$type": "GTextField",
       "name": "txt",
-      "x": 550,
-      "y": 126,
+      "x": 553,
+      "y": 64,
       "width": 199,
       "height": 30,
       "text": "选择奖励",
@@ -223,8 +228,8 @@
           "fontSize": 40,
           "x": -8,
           "y": 3,
-          "height": 75,
-          "width": 89
+          "height": 105,
+          "width": 44
         }
       ]
     }
