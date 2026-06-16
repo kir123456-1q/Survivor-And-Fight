@@ -14,7 +14,8 @@
     "ppt:export": "node scripts/export-html-slides-to-pptx.cjs",
     "ppt:v2:preview": "npx --yes serve ppt-html-v2 -p 5174",
     "ppt:v2:build": "node scripts/build-defense-ppt-v2.cjs",
-    "ppt:fix-bg-text": "node scripts/apply-template-bg-and-text.cjs"
+    "ppt:fix-bg-text": "node scripts/apply-template-bg-and-text.cjs",
+    "ppt:insert-diagrams": "node scripts/insert-diagram-slides.cjs"
   },
   "keywords": [],
   "author": "",
