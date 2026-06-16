@@ -133,4 +133,15 @@ export class SkillSelectPanelController {
     isInitialized(): boolean {
         return this.initialized;
     }
+
+    /** 关卡切换后绑定新的玩家实体，刷新法杖装配 UI。 */
+    rebindPlayerEntity(playerEntity: number): void {
+        this.playerEntity = playerEntity;
+        if (!this.initialized || playerEntity < 0) return;
+        const state = this.getLoadout();
+        if (state?.panelOpen) {
+            this.setPanelVisible(false);
+        }
+        void this.refreshAll();
+    }
 }

@@ -252,6 +252,14 @@ export class BulletSystem implements System {
         }
     }
 
+    /** 清空所有在场子弹（关卡切换/退出战斗时调用）。 */
+    clearAll(): void {
+        for (let i = this.bullets.length - 1; i >= 0; i--) {
+            this.destroyBullet(this.bullets[i]);
+        }
+        this.bullets.length = 0;
+    }
+
     update(deltaTime: number): void {
         if (this.isPaused?.()) return;
 

@@ -181,6 +181,7 @@ export class Main extends Laya.Script {
             MetaRunSession.runMapState = null;
             MetaRunSession.resumeRunMap = null;
             MetaRunSession.combatDemo = null;
+            this.demo?.clearCombatScene();
             this.demo?.resetCombatEntry();
             onCombatLeave();
 
@@ -206,6 +207,7 @@ export class Main extends Laya.Script {
         this.demo?.setSessionPaused(true);
         MetaRunSession.onTestCombatComplete = null;
         MetaRunSession.resetTestSession();
+        this.demo?.clearCombatScene();
         this.demo?.resetCombatEntry();
         onCombatLeave();
 
@@ -221,6 +223,7 @@ export class Main extends Laya.Script {
     private async afterCombatReward(_picked: boolean): Promise<void> {
         const container = this.owner as any;
         if (container) container.visible = false;
+        this.demo?.clearCombatScene();
         onCombatLeave();
         this.demo?.setSessionPaused(false);
 
